@@ -2,7 +2,6 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.deps.json
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.runtimeconfig.json
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.dll
-C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.csproj.AssemblyReference.cache
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.csproj.GenerateResource.cache
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.GeneratedMSBuildEditorConfig.editorconfig
@@ -11,7 +10,6 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.csproj.CoreCompileInputs.cache
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.dll
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\refint\FFXIVLooseTextureCompiler.dll
-C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.genruntimeconfig.cache
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\ref\FFXIVLooseTextureCompiler.dll
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVVoicePackCreator.FilePicker.resources
@@ -50,3 +48,5 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\runtimes\win-x64\native\WebView2Loader.dll
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\runtimes\win-x86\native\WebView2Loader.dll
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.Properties.Resources.resources
+C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
+C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
