@@ -2,6 +2,7 @@ using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
 using Penumbra.Import.Dds;
+using System.Diagnostics;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
@@ -17,6 +18,7 @@ namespace FFXIVLooseTextureCompiler {
             AutoScaleDimensions = new SizeF(96, 96);
             InitializeComponent();
             GetPenumbraPath();
+            Text += " " + Application.ProductVersion;
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -42,7 +44,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "", "", "", "", "", "", "raen", "xaela", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            baseBodyList.SelectedIndex = genderList.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = 0;
+            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = 0;
             CleanDirectory();
         }
 
@@ -51,48 +53,97 @@ namespace FFXIVLooseTextureCompiler {
                 ConfigurePenumbraModFolder();
             }
             if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
-                string diffusePath = GetMaterialPath(0);
-                string normalPath = GetMaterialPath(1);
-                string multiPath = GetMaterialPath(2);
                 string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
                 jsonFilepath = Path.Combine(modPath, "default_mod.json");
                 metaFilePath = Path.Combine(modPath, "meta.json");
-                string diffusePathDisk = Path.Combine(modPath, diffusePath.Replace("/", @"\"));
-                string normalPathDisk = Path.Combine(modPath, normalPath.Replace("/", @"\"));
-                string multiPathDisk = Path.Combine(modPath, multiPath.Replace("/", @"\"));
-                Group group = new Group($"Texture File", "Imported Textures", 0, "Multi", 0);
-                string groupPath = Path.Combine(modPath, $"group_0" + $"_{group.Name.ToLower()}.json");
-                Directory.Delete(modPath, true);
-                if (!string.IsNullOrEmpty(diffuse.FilePath.Text)) {
+
+                string diffuseBodyPath = GetBodyMaterialPath(0);
+                string normalBodyPath = GetBodyMaterialPath(1);
+                string multiBodyPath = GetBodyMaterialPath(2);
+
+                string diffuseFacePath = GetFaceMaterialPath(0);
+                string normalFacePath = GetFaceMaterialPath(1);
+                string multiFacePath = GetFaceMaterialPath(2);
+
+                string diffuseBodyDiskPath = Path.Combine(modPath, diffuseBodyPath.Replace("/", @"\"));
+                string normalBodyDiskPath = Path.Combine(modPath, normalBodyPath.Replace("/", @"\"));
+                string multiBodyDiskPath = Path.Combine(modPath, multiBodyPath.Replace("/", @"\"));
+
+                string diffuseFaceDiskPath = Path.Combine(modPath, diffuseFacePath.Replace("/", @"\"));
+                string normalFaceDiskPath = Path.Combine(modPath, normalFacePath.Replace("/", @"\"));
+                string multiFaceDiskPath = Path.Combine(modPath, multiFacePath.Replace("/", @"\"));
+
+                Group group = new Group($"Body", "Body Textures", 0, "Multi", 0);
+                Group group2 = new Group($"Face", "Face Textures", 0, "Multi", 0);
+                if (Directory.Exists(modPath)) {
+                    Directory.Delete(modPath, true);
+                }
+                if (!string.IsNullOrEmpty(diffuseB.FilePath.Text)) {
                     byte[] diffuseData = new byte[0];
-                    TextureImporter.PngToTex(diffuse.FilePath.Text, out diffuseData);
+                    TextureImporter.PngToTex(diffuseB.FilePath.Text, out diffuseData);
                     Option option = new Option("Diffuse", 0);
-                    option.Files.Add(diffusePath, diffusePath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(diffusePathDisk));
+                    option.Files.Add(diffuseBodyPath, diffuseBodyPath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
                     group.Options.Add(option);
-                    File.WriteAllBytes(diffusePathDisk, diffuseData);
+                    File.WriteAllBytes(diffuseBodyDiskPath, diffuseData);
                 }
-                if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
+                if (!string.IsNullOrEmpty(normalB.FilePath.Text)) {
                     byte[] normalData = new byte[0];
-                    TextureImporter.PngToTex(normal.FilePath.Text, out normalData);
+                    TextureImporter.PngToTex(normalB.FilePath.Text, out normalData);
                     Option option = new Option("Normal", 0);
-                    option.Files.Add(diffusePath, diffusePath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(normalPathDisk));
+                    option.Files.Add(diffuseBodyPath, diffuseBodyPath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
                     group.Options.Add(option);
-                    File.WriteAllBytes(normalPathDisk, normalData);
+                    File.WriteAllBytes(normalBodyDiskPath, normalData);
                 }
-                if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
+                if (!string.IsNullOrEmpty(normalB.FilePath.Text)) {
                     byte[] multiData = new byte[0];
-                    TextureImporter.PngToTex(multi.FilePath.Text, out multiData);
+                    TextureImporter.PngToTex(multiB.FilePath.Text, out multiData);
                     Option option = new Option("Multi", 0);
-                    option.Files.Add(multiPath, multiPath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(multiPathDisk));
+                    option.Files.Add(multiBodyPath, multiBodyPath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
                     group.Options.Add(option);
-                    File.WriteAllBytes(multiPathDisk, multiData);
+                    File.WriteAllBytes(multiBodyDiskPath, multiData);
+                }
+
+                if (!string.IsNullOrEmpty(diffuseF.FilePath.Text)) {
+                    byte[] diffuseData = new byte[0];
+                    TextureImporter.PngToTex(diffuseF.FilePath.Text, out diffuseData);
+                    Option option = new Option("Diffuse", 0);
+                    option.Files.Add(diffuseFacePath, diffuseFacePath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(diffuseFaceDiskPath));
+                    group2.Options.Add(option);
+                    File.WriteAllBytes(diffuseFaceDiskPath, diffuseData);
+                }
+                if (!string.IsNullOrEmpty(normalF.FilePath.Text)) {
+                    byte[] normalData = new byte[0];
+                    TextureImporter.PngToTex(normalF.FilePath.Text, out normalData);
+                    Option option = new Option("Normal", 0);
+                    option.Files.Add(diffuseFacePath, diffuseFacePath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(normalFaceDiskPath));
+                    group2.Options.Add(option);
+                    File.WriteAllBytes(normalFaceDiskPath, normalData);
+                }
+                if (!string.IsNullOrEmpty(normalF.FilePath.Text)) {
+                    byte[] multiData = new byte[0];
+                    TextureImporter.PngToTex(normalF.FilePath.Text, out multiData);
+                    Option option = new Option("Multi", 0);
+                    option.Files.Add(multiFacePath, multiFacePath.Replace("/", @"\"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(multiFaceDiskPath));
+                    group2.Options.Add(option);
+                    File.WriteAllBytes(multiFaceDiskPath, multiData);
                 }
                 ExportJson();
                 ExportMeta();
-                ExportGroup(groupPath, group);
+                int i = 0;
+                if (group.Options.Count > 0) {
+                    string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                    ExportGroup(groupPath, group);
+                }
+                if (group2.Options.Count > 0) {
+                    string groupPath2 = Path.Combine(modPath, $"group_" + i + $"_{group2.Name.ToLower()}.json");
+                    ExportGroup(groupPath2, group2);
+                }
             } else {
                 MessageBox.Show("Please enter a mod name!");
             }
@@ -157,14 +208,14 @@ namespace FFXIVLooseTextureCompiler {
                 WritePenumbraPath(penumbraModPath);
             }
         }
-        private string GetMaterialPath(int material) {
+        private string GetBodyMaterialPath(int material) {
             string result = "";
-            string uniqueAuRa = (raceList.SelectedIndex == 7 ? "0101" : "0001");
+            string unique = (uniqueAuRa.Checked ? "0101" : "0001");
             switch (baseBodyList.SelectedIndex) {
                 case 0:
                     // Vanila
                     if (material != 2) {
-                        result = @"chara/human/c" + (genderList.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + uniqueAuRa + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "b" + uniqueAuRa + GetTextureType(material) + ".tex";
+                        result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "b" + unique + GetTextureType(material) + ".tex";
                     } else {
                         result = @"chara/common/texture/skin_m.tex";
                     }
@@ -172,7 +223,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 1:
                     // Bibo+
                     if (raceList.SelectedIndex != 5) {
-                        if (genderList.SelectedIndex == 1) {
+                        if (genderListBody.SelectedIndex == 1) {
                             result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
@@ -185,8 +236,8 @@ namespace FFXIVLooseTextureCompiler {
                 case 2:
                     // Eve
                     if (raceList.SelectedIndex != 5) {
-                        if (genderList.SelectedIndex == 1) {
-                            result = @"chara/human/c" + (genderList.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
+                        if (genderListBody.SelectedIndex == 1) {
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Eve is only compatible with feminine characters");
@@ -198,8 +249,8 @@ namespace FFXIVLooseTextureCompiler {
                 case 3:
                     // Gen3 and T&F3
                     if (raceList.SelectedIndex != 5) {
-                        if (genderList.SelectedIndex == 1) {
-                            result = @"chara/human/c" + (genderList.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + uniqueAuRa + @"/texture/tfgen3" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(material) + ".tex";
+                        if (genderListBody.SelectedIndex == 1) {
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/tfgen3" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters");
@@ -212,7 +263,7 @@ namespace FFXIVLooseTextureCompiler {
                     // Scales+
                     if (raceList.SelectedIndex != 5) {
                         if (raceList.SelectedIndex == 6 || raceList.SelectedIndex == 7) {
-                            if (genderList.SelectedIndex == 1) {
+                            if (genderListBody.SelectedIndex == 1) {
                                 result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                             } else {
                                 result = "";
@@ -227,9 +278,9 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 5:
                     if (raceList.SelectedIndex != 5) {
-                        if (genderList.SelectedIndex == 0) {
+                        if (genderListBody.SelectedIndex == 0) {
                             // TBSE and HRBODY
-                            result = @"chara/human/c" + (genderList.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters");
@@ -240,24 +291,46 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 6:
                     string xaelaCheck = (raceList.SelectedIndex == 7 ? "0004" : "0104");
-                    result = @"chara/human/c" + (genderList.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "_etc_" + xaelaCheck + GetTextureType(material) + ".tex";
+                    result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "_etc_" + xaelaCheck + GetTextureType(material) + ".tex";
                     break;
             }
             return result;
         }
+        public string GetFaceMaterialPath(int material) {
+            string helionCheck = subRaceList.SelectedIndex == 12 ? "000" : "010";
+            string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
+            return "chara/human/c" + subRace + "/obj/face/f" + helionCheck + faceType.SelectedIndex + "/texture/--c" + subRace + "f" + helionCheck + faceType.SelectedIndex + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
+        }
 
-        public string GetTextureType(int material) {
+        public string GetTextureType(int material, bool isface = false) {
             switch (material) {
                 case 0:
                     return "_d";
                 case 1:
                     return "_n";
                 case 2:
-                    if (baseBodyList.SelectedIndex == 1) {
+                    if (baseBodyList.SelectedIndex == 1 && !isface) {
                         return "_m";
                     } else {
                         return "_s";
                     }
+            }
+            return null;
+        }
+        public string GetFacePart(int material) {
+            switch (material) {
+                case 0:
+                    if (!asymCheckbox.Checked) {
+                        return "_fac";
+                    } else {
+                        return "_fac_b";
+                    }
+                case 1:
+                    return "_etc";
+                case 2:
+                    return "_iri";
+                case 3:
+                    return "_etc";
             }
             return null;
         }
@@ -274,13 +347,13 @@ namespace FFXIVLooseTextureCompiler {
             switch (baseBodyList.SelectedIndex) {
                 case 0:
                     // Vanila
-                    genderList.Enabled = true;
+                    genderListBody.Enabled = true;
                     tailList.Enabled = false;
                     break;
                 case 1:
                     // Bibo+
-                    genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    genderListBody.SelectedIndex = 1;
+                    genderListBody.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -288,8 +361,8 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 2:
                     // Eve
-                    genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    genderListBody.SelectedIndex = 1;
+                    genderListBody.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -297,8 +370,8 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 3:
                     // Gen3 and T&F3
-                    genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    genderListBody.SelectedIndex = 1;
+                    genderListBody.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -309,8 +382,8 @@ namespace FFXIVLooseTextureCompiler {
                     if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                         raceList.SelectedIndex = 6;
                     }
-                    genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    genderListBody.SelectedIndex = 1;
+                    genderListBody.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -318,8 +391,8 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 5:
                     // TBSE and HRBODY
-                    genderList.SelectedIndex = 0;
-                    genderList.Enabled = false;
+                    genderListBody.SelectedIndex = 0;
+                    genderListBody.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -330,7 +403,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                         raceList.SelectedIndex = 6;
                     }
-                    genderList.Enabled = true;
+                    genderListBody.Enabled = true;
                     tailList.Enabled = true;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -377,6 +450,22 @@ namespace FFXIVLooseTextureCompiler {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
             using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"PenumbraPath.config"))) {
                 writer.WriteLine(path);
+            }
+        }
+
+        private void changePenumbraPathToolStripMenuItem_Click(object sender, EventArgs e) {
+            ConfigurePenumbraModFolder();
+        }
+
+        private void donateButton_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://ko-fi.com/sebastina",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
             }
         }
     }
