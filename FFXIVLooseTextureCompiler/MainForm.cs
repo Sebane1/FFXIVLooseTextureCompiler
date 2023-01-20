@@ -145,6 +145,7 @@ namespace FFXIVLooseTextureCompiler {
                     string groupPath2 = Path.Combine(modPath, $"group_" + i + $"_{group2.Name.ToLower()}.json");
                     ExportGroup(groupPath2, group2);
                 }
+                MessageBox.Show("Export succeeded!");
             } else {
                 MessageBox.Show("Please enter a mod name!");
             }
@@ -300,7 +301,7 @@ namespace FFXIVLooseTextureCompiler {
         public string GetFaceMaterialPath(int material) {
             string helionCheck = subRaceList.SelectedIndex == 12 ? "000" : "010";
             string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
-            return "chara/human/c" + subRace + "/obj/face/f" + helionCheck + faceType.SelectedIndex + "/texture/--c" + subRace + "f" + helionCheck + faceType.SelectedIndex + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
+            return "chara/human/c" + subRace + "/obj/face/f" + helionCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + helionCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
         }
 
         public string GetTextureType(int material, bool isface = false) {
