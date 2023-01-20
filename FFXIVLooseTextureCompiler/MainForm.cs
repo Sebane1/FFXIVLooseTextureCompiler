@@ -299,9 +299,12 @@ namespace FFXIVLooseTextureCompiler {
             return result;
         }
         public string GetFaceMaterialPath(int material) {
-            string helionCheck = subRaceList.SelectedIndex == 12 ? "000" : "010";
+            string faceIdCheck = "000";
+            if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "moon") {
+                faceIdCheck = "010";
+            }
             string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
-            return "chara/human/c" + subRace + "/obj/face/f" + helionCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + helionCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
+            return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
         }
 
         public string GetTextureType(int material, bool isface = false) {
