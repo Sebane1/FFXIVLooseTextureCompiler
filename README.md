@@ -1,6 +1,6 @@
 # FFXIVLooseTextureCompiler
 
-Dwonload: https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
+Download: https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
 
 Make loose texture mods less of a pain to set up.
 
