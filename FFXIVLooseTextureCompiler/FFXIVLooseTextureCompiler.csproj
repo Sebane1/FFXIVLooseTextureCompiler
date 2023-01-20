@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Penumbra\CombinedTexture.Manipulation.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Penumbra\CombinedTexture.Manipulation.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lumina" Version="3.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="OtterTex">
+      <HintPath>Penumbra\lib\OtterTex.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
