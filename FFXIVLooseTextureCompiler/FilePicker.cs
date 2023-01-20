@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace FFXIVVoicePackCreator {
+    public partial class FilePicker : UserControl {
+        public FilePicker() {
+            InitializeComponent();
+        }
+
+        int index = 0;
+        bool isSaveMode = false;
+        bool isSwappable = true;
+        bool isPlayable = true;
+        public event EventHandler OnFileSelected;
+
+        string filter;
+        private Point startPos;
+        private bool canDoDragDrop;
+        private bool ignoreClear;
+        private bool muteState;
+        private int maxTime = 4000;
+        private Color color;
+        [Category("Filter"), Description("Changes what type of selection is made")]
+        public string Filter { get => filter; set => filter = value; }
+
+        private void filePicker_Load(object sender, EventArgs e) {
+            color = BackColor;
+            AutoScaleDimensions = new SizeF(96, 96);
+            labelName.Text = (index == -1 ? Name : ($"({index})  " + Name));
+            filePath.AllowDrop = true;
+        }
+        private void filePicker_MouseDown(object sender, MouseEventArgs e) {
+            startPos = e.Location;
+            canDoDragDrop = true;
+        }
+
+        private void filePicker_MouseMove(object sender, MouseEventArgs e) {
+            if ((e.X != startPos.X || startPos.Y != e.Y) && canDoDragDrop) {
+                this.ParentForm.TopMost = true;
+                List<string> fileList = new List<string>();
+                if (!string.IsNullOrEmpty(filePath.Text)) {
+                    fileList.Add(filePath.Text);
+                }
+                if (fileList.Count > 0) {
+                    DataObject fileDragData = new DataObject(DataFormats.FileDrop, fileList.ToArray());
+                    DoDragDrop(fileDragData, DragDropEffects.Copy);
+                }
+                canDoDragDrop = false;
+                this.ParentForm.BringToFront();
+            }
+            this.ParentForm.TopMost = false;
+        }
+        private void openButton_Click(object sender, EventArgs e) {
+            if (!isSaveMode) {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = filter;
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    filePath.Text = openFileDialog.FileName;
+                }
+            } else {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = filter;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    filePath.Text = saveFileDialog.FileName;
+                }
+            }
+            if (OnFileSelected != null) {
+                OnFileSelected.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void useGameFileCheckBox_CheckedChanged(object sender, EventArgs e) {
+
+        }
+
+        private void filePath_TextChanged(object sender, EventArgs e) {
+        }
+
+        private void filePath_DragEnter(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void filePath_DragDrop(object sender, DragEventArgs e) {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
+            if (CheckExtentions(file)) {
+                filePath.Text = file;
+            } else {
+                MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
+            }
+        }
+        private bool CheckExtentions(string file) {
+            string[] extentions = new string[] { ".png" };
+            foreach (string extention in extentions) {
+                if (file.Contains(extention)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void playButton_Click(object sender, EventArgs e) {
+
+        }
+    }
+}
+
+
