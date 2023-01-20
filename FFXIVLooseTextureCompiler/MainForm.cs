@@ -78,6 +78,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (Directory.Exists(modPath)) {
                     Directory.Delete(modPath, true);
                 }
+                Directory.CreateDirectory(modPath);
                 if (!string.IsNullOrEmpty(diffuseB.FilePath.Text)) {
                     byte[] diffuseData = new byte[0];
                     TextureImporter.PngToTex(diffuseB.FilePath.Text, out diffuseData);
@@ -96,7 +97,7 @@ namespace FFXIVLooseTextureCompiler {
                     group.Options.Add(option);
                     File.WriteAllBytes(normalBodyDiskPath, normalData);
                 }
-                if (!string.IsNullOrEmpty(normalB.FilePath.Text)) {
+                if (!string.IsNullOrEmpty(multiB.FilePath.Text)) {
                     byte[] multiData = new byte[0];
                     TextureImporter.PngToTex(multiB.FilePath.Text, out multiData);
                     Option option = new Option("Multi", 0);
@@ -119,14 +120,14 @@ namespace FFXIVLooseTextureCompiler {
                     byte[] normalData = new byte[0];
                     TextureImporter.PngToTex(normalF.FilePath.Text, out normalData);
                     Option option = new Option("Normal", 0);
-                    option.Files.Add(diffuseFacePath, diffuseFacePath.Replace("/", @"\"));
+                    option.Files.Add(normalFacePath, normalFacePath.Replace("/", @"\"));
                     Directory.CreateDirectory(Path.GetDirectoryName(normalFaceDiskPath));
                     group2.Options.Add(option);
                     File.WriteAllBytes(normalFaceDiskPath, normalData);
                 }
-                if (!string.IsNullOrEmpty(normalF.FilePath.Text)) {
+                if (!string.IsNullOrEmpty(multiF.FilePath.Text)) {
                     byte[] multiData = new byte[0];
-                    TextureImporter.PngToTex(normalF.FilePath.Text, out multiData);
+                    TextureImporter.PngToTex(multiF.FilePath.Text, out multiData);
                     Option option = new Option("Multi", 0);
                     option.Files.Add(multiFacePath, multiFacePath.Replace("/", @"\"));
                     Directory.CreateDirectory(Path.GetDirectoryName(multiFaceDiskPath));

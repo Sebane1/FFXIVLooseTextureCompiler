@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Lawener Industries")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.0.0.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.0.1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.0.2")]
 [assembly: System.Reflection.AssemblyProductAttribute("FFXIVLooseTextureCompiler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FFXIVLooseTextureCompiler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.0.0.1")]
