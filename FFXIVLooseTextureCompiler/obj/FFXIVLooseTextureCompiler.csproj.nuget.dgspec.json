@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\stel9\\source\\repos\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler.csproj": {
-      "version": "1.0.0",
+      "version": "0.0.0.1",
       "restore": {
         "projectUniqueName": "C:\\Users\\stel9\\source\\repos\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler.csproj",
         "projectName": "FFXIVLooseTextureCompiler",
@@ -45,6 +45,10 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "dependencies": {
+            "Autoupdater.NET.Official": {
+              "target": "Package",
+              "version": "[1.7.6, )"
+            },
             "Lumina": {
               "target": "Package",
               "version": "[3.10.0, )"
