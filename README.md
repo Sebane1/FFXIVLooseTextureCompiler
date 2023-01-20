@@ -6,3 +6,5 @@ Make loose texture mods less of a pain to set up.
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
 
 This application is currently highly experimental, please report any bugs under issues.
+
+.tex generation is forked from Penumbra.
