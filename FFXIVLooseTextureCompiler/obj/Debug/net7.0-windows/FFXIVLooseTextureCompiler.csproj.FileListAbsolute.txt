@@ -50,3 +50,4 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.Properties.Resources.resources
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\bin\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.pdb
+C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.CustomPathDialog.resources

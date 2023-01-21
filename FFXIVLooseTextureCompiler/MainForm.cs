@@ -22,8 +22,18 @@ namespace FFXIVLooseTextureCompiler {
         public readonly string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
         public string _defaultWebsite = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
         private string savePath;
+        private bool hasSaved;
 
-        public bool HasSaved { get; private set; }
+        public bool HasSaved {
+            get => hasSaved; set {
+                hasSaved = value;
+                if (!hasSaved) {
+                    Text = Application.ProductName + " " + Application.ProductVersion + (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})*" : "*");
+                } else {
+                    Text = Application.ProductName + " " + Application.ProductVersion + (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})" : "");
+                }
+            }
+        }
         public string VersionText { get; private set; }
 
         public MainWindow() {
@@ -36,6 +46,8 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
+            VersionText = Application.ProductName + " " + Application.ProductVersion;
+            AutoScaleDimensions = new SizeF(96, 96);
             diffuse.FilePath.Enabled = false;
             normal.FilePath.Enabled = false;
             multi.FilePath.Enabled = false;
@@ -81,10 +93,10 @@ namespace FFXIVLooseTextureCompiler {
                 int i = 0;
                 foreach (MaterialSet materialSet in materialList.Items) {
                     Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
-                    string diffuseBodyDiskPath = Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\"));
-                    string normalBodyDiskPath = Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\"));
-                    string multiBodyDiskPath = Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\"));
-                    if (!string.IsNullOrEmpty(materialSet.Diffuse)) {
+                    string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
+                    string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
+                    string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
+                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
                         byte[] diffuseData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
                         Option option = new Option("Diffuse", 0);
@@ -93,7 +105,7 @@ namespace FFXIVLooseTextureCompiler {
                         group.Options.Add(option);
                         File.WriteAllBytes(diffuseBodyDiskPath, diffuseData);
                     }
-                    if (!string.IsNullOrEmpty(materialSet.Normal)) {
+                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                         byte[] normalData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Normal, out normalData);
                         Option option = new Option("Normal", 0);
@@ -102,7 +114,7 @@ namespace FFXIVLooseTextureCompiler {
                         group.Options.Add(option);
                         File.WriteAllBytes(normalBodyDiskPath, normalData);
                     }
-                    if (!string.IsNullOrEmpty(materialSet.Multi)) {
+                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                         byte[] multiData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Multi, out multiData);
                         Option option = new Option("Multi", 0);
@@ -177,7 +189,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void ConfigurePenumbraModFolder() {
-            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", Text);
+            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
             FolderBrowserDialog folderSelect = new FolderBrowserDialog();
             if (folderSelect.ShowDialog() == DialogResult.OK) {
                 penumbraModPath = folderSelect.SelectedPath;
@@ -191,7 +203,8 @@ namespace FFXIVLooseTextureCompiler {
                 case 0:
                     // Vanila
                     if (material != 2) {
-                        result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "b" + unique + GetTextureType(material) + ".tex";
+                        string genderCode = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
+                        result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(material) + ".tex";
                     } else {
                         result = @"chara/common/texture/skin_m.tex";
                     }
@@ -203,10 +216,10 @@ namespace FFXIVLooseTextureCompiler {
                             result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
-                            MessageBox.Show("Bibo+ is only compatible with feminine characters");
+                            MessageBox.Show("Bibo+ is only compatible with feminine characters", VersionText);
                         }
                     } else {
-                        MessageBox.Show("Bibo+ is not compatible with lalafells");
+                        MessageBox.Show("Bibo+ is not compatible with lalafells", VersionText);
                     }
                     break;
                 case 2:
@@ -216,10 +229,10 @@ namespace FFXIVLooseTextureCompiler {
                             result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
-                            MessageBox.Show("Eve is only compatible with feminine characters");
+                            MessageBox.Show("Eve is only compatible with feminine characters", VersionText);
                         }
                     } else {
-                        MessageBox.Show("Eve is not compatible with lalafells");
+                        MessageBox.Show("Eve is not compatible with lalafells", VersionText);
                     }
                     break;
                 case 3:
@@ -229,10 +242,10 @@ namespace FFXIVLooseTextureCompiler {
                             result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/tfgen3" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
-                            MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters");
+                            MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters", VersionText);
                         }
                     } else {
-                        MessageBox.Show("Gen3 and T&F3 are not compatible with lalafells");
+                        MessageBox.Show("Gen3 and T&F3 are not compatible with lalafells", VersionText);
                     }
                     break;
                 case 4:
@@ -243,13 +256,13 @@ namespace FFXIVLooseTextureCompiler {
                                 result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
                             } else {
                                 result = "";
-                                MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters");
+                                MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
                             }
                         } else {
-                            MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters");
+                            MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
                         }
                     } else {
-                        MessageBox.Show("Scales+ is not compatible with lalafells");
+                        MessageBox.Show("Scales+ is not compatible with lalafells", VersionText);
                     }
                     break;
                 case 5:
@@ -259,10 +272,10 @@ namespace FFXIVLooseTextureCompiler {
                             result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
-                            MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters");
+                            MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
                         }
                     } else {
-                        MessageBox.Show("TBSE and HRBODY are not compatible with lalafells");
+                        MessageBox.Show("TBSE and HRBODY are not compatible with lalafells", VersionText);
                     }
                     break;
                 case 6:
@@ -395,18 +408,18 @@ namespace FFXIVLooseTextureCompiler {
             if (baseBodyList.SelectedIndex == 6) {
                 if (raceList.SelectedIndex != 3 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     raceList.SelectedIndex = 3;
-                    MessageBox.Show("Tail is only compatible with Xaela, and Raen");
+                    MessageBox.Show("Tail is only compatible with Xaela, and Raen", VersionText);
                 }
             } else if (baseBodyList.SelectedIndex == 4) {
                 if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     raceList.SelectedIndex = 6;
-                    MessageBox.Show("Scales+ is only compatible with Xaela, and Raen");
+                    MessageBox.Show("Scales+ is only compatible with Xaela, and Raen", VersionText);
                 }
             }
             if (baseBodyList.SelectedIndex > 0) {
                 if (raceList.SelectedIndex == 5) {
                     raceList.SelectedIndex = lastRaceIndex;
-                    MessageBox.Show("Lalafels are not compatible with the selected body");
+                    MessageBox.Show("Lalafels are not compatible with the selected body", VersionText);
                 }
             }
             lastRaceIndex = raceList.SelectedIndex;
@@ -480,9 +493,10 @@ namespace FFXIVLooseTextureCompiler {
                 diffuse.FilePath.Text = materialSet.Diffuse;
                 normal.FilePath.Text = materialSet.Normal;
                 multi.FilePath.Text = materialSet.Multi;
-                diffuse.Enabled = true;
-                normal.Enabled = true;
-                multi.Enabled = true;
+
+                diffuse.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
+                normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
+                multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
             }
         }
         public void SetPaths() {
@@ -528,6 +542,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void NewProject() {
             Text = Application.ProductName + " " + Application.ProductVersion;
+            savePath = null;
             materialList.Items.Clear();
             modNameTextBox.Text = "";
             modAuthorTextBox.Text = _defaultAuthor;
@@ -556,7 +571,11 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void clearList_Click(object sender, EventArgs e) {
-            materialList.Items.Clear();
+            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                {
+                    materialList.Items.Clear();
+                }
+            }
         }
 
         private void multi_OnFileSelected(object sender, EventArgs e) {
@@ -712,6 +731,55 @@ namespace FFXIVLooseTextureCompiler {
                         e.Cancel = true;
                         break;
                 }
+            }
+        }
+
+        private void addCustomPathButton_Click(object sender, EventArgs e) {
+            CustomPathDialog customPathDialog = new CustomPathDialog();
+            if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                materialList.Items.Add(customPathDialog.MaterialSet);
+            }
+        }
+
+        private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (materialList.Items.Count == 0) {
+                materialListContextMenu.Close();
+            }
+        }
+
+        private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
+            CustomPathDialog customPathDialog = new CustomPathDialog();
+            customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+            if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Material Set has been edited successfully", VersionText);
+            }
+            RefreshList();
+        }
+        private void RefreshList() {
+            for (int i = 0; i < materialList.Items.Count; i++) {
+                materialList.Items[i] = materialList.Items[i];
+            }
+        }
+
+        private void moveUpButton_Click(object sender, EventArgs e) {
+            if (materialList.SelectedIndex > 0) {
+                object object1 = materialList.Items[materialList.SelectedIndex - 1];
+                object object2 = materialList.Items[materialList.SelectedIndex];
+
+                materialList.Items[materialList.SelectedIndex] = object1;
+                materialList.Items[materialList.SelectedIndex - 1] = object2;
+                materialList.SelectedIndex -= 1;
+            }
+        }
+
+        private void moveDownButton_Click(object sender, EventArgs e) {
+            if (materialList.SelectedIndex + 1 < materialList.Items.Count && materialList.SelectedIndex != -1) {
+                object object1 = materialList.Items[materialList.SelectedIndex + 1];
+                object object2 = materialList.Items[materialList.SelectedIndex];
+
+                materialList.Items[materialList.SelectedIndex] = object1;
+                materialList.Items[materialList.SelectedIndex + 1] = object2;
+                materialList.SelectedIndex += 1;
             }
         }
     }
