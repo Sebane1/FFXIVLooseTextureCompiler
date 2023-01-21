@@ -1,3 +1,4 @@
+using FFBardMusicPlayer.FFXIV;
 using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVVoicePackCreator;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
+        FFXIVHook Hook = new FFXIVHook();
         private RaceCode raceCodeBody;
         private RaceCode raceCodeFace;
         private List<RacialBodyIdentifiers> bodyIdentifiers = new List<RacialBodyIdentifiers>();
@@ -23,6 +25,7 @@ namespace FFXIVLooseTextureCompiler {
         public string _defaultWebsite = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
         private string savePath;
         private bool hasSaved;
+        private bool foundInstance;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -77,7 +80,14 @@ namespace FFXIVLooseTextureCompiler {
             CleanDirectory();
             CheckForCommandArguments();
         }
-
+        private void RefreshFFXIVInstance() {
+            var processes = new List<Process>(Process.GetProcessesByName("ffxiv_dx11"));
+            foundInstance = false;
+            if (processes.Count > 0) {
+                foundInstance = true;
+                Hook.Hook(processes[0], false);
+            }
+        }
         private void generateButton_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(penumbraModPath)) {
                 ConfigurePenumbraModFolder();
@@ -131,7 +141,18 @@ namespace FFXIVLooseTextureCompiler {
 
                 ExportJson();
                 ExportMeta();
-                MessageBox.Show("Export succeeded!");
+                Hook.SendSyncKey(Keys.Enter);
+                Thread.Sleep(500);
+                Hook.SendString(@"/penumbra redraw");
+                Thread.Sleep(100);
+                Hook.SendSyncKey(Keys.Enter);
+                TopMost = true;
+                BringToFront();
+                TopMost = false;
+                generateButton.Enabled = false;
+                generateButton.Text = "Generation Succeed";
+                generationCooldown.Start();
+                //MessageBox.Show("Export succeeded!");
             } else {
                 MessageBox.Show("Please enter a mod name!");
             }
@@ -800,6 +821,16 @@ namespace FFXIVLooseTextureCompiler {
                 materialList.Items[materialList.SelectedIndex + 1] = object2;
                 materialList.SelectedIndex += 1;
             }
+        }
+
+        private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
+            RefreshFFXIVInstance();
+        }
+
+        private void generationCooldown_Tick(object sender, EventArgs e) {
+            generationCooldown.Stop();
+            generateButton.Enabled = true;
+            generateButton.Text = "Generate";
         }
     }
 }
