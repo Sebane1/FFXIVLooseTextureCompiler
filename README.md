@@ -6,7 +6,7 @@ Tool in action: https://i.gyazo.com/4add694a6d5973df800b46a6eca19fcf.mp4
 
 Make loose texture mods less of a pain to set up.
 
-![image](https://user-images.githubusercontent.com/7157688/213757189-53beb3c1-7500-4033-b664-d485fde04718.png)
+![image](https://i.gyazo.com/391cfe85206f0c2ac7be33c258514387.png)
 
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
 
