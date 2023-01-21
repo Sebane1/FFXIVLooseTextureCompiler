@@ -71,5 +71,9 @@ namespace FFXIVLooseTextureCompiler {
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
         }
+
+        private void button1_Click(object sender, EventArgs e) {
+            Close();
+        }
     }
 }

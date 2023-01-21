@@ -286,12 +286,16 @@ namespace FFXIVLooseTextureCompiler {
             return result;
         }
         public string GetFaceMaterialPath(int material) {
-            string faceIdCheck = "000";
-            if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "moon") {
-                faceIdCheck = "010";
+            if (material != 3) {
+                string faceIdCheck = "000";
+                if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "moon") {
+                    faceIdCheck = "010";
+                }
+                string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
+                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
+            } else {
+                return "chara/common/texture/catchlight_1.tex";
             }
-            string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
-            return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
         }
 
         public string GetTextureType(int material, bool isface = false) {
@@ -474,9 +478,15 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             MaterialSet materialSet = new MaterialSet();
             materialSet.MaterialSetName = facePart.Text + ", " + genderListBody.Text + ", " + subRaceList.Text + ", " + faceType.Text;
-            materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
-            materialSet.InternalNormalPath = GetFaceMaterialPath(1);
-            materialSet.InternalMultiPath = GetFaceMaterialPath(2);
+            if (facePart.SelectedIndex != 2) {
+                materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
+                materialSet.InternalNormalPath = GetFaceMaterialPath(1);
+                materialSet.InternalMultiPath = GetFaceMaterialPath(2);
+            } else {
+                materialSet.InternalDiffusePath = GetFaceMaterialPath(1);
+                materialSet.InternalNormalPath = GetFaceMaterialPath(2);
+                materialSet.InternalMultiPath = GetFaceMaterialPath(3);
+            }
             materialList.Items.Add(materialSet);
             HasSaved = false;
         }
@@ -497,6 +507,15 @@ namespace FFXIVLooseTextureCompiler {
                 diffuse.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
+                if (materialSet.MaterialSetName.ToLower().Contains("eye")) {
+                    diffuse.LabelName.Text = "normal";
+                    normal.LabelName.Text = "multi";
+                    multi.LabelName.Text = "catchlight";
+                } else {
+                    diffuse.LabelName.Text = "diffuse";
+                    normal.LabelName.Text = "normal";
+                    multi.LabelName.Text = "multi";
+                }
             }
         }
         public void SetPaths() {
