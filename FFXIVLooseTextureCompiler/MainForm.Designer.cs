@@ -71,6 +71,8 @@
             this.addCustomPathButton = new System.Windows.Forms.Button();
             this.moveUpButton = new System.Windows.Forms.Button();
             this.moveDownButton = new System.Windows.Forms.Button();
+            this.ffxivRefreshTimer = new System.Windows.Forms.Timer(this.components);
+            this.generationCooldown = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -574,6 +576,17 @@
             this.moveDownButton.UseVisualStyleBackColor = true;
             this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
+            // ffxivRefreshTimer
+            // 
+            this.ffxivRefreshTimer.Enabled = true;
+            this.ffxivRefreshTimer.Interval = 5000;
+            this.ffxivRefreshTimer.Tick += new System.EventHandler(this.ffxivRefreshTimer_Tick);
+            // 
+            // generationCooldown
+            // 
+            this.generationCooldown.Interval = 3000;
+            this.generationCooldown.Tick += new System.EventHandler(this.generationCooldown_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -678,5 +691,7 @@
         private ToolStripMenuItem moveDownToolStripMenuItem;
         private Button moveUpButton;
         private Button moveDownButton;
+        private System.Windows.Forms.Timer ffxivRefreshTimer;
+        private System.Windows.Forms.Timer generationCooldown;
     }
 }
