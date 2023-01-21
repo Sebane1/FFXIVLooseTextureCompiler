@@ -2,7 +2,7 @@
 
 Download: https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
 
-Tool in action: https://i.gyazo.com/f0301db37b5ab723bd6aa894b946b0b2.mp4
+Tool in action: https://i.gyazo.com/4add694a6d5973df800b46a6eca19fcf.mp4
 
 Make loose texture mods less of a pain to set up.
 
