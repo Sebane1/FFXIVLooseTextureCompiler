@@ -23,6 +23,7 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.genderListBody = new System.Windows.Forms.ComboBox();
             this.raceList = new System.Windows.Forms.ComboBox();
@@ -57,13 +58,21 @@
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.materialList = new System.Windows.Forms.ListBox();
+            this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBodyButton = new System.Windows.Forms.Button();
             this.addFaceButton = new System.Windows.Forms.Button();
             this.currentEditLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.removeSelection = new System.Windows.Forms.Button();
             this.clearList = new System.Windows.Forms.Button();
+            this.addCustomPathButton = new System.Windows.Forms.Button();
+            this.moveUpButton = new System.Windows.Forms.Button();
+            this.moveDownButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
+            this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // genderListBody
@@ -435,6 +444,7 @@
             // 
             // materialList
             // 
+            this.materialList.ContextMenuStrip = this.materialListContextMenu;
             this.materialList.FormattingEnabled = true;
             this.materialList.ItemHeight = 15;
             this.materialList.Location = new System.Drawing.Point(12, 204);
@@ -442,6 +452,37 @@
             this.materialList.Size = new System.Drawing.Size(520, 184);
             this.materialList.TabIndex = 26;
             this.materialList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
+            // 
+            // materialListContextMenu
+            // 
+            this.materialListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editPathsToolStripMenuItem,
+            this.moveUpToolStripMenuItem,
+            this.moveDownToolStripMenuItem});
+            this.materialListContextMenu.Name = "materialListContextMenu";
+            this.materialListContextMenu.Size = new System.Drawing.Size(239, 70);
+            this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
+            // 
+            // editPathsToolStripMenuItem
+            // 
+            this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
+            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editPathsToolStripMenuItem.Text = "Edit Internal Material Set Values";
+            this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
+            // 
+            // moveUpToolStripMenuItem
+            // 
+            this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.moveUpToolStripMenuItem.Text = "Move Up";
+            this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpButton_Click);
+            // 
+            // moveDownToolStripMenuItem
+            // 
+            this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.moveDownToolStripMenuItem.Text = "Move Down";
+            this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
             // addBodyButton
             // 
@@ -455,7 +496,7 @@
             // 
             // addFaceButton
             // 
-            this.addFaceButton.Location = new System.Drawing.Point(420, 140);
+            this.addFaceButton.Location = new System.Drawing.Point(420, 144);
             this.addFaceButton.Name = "addFaceButton";
             this.addFaceButton.Size = new System.Drawing.Size(112, 23);
             this.addFaceButton.TabIndex = 28;
@@ -485,9 +526,9 @@
             // 
             // removeSelection
             // 
-            this.removeSelection.Location = new System.Drawing.Point(244, 388);
+            this.removeSelection.Location = new System.Drawing.Point(344, 388);
             this.removeSelection.Name = "removeSelection";
-            this.removeSelection.Size = new System.Drawing.Size(176, 23);
+            this.removeSelection.Size = new System.Drawing.Size(116, 23);
             this.removeSelection.TabIndex = 31;
             this.removeSelection.Text = "Remove Selection From List";
             this.removeSelection.UseVisualStyleBackColor = true;
@@ -495,19 +536,52 @@
             // 
             // clearList
             // 
-            this.clearList.Location = new System.Drawing.Point(424, 388);
+            this.clearList.Location = new System.Drawing.Point(460, 388);
             this.clearList.Name = "clearList";
-            this.clearList.Size = new System.Drawing.Size(108, 23);
+            this.clearList.Size = new System.Drawing.Size(72, 23);
             this.clearList.TabIndex = 32;
             this.clearList.Text = "Clear List";
             this.clearList.UseVisualStyleBackColor = true;
             this.clearList.Click += new System.EventHandler(this.clearList_Click);
+            // 
+            // addCustomPathButton
+            // 
+            this.addCustomPathButton.Location = new System.Drawing.Point(416, 176);
+            this.addCustomPathButton.Name = "addCustomPathButton";
+            this.addCustomPathButton.Size = new System.Drawing.Size(116, 23);
+            this.addCustomPathButton.TabIndex = 33;
+            this.addCustomPathButton.Text = "Add Custom Paths";
+            this.addCustomPathButton.UseVisualStyleBackColor = true;
+            this.addCustomPathButton.Click += new System.EventHandler(this.addCustomPathButton_Click);
+            // 
+            // moveUpButton
+            // 
+            this.moveUpButton.Location = new System.Drawing.Point(196, 388);
+            this.moveUpButton.Name = "moveUpButton";
+            this.moveUpButton.Size = new System.Drawing.Size(68, 23);
+            this.moveUpButton.TabIndex = 34;
+            this.moveUpButton.Text = "Move Up";
+            this.moveUpButton.UseVisualStyleBackColor = true;
+            this.moveUpButton.Click += new System.EventHandler(this.moveUpButton_Click);
+            // 
+            // moveDownButton
+            // 
+            this.moveDownButton.Location = new System.Drawing.Point(264, 388);
+            this.moveDownButton.Name = "moveDownButton";
+            this.moveDownButton.Size = new System.Drawing.Size(80, 23);
+            this.moveDownButton.TabIndex = 35;
+            this.moveDownButton.Text = "Move Down";
+            this.moveDownButton.UseVisualStyleBackColor = true;
+            this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 573);
+            this.Controls.Add(this.moveDownButton);
+            this.Controls.Add(this.moveUpButton);
+            this.Controls.Add(this.addCustomPathButton);
             this.Controls.Add(this.clearList);
             this.Controls.Add(this.removeSelection);
             this.Controls.Add(this.label6);
@@ -551,6 +625,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.materialListContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -596,5 +671,12 @@
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
+        private Button addCustomPathButton;
+        private ContextMenuStrip materialListContextMenu;
+        private ToolStripMenuItem editPathsToolStripMenuItem;
+        private ToolStripMenuItem moveUpToolStripMenuItem;
+        private ToolStripMenuItem moveDownToolStripMenuItem;
+        private Button moveUpButton;
+        private Button moveDownButton;
     }
 }
