@@ -16,4 +16,4 @@ This application is currently highly experimental, please report any bugs under 
 
 .tex generation is forked from Penumbra.
 
-Requirees penumbbra to use.
+Requires Penumbra to use.
