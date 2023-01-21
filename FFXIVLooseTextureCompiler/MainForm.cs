@@ -99,7 +99,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
                         byte[] diffuseData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
-                        Option option = new Option("Diffuse", 0);
+                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
                         option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
                         group.Options.Add(option);
@@ -108,7 +108,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                         byte[] normalData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Normal, out normalData);
-                        Option option = new Option("Normal", 0);
+                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
                         option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
                         group.Options.Add(option);
@@ -117,8 +117,8 @@ namespace FFXIVLooseTextureCompiler {
                     if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                         byte[] multiData = new byte[0];
                         TextureImporter.PngToTex(materialSet.Multi, out multiData);
-                        Option option = new Option("Multi", 0);
-                        option.Files.Add(materialSet.Multi, materialSet.Multi.Replace("/", @"\"));
+                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
+                        option.Files.Add(materialSet.InternalMultiPath, materialSet.InternalMultiPath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
                         group.Options.Add(option);
                         File.WriteAllBytes(multiBodyDiskPath, multiData);
@@ -305,7 +305,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 1:
                     return "_n";
                 case 2:
-                    if (baseBodyList.SelectedIndex == 1 && !isface || (isface && facePart.SelectedIndex == 2)) {
+                    if (baseBodyList.SelectedIndex == 1 && !isface) {
                         return "_m";
                     } else {
                         return "_s";
