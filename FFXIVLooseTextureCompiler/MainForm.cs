@@ -1,4 +1,6 @@
 using FFXIVLooseTextureCompiler.DataTypes;
+using FFXIVLooseTextureCompiler.PathOrganization;
+using FFXIVVoicePackCreator;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
 using Penumbra.Import.Dds;
@@ -13,15 +15,30 @@ namespace FFXIVLooseTextureCompiler {
         private string? penumbraModPath;
         private string jsonFilepath;
         private string metaFilePath;
+        private bool enteredField;
+
+        public readonly string _defaultModName = "";
+        public string _defaultAuthor = "FFXIV Loose Texture Compiler";
+        public readonly string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
+        public string _defaultWebsite = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
+        private string savePath;
+
+        public bool HasSaved { get; private set; }
+        public string VersionText { get; private set; }
 
         public MainWindow() {
             AutoScaleDimensions = new SizeF(96, 96);
             InitializeComponent();
+            GetAuthorWebsite();
+            GetAuthorName();
             GetPenumbraPath();
             Text += " " + Application.ProductVersion;
         }
 
         private void Form1_Load(object sender, EventArgs e) {
+            diffuse.FilePath.Enabled = false;
+            normal.FilePath.Enabled = false;
+            multi.FilePath.Enabled = false;
             raceCodeBody = new RaceCode();
             raceCodeFace = new RaceCode();
             raceCodeBody.Masculine = new string[] {
@@ -46,6 +63,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = 0;
             CleanDirectory();
+            CheckForCommandArguments();
         }
 
         private void generateButton_Click(object sender, EventArgs e) {
@@ -56,95 +74,51 @@ namespace FFXIVLooseTextureCompiler {
                 string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
                 jsonFilepath = Path.Combine(modPath, "default_mod.json");
                 metaFilePath = Path.Combine(modPath, "meta.json");
-
-                string diffuseBodyPath = GetBodyMaterialPath(0);
-                string normalBodyPath = GetBodyMaterialPath(1);
-                string multiBodyPath = GetBodyMaterialPath(2);
-
-                string diffuseFacePath = GetFaceMaterialPath(0);
-                string normalFacePath = GetFaceMaterialPath(1);
-                string multiFacePath = GetFaceMaterialPath(2);
-
-                string diffuseBodyDiskPath = Path.Combine(modPath, diffuseBodyPath.Replace("/", @"\"));
-                string normalBodyDiskPath = Path.Combine(modPath, normalBodyPath.Replace("/", @"\"));
-                string multiBodyDiskPath = Path.Combine(modPath, multiBodyPath.Replace("/", @"\"));
-
-                string diffuseFaceDiskPath = Path.Combine(modPath, diffuseFacePath.Replace("/", @"\"));
-                string normalFaceDiskPath = Path.Combine(modPath, normalFacePath.Replace("/", @"\"));
-                string multiFaceDiskPath = Path.Combine(modPath, multiFacePath.Replace("/", @"\"));
-
-                Group group = new Group($"Body", "Body Textures", 0, "Multi", 0);
-                Group group2 = new Group($"Face", "Face Textures", 0, "Multi", 0);
                 if (Directory.Exists(modPath)) {
                     Directory.Delete(modPath, true);
                 }
                 Directory.CreateDirectory(modPath);
-                if (!string.IsNullOrEmpty(diffuseB.FilePath.Text)) {
-                    byte[] diffuseData = new byte[0];
-                    TextureImporter.PngToTex(diffuseB.FilePath.Text, out diffuseData);
-                    Option option = new Option("Diffuse", 0);
-                    option.Files.Add(diffuseBodyPath, diffuseBodyPath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
-                    group.Options.Add(option);
-                    File.WriteAllBytes(diffuseBodyDiskPath, diffuseData);
-                }
-                if (!string.IsNullOrEmpty(normalB.FilePath.Text)) {
-                    byte[] normalData = new byte[0];
-                    TextureImporter.PngToTex(normalB.FilePath.Text, out normalData);
-                    Option option = new Option("Normal", 0);
-                    option.Files.Add(diffuseBodyPath, diffuseBodyPath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
-                    group.Options.Add(option);
-                    File.WriteAllBytes(normalBodyDiskPath, normalData);
-                }
-                if (!string.IsNullOrEmpty(multiB.FilePath.Text)) {
-                    byte[] multiData = new byte[0];
-                    TextureImporter.PngToTex(multiB.FilePath.Text, out multiData);
-                    Option option = new Option("Multi", 0);
-                    option.Files.Add(multiBodyPath, multiBodyPath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
-                    group.Options.Add(option);
-                    File.WriteAllBytes(multiBodyDiskPath, multiData);
+                int i = 0;
+                foreach (MaterialSet materialSet in materialList.Items) {
+                    Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
+                    string diffuseBodyDiskPath = Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\"));
+                    string normalBodyDiskPath = Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\"));
+                    string multiBodyDiskPath = Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\"));
+                    if (!string.IsNullOrEmpty(materialSet.Diffuse)) {
+                        byte[] diffuseData = new byte[0];
+                        TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
+                        Option option = new Option("Diffuse", 0);
+                        option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
+                        Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
+                        group.Options.Add(option);
+                        File.WriteAllBytes(diffuseBodyDiskPath, diffuseData);
+                    }
+                    if (!string.IsNullOrEmpty(materialSet.Normal)) {
+                        byte[] normalData = new byte[0];
+                        TextureImporter.PngToTex(materialSet.Normal, out normalData);
+                        Option option = new Option("Normal", 0);
+                        option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
+                        Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
+                        group.Options.Add(option);
+                        File.WriteAllBytes(normalBodyDiskPath, normalData);
+                    }
+                    if (!string.IsNullOrEmpty(materialSet.Multi)) {
+                        byte[] multiData = new byte[0];
+                        TextureImporter.PngToTex(materialSet.Multi, out multiData);
+                        Option option = new Option("Multi", 0);
+                        option.Files.Add(materialSet.Multi, materialSet.Multi.Replace("/", @"\"));
+                        Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
+                        group.Options.Add(option);
+                        File.WriteAllBytes(multiBodyDiskPath, multiData);
+                    }
+                    if (group.Options.Count > 0) {
+                        string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                        ExportGroup(groupPath, group);
+                    }
                 }
 
-                if (!string.IsNullOrEmpty(diffuseF.FilePath.Text)) {
-                    byte[] diffuseData = new byte[0];
-                    TextureImporter.PngToTex(diffuseF.FilePath.Text, out diffuseData);
-                    Option option = new Option("Diffuse", 0);
-                    option.Files.Add(diffuseFacePath, diffuseFacePath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(diffuseFaceDiskPath));
-                    group2.Options.Add(option);
-                    File.WriteAllBytes(diffuseFaceDiskPath, diffuseData);
-                }
-                if (!string.IsNullOrEmpty(normalF.FilePath.Text)) {
-                    byte[] normalData = new byte[0];
-                    TextureImporter.PngToTex(normalF.FilePath.Text, out normalData);
-                    Option option = new Option("Normal", 0);
-                    option.Files.Add(normalFacePath, normalFacePath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(normalFaceDiskPath));
-                    group2.Options.Add(option);
-                    File.WriteAllBytes(normalFaceDiskPath, normalData);
-                }
-                if (!string.IsNullOrEmpty(multiF.FilePath.Text)) {
-                    byte[] multiData = new byte[0];
-                    TextureImporter.PngToTex(multiF.FilePath.Text, out multiData);
-                    Option option = new Option("Multi", 0);
-                    option.Files.Add(multiFacePath, multiFacePath.Replace("/", @"\"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(multiFaceDiskPath));
-                    group2.Options.Add(option);
-                    File.WriteAllBytes(multiFaceDiskPath, multiData);
-                }
                 ExportJson();
                 ExportMeta();
-                int i = 0;
-                if (group.Options.Count > 0) {
-                    string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
-                    ExportGroup(groupPath, group);
-                }
-                if (group2.Options.Count > 0) {
-                    string groupPath2 = Path.Combine(modPath, $"group_" + i + $"_{group2.Name.ToLower()}.json");
-                    ExportGroup(groupPath2, group2);
-                }
                 MessageBox.Show("Export succeeded!");
             } else {
                 MessageBox.Show("Please enter a mod name!");
@@ -471,6 +445,273 @@ namespace FFXIVLooseTextureCompiler {
                 });
             } catch {
 
+            }
+        }
+
+        private void addBodyEditButton_Click(object sender, EventArgs e) {
+            MaterialSet materialSet = new MaterialSet();
+            materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
+            materialSet.InternalDiffusePath = GetBodyMaterialPath(0);
+            materialSet.InternalNormalPath = GetBodyMaterialPath(1);
+            materialSet.InternalMultiPath = GetBodyMaterialPath(2);
+            materialList.Items.Add(materialSet);
+            HasSaved = false;
+        }
+
+        private void addFaceButton_Click(object sender, EventArgs e) {
+            MaterialSet materialSet = new MaterialSet();
+            materialSet.MaterialSetName = facePart.Text + ", " + genderListBody.Text + ", " + subRaceList.Text + ", " + faceType.Text;
+            materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
+            materialSet.InternalNormalPath = GetFaceMaterialPath(1);
+            materialSet.InternalMultiPath = GetFaceMaterialPath(2);
+            materialList.Items.Add(materialSet);
+            HasSaved = false;
+        }
+
+        private void materialList_SelectedIndexChanged(object sender, EventArgs e) {
+            if (materialList.SelectedIndex == -1) {
+                currentEditLabel.Text = "Please select a texture set to start importing";
+                diffuse.Enabled = false;
+                normal.Enabled = false;
+                multi.Enabled = false;
+            } else {
+                MaterialSet materialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                currentEditLabel.Text = "Editing: " + materialSet.MaterialSetName;
+                diffuse.FilePath.Text = materialSet.Diffuse;
+                normal.FilePath.Text = materialSet.Normal;
+                multi.FilePath.Text = materialSet.Multi;
+                diffuse.Enabled = true;
+                normal.Enabled = true;
+                multi.Enabled = true;
+            }
+        }
+        public void SetPaths() {
+            if (materialList.SelectedIndex != -1) {
+                MaterialSet materialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                materialSet.Diffuse = diffuse.FilePath.Text;
+                materialSet.Normal = normal.FilePath.Text;
+                materialSet.Multi = multi.FilePath.Text;
+            }
+        }
+        private void newToolStripMenuItem_Click(object sender, EventArgs e) {
+            CleanSlate();
+        }
+        private bool CleanSlate() {
+            if (!HasSaved) {
+                DialogResult dialogResult = MessageBox.Show("Save changes?", VersionText, MessageBoxButtons.YesNoCancel);
+                switch (dialogResult) {
+                    case DialogResult.Yes:
+                        if (savePath == null) {
+                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            saveFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+                            saveFileDialog.AddExtension = true;
+                            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                                savePath = saveFileDialog.FileName;
+                                Text = Application.ProductName + " " + Application.ProductVersion + $" ({savePath})";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(savePath)) {
+                            SaveProject(savePath);
+                            NewProject();
+                            return true;
+                        }
+                        break;
+                    case DialogResult.No:
+                        NewProject();
+                        return true;
+                }
+            } else {
+                NewProject();
+                return true;
+            }
+            return false;
+        }
+        private void NewProject() {
+            Text = Application.ProductName + " " + Application.ProductVersion;
+            materialList.Items.Clear();
+            modNameTextBox.Text = "";
+            modAuthorTextBox.Text = _defaultAuthor;
+            modVersionTextBox.Text = "1.0.0";
+            modDescriptionTextBox.Text = _defaultDescription;
+            modWebsiteTextBox.Text = _defaultWebsite;
+            diffuse.FilePath.Text = "";
+            normal.FilePath.Text = "";
+            multi.FilePath.Text = "";
+            diffuse.Enabled = false;
+            normal.Enabled = false;
+            multi.Enabled = false;
+            HasSaved = true;
+            currentEditLabel.Text = "Please select a texture set to start importing";
+        }
+        private void multi_Leave(object sender, EventArgs e) {
+            SetPaths();
+        }
+
+        private void multi_Enter(object sender, EventArgs e) {
+            enteredField = true;
+        }
+
+        private void removeSelectionButton_Click(object sender, EventArgs e) {
+            materialList.Items.RemoveAt(materialList.SelectedIndex);
+        }
+
+        private void clearList_Click(object sender, EventArgs e) {
+            materialList.Items.Clear();
+        }
+
+        private void multi_OnFileSelected(object sender, EventArgs e) {
+            SetPaths();
+            HasSaved = false;
+        }
+
+        private void modDescriptionTextBox_TextChanged(object sender, EventArgs e) {
+            HasSaved = false;
+        }
+        public void GetAuthorWebsite() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string lastDataPath = Path.Combine(dataPath, @"0.0.1.5\");
+            if (Directory.Exists(lastDataPath)) {
+                dataPath = lastDataPath;
+            }
+            string path = Path.Combine(dataPath, @"AuthorWebsite.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    _defaultWebsite = reader.ReadLine();
+                }
+            }
+        }
+        public void GetAuthorName() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string lastDataPath = Path.Combine(dataPath, @"0.0.1.5\");
+            if (Directory.Exists(lastDataPath)) {
+                dataPath = lastDataPath;
+            }
+            string path = Path.Combine(dataPath, @"AuthorName.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    _defaultAuthor = reader.ReadLine();
+                }
+            }
+        }
+
+        public void WriteAuthorWebsite(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorWebsite.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+        public void WriteAuthorName(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorName.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
+            Save();
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                savePath = saveFileDialog.FileName;
+                SaveProject(savePath);
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (CleanSlate()) {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    savePath = openFileDialog.FileName;
+                    OpenProject(savePath);
+                }
+                HasSaved = true;
+            }
+        }
+        private void Save() {
+            if (savePath == null) {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    savePath = saveFileDialog.FileName;
+                }
+            }
+            if (savePath != null) {
+                SaveProject(savePath);
+            }
+        }
+        public void OpenProject(string path) {
+            using (StreamReader file = File.OpenText(path)) {
+                JsonSerializer serializer = new JsonSerializer();
+                ProjectFile projectFile = (ProjectFile)serializer.Deserialize(file, typeof(ProjectFile));
+                modNameTextBox.Text = projectFile.Name;
+                modAuthorTextBox.Text = projectFile.Author;
+                modVersionTextBox.Text = projectFile.Version;
+                modDescriptionTextBox.Text = projectFile.Description;
+                modWebsiteTextBox.Text = projectFile.Website;
+                materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+            }
+            HasSaved = true;
+        }
+        public void SaveProject(string path) {
+            using (StreamWriter writer = new StreamWriter(path)) {
+                JsonSerializer serializer = new JsonSerializer();
+                ProjectFile projectFile = new ProjectFile();
+                projectFile.Name = modNameTextBox.Text;
+                projectFile.Author = modAuthorTextBox.Text;
+                projectFile.Version = modVersionTextBox.Text;
+                projectFile.Description = modDescriptionTextBox.Text;
+                projectFile.Website = modWebsiteTextBox.Text;
+                projectFile.MaterialSets = new List<MaterialSet>();
+                foreach (MaterialSet materialSet in materialList.Items) {
+                    projectFile.MaterialSets.Add(materialSet);
+                }
+                serializer.Serialize(writer, projectFile);
+            }
+            HasSaved = true;
+        }
+        private void CheckForCommandArguments() {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1) {
+                if (!string.IsNullOrWhiteSpace(args[1])) {
+                    if (File.Exists(args[1]) && args[1].Contains(".ffxivtp")) {
+                        savePath = args[1];
+                        OpenProject(savePath);
+                    }
+                }
+            }
+        }
+
+        private void modAuthorTextBox_Leave(object sender, EventArgs e) {
+            WriteAuthorName(modAuthorTextBox.Text);
+        }
+
+        private void modWebsiteTextBox_Leave(object sender, EventArgs e) {
+            WriteAuthorWebsite(modWebsiteTextBox.Text);
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            if (!HasSaved) {
+                DialogResult dialogResult = MessageBox.Show("Save changes?", Text, MessageBoxButtons.YesNoCancel);
+                switch (dialogResult) {
+                    case DialogResult.Yes:
+                        if (savePath == null) {
+                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            saveFileDialog.Filter = "FFXIV Sound Project|*.ffxivtp;";
+                            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                                savePath = saveFileDialog.FileName;
+                            }
+                        }
+                        if (savePath != null) {
+                            SaveProject(savePath);
+                        }
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
             }
         }
     }

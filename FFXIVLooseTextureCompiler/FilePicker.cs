@@ -32,7 +32,11 @@ namespace FFXIVVoicePackCreator {
         private Color color;
         [Category("Filter"), Description("Changes what type of selection is made")]
         public string Filter { get => filter; set => filter = value; }
-
+        public bool Enabled {
+            set {
+                openButton.Enabled = filePath.Enabled = value;
+            }
+        }
         private void filePicker_Load(object sender, EventArgs e) {
             color = BackColor;
             AutoScaleDimensions = new SizeF(96, 96);
@@ -84,6 +88,7 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_TextChanged(object sender, EventArgs e) {
+
         }
 
         private void filePath_DragEnter(object sender, DragEventArgs e) {
@@ -97,6 +102,9 @@ namespace FFXIVVoicePackCreator {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
             if (CheckExtentions(file)) {
                 filePath.Text = file;
+                if (OnFileSelected != null) {
+                    OnFileSelected.Invoke(this, EventArgs.Empty);
+                }
             } else {
                 MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
             }
