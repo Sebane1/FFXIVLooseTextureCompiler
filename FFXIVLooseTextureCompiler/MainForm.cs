@@ -292,7 +292,7 @@ namespace FFXIVLooseTextureCompiler {
                     faceIdCheck = "010";
                 }
                 string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
-                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material) + ".tex";
+                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c" + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1) + GetFacePart(facePart.SelectedIndex) + GetTextureType(material, true) + ".tex";
             } else {
                 return "chara/common/texture/catchlight_1.tex";
             }
@@ -305,7 +305,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 1:
                     return "_n";
                 case 2:
-                    if (baseBodyList.SelectedIndex == 1 && !isface) {
+                    if (baseBodyList.SelectedIndex == 1 && !isface || (isface && facePart.SelectedIndex == 2)) {
                         return "_m";
                     } else {
                         return "_s";
