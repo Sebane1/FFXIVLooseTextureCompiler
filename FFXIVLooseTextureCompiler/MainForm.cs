@@ -26,6 +26,7 @@ namespace FFXIVLooseTextureCompiler {
         private string savePath;
         private bool hasSaved;
         private bool foundInstance;
+        private bool generatedOnce;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -98,6 +99,8 @@ namespace FFXIVLooseTextureCompiler {
                 metaFilePath = Path.Combine(modPath, "meta.json");
                 if (Directory.Exists(modPath)) {
                     Directory.Delete(modPath, true);
+                } else {
+                    generatedOnce = false;
                 }
                 Directory.CreateDirectory(modPath);
                 int i = 0;
@@ -141,11 +144,20 @@ namespace FFXIVLooseTextureCompiler {
 
                 ExportJson();
                 ExportMeta();
-                Hook.SendSyncKey(Keys.Enter);
-                Thread.Sleep(500);
-                Hook.SendString(@"/penumbra redraw");
-                Thread.Sleep(100);
-                Hook.SendSyncKey(Keys.Enter);
+                if (generatedOnce) {
+                    Hook.SendSyncKey(Keys.Enter);
+                    Thread.Sleep(500);
+                    Hook.SendString(@"/penumbra redraw");
+                    Thread.Sleep(100);
+                    Hook.SendSyncKey(Keys.Enter);
+                } else {
+                    Hook.SendSyncKey(Keys.Enter);
+                    Thread.Sleep(500);
+                    Hook.SendString(@"/penumbra reload");
+                    Thread.Sleep(100);
+                    Hook.SendSyncKey(Keys.Enter);
+                    generatedOnce = true;
+                }
                 TopMost = true;
                 BringToFront();
                 TopMost = false;
@@ -581,6 +593,7 @@ namespace FFXIVLooseTextureCompiler {
             return false;
         }
         private void NewProject() {
+            generatedOnce = false;
             Text = Application.ProductName + " " + Application.ProductVersion;
             savePath = null;
             materialList.Items.Clear();
