@@ -23,22 +23,17 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.genderListBody = new System.Windows.Forms.ComboBox();
             this.raceList = new System.Windows.Forms.ComboBox();
             this.tailList = new System.Windows.Forms.ComboBox();
             this.baseBodyList = new System.Windows.Forms.ComboBox();
             this.generateButton = new System.Windows.Forms.Button();
-            this.tabPages = new System.Windows.Forms.TabControl();
-            this.bodyPage = new System.Windows.Forms.TabPage();
             this.uniqueAuRa = new System.Windows.Forms.CheckBox();
-            this.multiB = new FFXIVVoicePackCreator.FilePicker();
-            this.normalB = new FFXIVVoicePackCreator.FilePicker();
-            this.diffuseB = new FFXIVVoicePackCreator.FilePicker();
-            this.facePage = new System.Windows.Forms.TabPage();
+            this.multi = new FFXIVVoicePackCreator.FilePicker();
+            this.normal = new FFXIVVoicePackCreator.FilePicker();
+            this.diffuse = new FFXIVVoicePackCreator.FilePicker();
             this.asymCheckbox = new System.Windows.Forms.CheckBox();
-            this.multiF = new FFXIVVoicePackCreator.FilePicker();
-            this.normalF = new FFXIVVoicePackCreator.FilePicker();
-            this.diffuseF = new FFXIVVoicePackCreator.FilePicker();
             this.facePart = new System.Windows.Forms.ComboBox();
             this.faceType = new System.Windows.Forms.ComboBox();
             this.subRaceList = new System.Windows.Forms.ComboBox();
@@ -53,12 +48,21 @@
             this.nameLabel = new System.Windows.Forms.Label();
             this.modNameTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
-            this.tabPages.SuspendLayout();
-            this.bodyPage.SuspendLayout();
-            this.facePage.SuspendLayout();
+            this.materialList = new System.Windows.Forms.ListBox();
+            this.addBodyButton = new System.Windows.Forms.Button();
+            this.addFaceButton = new System.Windows.Forms.Button();
+            this.currentEditLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.removeSelection = new System.Windows.Forms.Button();
+            this.clearList = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,15 +72,15 @@
             this.genderListBody.Items.AddRange(new object[] {
             "Masculine",
             "Feminine"});
-            this.genderListBody.Location = new System.Drawing.Point(120, 4);
+            this.genderListBody.Location = new System.Drawing.Point(120, 112);
             this.genderListBody.Name = "genderListBody";
-            this.genderListBody.Size = new System.Drawing.Size(112, 23);
+            this.genderListBody.Size = new System.Drawing.Size(76, 23);
             this.genderListBody.TabIndex = 1;
+            this.genderListBody.Text = "Masculine";
             this.genderListBody.SelectedIndexChanged += new System.EventHandler(this.genderList_SelectedIndexChanged);
             // 
             // raceList
             // 
-            this.raceList.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.raceList.FormattingEnabled = true;
             this.raceList.Items.AddRange(new object[] {
             "Midlander",
@@ -89,15 +93,15 @@
             "Xaela",
             "Hrothgar",
             "Viera"});
-            this.raceList.Location = new System.Drawing.Point(236, 4);
+            this.raceList.Location = new System.Drawing.Point(200, 112);
             this.raceList.Name = "raceList";
-            this.raceList.Size = new System.Drawing.Size(108, 23);
+            this.raceList.Size = new System.Drawing.Size(84, 23);
             this.raceList.TabIndex = 2;
+            this.raceList.Text = "Highlander";
             this.raceList.SelectedIndexChanged += new System.EventHandler(this.raceList_SelectedIndexChanged);
             // 
             // tailList
             // 
-            this.tailList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tailList.Enabled = false;
             this.tailList.FormattingEnabled = true;
             this.tailList.Items.AddRange(new object[] {
@@ -109,10 +113,11 @@
             "6",
             "7",
             "8"});
-            this.tailList.Location = new System.Drawing.Point(348, 4);
+            this.tailList.Location = new System.Drawing.Point(288, 112);
             this.tailList.Name = "tailList";
-            this.tailList.Size = new System.Drawing.Size(76, 23);
+            this.tailList.Size = new System.Drawing.Size(32, 23);
             this.tailList.TabIndex = 3;
+            this.tailList.Text = "8";
             // 
             // baseBodyList
             // 
@@ -121,174 +126,104 @@
             "Vanilla",
             "BIBO+",
             "EVE",
-            "GEN3",
+            "Gen3 and T&F3",
             "SCALES+",
             "TBSE/HRBODY",
             "TAIL"});
-            this.baseBodyList.Location = new System.Drawing.Point(4, 4);
+            this.baseBodyList.Location = new System.Drawing.Point(12, 112);
             this.baseBodyList.Name = "baseBodyList";
-            this.baseBodyList.Size = new System.Drawing.Size(112, 23);
+            this.baseBodyList.Size = new System.Drawing.Size(104, 23);
             this.baseBodyList.TabIndex = 4;
+            this.baseBodyList.Text = "Gen3 and T&F3";
             this.baseBodyList.SelectedIndexChanged += new System.EventHandler(this.baseBodyList_SelectedIndexChanged);
             // 
             // generateButton
             // 
             this.generateButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateButton.Location = new System.Drawing.Point(12, 279);
+            this.generateButton.Location = new System.Drawing.Point(12, 546);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(428, 23);
+            this.generateButton.Size = new System.Drawing.Size(516, 23);
             this.generateButton.TabIndex = 7;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 
-            // tabPages
-            // 
-            this.tabPages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabPages.Controls.Add(this.bodyPage);
-            this.tabPages.Controls.Add(this.facePage);
-            this.tabPages.Location = new System.Drawing.Point(8, 28);
-            this.tabPages.Name = "tabPages";
-            this.tabPages.SelectedIndex = 0;
-            this.tabPages.Size = new System.Drawing.Size(436, 172);
-            this.tabPages.TabIndex = 11;
-            // 
-            // bodyPage
-            // 
-            this.bodyPage.Controls.Add(this.uniqueAuRa);
-            this.bodyPage.Controls.Add(this.multiB);
-            this.bodyPage.Controls.Add(this.normalB);
-            this.bodyPage.Controls.Add(this.diffuseB);
-            this.bodyPage.Controls.Add(this.genderListBody);
-            this.bodyPage.Controls.Add(this.raceList);
-            this.bodyPage.Controls.Add(this.tailList);
-            this.bodyPage.Controls.Add(this.baseBodyList);
-            this.bodyPage.Location = new System.Drawing.Point(4, 24);
-            this.bodyPage.Name = "bodyPage";
-            this.bodyPage.Padding = new System.Windows.Forms.Padding(3);
-            this.bodyPage.Size = new System.Drawing.Size(428, 144);
-            this.bodyPage.TabIndex = 0;
-            this.bodyPage.Text = "Body";
-            this.bodyPage.UseVisualStyleBackColor = true;
-            // 
             // uniqueAuRa
             // 
             this.uniqueAuRa.AutoSize = true;
-            this.uniqueAuRa.Location = new System.Drawing.Point(328, 32);
+            this.uniqueAuRa.Location = new System.Drawing.Point(324, 116);
             this.uniqueAuRa.Name = "uniqueAuRa";
             this.uniqueAuRa.Size = new System.Drawing.Size(98, 19);
             this.uniqueAuRa.TabIndex = 20;
             this.uniqueAuRa.Text = "Unique Au Ra";
             this.uniqueAuRa.UseVisualStyleBackColor = true;
             // 
-            // multiB
+            // multi
             // 
-            this.multiB.Filter = null;
-            this.multiB.Index = -1;
-            this.multiB.Location = new System.Drawing.Point(4, 112);
-            this.multiB.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.multiB.MinimumSize = new System.Drawing.Size(300, 28);
-            this.multiB.Name = "multiB";
-            this.multiB.Size = new System.Drawing.Size(420, 28);
-            this.multiB.TabIndex = 19;
+            this.multi.Filter = null;
+            this.multi.Index = -1;
+            this.multi.Location = new System.Drawing.Point(12, 512);
+            this.multi.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.multi.MinimumSize = new System.Drawing.Size(300, 28);
+            this.multi.Name = "multi";
+            this.multi.Size = new System.Drawing.Size(520, 28);
+            this.multi.TabIndex = 19;
+            this.multi.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.multi.Enter += new System.EventHandler(this.multi_Enter);
+            this.multi.Leave += new System.EventHandler(this.multi_Leave);
             // 
-            // normalB
+            // normal
             // 
-            this.normalB.Filter = null;
-            this.normalB.Index = -1;
-            this.normalB.Location = new System.Drawing.Point(4, 80);
-            this.normalB.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.normalB.MinimumSize = new System.Drawing.Size(300, 28);
-            this.normalB.Name = "normalB";
-            this.normalB.Size = new System.Drawing.Size(420, 28);
-            this.normalB.TabIndex = 18;
+            this.normal.Filter = null;
+            this.normal.Index = -1;
+            this.normal.Location = new System.Drawing.Point(12, 480);
+            this.normal.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.normal.MinimumSize = new System.Drawing.Size(300, 28);
+            this.normal.Name = "normal";
+            this.normal.Size = new System.Drawing.Size(520, 28);
+            this.normal.TabIndex = 18;
+            this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.normal.Enter += new System.EventHandler(this.multi_Enter);
+            this.normal.Leave += new System.EventHandler(this.multi_Leave);
             // 
-            // diffuseB
+            // diffuse
             // 
-            this.diffuseB.Filter = null;
-            this.diffuseB.Index = -1;
-            this.diffuseB.Location = new System.Drawing.Point(4, 48);
-            this.diffuseB.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.diffuseB.MinimumSize = new System.Drawing.Size(300, 28);
-            this.diffuseB.Name = "diffuseB";
-            this.diffuseB.Size = new System.Drawing.Size(420, 28);
-            this.diffuseB.TabIndex = 17;
-            // 
-            // facePage
-            // 
-            this.facePage.Controls.Add(this.asymCheckbox);
-            this.facePage.Controls.Add(this.multiF);
-            this.facePage.Controls.Add(this.normalF);
-            this.facePage.Controls.Add(this.diffuseF);
-            this.facePage.Controls.Add(this.facePart);
-            this.facePage.Controls.Add(this.faceType);
-            this.facePage.Controls.Add(this.subRaceList);
-            this.facePage.Location = new System.Drawing.Point(4, 24);
-            this.facePage.Name = "facePage";
-            this.facePage.Padding = new System.Windows.Forms.Padding(3);
-            this.facePage.Size = new System.Drawing.Size(192, 72);
-            this.facePage.TabIndex = 1;
-            this.facePage.Text = "Face";
-            this.facePage.UseVisualStyleBackColor = true;
+            this.diffuse.Filter = null;
+            this.diffuse.Index = -1;
+            this.diffuse.Location = new System.Drawing.Point(12, 448);
+            this.diffuse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.diffuse.MinimumSize = new System.Drawing.Size(300, 28);
+            this.diffuse.Name = "diffuse";
+            this.diffuse.Size = new System.Drawing.Size(520, 28);
+            this.diffuse.TabIndex = 17;
+            this.diffuse.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.diffuse.Enter += new System.EventHandler(this.multi_Enter);
+            this.diffuse.Leave += new System.EventHandler(this.multi_Leave);
             // 
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(328, 32);
+            this.asymCheckbox.Location = new System.Drawing.Point(292, 144);
             this.asymCheckbox.Name = "asymCheckbox";
-            this.asymCheckbox.Size = new System.Drawing.Size(99, 19);
+            this.asymCheckbox.Size = new System.Drawing.Size(126, 19);
             this.asymCheckbox.TabIndex = 23;
-            this.asymCheckbox.Text = "Asymmetrical";
+            this.asymCheckbox.Text = "Asymmetrical Face";
             this.asymCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // multiF
-            // 
-            this.multiF.Filter = null;
-            this.multiF.Index = -1;
-            this.multiF.Location = new System.Drawing.Point(4, 112);
-            this.multiF.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.multiF.MinimumSize = new System.Drawing.Size(300, 28);
-            this.multiF.Name = "multiF";
-            this.multiF.Size = new System.Drawing.Size(420, 28);
-            this.multiF.TabIndex = 22;
-            // 
-            // normalF
-            // 
-            this.normalF.Filter = null;
-            this.normalF.Index = -1;
-            this.normalF.Location = new System.Drawing.Point(4, 80);
-            this.normalF.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.normalF.MinimumSize = new System.Drawing.Size(300, 28);
-            this.normalF.Name = "normalF";
-            this.normalF.Size = new System.Drawing.Size(420, 28);
-            this.normalF.TabIndex = 21;
-            // 
-            // diffuseF
-            // 
-            this.diffuseF.Filter = null;
-            this.diffuseF.Index = -1;
-            this.diffuseF.Location = new System.Drawing.Point(4, 48);
-            this.diffuseF.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.diffuseF.MinimumSize = new System.Drawing.Size(300, 28);
-            this.diffuseF.Name = "diffuseF";
-            this.diffuseF.Size = new System.Drawing.Size(420, 28);
-            this.diffuseF.TabIndex = 20;
             // 
             // facePart
             // 
-            this.facePart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.facePart.FormattingEnabled = true;
             this.facePart.Items.AddRange(new object[] {
             "Face",
             "Eyebrows",
             "Eyes",
             "Ears"});
-            this.facePart.Location = new System.Drawing.Point(40, 4);
+            this.facePart.Location = new System.Drawing.Point(200, 140);
             this.facePart.Name = "facePart";
-            this.facePart.Size = new System.Drawing.Size(144, 23);
+            this.facePart.Size = new System.Drawing.Size(84, 23);
             this.facePart.TabIndex = 4;
+            this.facePart.Text = "Eyebrows";
             // 
             // faceType
             // 
@@ -298,10 +233,11 @@
             "Face 2",
             "Face 3",
             "Face 4"});
-            this.faceType.Location = new System.Drawing.Point(140, 4);
+            this.faceType.Location = new System.Drawing.Point(120, 140);
             this.faceType.Name = "faceType";
-            this.faceType.Size = new System.Drawing.Size(132, 23);
+            this.faceType.Size = new System.Drawing.Size(76, 23);
             this.faceType.TabIndex = 3;
+            this.faceType.Text = "Face 4";
             // 
             // subRaceList
             // 
@@ -311,8 +247,8 @@
             "Highlander",
             "Wildwood",
             "Duskwight",
-            "Seeker Of The Sun",
-            "Keeper Of The Moon",
+            "Seeker",
+            "Keeper",
             "Sea Wolves",
             "Hellsgaurd",
             "Plainsfolk",
@@ -323,15 +259,16 @@
             "The Lost",
             "Rava",
             "Veena"});
-            this.subRaceList.Location = new System.Drawing.Point(8, 4);
+            this.subRaceList.Location = new System.Drawing.Point(12, 140);
             this.subRaceList.Name = "subRaceList";
-            this.subRaceList.Size = new System.Drawing.Size(128, 23);
+            this.subRaceList.Size = new System.Drawing.Size(104, 23);
             this.subRaceList.TabIndex = 2;
+            this.subRaceList.Text = "Highlander";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 256);
+            this.label4.Location = new System.Drawing.Point(12, 88);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(67, 15);
             this.label4.TabIndex = 23;
@@ -339,16 +276,17 @@
             // 
             // modDescriptionTextBox
             // 
-            this.modDescriptionTextBox.Location = new System.Drawing.Point(96, 252);
+            this.modDescriptionTextBox.Location = new System.Drawing.Point(96, 84);
             this.modDescriptionTextBox.Name = "modDescriptionTextBox";
-            this.modDescriptionTextBox.Size = new System.Drawing.Size(336, 23);
+            this.modDescriptionTextBox.Size = new System.Drawing.Size(436, 23);
             this.modDescriptionTextBox.TabIndex = 22;
             this.modDescriptionTextBox.Text = "Exported by FFXIV Loose Texture Compiler";
+            this.modDescriptionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(256, 232);
+            this.label3.Location = new System.Drawing.Point(256, 60);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 15);
             this.label3.TabIndex = 21;
@@ -356,16 +294,17 @@
             // 
             // modVersionTextBox
             // 
-            this.modVersionTextBox.Location = new System.Drawing.Point(328, 228);
+            this.modVersionTextBox.Location = new System.Drawing.Point(328, 56);
             this.modVersionTextBox.Name = "modVersionTextBox";
-            this.modVersionTextBox.Size = new System.Drawing.Size(104, 23);
+            this.modVersionTextBox.Size = new System.Drawing.Size(204, 23);
             this.modVersionTextBox.TabIndex = 20;
             this.modVersionTextBox.Text = "1.0.0";
+            this.modVersionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(256, 204);
+            this.label2.Location = new System.Drawing.Point(256, 32);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 15);
             this.label2.TabIndex = 16;
@@ -373,16 +312,18 @@
             // 
             // modWebsiteTextBox
             // 
-            this.modWebsiteTextBox.Location = new System.Drawing.Point(328, 200);
+            this.modWebsiteTextBox.Location = new System.Drawing.Point(328, 28);
             this.modWebsiteTextBox.Name = "modWebsiteTextBox";
-            this.modWebsiteTextBox.Size = new System.Drawing.Size(104, 23);
+            this.modWebsiteTextBox.Size = new System.Drawing.Size(204, 23);
             this.modWebsiteTextBox.TabIndex = 15;
             this.modWebsiteTextBox.Text = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
+            this.modWebsiteTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            this.modWebsiteTextBox.Leave += new System.EventHandler(this.modWebsiteTextBox_Leave);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 232);
+            this.label1.Location = new System.Drawing.Point(12, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 15);
             this.label1.TabIndex = 14;
@@ -390,16 +331,18 @@
             // 
             // modAuthorTextBox
             // 
-            this.modAuthorTextBox.Location = new System.Drawing.Point(96, 228);
+            this.modAuthorTextBox.Location = new System.Drawing.Point(96, 56);
             this.modAuthorTextBox.Name = "modAuthorTextBox";
             this.modAuthorTextBox.Size = new System.Drawing.Size(148, 23);
             this.modAuthorTextBox.TabIndex = 13;
             this.modAuthorTextBox.Text = "FFXIV Loose Texture Compiler";
+            this.modAuthorTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            this.modAuthorTextBox.Leave += new System.EventHandler(this.modAuthorTextBox_Leave);
             // 
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(20, 204);
+            this.nameLabel.Location = new System.Drawing.Point(12, 32);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(39, 15);
             this.nameLabel.TabIndex = 12;
@@ -407,20 +350,61 @@
             // 
             // modNameTextBox
             // 
-            this.modNameTextBox.Location = new System.Drawing.Point(96, 200);
+            this.modNameTextBox.Location = new System.Drawing.Point(96, 28);
             this.modNameTextBox.Name = "modNameTextBox";
             this.modNameTextBox.Size = new System.Drawing.Size(148, 23);
             this.modNameTextBox.TabIndex = 11;
+            this.modNameTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.configToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(455, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
             this.menuStrip1.TabIndex = 24;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.openToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -441,7 +425,7 @@
             // 
             this.donateButton.BackColor = System.Drawing.Color.IndianRed;
             this.donateButton.ForeColor = System.Drawing.Color.White;
-            this.donateButton.Location = new System.Drawing.Point(380, 0);
+            this.donateButton.Location = new System.Drawing.Point(464, 0);
             this.donateButton.Name = "donateButton";
             this.donateButton.Size = new System.Drawing.Size(75, 23);
             this.donateButton.TabIndex = 25;
@@ -449,17 +433,105 @@
             this.donateButton.UseVisualStyleBackColor = false;
             this.donateButton.Click += new System.EventHandler(this.donateButton_Click);
             // 
+            // materialList
+            // 
+            this.materialList.FormattingEnabled = true;
+            this.materialList.ItemHeight = 15;
+            this.materialList.Location = new System.Drawing.Point(12, 204);
+            this.materialList.Name = "materialList";
+            this.materialList.Size = new System.Drawing.Size(520, 184);
+            this.materialList.TabIndex = 26;
+            this.materialList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
+            // 
+            // addBodyButton
+            // 
+            this.addBodyButton.Location = new System.Drawing.Point(420, 112);
+            this.addBodyButton.Name = "addBodyButton";
+            this.addBodyButton.Size = new System.Drawing.Size(112, 23);
+            this.addBodyButton.TabIndex = 27;
+            this.addBodyButton.Text = "Add Body";
+            this.addBodyButton.UseVisualStyleBackColor = true;
+            this.addBodyButton.Click += new System.EventHandler(this.addBodyEditButton_Click);
+            // 
+            // addFaceButton
+            // 
+            this.addFaceButton.Location = new System.Drawing.Point(420, 140);
+            this.addFaceButton.Name = "addFaceButton";
+            this.addFaceButton.Size = new System.Drawing.Size(112, 23);
+            this.addFaceButton.TabIndex = 28;
+            this.addFaceButton.Text = "Add Face";
+            this.addFaceButton.UseVisualStyleBackColor = true;
+            this.addFaceButton.Click += new System.EventHandler(this.addFaceButton_Click);
+            // 
+            // currentEditLabel
+            // 
+            this.currentEditLabel.AutoSize = true;
+            this.currentEditLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.currentEditLabel.Location = new System.Drawing.Point(12, 412);
+            this.currentEditLabel.Name = "currentEditLabel";
+            this.currentEditLabel.Size = new System.Drawing.Size(447, 30);
+            this.currentEditLabel.TabIndex = 29;
+            this.currentEditLabel.Text = "Please select a texture set to start importing";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label6.Location = new System.Drawing.Point(12, 172);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(155, 30);
+            this.label6.TabIndex = 30;
+            this.label6.Text = "Texture set list";
+            // 
+            // removeSelection
+            // 
+            this.removeSelection.Location = new System.Drawing.Point(244, 388);
+            this.removeSelection.Name = "removeSelection";
+            this.removeSelection.Size = new System.Drawing.Size(176, 23);
+            this.removeSelection.TabIndex = 31;
+            this.removeSelection.Text = "Remove Selection From List";
+            this.removeSelection.UseVisualStyleBackColor = true;
+            this.removeSelection.Click += new System.EventHandler(this.removeSelectionButton_Click);
+            // 
+            // clearList
+            // 
+            this.clearList.Location = new System.Drawing.Point(424, 388);
+            this.clearList.Name = "clearList";
+            this.clearList.Size = new System.Drawing.Size(108, 23);
+            this.clearList.TabIndex = 32;
+            this.clearList.Text = "Clear List";
+            this.clearList.UseVisualStyleBackColor = true;
+            this.clearList.Click += new System.EventHandler(this.clearList_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(455, 306);
+            this.ClientSize = new System.Drawing.Size(537, 573);
+            this.Controls.Add(this.clearList);
+            this.Controls.Add(this.removeSelection);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.currentEditLabel);
+            this.Controls.Add(this.addFaceButton);
+            this.Controls.Add(this.addBodyButton);
+            this.Controls.Add(this.multi);
+            this.Controls.Add(this.asymCheckbox);
+            this.Controls.Add(this.normal);
+            this.Controls.Add(this.uniqueAuRa);
+            this.Controls.Add(this.diffuse);
+            this.Controls.Add(this.materialList);
+            this.Controls.Add(this.facePart);
             this.Controls.Add(this.donateButton);
+            this.Controls.Add(this.faceType);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.subRaceList);
             this.Controls.Add(this.generateButton);
+            this.Controls.Add(this.genderListBody);
             this.Controls.Add(this.modDescriptionTextBox);
-            this.Controls.Add(this.tabPages);
+            this.Controls.Add(this.raceList);
+            this.Controls.Add(this.tailList);
             this.Controls.Add(this.label3);
+            this.Controls.Add(this.baseBodyList);
             this.Controls.Add(this.modNameTextBox);
             this.Controls.Add(this.modVersionTextBox);
             this.Controls.Add(this.nameLabel);
@@ -468,16 +540,15 @@
             this.Controls.Add(this.modWebsiteTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FFXIV Loose Texture Compiler Alpha";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tabPages.ResumeLayout(false);
-            this.bodyPage.ResumeLayout(false);
-            this.bodyPage.PerformLayout();
-            this.facePage.ResumeLayout(false);
-            this.facePage.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -491,25 +562,19 @@
         private ComboBox tailList;
         private ComboBox baseBodyList;
         private Button generateButton;
-        private TabControl tabPages;
-        private TabPage bodyPage;
-        private TabPage facePage;
         private Label label1;
         private TextBox modAuthorTextBox;
         private Label nameLabel;
         private TextBox modNameTextBox;
         private Label label2;
         private TextBox modWebsiteTextBox;
-        private FFXIVVoicePackCreator.FilePicker multiB;
-        private FFXIVVoicePackCreator.FilePicker normalB;
-        private FFXIVVoicePackCreator.FilePicker diffuseB;
+        private FFXIVVoicePackCreator.FilePicker multi;
+        private FFXIVVoicePackCreator.FilePicker normal;
+        private FFXIVVoicePackCreator.FilePicker diffuse;
         private Label label4;
         private TextBox modDescriptionTextBox;
         private Label label3;
         private TextBox modVersionTextBox;
-        private FFXIVVoicePackCreator.FilePicker multiF;
-        private FFXIVVoicePackCreator.FilePicker normalF;
-        private FFXIVVoicePackCreator.FilePicker diffuseF;
         private ComboBox facePart;
         private ComboBox faceType;
         private ComboBox subRaceList;
@@ -519,5 +584,17 @@
         private Button donateButton;
         private CheckBox asymCheckbox;
         private CheckBox uniqueAuRa;
+        private ListBox materialList;
+        private Button addBodyButton;
+        private Button addFaceButton;
+        private Label currentEditLabel;
+        private Label label6;
+        private Button removeSelection;
+        private Button clearList;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem newToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }
