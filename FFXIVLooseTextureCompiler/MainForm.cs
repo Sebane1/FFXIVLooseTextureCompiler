@@ -106,6 +106,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 Directory.CreateDirectory(modPath);
                 int i = 0;
+                int fileCount = 0;
                 foreach (MaterialSet materialSet in materialList.Items) {
                     Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
                     string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
@@ -130,10 +131,10 @@ namespace FFXIVLooseTextureCompiler {
                             diffuseData = File.ReadAllBytes(materialSet.Diffuse);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
-                        option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
+                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
                         Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
                         group.Options.Add(option);
-                        File.WriteAllBytes(diffuseBodyDiskPath, diffuseData);
+                        File.WriteAllBytes(AppendNumber(diffuseBodyDiskPath, fileCount++), diffuseData);
                     }
                     if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                         byte[] normalData = new byte[0];
@@ -153,10 +154,10 @@ namespace FFXIVLooseTextureCompiler {
                             normalData = File.ReadAllBytes(materialSet.Normal);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
-                        option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
+                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
                         Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
                         group.Options.Add(option);
-                        File.WriteAllBytes(normalBodyDiskPath, normalData);
+                        File.WriteAllBytes(AppendNumber(normalBodyDiskPath, fileCount++), normalData);
                     }
                     if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                         byte[] multiData = new byte[0];
@@ -176,10 +177,10 @@ namespace FFXIVLooseTextureCompiler {
                             multiData = File.ReadAllBytes(materialSet.Multi);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
-                        option.Files.Add(materialSet.InternalMultiPath, materialSet.InternalMultiPath.Replace("/", @"\"));
+                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
                         Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
                         group.Options.Add(option);
-                        File.WriteAllBytes(multiBodyDiskPath, multiData);
+                        File.WriteAllBytes(AppendNumber(multiBodyDiskPath, fileCount++), multiData);
                     }
                     if (group.Options.Count > 0) {
                         string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
@@ -238,6 +239,9 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
+        }
+        public string AppendNumber(string value, int number) {
+            return value.Replace(".tex", number + ".tex");
         }
         private void CleanDirectory() {
             foreach (string file in Directory.GetFiles(Application.StartupPath)) {
