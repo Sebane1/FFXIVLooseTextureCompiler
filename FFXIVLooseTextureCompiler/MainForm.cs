@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using OtterTex;
 using Penumbra.Import.Dds;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
@@ -120,6 +121,11 @@ namespace FFXIVLooseTextureCompiler {
                             var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                             byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
                             TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out diffuseData);
+                        } else if(materialSet.Diffuse.EndsWith(".bmp")) {
+                            MemoryStream stream = new MemoryStream();
+                            Bitmap bitmap = new Bitmap(materialSet.Diffuse);
+                            bitmap.Save(stream, ImageFormat.Png);
+                            TextureImporter.PngToTex(stream, out diffuseData);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
                         option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
@@ -136,6 +142,11 @@ namespace FFXIVLooseTextureCompiler {
                             var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                             byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
                             TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out normalData);
+                        } else if (materialSet.Normal.EndsWith(".bmp")) {
+                            MemoryStream stream = new MemoryStream();
+                            Bitmap bitmap = new Bitmap(materialSet.Normal);
+                            bitmap.Save(stream, ImageFormat.Png);
+                            TextureImporter.PngToTex(stream, out normalData);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
                         option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
@@ -145,13 +156,18 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                         byte[] multiData = new byte[0];
-                        if (materialSet.Normal.EndsWith(".png")) {
+                        if (materialSet.Multi.EndsWith(".png")) {
                             TextureImporter.PngToTex(materialSet.Multi, out multiData);
-                        } else if (materialSet.Normal.EndsWith(".dds")) {
+                        } else if (materialSet.Multi.EndsWith(".dds")) {
                             var scratch = ScratchImage.LoadDDS(materialSet.Multi);
                             var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                             byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
                             TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out multiData);
+                        } else if (materialSet.Multi.EndsWith(".bmp")) {
+                            MemoryStream stream = new MemoryStream();
+                            Bitmap bitmap = new Bitmap(materialSet.Multi);
+                            bitmap.Save(stream, ImageFormat.Png);
+                            TextureImporter.PngToTex(stream, out multiData);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
                         option.Files.Add(materialSet.InternalMultiPath, materialSet.InternalMultiPath.Replace("/", @"\"));
@@ -644,6 +660,9 @@ namespace FFXIVLooseTextureCompiler {
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
             materialList.Items.RemoveAt(materialList.SelectedIndex);
+            diffuse.FilePath.Text = "";
+            normal.FilePath.Text = "";
+            multi.FilePath.Text = "";
         }
 
         private void clearList_Click(object sender, EventArgs e) {
@@ -652,6 +671,9 @@ namespace FFXIVLooseTextureCompiler {
                     materialList.Items.Clear();
                 }
             }
+            diffuse.FilePath.Text = "";
+            normal.FilePath.Text = "";
+            multi.FilePath.Text = "";
         }
 
         private void multi_OnFileSelected(object sender, EventArgs e) {

@@ -53,4 +53,16 @@ public static class TextureImporter {
         texData = buffer;
         return true;
     }
+    public static bool PngToTex(Stream file, out byte[] texData) {
+        var image = SixLabors.ImageSharp.Image.Load<Bgra32>(file);
+
+        var buffer = new byte[80 + image.Height * image.Width * 4];
+        WriteHeader(buffer, image.Width, image.Height);
+
+        var span = new Span<byte>(buffer, 80, buffer.Length - 80);
+        image.CopyPixelDataTo(span);
+
+        texData = buffer;
+        return true;
+    }
 }
