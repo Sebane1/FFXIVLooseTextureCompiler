@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FFXIVLooseTextureCompiler.PathOrganization
-{
-    public class MaterialSet
-    {
+namespace FFXIVLooseTextureCompiler.PathOrganization {
+    public class MaterialSet {
         string materialSetName;
+        string materialGroupName;
 
         string diffuse;
         string normal;
@@ -25,9 +24,18 @@ namespace FFXIVLooseTextureCompiler.PathOrganization
         public string InternalDiffusePath { get => internalDiffusePath; set => internalDiffusePath = value; }
         public string InternalNormalPath { get => internalNormalPath; set => internalNormalPath = value; }
         public string InternalMultiPath { get => internalMultiPath; set => internalMultiPath = value; }
+        public string MaterialGroupName {
+            get {
+                if (string.IsNullOrEmpty(materialGroupName)) {
+                    materialGroupName = materialSetName;
+                }
+                return materialGroupName;
+            }
+            set => materialGroupName = value;
+        }
 
         public override string ToString() {
-            return materialSetName;
+            return materialSetName + (MaterialGroupName != materialSetName ? $"| Group({materialGroupName})" : "");
         }
     }
 }

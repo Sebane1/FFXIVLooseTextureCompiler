@@ -73,6 +73,8 @@
             this.moveDownButton = new System.Windows.Forms.Button();
             this.ffxivRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.generationCooldown = new System.Windows.Forms.Timer(this.components);
+            this.generationType = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -152,9 +154,9 @@
             // 
             this.generateButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateButton.Location = new System.Drawing.Point(12, 546);
+            this.generateButton.Location = new System.Drawing.Point(212, 544);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(516, 23);
+            this.generateButton.Size = new System.Drawing.Size(316, 23);
             this.generateButton.TabIndex = 7;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -587,11 +589,33 @@
             this.generationCooldown.Interval = 3000;
             this.generationCooldown.Tick += new System.EventHandler(this.generationCooldown_Tick);
             // 
+            // generationType
+            // 
+            this.generationType.FormattingEnabled = true;
+            this.generationType.Items.AddRange(new object[] {
+            "Verbose",
+            "Compact"});
+            this.generationType.Location = new System.Drawing.Point(90, 544);
+            this.generationType.Name = "generationType";
+            this.generationType.Size = new System.Drawing.Size(121, 23);
+            this.generationType.TabIndex = 36;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 548);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 15);
+            this.label5.TabIndex = 37;
+            this.label5.Text = "Choice Type";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 573);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.generationType);
             this.Controls.Add(this.moveDownButton);
             this.Controls.Add(this.moveUpButton);
             this.Controls.Add(this.addCustomPathButton);
@@ -693,5 +717,7 @@
         private Button moveDownButton;
         private System.Windows.Forms.Timer ffxivRefreshTimer;
         private System.Windows.Forms.Timer generationCooldown;
+        private ComboBox generationType;
+        private Label label5;
     }
 }

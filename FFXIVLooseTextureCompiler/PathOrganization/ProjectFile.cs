@@ -12,6 +12,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public string Website { get; set; }
         public string Version { get; set; }
 
+        public int ExportType { get; set; }
         public List<MaterialSet> MaterialSets { get; set; }
     }
 }
