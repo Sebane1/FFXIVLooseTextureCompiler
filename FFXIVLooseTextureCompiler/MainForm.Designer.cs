@@ -172,7 +172,7 @@
             // 
             // multi
             // 
-            this.multi.Filter = null;
+            this.multi.Filter = "Texture File|*.png;*.dds;*.bmp;";
             this.multi.Index = -1;
             this.multi.Location = new System.Drawing.Point(12, 512);
             this.multi.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -186,7 +186,7 @@
             // 
             // normal
             // 
-            this.normal.Filter = null;
+            this.normal.Filter = "Texture File|*.png;*.dds;*.bmp;";
             this.normal.Index = -1;
             this.normal.Location = new System.Drawing.Point(12, 480);
             this.normal.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -200,7 +200,7 @@
             // 
             // diffuse
             // 
-            this.diffuse.Filter = null;
+            this.diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;";
             this.diffuse.Index = -1;
             this.diffuse.Location = new System.Drawing.Point(12, 448);
             this.diffuse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
