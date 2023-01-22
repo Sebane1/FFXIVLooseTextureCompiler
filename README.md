@@ -2,7 +2,7 @@
 
 Download: https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
 
-Tool in action: https://i.gyazo.com/4add694a6d5973df800b46a6eca19fcf.mp4
+Quick tutorial: https://www.youtube.com/watch?v=YmxmL5ccL2Y
 
 Make loose texture mods less of a pain to set up.
 
@@ -11,8 +11,7 @@ Make loose texture mods less of a pain to set up.
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
 
 Just hit rediscover in penumbra and use.
-
-This application is currently highly experimental, please report any bugs under issues.
+Supports png, bmp, dds, and redirecting raw .tex files.
 
 .tex generation is forked from Penumbra.
 
