@@ -16,3 +16,6 @@ Supports png, bmp, dds, and redirecting raw .tex files.
 .tex generation is forked from Penumbra.
 
 Requires Penumbra to use.
+
+Support Discord: https://discord.gg/rtGXwMn7pX
+If you wish to donate you can do so here: https://ko-fi.com/sebastina
