@@ -114,7 +114,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
 
                         byte[] diffuseData = new byte[0];
-                        if (materialSet.Diffuse.EndsWith("*png")) {
+                        if (materialSet.Diffuse.EndsWith(".png")) {
                             TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
                         } else if (materialSet.Diffuse.EndsWith(".dds")) {
                             var scratch = ScratchImage.LoadDDS(materialSet.Diffuse);
