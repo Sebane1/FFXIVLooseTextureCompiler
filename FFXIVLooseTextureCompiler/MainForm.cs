@@ -4,6 +4,7 @@ using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVVoicePackCreator;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
+using OtterTex;
 using Penumbra.Import.Dds;
 using System.Diagnostics;
 
@@ -110,8 +111,16 @@ namespace FFXIVLooseTextureCompiler {
                     string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
                     string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
                     if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+
                         byte[] diffuseData = new byte[0];
-                        TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
+                        if (materialSet.Diffuse.EndsWith("*png")) {
+                            TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
+                        } else if (materialSet.Diffuse.EndsWith(".dds")) {
+                            var scratch = ScratchImage.LoadDDS(materialSet.Diffuse);
+                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
+                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
+                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out diffuseData);
+                        }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
                         option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
@@ -120,7 +129,14 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                         byte[] normalData = new byte[0];
-                        TextureImporter.PngToTex(materialSet.Normal, out normalData);
+                        if (materialSet.Normal.EndsWith(".png")) {
+                            TextureImporter.PngToTex(materialSet.Normal, out normalData);
+                        } else if (materialSet.Normal.EndsWith(".dds")) {
+                            var scratch = ScratchImage.LoadDDS(materialSet.Normal);
+                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
+                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
+                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out normalData);
+                        }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
                         option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
@@ -129,7 +145,14 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                         byte[] multiData = new byte[0];
-                        TextureImporter.PngToTex(materialSet.Multi, out multiData);
+                        if (materialSet.Normal.EndsWith(".png")) {
+                            TextureImporter.PngToTex(materialSet.Multi, out multiData);
+                        } else if (materialSet.Normal.EndsWith(".dds")) {
+                            var scratch = ScratchImage.LoadDDS(materialSet.Multi);
+                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
+                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
+                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out multiData);
+                        }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
                         option.Files.Add(materialSet.InternalMultiPath, materialSet.InternalMultiPath.Replace("/", @"\"));
                         Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
@@ -162,7 +185,7 @@ namespace FFXIVLooseTextureCompiler {
                 BringToFront();
                 TopMost = false;
                 generateButton.Enabled = false;
-                generateButton.Text = "Generation Succeed";
+                generateButton.Text = "Generation Succeeded";
                 generationCooldown.Start();
                 //MessageBox.Show("Export succeeded!");
             } else {

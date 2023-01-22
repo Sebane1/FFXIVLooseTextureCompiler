@@ -110,7 +110,7 @@ namespace FFXIVVoicePackCreator {
             }
         }
         private bool CheckExtentions(string file) {
-            string[] extentions = new string[] { ".png" };
+            string[] extentions = new string[] { ".png", ".dds" };
             foreach (string extention in extentions) {
                 if (file.Contains(extention)) {
                     return true;
