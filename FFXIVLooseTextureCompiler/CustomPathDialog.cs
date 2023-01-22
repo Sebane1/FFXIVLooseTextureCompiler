@@ -21,6 +21,7 @@ namespace FFXIVLooseTextureCompiler {
             set {
                 materialSet = value;
                 if (materialSet != null) {
+                    groupNameTextBox.Text = materialSet.MaterialGroupName;
                     materialSetNameTextBox.Text = materialSet.MaterialSetName;
                     internalDiffusePathTextBox.Text = materialSet.InternalDiffusePath;
                     internalNormalPathTextBox.Text = materialSet.InternalNormalPath;
@@ -31,6 +32,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrWhiteSpace(materialSetNameTextBox.Text)) {
+                materialSet.MaterialGroupName = groupNameTextBox.Text;
                 materialSet.MaterialSetName = materialSetNameTextBox.Text;
                 int validationCount = 0;
                 if (IsValidGamePathFormat(internalDiffusePathTextBox.Text)) {

@@ -29,6 +29,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool hasSaved;
         private bool foundInstance;
         private bool generatedOnce;
+        private int fileCount;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -79,7 +80,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "", "", "", "", "", "", "raen", "xaela", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = 0;
+            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
         }
@@ -106,87 +107,121 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 Directory.CreateDirectory(modPath);
                 int i = 0;
-                int fileCount = 0;
+                fileCount = 0;
+                Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
                 foreach (MaterialSet materialSet in materialList.Items) {
-                    Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
-                    string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
-                    string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
-                    string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
-                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-
-                        byte[] diffuseData = new byte[0];
-                        if (materialSet.Diffuse.EndsWith(".png")) {
-                            TextureImporter.PngToTex(materialSet.Diffuse, out diffuseData);
-                        } else if (materialSet.Diffuse.EndsWith(".dds")) {
-                            var scratch = ScratchImage.LoadDDS(materialSet.Diffuse);
-                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out diffuseData);
-                        } else if (materialSet.Diffuse.EndsWith(".bmp")) {
-                            MemoryStream stream = new MemoryStream();
-                            Bitmap bitmap = new Bitmap(materialSet.Diffuse);
-                            bitmap.Save(stream, ImageFormat.Png);
-                            TextureImporter.PngToTex(stream, out diffuseData);
-                        } else if (materialSet.Diffuse.EndsWith(".tex")) {
-                            diffuseData = File.ReadAllBytes(materialSet.Diffuse);
-                        }
-                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
-                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
-                        Directory.CreateDirectory(Path.GetDirectoryName(diffuseBodyDiskPath));
-                        group.Options.Add(option);
-                        File.WriteAllBytes(AppendNumber(diffuseBodyDiskPath, fileCount++), diffuseData);
+                    if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
+                        groups.Add(materialSet.MaterialGroupName, new List<MaterialSet>() { materialSet });
+                    } else {
+                        groups[materialSet.MaterialGroupName].Add(materialSet);
                     }
-                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                        byte[] normalData = new byte[0];
-                        if (materialSet.Normal.EndsWith(".png")) {
-                            TextureImporter.PngToTex(materialSet.Normal, out normalData);
-                        } else if (materialSet.Normal.EndsWith(".dds")) {
-                            var scratch = ScratchImage.LoadDDS(materialSet.Normal);
-                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out normalData);
-                        } else if (materialSet.Normal.EndsWith(".bmp")) {
-                            MemoryStream stream = new MemoryStream();
-                            Bitmap bitmap = new Bitmap(materialSet.Normal);
-                            bitmap.Save(stream, ImageFormat.Png);
-                            TextureImporter.PngToTex(stream, out normalData);
-                        } else if (materialSet.Normal.EndsWith(".tex")) {
-                            normalData = File.ReadAllBytes(materialSet.Normal);
+                }
+                foreach (List<MaterialSet> materialSets in groups.Values) {
+                    Group group = new Group(materialSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
+                    Option option = null;
+                    foreach (MaterialSet materialSet in materialSets) {
+                        string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
+                        string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
+                        string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
+                        switch (generationType.SelectedIndex) {
+                            case 0:
+                                if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse"), 0);
+                                    option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
+                                    group.Options.Add(option);
+                                    ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
+                                }
+                                if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
+                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                                    group.Options.Add(option);
+                                    ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
+                                }
+                                if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
+                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                                    group.Options.Add(option);
+                                    ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
+                                }
+                                break;
+                            case 1:
+                                option = new Option(materialSet.MaterialSetName == materialSet.MaterialGroupName ? "Enable" : materialSet.MaterialSetName, 0);
+                                group.Options.Add(option);
+                                if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                                    ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
+                                    option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
+                                }
+                                if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                                    ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
+                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                }
+                                if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                                    ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
+                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                }
+                                break;
                         }
-                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
-                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
-                        Directory.CreateDirectory(Path.GetDirectoryName(normalBodyDiskPath));
-                        group.Options.Add(option);
-                        File.WriteAllBytes(AppendNumber(normalBodyDiskPath, fileCount++), normalData);
-                    }
-                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                        byte[] multiData = new byte[0];
-                        if (materialSet.Multi.EndsWith(".png")) {
-                            TextureImporter.PngToTex(materialSet.Multi, out multiData);
-                        } else if (materialSet.Multi.EndsWith(".dds")) {
-                            var scratch = ScratchImage.LoadDDS(materialSet.Multi);
-                            var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                            byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out multiData);
-                        } else if (materialSet.Multi.EndsWith(".bmp")) {
-                            MemoryStream stream = new MemoryStream();
-                            Bitmap bitmap = new Bitmap(materialSet.Multi);
-                            bitmap.Save(stream, ImageFormat.Png);
-                            TextureImporter.PngToTex(stream, out multiData);
-                        } else if (materialSet.Multi.EndsWith(".tex")) {
-                            multiData = File.ReadAllBytes(materialSet.Multi);
-                        }
-                        Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
-                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
-                        Directory.CreateDirectory(Path.GetDirectoryName(multiBodyDiskPath));
-                        group.Options.Add(option);
-                        File.WriteAllBytes(AppendNumber(multiBodyDiskPath, fileCount++), multiData);
                     }
                     if (group.Options.Count > 0) {
                         string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
                         ExportGroup(groupPath, group);
                     }
                 }
+                //foreach (MaterialSet materialSet in materialList.Items) {
+                //    string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
+                //    string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
+                //    string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
+                //    Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
+                //    Option option = null;
+                //    switch (0) {
+                //        case 0:
+                //            if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                //                ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
+                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
+                //                option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
+                //                group.Options.Add(option);
+                //            }
+                //            if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                //                ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
+                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
+                //                option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                //                group.Options.Add(option);
+                //            }
+                //            if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                //                ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
+                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
+                //                option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                //                group.Options.Add(option);
+                //            }
+                //            if (group.Options.Count > 0) {
+                //                string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                //                ExportGroup(groupPath, group);
+                //            }
+                //            break;
+                //        case 1:
+                //            option = new Option("Enable", 0);
+                //            option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
+                //            group.Options.Add(option);
+                //            if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                //                ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
+                //                option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
+                //            }
+                //            if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                //                ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
+                //                option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                //            }
+                //            if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                //                ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
+                //                option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                //            }
+                //            if (group.Options.Count > 0) {
+                //                string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                //                ExportGroup(groupPath, group);
+                //            }
+                //            break;
+                //    }
+
+                //}
 
                 ExportJson();
                 ExportMeta();
@@ -214,6 +249,27 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 MessageBox.Show("Please enter a mod name!");
             }
+        }
+
+        public void ExportTex(string inputFile, string outputFile) {
+            byte[] data = new byte[0];
+            if (inputFile.EndsWith(".png")) {
+                TextureImporter.PngToTex(inputFile, out data);
+            } else if (inputFile.EndsWith(".dds")) {
+                var scratch = ScratchImage.LoadDDS(inputFile);
+                var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
+                byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
+                TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
+            } else if (inputFile.EndsWith(".bmp")) {
+                MemoryStream stream = new MemoryStream();
+                Bitmap bitmap = new Bitmap(inputFile);
+                bitmap.Save(stream, ImageFormat.Png);
+                TextureImporter.PngToTex(stream, out data);
+            } else if (inputFile.EndsWith(".tex")) {
+                data = File.ReadAllBytes(inputFile);
+            }
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+            File.WriteAllBytes(outputFile, data);
         }
         private void ExportJson() {
             string jsonText = @"{
@@ -773,7 +829,9 @@ namespace FFXIVLooseTextureCompiler {
                 modVersionTextBox.Text = projectFile.Version;
                 modDescriptionTextBox.Text = projectFile.Description;
                 modWebsiteTextBox.Text = projectFile.Website;
+                generationType.SelectedIndex = projectFile.ExportType;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+
             }
             HasSaved = true;
         }
@@ -787,6 +845,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.Description = modDescriptionTextBox.Text;
                 projectFile.Website = modWebsiteTextBox.Text;
                 projectFile.MaterialSets = new List<MaterialSet>();
+                projectFile.ExportType = generationType.SelectedIndex;
                 foreach (MaterialSet materialSet in materialList.Items) {
                     projectFile.MaterialSets.Add(materialSet);
                 }
