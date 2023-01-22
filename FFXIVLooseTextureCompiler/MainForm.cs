@@ -167,61 +167,6 @@ namespace FFXIVLooseTextureCompiler {
                         ExportGroup(groupPath, group);
                     }
                 }
-                //foreach (MaterialSet materialSet in materialList.Items) {
-                //    string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
-                //    string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
-                //    string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
-                //    Group group = new Group(materialSet.MaterialSetName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
-                //    Option option = null;
-                //    switch (0) {
-                //        case 0:
-                //            if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                //                ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
-                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
-                //                option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
-                //                group.Options.Add(option);
-                //            }
-                //            if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                //                ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
-                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
-                //                option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
-                //                group.Options.Add(option);
-                //            }
-                //            if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                //                ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
-                //                option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
-                //                option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
-                //                group.Options.Add(option);
-                //            }
-                //            if (group.Options.Count > 0) {
-                //                string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
-                //                ExportGroup(groupPath, group);
-                //            }
-                //            break;
-                //        case 1:
-                //            option = new Option("Enable", 0);
-                //            option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
-                //            group.Options.Add(option);
-                //            if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                //                ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
-                //                option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
-                //            }
-                //            if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                //                ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
-                //                option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
-                //            }
-                //            if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                //                ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
-                //                option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
-                //            }
-                //            if (group.Options.Count > 0) {
-                //                string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
-                //                ExportGroup(groupPath, group);
-                //            }
-                //            break;
-                //    }
-
-                //}
 
                 ExportJson();
                 ExportMeta();
@@ -426,7 +371,7 @@ namespace FFXIVLooseTextureCompiler {
         public string GetFaceMaterialPath(int material) {
             if (material != 3) {
                 string faceIdCheck = "000";
-                if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "moon") {
+                if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "keeper") {
                     faceIdCheck = "010";
                 }
                 string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
@@ -831,7 +776,7 @@ namespace FFXIVLooseTextureCompiler {
                 modWebsiteTextBox.Text = projectFile.Website;
                 generationType.SelectedIndex = projectFile.ExportType;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
-
+                
             }
             HasSaved = true;
         }
