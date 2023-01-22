@@ -121,11 +121,13 @@ namespace FFXIVLooseTextureCompiler {
                             var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                             byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
                             TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out diffuseData);
-                        } else if(materialSet.Diffuse.EndsWith(".bmp")) {
+                        } else if (materialSet.Diffuse.EndsWith(".bmp")) {
                             MemoryStream stream = new MemoryStream();
                             Bitmap bitmap = new Bitmap(materialSet.Diffuse);
                             bitmap.Save(stream, ImageFormat.Png);
                             TextureImporter.PngToTex(stream, out diffuseData);
+                        } else if (materialSet.Diffuse.EndsWith(".tex")) {
+                            diffuseData = File.ReadAllBytes(materialSet.Diffuse);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse", 0);
                         option.Files.Add(materialSet.InternalDiffusePath, materialSet.InternalDiffusePath.Replace("/", @"\"));
@@ -147,6 +149,8 @@ namespace FFXIVLooseTextureCompiler {
                             Bitmap bitmap = new Bitmap(materialSet.Normal);
                             bitmap.Save(stream, ImageFormat.Png);
                             TextureImporter.PngToTex(stream, out normalData);
+                        } else if (materialSet.Normal.EndsWith(".tex")) {
+                            normalData = File.ReadAllBytes(materialSet.Normal);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal", 0);
                         option.Files.Add(materialSet.InternalNormalPath, materialSet.InternalNormalPath.Replace("/", @"\"));
@@ -168,6 +172,8 @@ namespace FFXIVLooseTextureCompiler {
                             Bitmap bitmap = new Bitmap(materialSet.Multi);
                             bitmap.Save(stream, ImageFormat.Png);
                             TextureImporter.PngToTex(stream, out multiData);
+                        } else if (materialSet.Multi.EndsWith(".tex")) {
+                            multiData = File.ReadAllBytes(materialSet.Multi);
                         }
                         Option option = new Option(materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi", 0);
                         option.Files.Add(materialSet.InternalMultiPath, materialSet.InternalMultiPath.Replace("/", @"\"));
@@ -674,6 +680,9 @@ namespace FFXIVLooseTextureCompiler {
             diffuse.FilePath.Text = "";
             normal.FilePath.Text = "";
             multi.FilePath.Text = "";
+            diffuse.Enabled = false;
+            normal.Enabled = false;
+            multi.Enabled = false;
         }
 
         private void multi_OnFileSelected(object sender, EventArgs e) {
@@ -686,10 +695,6 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void GetAuthorWebsite() {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string lastDataPath = Path.Combine(dataPath, @"0.0.1.5\");
-            if (Directory.Exists(lastDataPath)) {
-                dataPath = lastDataPath;
-            }
             string path = Path.Combine(dataPath, @"AuthorWebsite.config");
             if (File.Exists(path)) {
                 using (StreamReader reader = new StreamReader(path)) {
@@ -699,10 +704,6 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void GetAuthorName() {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string lastDataPath = Path.Combine(dataPath, @"0.0.1.5\");
-            if (Directory.Exists(lastDataPath)) {
-                dataPath = lastDataPath;
-            }
             string path = Path.Combine(dataPath, @"AuthorName.config");
             if (File.Exists(path)) {
                 using (StreamReader reader = new StreamReader(path)) {
