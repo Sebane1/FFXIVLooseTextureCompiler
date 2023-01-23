@@ -54,6 +54,8 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
@@ -373,6 +375,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.configToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -418,6 +421,21 @@
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bulkTexViewerToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // bulkTexViewerToolStripMenuItem
+            // 
+            this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
+            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
+            this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -657,7 +675,7 @@
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FFXIV Loose Texture Compiler Alpha";
+            this.Text = "FFXIV Loose Texture Compiler";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -719,5 +737,7 @@
         private System.Windows.Forms.Timer generationCooldown;
         private ComboBox generationType;
         private Label label5;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem bulkTexViewerToolStripMenuItem;
     }
 }
