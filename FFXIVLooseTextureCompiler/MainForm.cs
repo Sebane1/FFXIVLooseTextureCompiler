@@ -1,7 +1,6 @@
 using FFBardMusicPlayer.FFXIV;
 using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVLooseTextureCompiler.PathOrganization;
-using FFXIVVoicePackCreator;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
 using OtterTex;
@@ -776,7 +775,7 @@ namespace FFXIVLooseTextureCompiler {
                 modWebsiteTextBox.Text = projectFile.Website;
                 generationType.SelectedIndex = projectFile.ExportType;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
-                
+
             }
             HasSaved = true;
         }
@@ -898,6 +897,10 @@ namespace FFXIVLooseTextureCompiler {
             generationCooldown.Stop();
             generateButton.Enabled = true;
             generateButton.Text = "Generate";
+        }
+
+        private void bulkTexViewerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new BulkTexManager().Show();
         }
     }
 }
