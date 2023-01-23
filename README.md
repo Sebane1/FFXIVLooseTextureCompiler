@@ -15,11 +15,20 @@ https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
 
 Just hit rediscover in penumbra and use.
-Supports png, bmp, dds, and redirecting raw .tex files.
 
 .tex generation is forked from Penumbra.
 
 Requires Penumbra to use.
+
+Core features:
+- Drag and drop texture assignment
+- Automatic path generation
+- Automatic penumbra options, and ability to customize groups for exports to penumbra
+- png, dds, bmp, and .tex support (yes you can compile existing makeup or body mods into this tool with just the .tex files) 
+- Ability to add custom texture paths if this tool doesn't already autogenerate them
+- Automatic redraw on generation
+- Low learning curve.
+
 
 Support Discord: https://discord.gg/rtGXwMn7pX
 
