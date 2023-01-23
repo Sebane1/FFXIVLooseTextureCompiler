@@ -848,16 +848,19 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (materialList.Items.Count == 0) {
+            if (materialList.Items.Count < 1) {
+                e.Cancel = true;
                 materialListContextMenu.Close();
             }
         }
 
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
             CustomPathDialog customPathDialog = new CustomPathDialog();
-            customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
-            if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Material Set has been edited successfully", VersionText);
+            if (materialList.SelectedIndex != -1) {
+                customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                    MessageBox.Show("Material Set has been edited successfully", VersionText);
+                }
             }
             RefreshList();
         }
