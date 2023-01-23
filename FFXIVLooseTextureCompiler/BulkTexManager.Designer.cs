@@ -28,6 +28,7 @@
             this.exportPNG = new System.Windows.Forms.Button();
             this.bulkImport = new System.Windows.Forms.Button();
             this.exportAllButton = new System.Windows.Forms.Button();
+            this.clearListButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.texturePreview)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,9 +59,9 @@
             // 
             // exportPNG
             // 
-            this.exportPNG.Location = new System.Drawing.Point(376, 310);
+            this.exportPNG.Location = new System.Drawing.Point(400, 312);
             this.exportPNG.Name = "exportPNG";
-            this.exportPNG.Size = new System.Drawing.Size(104, 23);
+            this.exportPNG.Size = new System.Drawing.Size(80, 24);
             this.exportPNG.TabIndex = 3;
             this.exportPNG.Text = "Export PNG";
             this.exportPNG.UseVisualStyleBackColor = true;
@@ -68,7 +69,7 @@
             // 
             // bulkImport
             // 
-            this.bulkImport.Location = new System.Drawing.Point(4, 310);
+            this.bulkImport.Location = new System.Drawing.Point(4, 312);
             this.bulkImport.Name = "bulkImport";
             this.bulkImport.Size = new System.Drawing.Size(168, 23);
             this.bulkImport.TabIndex = 4;
@@ -78,7 +79,7 @@
             // 
             // exportAllButton
             // 
-            this.exportAllButton.Location = new System.Drawing.Point(244, 309);
+            this.exportAllButton.Location = new System.Drawing.Point(264, 312);
             this.exportAllButton.Name = "exportAllButton";
             this.exportAllButton.Size = new System.Drawing.Size(132, 24);
             this.exportAllButton.TabIndex = 5;
@@ -86,11 +87,22 @@
             this.exportAllButton.UseVisualStyleBackColor = true;
             this.exportAllButton.Click += new System.EventHandler(this.exportAllButton_Click);
             // 
+            // clearListButton
+            // 
+            this.clearListButton.Location = new System.Drawing.Point(176, 312);
+            this.clearListButton.Name = "clearListButton";
+            this.clearListButton.Size = new System.Drawing.Size(88, 24);
+            this.clearListButton.TabIndex = 6;
+            this.clearListButton.Text = "Clear List";
+            this.clearListButton.UseVisualStyleBackColor = true;
+            this.clearListButton.Click += new System.EventHandler(this.button1_Click);
+            // 
             // BulkTexManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 334);
+            this.ClientSize = new System.Drawing.Size(484, 341);
+            this.Controls.Add(this.clearListButton);
             this.Controls.Add(this.exportAllButton);
             this.Controls.Add(this.bulkImport);
             this.Controls.Add(this.exportPNG);
@@ -98,7 +110,7 @@
             this.Controls.Add(this.textureList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BulkTexManager";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bulk Tex Manager";
             ((System.ComponentModel.ISupportInitialize)(this.texturePreview)).EndInit();
             this.ResumeLayout(false);
@@ -112,5 +124,6 @@
         private Button exportPNG;
         private Button bulkImport;
         private Button exportAllButton;
+        private Button clearListButton;
     }
 }
