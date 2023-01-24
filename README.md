@@ -9,7 +9,8 @@ Written Tutorial: https://docs.google.com/document/d/1AR53LNy0dQ6X7L6NSfQY4PkZoU
 
 Make loose texture mods less of a pain to set up.
 
-![image](![ec3e99f534ec0985ebf2935d7896e1d8](https://user-images.githubusercontent.com/7157688/214223848-c2c80ae9-ca5e-4974-b62a-473f825418dc.png)
+![ec3e99f534ec0985ebf2935d7896e1d8](https://user-images.githubusercontent.com/7157688/214223910-46523ea6-5af9-4469-a327-faaceb29b15c.png)
+
 
 Make sure you have .net desktop runtime 7.0 (not to be confused with .net runtime 7.0)
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.1-windows-x64-installer
