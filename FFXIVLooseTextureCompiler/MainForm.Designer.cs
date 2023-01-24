@@ -645,9 +645,9 @@
             this.bakeMissingNormalsCheckbox.AutoSize = true;
             this.bakeMissingNormalsCheckbox.Location = new System.Drawing.Point(164, 548);
             this.bakeMissingNormalsCheckbox.Name = "bakeMissingNormalsCheckbox";
-            this.bakeMissingNormalsCheckbox.Size = new System.Drawing.Size(134, 19);
+            this.bakeMissingNormalsCheckbox.Size = new System.Drawing.Size(116, 19);
             this.bakeMissingNormalsCheckbox.TabIndex = 39;
-            this.bakeMissingNormalsCheckbox.Text = "Bake Normals (slow)";
+            this.bakeMissingNormalsCheckbox.Text = "Generate Normal";
             this.bakeMissingNormalsCheckbox.UseVisualStyleBackColor = true;
             this.bakeMissingNormalsCheckbox.CheckedChanged += new System.EventHandler(this.bakeMissingNormalsCheckbox_CheckedChanged);
             // 
