@@ -35,6 +35,9 @@ namespace FFXIVVoicePackCreator {
         public bool Enabled {
             set {
                 openButton.Enabled = filePath.Enabled = value;
+                if (!value) {
+                    filePath.Text = "";
+                }
             }
         }
         private void filePicker_Load(object sender, EventArgs e) {
