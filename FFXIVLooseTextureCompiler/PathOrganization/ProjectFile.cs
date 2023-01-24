@@ -13,6 +13,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public string Version { get; set; }
 
         public bool BakeMissingNormals { get; set; }
+        public bool GenerateMulti { get; set; }
 
         public int ExportType { get; set; }
         public List<MaterialSet> MaterialSets { get; set; }

@@ -9,6 +9,7 @@ using OtterTex;
 using Penumbra.Import.Dds;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
@@ -31,6 +32,8 @@ namespace FFXIVLooseTextureCompiler {
         private bool foundInstance;
         private bool generatedOnce;
         private int fileCount;
+        private Dictionary<string, Bitmap> normalCache;
+        private Dictionary<string, Bitmap> multiCache;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -114,6 +117,8 @@ namespace FFXIVLooseTextureCompiler {
                 exportProgress.Visible = true;
                 Refresh();
                 Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
+                normalCache = new Dictionary<string, Bitmap>();
+                multiCache = new Dictionary<string, Bitmap>();
                 foreach (MaterialSet materialSet in materialList.Items) {
                     if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
                         groups.Add(materialSet.MaterialGroupName, new List<MaterialSet>() { materialSet });
@@ -152,7 +157,7 @@ namespace FFXIVLooseTextureCompiler {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
-                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), true);
+                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.Normal);
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
@@ -164,6 +169,21 @@ namespace FFXIVLooseTextureCompiler {
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
                                     ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
+                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked) {
+                                    if (!string.IsNullOrEmpty(materialSet.Normal)) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        ExportTex(materialSet.Normal, AppendNumber(multiBodyDiskPath, fileCount), materialSet.InternalDiffusePath.Contains("_fac") ? ExportType.MultiFace : ExportType.Multi);
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse)) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), materialSet.InternalDiffusePath.Contains("_fac") ? ExportType.MultiFace : ExportType.Multi);
+                                    }
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
@@ -190,7 +210,7 @@ namespace FFXIVLooseTextureCompiler {
                                     Refresh();
                                     Application.DoEvents();
                                 } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked) {
-                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), true);
+                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), ExportType.Normal);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
@@ -201,6 +221,17 @@ namespace FFXIVLooseTextureCompiler {
                                 if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                                     ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
+                                } else if (!string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked) {
+                                    if (!string.IsNullOrEmpty(materialSet.Normal)) {
+                                        ExportTex(materialSet.Normal, AppendNumber(multiBodyDiskPath, fileCount), materialSet.InternalDiffusePath.Contains("_fac") ? ExportType.MultiFace : ExportType.Multi);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse)) {
+                                        ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), materialSet.InternalDiffusePath.Contains("_fac") ? ExportType.MultiFace : ExportType.Multi);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                    }
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
@@ -266,58 +297,163 @@ namespace FFXIVLooseTextureCompiler {
             output.UnlockBits(bmpData);
             return output;
         }
-        public void ExportTex(string inputFile, string outputFile, bool doNormal = false) {
+        public enum ExportType {
+            None,
+            Normal,
+            Multi,
+            MultiFace
+        }
+        public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None) {
             byte[] data = new byte[0];
+            int contrast = 500;
             if (inputFile.EndsWith(".png")) {
-                if (!doNormal) {
-                    TextureImporter.PngToTex(inputFile, out data);
-                } else {
-                    using (Bitmap bitmap = new Bitmap(inputFile)) {
+                switch (exportType) {
+                    case ExportType.None:
+                        TextureImporter.PngToTex(inputFile, out data);
+                        break;
+                    case ExportType.Normal:
                         using (MemoryStream stream = new MemoryStream()) {
-                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                            Graphics g = Graphics.FromImage(target);
-                            g.Clear(Color.White);
-                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                            if (!normalCache.ContainsKey(inputFile)) {
+                                using (Bitmap bitmap = new Bitmap(inputFile)) {
+                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                                    Graphics g = Graphics.FromImage(target);
+                                    g.Clear(Color.White);
+                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    Bitmap normal = Normal.Calculate(target);
+                                    normal.Save(stream, ImageFormat.Png);
+                                    normalCache.Add(inputFile, normal);
+                                }
+                            } else {
+                                normalCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
                             stream.Position = 0;
                             TextureImporter.PngToTex(stream, out data);
                         }
-                    }
+                        break;
+                    case ExportType.Multi:
+                        using (MemoryStream stream = new MemoryStream()) {
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                        break;
+                    case ExportType.MultiFace:
+                        using (MemoryStream stream = new MemoryStream()) {
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = MultiplyFilter.MultiplyImage(Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast), Color.Orange.R, Color.Orange.G, Color.Orange.B);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                        break;
+
                 }
             } else if (inputFile.EndsWith(".dds")) {
                 var scratch = ScratchImage.LoadDDS(inputFile);
                 var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                 byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                if (!doNormal) {
-                    TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
-                } else {
-                    using (Bitmap bitmap = Normal.Calculate(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))) {
+                switch (exportType) {
+                    case ExportType.None:
+                        TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
+                        break;
+                    case ExportType.Normal:
                         using (MemoryStream stream = new MemoryStream()) {
-                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                            Graphics g = Graphics.FromImage(target);
-                            g.Clear(Color.White);
-                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                            if (!normalCache.ContainsKey(inputFile)) {
+                                using (Bitmap bitmap = Normal.Calculate(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))) {
+                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                                    Graphics g = Graphics.FromImage(target);
+                                    g.Clear(Color.White);
+                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    Bitmap normal = Normal.Calculate(target);
+                                    normal.Save(stream, ImageFormat.Png);
+                                    normalCache.Add(inputFile, normal);
+                                }
+                            } else {
+                                normalCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
                             stream.Position = 0;
                             TextureImporter.PngToTex(stream, out data);
                         }
-                    }
+                        break;
+                    case ExportType.Multi:
+                        using (MemoryStream stream = new MemoryStream()) {
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                        break;
+                    case ExportType.MultiFace:
+                        using (MemoryStream stream = new MemoryStream()) {
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = MultiplyFilter.MultiplyImage(Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast), Color.Orange.R, Color.Orange.G, Color.Orange.B);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                        break;
                 }
             } else if (inputFile.EndsWith(".bmp")) {
                 using (MemoryStream stream = new MemoryStream()) {
-                    using (Bitmap bitmap = new Bitmap(inputFile)) {
-                        if (doNormal) {
-                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                            Graphics g = Graphics.FromImage(target);
-                            g.Clear(Color.White);
-                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
-                        } else {
-                            bitmap.Save(stream, ImageFormat.Png);
-                        }
-                        stream.Flush();
-                        stream.Position = 0;
-                        TextureImporter.PngToTex(stream, out data);
+                    switch (exportType) {
+                        case ExportType.Normal:
+                            if (!normalCache.ContainsKey(inputFile)) {
+                                using (Bitmap bitmap = new Bitmap(inputFile)) {
+                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                                    Graphics g = Graphics.FromImage(target);
+                                    g.Clear(Color.White);
+                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    Bitmap normal = Normal.Calculate(target);
+                                    normal.Save(stream, ImageFormat.Png);
+                                    normalCache.Add(inputFile, normal);
+                                }
+                            } else {
+                                normalCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            break;
+                        case ExportType.None:
+                            using (Bitmap bitmap = new Bitmap(inputFile)) {
+                                bitmap.Save(stream, ImageFormat.Png);
+                                stream.Flush();
+                                stream.Position = 0;
+                                TextureImporter.PngToTex(stream, out data);
+                            }
+                            break;
+                        case ExportType.Multi:
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                            break;
+                        case ExportType.MultiFace:
+                            if (!multiCache.ContainsKey(inputFile)) {
+                                Bitmap multi = MultiplyFilter.MultiplyImage(Contrast.AdjustContrast(Grayscale.MakeGrayscale3(normalCache.ContainsKey(inputFile) ? normalCache[inputFile] : new Bitmap(inputFile)), contrast), Color.Orange.R, Color.Orange.G, Color.Orange.B);
+                                multi.Save(stream, ImageFormat.Png);
+                            } else {
+                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                            }
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                            break;
                     }
                 }
             } else if (inputFile.EndsWith(".tex")) {
@@ -886,6 +1022,7 @@ namespace FFXIVLooseTextureCompiler {
                 modWebsiteTextBox.Text = projectFile.Website;
                 generationType.SelectedIndex = projectFile.ExportType;
                 bakeMissingNormalsCheckbox.Checked = projectFile.BakeMissingNormals;
+                generateMultiCheckBox.Checked = projectFile.GenerateMulti;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
             }
@@ -903,6 +1040,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.MaterialSets = new List<MaterialSet>();
                 projectFile.ExportType = generationType.SelectedIndex;
                 projectFile.BakeMissingNormals = bakeMissingNormalsCheckbox.Checked;
+                projectFile.GenerateMulti = generateMultiCheckBox.Checked;
                 foreach (MaterialSet materialSet in materialList.Items) {
                     projectFile.MaterialSets.Add(materialSet);
                 }
