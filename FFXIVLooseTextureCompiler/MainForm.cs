@@ -795,6 +795,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void addBodyEditButton_Click(object sender, EventArgs e) {
+            generatedOnce = false;
             MaterialSet materialSet = new MaterialSet();
             materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
             materialSet.InternalDiffusePath = GetBodyMaterialPath(0);
@@ -805,6 +806,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
+            generatedOnce = false;
             MaterialSet materialSet = new MaterialSet();
             materialSet.MaterialSetName = facePart.Text + ", " + genderListBody.Text + ", " + subRaceList.Text + ", " + faceType.Text;
             if (facePart.SelectedIndex != 2) {
@@ -916,6 +918,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
+            generatedOnce = false;
             materialList.Items.RemoveAt(materialList.SelectedIndex);
             diffuse.FilePath.Text = "";
             normal.FilePath.Text = "";
@@ -923,6 +926,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void clearList_Click(object sender, EventArgs e) {
+            generatedOnce = false;
             if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 {
                     materialList.Items.Clear();
@@ -1155,6 +1159,18 @@ namespace FFXIVLooseTextureCompiler {
 
         private void bulkTexViewerToolStripMenuItem_Click(object sender, EventArgs e) {
             new BulkTexManager().Show();
+        }
+
+        private void generationType_SelectedIndexChanged(object sender, EventArgs e) {
+            generatedOnce = false;
+        }
+
+        private void bakeMissingNormalsCheckbox_CheckedChanged(object sender, EventArgs e) {
+            generatedOnce = false;
+        }
+
+        private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
+            generatedOnce = false;
         }
     }
 }
