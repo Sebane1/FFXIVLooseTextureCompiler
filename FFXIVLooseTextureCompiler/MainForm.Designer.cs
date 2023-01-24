@@ -621,6 +621,7 @@
             this.generationType.Size = new System.Drawing.Size(70, 23);
             this.generationType.TabIndex = 36;
             this.generationType.Text = "Verbose";
+            this.generationType.SelectedIndexChanged += new System.EventHandler(this.generationType_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -648,6 +649,7 @@
             this.bakeMissingNormalsCheckbox.TabIndex = 39;
             this.bakeMissingNormalsCheckbox.Text = "Bake Normals (slow)";
             this.bakeMissingNormalsCheckbox.UseVisualStyleBackColor = true;
+            this.bakeMissingNormalsCheckbox.CheckedChanged += new System.EventHandler(this.bakeMissingNormalsCheckbox_CheckedChanged);
             // 
             // generateMultiCheckBox
             // 
@@ -658,6 +660,7 @@
             this.generateMultiCheckBox.TabIndex = 40;
             this.generateMultiCheckBox.Text = "Generate Multi";
             this.generateMultiCheckBox.UseVisualStyleBackColor = true;
+            this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
             // 
             // MainWindow
             // 
