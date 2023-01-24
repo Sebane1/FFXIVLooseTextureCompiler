@@ -1,7 +1,9 @@
 using FFBardMusicPlayer.FFXIV;
 using FFXIVLooseTextureCompiler.DataTypes;
+using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVVoicePackCreator.Json;
+using Lumina.Data.Files;
 using Newtonsoft.Json;
 using OtterTex;
 using Penumbra.Import.Dds;
@@ -107,6 +109,10 @@ namespace FFXIVLooseTextureCompiler {
                 Directory.CreateDirectory(modPath);
                 int i = 0;
                 fileCount = 0;
+                exportProgress.BringToFront();
+                exportProgress.Maximum = materialList.Items.Count * 3;
+                exportProgress.Visible = true;
+                Refresh();
                 Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
                 foreach (MaterialSet materialSet in materialList.Items) {
                     if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
@@ -129,18 +135,37 @@ namespace FFXIVLooseTextureCompiler {
                                     option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
                                     ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
                                     ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked) {
+                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
+                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                                    group.Options.Add(option);
+                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), true);
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
                                     ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 break;
                             case 1:
@@ -149,14 +174,31 @@ namespace FFXIVLooseTextureCompiler {
                                 if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
                                     ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
                                     option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                                     ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked) {
+                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), true);
+                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
                                     ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                } else {
+                                    exportProgress.Maximum--;
                                 }
                                 break;
                         }
@@ -187,27 +229,83 @@ namespace FFXIVLooseTextureCompiler {
                 BringToFront();
                 TopMost = false;
                 generateButton.Enabled = false;
-                generateButton.Text = "Generation Succeeded";
+                generateButton.Text = "Success!";
                 generationCooldown.Start();
+                exportProgress.Visible = false;
+                exportProgress.Value = 0;
                 //MessageBox.Show("Export succeeded!");
             } else {
                 MessageBox.Show("Please enter a mod name!");
             }
         }
+        public Bitmap RGBAToBitmap(byte[] RGBAPixels, int width, int height) {
+            Bitmap output = new Bitmap(width, height);
+            Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
+            BitmapData bmpData = output.LockBits(rect, ImageLockMode.ReadWrite, output.PixelFormat);
+            IntPtr ptr = bmpData.Scan0;
+            for (int i = 0; i < RGBAPixels.Length; i += 4) {
+                byte R = RGBAPixels[i];
+                byte G = RGBAPixels[i + 1];
+                byte B = RGBAPixels[i + 2];
+                byte A = RGBAPixels[i + 3];
 
-        public void ExportTex(string inputFile, string outputFile) {
+                RGBAPixels[i] = B;
+                RGBAPixels[i + 1] = G;
+                RGBAPixels[i + 2] = R;
+                RGBAPixels[i + 3] = A;
+
+            }
+            System.Runtime.InteropServices.Marshal.Copy(RGBAPixels, 0, ptr, RGBAPixels.Length);
+            output.UnlockBits(bmpData);
+            return output;
+        }
+        public void ExportTex(string inputFile, string outputFile, bool doNormal = false) {
             byte[] data = new byte[0];
             if (inputFile.EndsWith(".png")) {
-                TextureImporter.PngToTex(inputFile, out data);
+                if (!doNormal) {
+                    TextureImporter.PngToTex(inputFile, out data);
+                } else {
+                    Bitmap bitmap = new Bitmap(inputFile);
+                    MemoryStream stream = new MemoryStream();
+                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                    Graphics g = Graphics.FromImage(target);
+                    g.Clear(Color.White);
+                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    TextureImporter.PngToTex(stream, out data);
+                }
             } else if (inputFile.EndsWith(".dds")) {
                 var scratch = ScratchImage.LoadDDS(inputFile);
                 var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                 byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
+                if (!doNormal) {
+                    TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
+                } else {
+                    Bitmap bitmap = Normal.Calculate(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height));
+                    MemoryStream stream = new MemoryStream();
+                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                    Graphics g = Graphics.FromImage(target);
+                    g.Clear(Color.White);
+                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    TextureImporter.PngToTex(stream, out data);
+                }
             } else if (inputFile.EndsWith(".bmp")) {
                 MemoryStream stream = new MemoryStream();
                 Bitmap bitmap = new Bitmap(inputFile);
-                bitmap.Save(stream, ImageFormat.Png);
+                if (doNormal) {
+                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                    Graphics g = Graphics.FromImage(target);
+                    g.Clear(Color.White);
+                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                } else {
+                    bitmap.Save(stream, ImageFormat.Png);
+                }
+                stream.Flush();
+                stream.Position = 0;
                 TextureImporter.PngToTex(stream, out data);
             } else if (inputFile.EndsWith(".tex")) {
                 data = File.ReadAllBytes(inputFile);
@@ -774,6 +872,7 @@ namespace FFXIVLooseTextureCompiler {
                 modDescriptionTextBox.Text = projectFile.Description;
                 modWebsiteTextBox.Text = projectFile.Website;
                 generationType.SelectedIndex = projectFile.ExportType;
+                bakeMissingNormalsCheckbox.Checked = projectFile.BakeMissingNormals;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
             }
@@ -790,6 +889,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.Website = modWebsiteTextBox.Text;
                 projectFile.MaterialSets = new List<MaterialSet>();
                 projectFile.ExportType = generationType.SelectedIndex;
+                projectFile.BakeMissingNormals = bakeMissingNormalsCheckbox.Checked;
                 foreach (MaterialSet materialSet in materialList.Items) {
                     projectFile.MaterialSets.Add(materialSet);
                 }
@@ -848,7 +948,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (materialList.Items.Count < 1) {
+            if (materialList.Items.Count < 1 || materialList.SelectedIndex < 0) {
                 e.Cancel = true;
                 materialListContextMenu.Close();
             }
