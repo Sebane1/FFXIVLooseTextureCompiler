@@ -265,15 +265,17 @@ namespace FFXIVLooseTextureCompiler {
                 if (!doNormal) {
                     TextureImporter.PngToTex(inputFile, out data);
                 } else {
-                    Bitmap bitmap = new Bitmap(inputFile);
-                    MemoryStream stream = new MemoryStream();
-                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                    Graphics g = Graphics.FromImage(target);
-                    g.Clear(Color.White);
-                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
-                    stream.Position = 0;
-                    TextureImporter.PngToTex(stream, out data);
+                    using (Bitmap bitmap = new Bitmap(inputFile)) {
+                        using (MemoryStream stream = new MemoryStream()) {
+                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                            Graphics g = Graphics.FromImage(target);
+                            g.Clear(Color.White);
+                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                    }
                 }
             } else if (inputFile.EndsWith(".dds")) {
                 var scratch = ScratchImage.LoadDDS(inputFile);
@@ -282,31 +284,35 @@ namespace FFXIVLooseTextureCompiler {
                 if (!doNormal) {
                     TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
                 } else {
-                    Bitmap bitmap = Normal.Calculate(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height));
-                    MemoryStream stream = new MemoryStream();
-                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                    Graphics g = Graphics.FromImage(target);
-                    g.Clear(Color.White);
-                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
-                    stream.Position = 0;
-                    TextureImporter.PngToTex(stream, out data);
+                    using (Bitmap bitmap = Normal.Calculate(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))) {
+                        using (MemoryStream stream = new MemoryStream()) {
+                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                            Graphics g = Graphics.FromImage(target);
+                            g.Clear(Color.White);
+                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                            stream.Position = 0;
+                            TextureImporter.PngToTex(stream, out data);
+                        }
+                    }
                 }
             } else if (inputFile.EndsWith(".bmp")) {
-                MemoryStream stream = new MemoryStream();
-                Bitmap bitmap = new Bitmap(inputFile);
-                if (doNormal) {
-                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                    Graphics g = Graphics.FromImage(target);
-                    g.Clear(Color.White);
-                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                    Normal.Calculate(target).Save(stream, ImageFormat.Png);
-                } else {
-                    bitmap.Save(stream, ImageFormat.Png);
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (Bitmap bitmap = new Bitmap(inputFile)) {
+                        if (doNormal) {
+                            Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+                            Graphics g = Graphics.FromImage(target);
+                            g.Clear(Color.White);
+                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                            Normal.Calculate(target).Save(stream, ImageFormat.Png);
+                        } else {
+                            bitmap.Save(stream, ImageFormat.Png);
+                        }
+                        stream.Flush();
+                        stream.Position = 0;
+                        TextureImporter.PngToTex(stream, out data);
+                    }
                 }
-                stream.Flush();
-                stream.Position = 0;
-                TextureImporter.PngToTex(stream, out data);
             } else if (inputFile.EndsWith(".tex")) {
                 data = File.ReadAllBytes(inputFile);
             }
