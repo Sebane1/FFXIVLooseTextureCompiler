@@ -95,7 +95,7 @@
             this.clearListButton.TabIndex = 6;
             this.clearListButton.Text = "Clear List";
             this.clearListButton.UseVisualStyleBackColor = true;
-            this.clearListButton.Click += new System.EventHandler(this.button1_Click);
+            this.clearListButton.Click += new System.EventHandler(this.textureList_Click);
             // 
             // BulkTexManager
             // 
