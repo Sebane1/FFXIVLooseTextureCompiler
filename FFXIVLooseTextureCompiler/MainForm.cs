@@ -137,6 +137,7 @@ namespace FFXIVLooseTextureCompiler {
                                     ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
@@ -154,6 +155,7 @@ namespace FFXIVLooseTextureCompiler {
                                     ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), true);
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
@@ -164,6 +166,7 @@ namespace FFXIVLooseTextureCompiler {
                                     ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
@@ -176,6 +179,7 @@ namespace FFXIVLooseTextureCompiler {
                                     option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
@@ -184,11 +188,13 @@ namespace FFXIVLooseTextureCompiler {
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked) {
                                     ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), true);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
@@ -197,6 +203,7 @@ namespace FFXIVLooseTextureCompiler {
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
                                     exportProgress.Increment(1);
                                     Refresh();
+                                    Application.DoEvents();
                                 } else {
                                     exportProgress.Maximum--;
                                 }
