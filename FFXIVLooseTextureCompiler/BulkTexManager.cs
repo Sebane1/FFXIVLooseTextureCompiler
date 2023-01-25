@@ -33,6 +33,7 @@ namespace FFXIVLooseTextureCompiler {
                 saveFileDialog.Filter = ".png files|*.png";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     texturePreview.BackgroundImage.Save(saveFileDialog.FileName);
+                    MessageBox.Show("Texture saved to .png", ParentForm.Text);
                 }
             } else {
                 MessageBox.Show("Please select a valid file!", ParentForm.Text);
@@ -104,6 +105,9 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 AddFilesRecursively(folderBrowserDialog.SelectedPath, 0, 10);
             }
+            TopMost = true;
+            BringToFront();
+            TopMost = false;
         }
         public void AddFilesRecursively(string path, int recursionCount, int recursionLimit) {
             foreach (string file in Directory.GetFiles(path, "*.tex")) {
@@ -168,6 +172,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
+            MessageBox.Show("Bulk Export Complete", ParentForm.Text);
         }
 
         private void textureList_Click(object sender, EventArgs e) {

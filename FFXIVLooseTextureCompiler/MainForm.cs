@@ -353,7 +353,7 @@ namespace FFXIVLooseTextureCompiler {
                                     Graphics g = Graphics.FromImage(target);
                                     g.Clear(Color.White);
                                     g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 100));
+                                    Bitmap normal = Normal.Calculate((target));
                                     KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                     using (Bitmap originalNormal = new Bitmap(inputFile)) {
                                         Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
