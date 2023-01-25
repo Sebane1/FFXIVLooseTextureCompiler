@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BulkTexManager));
             this.textureList = new System.Windows.Forms.ListBox();
             this.texturePreview = new System.Windows.Forms.PictureBox();
             this.exportPNG = new System.Windows.Forms.Button();
@@ -109,6 +110,8 @@
             this.Controls.Add(this.texturePreview);
             this.Controls.Add(this.textureList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "BulkTexManager";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bulk Tex Manager";
