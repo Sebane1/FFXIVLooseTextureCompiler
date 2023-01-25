@@ -321,7 +321,7 @@ namespace FFXIVLooseTextureCompiler {
                                     Graphics g = Graphics.FromImage(target);
                                     g.Clear(Color.White);
                                     g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 250));
+                                    Bitmap normal = Normal.Calculate(target);
                                     normal.Save(stream, ImageFormat.Png);
                                     normalCache.Add(inputFile, normal);
                                 }
@@ -392,7 +392,7 @@ namespace FFXIVLooseTextureCompiler {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.White);
                                         g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 250));
+                                        Bitmap normal = Normal.Calculate(target);
                                         normal.Save(stream, ImageFormat.Png);
                                         normalCache.Add(inputFile, normal);
                                     }
@@ -423,7 +423,7 @@ namespace FFXIVLooseTextureCompiler {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.White);
                                         g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 250));
+                                        Bitmap normal = Normal.Calculate(target);
                                         KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                         using (Bitmap originalNormal = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
                                             Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
@@ -457,7 +457,7 @@ namespace FFXIVLooseTextureCompiler {
                                     Graphics g = Graphics.FromImage(target);
                                     g.Clear(Color.White);
                                     g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 250));
+                                    Bitmap normal = Normal.Calculate(target);
                                     normal.Save(stream, ImageFormat.Png);
                                     normalCache.Add(inputFile, normal);
                                 }
@@ -491,7 +491,7 @@ namespace FFXIVLooseTextureCompiler {
                                     Graphics g = Graphics.FromImage(target);
                                     g.Clear(Color.White);
                                     g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(Contrast.AdjustContrast((target), 250));
+                                    Bitmap normal = Normal.Calculate(target);
                                     KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                     using (Bitmap originalNormal = new Bitmap(inputFile)) {
                                         Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
