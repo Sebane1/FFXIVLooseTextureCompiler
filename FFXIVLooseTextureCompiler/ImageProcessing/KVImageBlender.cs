@@ -155,8 +155,9 @@ namespace KVImage
 			if( srcImage == null )
 				throw new Exception("Source image must be provided");
 
-			if( srcImage.Width < srcX + destWidth || srcImage.Height< srcY + destHeight )
+			if (srcImage.Width < srcX + destWidth || srcImage.Height < srcY + destHeight) {
 				throw new Exception("Source image is smaller than requested dimentions");
+			}
 
 			Bitmap tempBmp = null;
 			Graphics gr = Graphics.FromImage(destImage);

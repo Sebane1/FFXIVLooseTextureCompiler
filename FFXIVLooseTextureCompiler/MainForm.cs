@@ -357,13 +357,19 @@ namespace FFXIVLooseTextureCompiler {
                                     KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                     using (Bitmap originalNormal = new Bitmap(inputFile)) {
                                         Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                        Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                        output.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, output);
+                                        try {
+                                            Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                            output.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, output);
+                                        } catch {
+                                            MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                            normal.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, normal);
+                                        }
                                     }
                                 }
                             } else {
-                                normalCache[inputFile].Save(stream, ImageFormat.Png);
+                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                             }
                             stream.Position = 0;
                             TextureImporter.PngToTex(stream, out data);
@@ -421,13 +427,19 @@ namespace FFXIVLooseTextureCompiler {
                                         KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                         using (Bitmap originalNormal = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
                                             Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                            Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                            output.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(inputFile, output);
+                                            try {
+                                                Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                                output.Save(stream, ImageFormat.Png);
+                                                normalCache.Add(diffuseNormal, output);
+                                            } catch {
+                                                MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                normal.Save(stream, ImageFormat.Png);
+                                                normalCache.Add(diffuseNormal, normal);
+                                            }
                                         }
                                     }
                                 } else {
-                                    normalCache[inputFile].Save(stream, ImageFormat.Png);
+                                    normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                                 }
                                 stream.Position = 0;
                                 TextureImporter.PngToTex(stream, out data);
@@ -483,13 +495,19 @@ namespace FFXIVLooseTextureCompiler {
                                     KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
                                     using (Bitmap originalNormal = new Bitmap(inputFile)) {
                                         Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                        Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                        output.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, output);
+                                        try {
+                                            Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                            output.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, output);
+                                        } catch {
+                                            MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                            normal.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, normal);
+                                        }
                                     }
                                 }
                             } else {
-                                normalCache[inputFile].Save(stream, ImageFormat.Png);
+                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                             }
                             stream.Position = 0;
                             TextureImporter.PngToTex(stream, out data);
