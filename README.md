@@ -31,6 +31,7 @@ Core features:
 - png, dds, bmp, and .tex support (yes you can compile existing makeup or body mods into this tool with just the .tex files) 
 - Ability to add custom texture paths if this tool doesn't already autogenerate them
 - Automatic redraw on generation
+- Can automatically generate normals, if only a diffuse is provided, or alternatively merge the generated normal data with existing normals.
 - Low learning curve.
 
 
