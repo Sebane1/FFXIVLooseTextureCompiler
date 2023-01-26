@@ -299,6 +299,22 @@ namespace FFXIVLooseTextureCompiler {
             output.UnlockBits(bmpData);
             return output;
         }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Control && e.KeyCode == Keys.S) {
+                Save();
+            }
+        }
+        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
+            switch (keys) {
+                case Keys.S | Keys.Control:
+                    // ... Process Shift+Ctrl+Alt+B ...
+                    Save();
+                    return true; // signal that we've processed this key
+            }
+
+            // run base implementation
+            return base.ProcessCmdKey(ref message, keys);
+        }
         public enum ExportType {
             None,
             Normal,
@@ -319,13 +335,14 @@ namespace FFXIVLooseTextureCompiler {
                         using (MemoryStream stream = new MemoryStream()) {
                             if (!normalCache.ContainsKey(inputFile)) {
                                 using (Bitmap bitmap = new Bitmap(inputFile)) {
-                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                    Graphics g = Graphics.FromImage(target);
-                                    g.Clear(Color.White);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(target);
-                                    normal.Save(stream, ImageFormat.Png);
-                                    normalCache.Add(inputFile, normal);
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Graphics g = Graphics.FromImage(target);
+                                        g.Clear(Color.White);
+                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        Bitmap normal = Normal.Calculate(target);
+                                        normal.Save(stream, ImageFormat.Png);
+                                        normalCache.Add(inputFile, normal);
+                                    }
                                 }
                             } else {
                                 normalCache[inputFile].Save(stream, ImageFormat.Png);
@@ -337,8 +354,10 @@ namespace FFXIVLooseTextureCompiler {
                     case ExportType.MultiFace:
                         using (MemoryStream stream = new MemoryStream()) {
                             if (!multiCache.ContainsKey(inputFile)) {
-                                using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(new Bitmap(inputFile))), 255, 126, 0)) {
-                                    multi.Save(stream, ImageFormat.Png);
+                                using (Bitmap input = new Bitmap(inputFile)) {
+                                    using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(input)), 255, 126, 0)) {
+                                        multi.Save(stream, ImageFormat.Png);
+                                    }
                                 }
                             } else {
                                 multiCache[inputFile].Save(stream, ImageFormat.Png);
@@ -351,22 +370,24 @@ namespace FFXIVLooseTextureCompiler {
                         using (MemoryStream stream = new MemoryStream()) {
                             if (!normalCache.ContainsKey(diffuseNormal)) {
                                 using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                    Graphics g = Graphics.FromImage(target);
-                                    g.Clear(Color.White);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate((target));
-                                    KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                    using (Bitmap originalNormal = new Bitmap(inputFile)) {
-                                        Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                        try {
-                                            Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                            output.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(diffuseNormal, output);
-                                        } catch {
-                                            MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
-                                            normal.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(diffuseNormal, normal);
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Graphics g = Graphics.FromImage(target);
+                                        g.Clear(Color.White);
+                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        Bitmap normal = Normal.Calculate((target));
+                                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+                                        using (Bitmap originalNormal = new Bitmap(inputFile)) {
+                                            using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
+                                                try {
+                                                    Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                                    output.Save(stream, ImageFormat.Png);
+                                                    normalCache.Add(diffuseNormal, output);
+                                                } catch {
+                                                    MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                    normal.Save(stream, ImageFormat.Png);
+                                                    normalCache.Add(diffuseNormal, normal);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -390,13 +411,14 @@ namespace FFXIVLooseTextureCompiler {
                             using (MemoryStream stream = new MemoryStream()) {
                                 if (!normalCache.ContainsKey(inputFile)) {
                                     using (Bitmap bitmap = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
-                                        Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(target);
-                                        normal.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, normal);
+                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                            Graphics g = Graphics.FromImage(target);
+                                            g.Clear(Color.White);
+                                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                            Bitmap normal = Normal.Calculate(target);
+                                            normal.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(inputFile, normal);
+                                        }
                                     }
                                 } else {
                                     normalCache[inputFile].Save(stream, ImageFormat.Png);
@@ -421,22 +443,24 @@ namespace FFXIVLooseTextureCompiler {
                             using (MemoryStream stream = new MemoryStream()) {
                                 if (!normalCache.ContainsKey(diffuseNormal)) {
                                     using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                        Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(target);
-                                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                        using (Bitmap originalNormal = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
-                                            Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                            try {
-                                                Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                                output.Save(stream, ImageFormat.Png);
-                                                normalCache.Add(diffuseNormal, output);
-                                            } catch {
-                                                MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
-                                                normal.Save(stream, ImageFormat.Png);
-                                                normalCache.Add(diffuseNormal, normal);
+                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                            Graphics g = Graphics.FromImage(target);
+                                            g.Clear(Color.White);
+                                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                            Bitmap normal = Normal.Calculate(target);
+                                            KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+                                            using (Bitmap originalNormal = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
+                                                using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
+                                                    try {
+                                                        Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                                        output.Save(stream, ImageFormat.Png);
+                                                        normalCache.Add(diffuseNormal, output);
+                                                    } catch {
+                                                        MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                        normal.Save(stream, ImageFormat.Png);
+                                                        normalCache.Add(diffuseNormal, normal);
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -455,13 +479,14 @@ namespace FFXIVLooseTextureCompiler {
                         case ExportType.Normal:
                             if (!normalCache.ContainsKey(inputFile)) {
                                 using (Bitmap bitmap = new Bitmap(inputFile)) {
-                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                    Graphics g = Graphics.FromImage(target);
-                                    g.Clear(Color.White);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(target);
-                                    normal.Save(stream, ImageFormat.Png);
-                                    normalCache.Add(inputFile, normal);
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Graphics g = Graphics.FromImage(target);
+                                        g.Clear(Color.White);
+                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        Bitmap normal = Normal.Calculate(target);
+                                        normal.Save(stream, ImageFormat.Png);
+                                        normalCache.Add(inputFile, normal);
+                                    }
                                 }
                             } else {
                                 normalCache[inputFile].Save(stream, ImageFormat.Png);
@@ -489,22 +514,23 @@ namespace FFXIVLooseTextureCompiler {
                         case ExportType.MergeNormal:
                             if (!normalCache.ContainsKey(diffuseNormal)) {
                                 using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                    Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
-                                    Graphics g = Graphics.FromImage(target);
-                                    g.Clear(Color.White);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap normal = Normal.Calculate(target);
-                                    KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                    using (Bitmap originalNormal = new Bitmap(inputFile)) {
-                                        Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                        try {
-                                            Bitmap output = imageBlender.BlendImages(originalNormal, 0, 0, originalNormal.Width, originalNormal.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                            output.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(diffuseNormal, output);
-                                        } catch {
-                                            MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
-                                            normal.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(diffuseNormal, normal);
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Graphics g = Graphics.FromImage(target);
+                                        g.Clear(Color.White);
+                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        Bitmap normal = Normal.Calculate(target);
+                                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+                                        using (Bitmap originalNormal = new Bitmap(inputFile)) {
+                                            Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
+                                            try {
+                                                Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                                                output.Save(stream, ImageFormat.Png);
+                                                normalCache.Add(diffuseNormal, output);
+                                            } catch {
+                                                MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                normal.Save(stream, ImageFormat.Png);
+                                                normalCache.Add(diffuseNormal, normal);
+                                            }
                                         }
                                     }
                                 }
