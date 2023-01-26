@@ -10,6 +10,8 @@ using Penumbra.Import.Dds;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
+using TypingConnector;
+
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
         FFXIVHook Hook = new FFXIVHook();
@@ -1236,6 +1238,28 @@ namespace FFXIVLooseTextureCompiler {
 
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
             generatedOnce = false;
+        }
+
+        private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
+            FindAndReplace findAndReplace = new FindAndReplace();
+            Tokenizer tokenizer = new Tokenizer((materialList.Items[materialList.SelectedIndex] as MaterialSet).MaterialSetName);
+            findAndReplace.ReplacementString.Text = tokenizer.GetToken();
+            findAndReplace.Diffuse.FilePath.Text = diffuse.FilePath.Text;
+            findAndReplace.Normal.FilePath.Text = normal.FilePath.Text;
+            findAndReplace.Multi.FilePath.Text = multi.FilePath.Text;
+
+            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<MaterialSet>().ToArray());
+            if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Replacement succeeded.", VersionText);
+            }
+        }
+
+        private void findAndBulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
+            FindAndReplace findAndReplace = new FindAndReplace();
+            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<MaterialSet>().ToArray());
+            if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Replacement succeeded.", VersionText);
+            }
         }
     }
 }

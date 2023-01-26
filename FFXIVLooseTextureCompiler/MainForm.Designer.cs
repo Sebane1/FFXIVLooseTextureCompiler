@@ -61,9 +61,10 @@
             this.donateButton = new System.Windows.Forms.Button();
             this.materialList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBodyButton = new System.Windows.Forms.Button();
             this.addFaceButton = new System.Windows.Forms.Button();
             this.currentEditLabel = new System.Windows.Forms.Label();
@@ -80,6 +81,8 @@
             this.exportProgress = new System.Windows.Forms.ProgressBar();
             this.bakeMissingNormalsCheckbox = new System.Windows.Forms.CheckBox();
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -378,6 +381,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.configToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -481,19 +485,13 @@
             // materialListContextMenu
             // 
             this.materialListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editPathsToolStripMenuItem,
             this.moveUpToolStripMenuItem,
-            this.moveDownToolStripMenuItem});
+            this.moveDownToolStripMenuItem,
+            this.bulkReplaceToolStripMenuItem,
+            this.editPathsToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(239, 70);
+            this.materialListContextMenu.Size = new System.Drawing.Size(239, 92);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
-            // 
-            // editPathsToolStripMenuItem
-            // 
-            this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
-            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.editPathsToolStripMenuItem.Text = "Edit Internal Material Set Values";
-            this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
             // 
             // moveUpToolStripMenuItem
             // 
@@ -508,6 +506,20 @@
             this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownButton_Click);
+            // 
+            // bulkReplaceToolStripMenuItem
+            // 
+            this.bulkReplaceToolStripMenuItem.Name = "bulkReplaceToolStripMenuItem";
+            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
+            this.bulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.bulkReplaceToolStripMenuItem_Click);
+            // 
+            // editPathsToolStripMenuItem
+            // 
+            this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
+            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editPathsToolStripMenuItem.Text = "Edit Internal Material Set Values";
+            this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
             // 
             // addBodyButton
             // 
@@ -662,6 +674,21 @@
             this.generateMultiCheckBox.UseVisualStyleBackColor = true;
             this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findAndBulkReplaceToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // findAndBulkReplaceToolStripMenuItem
+            // 
+            this.findAndBulkReplaceToolStripMenuItem.Name = "findAndBulkReplaceToolStripMenuItem";
+            this.findAndBulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.findAndBulkReplaceToolStripMenuItem.Text = "Find And Bulk Replace";
+            this.findAndBulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndBulkReplaceToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -780,5 +807,8 @@
         private ProgressBar exportProgress;
         private CheckBox bakeMissingNormalsCheckbox;
         private CheckBox generateMultiCheckBox;
+        private ToolStripMenuItem bulkReplaceToolStripMenuItem;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
     }
 }
