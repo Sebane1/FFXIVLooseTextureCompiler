@@ -1,4 +1,5 @@
-﻿using FFXIVLooseTextureCompiler.PathOrganization;
+﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using FFXIVLooseTextureCompiler.PathOrganization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -76,6 +77,18 @@ namespace FFXIVLooseTextureCompiler {
 
         private void button1_Click(object sender, EventArgs e) {
             Close();
+        }
+
+        private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
+            if (materialSetNameTextBox.Text.ToLower().Contains("eye")) {
+                diffuseLabel.Text = "Internal Normal";
+                normalLabel.Text = "Internal Multi";
+                multiLabel.Text = "Internal Catchlight";
+            } else {
+                diffuseLabel.Text = "Internal Diffuse";
+                normalLabel.Text = "Internal Normal";
+                multiLabel.Text = "Internal Multi";
+            }
         }
     }
 }

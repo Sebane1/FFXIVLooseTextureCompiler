@@ -59,5 +59,17 @@ namespace FFXIVLooseTextureCompiler {
         private void button1_Click(object sender, EventArgs e) {
             Close();
         }
+
+        private void replacementString_TextChanged(object sender, EventArgs e) {
+            if (replacementString.Text.ToLower().Contains("eye")) {
+                diffuse.LabelName.Text = "normal";
+                normal.LabelName.Text = "multi";
+                multi.LabelName.Text = "catchlight";
+            } else {
+                diffuse.LabelName.Text = "diffuse";
+                normal.LabelName.Text = "normal";
+                multi.LabelName.Text = "multi";
+            }
+        }
     }
 }
