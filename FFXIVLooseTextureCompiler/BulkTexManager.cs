@@ -33,10 +33,10 @@ namespace FFXIVLooseTextureCompiler {
                 saveFileDialog.Filter = ".png files|*.png";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     texturePreview.BackgroundImage.Save(saveFileDialog.FileName);
-                    MessageBox.Show("Texture saved to .png", ParentForm.Text);
+                    MessageBox.Show("Texture saved to .png", Text);
                 }
             } else {
-                MessageBox.Show("Please select a valid file!", ParentForm.Text);
+                MessageBox.Show("Please select a valid file!", Text);
             }
         }
         private void texList_DragEnter(object sender, DragEventArgs e) {
@@ -53,7 +53,7 @@ namespace FFXIVLooseTextureCompiler {
                     textureList.Items.Add(file);
                 }
             } else {
-                MessageBox.Show("This is not a media file this window supports.", ParentForm.Text);
+                MessageBox.Show("This is not a media file this window supports.", Text);
             }
         }
         private bool CheckExtentions(string file) {
@@ -172,7 +172,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
-            MessageBox.Show("Bulk Export Complete", ParentForm.Text);
+            MessageBox.Show("Bulk Export Complete", Text);
         }
 
         private void textureList_Click(object sender, EventArgs e) {
