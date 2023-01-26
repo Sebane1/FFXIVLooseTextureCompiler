@@ -716,7 +716,8 @@ namespace FFXIVLooseTextureCompiler {
         public string GetFaceMaterialPath(int material) {
             if (material != 3) {
                 string faceIdCheck = "000";
-                if (subRaceList.SelectedText.ToLower() == "the lost" || subRaceList.SelectedText.ToLower() == "highlander" || subRaceList.SelectedText.ToLower() == "duskwight" || subRaceList.SelectedText.ToLower() == "keeper") {
+                string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
+                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "highlander" || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper") {
                     faceIdCheck = "010";
                 }
                 string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
