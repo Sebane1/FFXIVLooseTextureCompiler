@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KVImage;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         }
         public static Bitmap Calculate(Bitmap file) {
             Bitmap image = file;
+            image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             #region Global Variables
             int w = image.Width - 1;
             int h = image.Height - 1;
@@ -46,6 +48,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             float sample_d;
             float x_vector;
             float y_vector;
+            Bitmap finalNormal = new Bitmap(image.Width, image.Height);
             Bitmap normal = new Bitmap(image.Width, image.Height);
             #endregion
             for (int y = 0; y < h + 1; y++) {
@@ -60,7 +63,10 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     normal.SetPixel(x, y, col);
                 }
             }
-            return normal;
+            normal.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            Bitmap normal2 = new Bitmap(normal);
+            KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+            return imageBlender.BlendImages(normal, 0, 0, normal.Width, normal.Height, Contrast.AdjustContrast(normal2, 120), 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay); ;
         }
     }
 }
