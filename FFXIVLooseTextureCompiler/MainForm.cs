@@ -263,6 +263,12 @@ namespace FFXIVLooseTextureCompiler {
                     Hook.SendString(@"/penumbra reload");
                     Thread.Sleep(100);
                     Hook.SendSyncKey(Keys.Enter);
+                    Thread.Sleep(2000);
+                    Hook.SendSyncKey(Keys.Enter);
+                    Thread.Sleep(500);
+                    Hook.SendString(@"/penumbra redraw");
+                    Thread.Sleep(100);
+                    Hook.SendSyncKey(Keys.Enter);
                     generatedOnce = true;
                 }
                 TopMost = true;
@@ -383,7 +389,7 @@ namespace FFXIVLooseTextureCompiler {
                                                     output.Save(stream, ImageFormat.Png);
                                                     normalCache.Add(diffuseNormal, output);
                                                 } catch {
-                                                    MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                    MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
                                                     normal.Save(stream, ImageFormat.Png);
                                                     normalCache.Add(diffuseNormal, normal);
                                                 }
@@ -456,7 +462,7 @@ namespace FFXIVLooseTextureCompiler {
                                                         output.Save(stream, ImageFormat.Png);
                                                         normalCache.Add(diffuseNormal, output);
                                                     } catch {
-                                                        MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                        MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
                                                         normal.Save(stream, ImageFormat.Png);
                                                         normalCache.Add(diffuseNormal, normal);
                                                     }
@@ -527,7 +533,7 @@ namespace FFXIVLooseTextureCompiler {
                                                 output.Save(stream, ImageFormat.Png);
                                                 normalCache.Add(diffuseNormal, output);
                                             } catch {
-                                                MessageBox.Show("Warning, normal conversion failed. Check that your files are correct.", VersionText);
+                                                MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
                                                 normal.Save(stream, ImageFormat.Png);
                                                 normalCache.Add(diffuseNormal, normal);
                                             }

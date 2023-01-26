@@ -21,6 +21,7 @@ namespace FFXIVLooseTextureCompiler {
 
         public BulkTexManager() {
             InitializeComponent();
+            TopMost = true;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e) {
@@ -105,9 +106,6 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 AddFilesRecursively(folderBrowserDialog.SelectedPath, 0, 10);
             }
-            TopMost = true;
-            BringToFront();
-            TopMost = false;
         }
         public void AddFilesRecursively(string path, int recursionCount, int recursionLimit) {
             foreach (string file in Directory.GetFiles(path, "*.tex")) {
