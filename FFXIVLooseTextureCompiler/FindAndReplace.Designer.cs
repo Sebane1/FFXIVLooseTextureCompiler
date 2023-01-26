@@ -72,6 +72,7 @@ namespace FFXIVLooseTextureCompiler {
             this.replacementString.Name = "replacementString";
             this.replacementString.Size = new System.Drawing.Size(400, 23);
             this.replacementString.TabIndex = 10;
+            this.replacementString.TextChanged += new System.EventHandler(this.replacementString_TextChanged);
             // 
             // label1
             // 

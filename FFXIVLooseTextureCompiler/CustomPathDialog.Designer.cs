@@ -26,11 +26,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomPathDialog));
             this.materialSetNameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.diffuseLabel = new System.Windows.Forms.Label();
             this.internalDiffusePathTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.normalLabel = new System.Windows.Forms.Label();
             this.internalNormalPathTextBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.multiLabel = new System.Windows.Forms.Label();
             this.internalMultiPathTextbox = new System.Windows.Forms.TextBox();
             this.acceptChangesButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -44,6 +44,7 @@
             this.materialSetNameTextBox.Name = "materialSetNameTextBox";
             this.materialSetNameTextBox.Size = new System.Drawing.Size(276, 23);
             this.materialSetNameTextBox.TabIndex = 0;
+            this.materialSetNameTextBox.TextChanged += new System.EventHandler(this.materialSetNameTextBox_TextChanged);
             // 
             // label1
             // 
@@ -54,14 +55,14 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Material Set Name";
             // 
-            // label2
+            // diffuseLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 68);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 15);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Internal Diffuse Path";
+            this.diffuseLabel.AutoSize = true;
+            this.diffuseLabel.Location = new System.Drawing.Point(4, 68);
+            this.diffuseLabel.Name = "diffuseLabel";
+            this.diffuseLabel.Size = new System.Drawing.Size(87, 15);
+            this.diffuseLabel.TabIndex = 3;
+            this.diffuseLabel.Text = "Internal Diffuse";
             // 
             // internalDiffusePathTextBox
             // 
@@ -70,14 +71,14 @@
             this.internalDiffusePathTextBox.Size = new System.Drawing.Size(276, 23);
             this.internalDiffusePathTextBox.TabIndex = 2;
             // 
-            // label3
+            // normalLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 96);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(117, 15);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Internal Normal path";
+            this.normalLabel.AutoSize = true;
+            this.normalLabel.Location = new System.Drawing.Point(4, 96);
+            this.normalLabel.Name = "normalLabel";
+            this.normalLabel.Size = new System.Drawing.Size(90, 15);
+            this.normalLabel.TabIndex = 5;
+            this.normalLabel.Text = "Internal Normal";
             // 
             // internalNormalPathTextBox
             // 
@@ -86,14 +87,14 @@
             this.internalNormalPathTextBox.Size = new System.Drawing.Size(276, 23);
             this.internalNormalPathTextBox.TabIndex = 4;
             // 
-            // label4
+            // multiLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 124);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 15);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Internal Multi Path";
+            this.multiLabel.AutoSize = true;
+            this.multiLabel.Location = new System.Drawing.Point(4, 124);
+            this.multiLabel.Name = "multiLabel";
+            this.multiLabel.Size = new System.Drawing.Size(78, 15);
+            this.multiLabel.TabIndex = 7;
+            this.multiLabel.Text = "Internal Multi";
             // 
             // internalMultiPathTextbox
             // 
@@ -147,11 +148,11 @@
             this.Controls.Add(this.groupNameTextBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.acceptChangesButton);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.multiLabel);
             this.Controls.Add(this.internalMultiPathTextbox);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.normalLabel);
             this.Controls.Add(this.internalNormalPathTextBox);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.diffuseLabel);
             this.Controls.Add(this.internalDiffusePathTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.materialSetNameTextBox);
@@ -171,11 +172,11 @@
 
         private TextBox materialSetNameTextBox;
         private Label label1;
-        private Label label2;
+        private Label diffuseLabel;
         private TextBox internalDiffusePathTextBox;
-        private Label label3;
+        private Label normalLabel;
         private TextBox internalNormalPathTextBox;
-        private Label label4;
+        private Label multiLabel;
         private TextBox internalMultiPathTextbox;
         private Button acceptChangesButton;
         private Button button1;
