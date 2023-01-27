@@ -54,6 +54,8 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +83,6 @@
             this.exportProgress = new System.Windows.Forms.ProgressBar();
             this.bakeMissingNormalsCheckbox = new System.Windows.Forms.CheckBox();
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -429,6 +429,21 @@
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findAndBulkReplaceToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // findAndBulkReplaceToolStripMenuItem
+            // 
+            this.findAndBulkReplaceToolStripMenuItem.Name = "findAndBulkReplaceToolStripMenuItem";
+            this.findAndBulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.findAndBulkReplaceToolStripMenuItem.Text = "Find And Bulk Replace";
+            this.findAndBulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndBulkReplaceToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -651,6 +666,7 @@
             this.exportProgress.Size = new System.Drawing.Size(532, 28);
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
+            this.exportProgress.Click += new System.EventHandler(this.exportProgress_Click);
             // 
             // bakeMissingNormalsCheckbox
             // 
@@ -673,21 +689,6 @@
             this.generateMultiCheckBox.Text = "Generate Multi";
             this.generateMultiCheckBox.UseVisualStyleBackColor = true;
             this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findAndBulkReplaceToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
-            // 
-            // findAndBulkReplaceToolStripMenuItem
-            // 
-            this.findAndBulkReplaceToolStripMenuItem.Name = "findAndBulkReplaceToolStripMenuItem";
-            this.findAndBulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.findAndBulkReplaceToolStripMenuItem.Text = "Find And Bulk Replace";
-            this.findAndBulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndBulkReplaceToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

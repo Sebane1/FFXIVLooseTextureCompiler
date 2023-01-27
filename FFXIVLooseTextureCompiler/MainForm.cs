@@ -626,7 +626,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private string GetBodyMaterialPath(int material) {
             string result = "";
-            string unique = (uniqueAuRa.Checked ? "0101" : "0001");
+            string unique = (((string)raceList.Items[raceList.SelectedIndex]).Contains("Xaela") ? "0101" : "0001");
             switch (baseBodyList.SelectedIndex) {
                 case 0:
                     // Vanila
@@ -697,7 +697,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (raceList.SelectedIndex != 5) {
                         if (genderListBody.SelectedIndex == 0) {
                             // TBSE and HRBODY
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001") + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
@@ -1293,6 +1293,10 @@ namespace FFXIVLooseTextureCompiler {
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
+        }
+
+        private void exportProgress_Click(object sender, EventArgs e) {
+
         }
     }
 }
