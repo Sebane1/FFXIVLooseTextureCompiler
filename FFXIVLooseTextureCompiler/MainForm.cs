@@ -8,7 +8,9 @@ using Newtonsoft.Json;
 using OtterTex;
 using Penumbra.Import.Dds;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using TypingConnector;
 
@@ -140,7 +142,7 @@ namespace FFXIVLooseTextureCompiler {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse"), 0);
                                     option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
-                                    if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeMissingNormalsCheckbox.Checked)){
+                                    if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeMissingNormalsCheckbox.Checked)) {
                                         ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++), ExportType.Normal, materialSet.Diffuse);
                                     } else {
                                         ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
@@ -148,7 +150,7 @@ namespace FFXIVLooseTextureCompiler {
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
-                                } else { 
+                                } else {
                                     exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
@@ -159,7 +161,7 @@ namespace FFXIVLooseTextureCompiler {
                                         ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.MergeNormal, materialSet.Diffuse);
                                     } else {
                                         ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
-                                    }           
+                                    }
                                     exportProgress.Increment(1);
                                     Refresh();
                                 } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
@@ -316,227 +318,86 @@ namespace FFXIVLooseTextureCompiler {
             byte[] data = new byte[0];
             int contrast = 500;
             int contrastFace = 100;
-            if (inputFile.EndsWith(".png")) {
+
+            using (MemoryStream stream = new MemoryStream()) {
                 switch (exportType) {
                     case ExportType.None:
-                        TextureImporter.PngToTex(inputFile, out data);
-                        break;
-                    case ExportType.Normal:
-                        using (MemoryStream stream = new MemoryStream()) {
-                            if (!normalCache.ContainsKey(inputFile)) {
-                                using (Bitmap bitmap = new Bitmap(inputFile)) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(target);
-                                        normal.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, normal);
-                                    }
-                                }
-                            } else {
-                                normalCache[inputFile].Save(stream, ImageFormat.Png);
-                            }
+                        using (Bitmap bitmap = ResolveBitmap(inputFile)) {
+                            bitmap.Save(stream, ImageFormat.Png);
+                            stream.Flush();
                             stream.Position = 0;
                             TextureImporter.PngToTex(stream, out data);
+                        }
+                        break;
+                    case ExportType.Normal:
+                        if (!normalCache.ContainsKey(inputFile)) {
+                            using (Bitmap bitmap = ResolveBitmap(inputFile)) {
+                                using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                    Graphics g = Graphics.FromImage(target);
+                                    g.Clear(Color.White);
+                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    Bitmap normal = Normal.Calculate(target);
+                                    normal.Save(stream, ImageFormat.Png);
+                                    normalCache.Add(inputFile, normal);
+                                }
+                            }
+                        } else {
+                            normalCache[inputFile].Save(stream, ImageFormat.Png);
                         }
                         break;
                     case ExportType.MultiFace:
-                        using (MemoryStream stream = new MemoryStream()) {
-                            if (!multiCache.ContainsKey(inputFile)) {
-                                using (Bitmap input = new Bitmap(inputFile)) {
-                                    using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(input)), 255, 126, 0)) {
-                                        multi.Save(stream, ImageFormat.Png);
-                                    }
-                                }
-                            } else {
-                                multiCache[inputFile].Save(stream, ImageFormat.Png);
+                        if (!multiCache.ContainsKey(inputFile)) {
+                            using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(new Bitmap(inputFile))), 255, 126, 0)) {
+                                multi.Save(stream, ImageFormat.Png);
                             }
-                            stream.Position = 0;
-                            TextureImporter.PngToTex(stream, out data);
+                        } else {
+                            multiCache[inputFile].Save(stream, ImageFormat.Png);
                         }
+                        stream.Position = 0;
+                        TextureImporter.PngToTex(stream, out data);
                         break;
                     case ExportType.MergeNormal:
-                        using (MemoryStream stream = new MemoryStream()) {
-                            if (!normalCache.ContainsKey(diffuseNormal)) {
-                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate((target));
-                                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                        using (Bitmap originalNormal = new Bitmap(inputFile)) {
-                                            using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
-                                                try {
-                                                    Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                                    output.Save(stream, ImageFormat.Png);
-                                                    normalCache.Add(diffuseNormal, output);
-                                                } catch {
-                                                    MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
-                                                    normal.Save(stream, ImageFormat.Png);
-                                                    normalCache.Add(diffuseNormal, normal);
-                                                }
-                                            }
-                                        }
-                                    }
+                        if (!normalCache.ContainsKey(diffuseNormal)) {
+                            using (Bitmap bitmap = ResolveBitmap(diffuseNormal)) {
+                                using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                    MergeNormals(inputFile, stream, bitmap, target, diffuseNormal);
                                 }
-                            } else {
-                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                             }
-                            stream.Position = 0;
-                            TextureImporter.PngToTex(stream, out data);
+                        } else {
+                            normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                         }
+                        stream.Position = 0;
+                        TextureImporter.PngToTex(stream, out data);
                         break;
                 }
-            } else if (inputFile.EndsWith(".dds")) {
-                using (var scratch = ScratchImage.LoadDDS(inputFile)) {
-                    var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                    byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                    switch (exportType) {
-                        case ExportType.None:
-                            TextureImporter.RgbaBytesToTex(ddsFile, f.Meta.Width, f.Meta.Height, out data);
-                            break;
-                        case ExportType.Normal:
-                            using (MemoryStream stream = new MemoryStream()) {
-                                if (!normalCache.ContainsKey(inputFile)) {
-                                    using (Bitmap bitmap = DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
-                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                            Graphics g = Graphics.FromImage(target);
-                                            g.Clear(Color.White);
-                                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                            Bitmap normal = Normal.Calculate(target);
-                                            normal.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(inputFile, normal);
-                                        }
-                                    }
-                                } else {
-                                    normalCache[inputFile].Save(stream, ImageFormat.Png);
-                                }
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
-                            }
-                            break;
-                        case ExportType.MultiFace:
-                            using (MemoryStream stream = new MemoryStream()) {
-                                if (!multiCache.ContainsKey(inputFile)) {
-                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))), 255, 126, 0);
-                                    multi.Save(stream, ImageFormat.Png);
-                                } else {
-                                    multiCache[inputFile].Save(stream, ImageFormat.Png);
-                                }
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
-                            }
-                            break;
-                        case ExportType.MergeNormal:
-                            using (MemoryStream stream = new MemoryStream()) {
-                                if (!normalCache.ContainsKey(diffuseNormal)) {
-                                    using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                            Graphics g = Graphics.FromImage(target);
-                                            g.Clear(Color.White);
-                                            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                            Bitmap normal = Normal.Calculate(target);
-                                            KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                            using (Bitmap originalNormal = DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
-                                                using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
-                                                    try {
-                                                        Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                                        output.Save(stream, ImageFormat.Png);
-                                                        normalCache.Add(diffuseNormal, output);
-                                                    } catch {
-                                                        MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
-                                                        normal.Save(stream, ImageFormat.Png);
-                                                        normalCache.Add(diffuseNormal, normal);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
-                                }
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
-                            }
-                            break;
-                    }
-                }
-            } else if (inputFile.EndsWith(".bmp")) {
-                using (MemoryStream stream = new MemoryStream()) {
-                    switch (exportType) {
-                        case ExportType.Normal:
-                            if (!normalCache.ContainsKey(inputFile)) {
-                                using (Bitmap bitmap = new Bitmap(inputFile)) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(target);
-                                        normal.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, normal);
-                                    }
-                                }
-                            } else {
-                                normalCache[inputFile].Save(stream, ImageFormat.Png);
-                            }
-                            break;
-                        case ExportType.None:
-                            using (Bitmap bitmap = new Bitmap(inputFile)) {
-                                bitmap.Save(stream, ImageFormat.Png);
-                                stream.Flush();
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
-                            }
-                            break;
-                        case ExportType.MultiFace:
-                            if (!multiCache.ContainsKey(inputFile)) {
-                                using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(new Bitmap(inputFile))), 255, 126, 0)) {
-                                    multi.Save(stream, ImageFormat.Png);
-                                }
-                            } else {
-                                multiCache[inputFile].Save(stream, ImageFormat.Png);
-                            }
-                            stream.Position = 0;
-                            TextureImporter.PngToTex(stream, out data);
-                            break;
-                        case ExportType.MergeNormal:
-                            if (!normalCache.ContainsKey(diffuseNormal)) {
-                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap normal = Normal.Calculate(target);
-                                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                        using (Bitmap originalNormal = new Bitmap(inputFile)) {
-                                            Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height);
-                                            try {
-                                                Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
-                                                output.Save(stream, ImageFormat.Png);
-                                                normalCache.Add(diffuseNormal, output);
-                                            } catch {
-                                                MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
-                                                normal.Save(stream, ImageFormat.Png);
-                                                normalCache.Add(diffuseNormal, normal);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
-                            }
-                            stream.Position = 0;
-                            TextureImporter.PngToTex(stream, out data);
-                            break;
-                    }
-                }
-            } else if (inputFile.EndsWith(".tex")) {
-                data = File.ReadAllBytes(inputFile);
             }
             Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
             File.WriteAllBytes(outputFile, data);
+        }
+
+        private Bitmap ResolveBitmap(string inputFile) {
+            return inputFile.EndsWith(".tex") ? TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile));
+        }
+
+        private void MergeNormals(string inputFile, Stream stream, Bitmap bitmap, Bitmap target, string diffuseNormal) {
+            Graphics g = Graphics.FromImage(target);
+            g.Clear(Color.White);
+            g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+            Bitmap normal = Normal.Calculate((target));
+            using (Bitmap originalNormal = (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+                using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
+                    try {
+                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+                        Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                        output.Save(stream, ImageFormat.Png);
+                        normalCache.Add(diffuseNormal, output);
+                    } catch {
+                        MessageBox.Show("Warning, normal merging failed. Check that your files are correct and the same dimensions", VersionText);
+                        normal.Save(stream, ImageFormat.Png);
+                        normalCache.Add(diffuseNormal, normal);
+                    }
+                }
+            }
         }
 
         private void ExportJson() {

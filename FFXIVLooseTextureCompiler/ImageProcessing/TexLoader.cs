@@ -1,4 +1,5 @@
 ﻿using OtterTex;
+using Penumbra.Import.Textures;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
-    public static class DDS {
+    public static class TexLoader {
         public static Bitmap DDSToBitmap(string inputFile) {
             using (var scratch = ScratchImage.LoadDDS(inputFile)) {
                 var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
@@ -35,6 +36,14 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             System.Runtime.InteropServices.Marshal.Copy(RGBAPixels, 0, ptr, RGBAPixels.Length);
             output.UnlockBits(bmpData);
             return output;
+        }
+        public static Bitmap TexToBitmap(string path) {
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read)) {
+                var scratch = TexFileParser.Parse(stream);
+                var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
+                byte[] RGBAPixels = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
+                return RGBAToBitmap(RGBAPixels, f.Meta.Width, f.Meta.Height);
+            }
         }
     }
 }
