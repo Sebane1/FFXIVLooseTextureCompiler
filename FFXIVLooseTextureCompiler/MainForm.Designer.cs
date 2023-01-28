@@ -82,9 +82,9 @@
             this.generationType = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.exportProgress = new System.Windows.Forms.ProgressBar();
-            this.bakeMissingNormalsCheckbox = new System.Windows.Forms.CheckBox();
+            this.bakeNormals = new System.Windows.Forms.CheckBox();
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
-            this.normalMask = new FFXIVVoicePackCreator.FilePicker();
+            this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -183,6 +183,8 @@
             // 
             // multi
             // 
+            this.multi.CurrentPath = null;
+            this.multi.Enabled = false;
             this.multi.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.multi.Index = -1;
             this.multi.Location = new System.Drawing.Point(12, 512);
@@ -197,6 +199,8 @@
             // 
             // normal
             // 
+            this.normal.CurrentPath = null;
+            this.normal.Enabled = false;
             this.normal.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.normal.Index = -1;
             this.normal.Location = new System.Drawing.Point(12, 480);
@@ -211,6 +215,8 @@
             // 
             // diffuse
             // 
+            this.diffuse.CurrentPath = null;
+            this.diffuse.Enabled = false;
             this.diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.diffuse.Index = -1;
             this.diffuse.Location = new System.Drawing.Point(12, 448);
@@ -673,24 +679,24 @@
             // 
             // exportProgress
             // 
-            this.exportProgress.Location = new System.Drawing.Point(0, 576);
+            this.exportProgress.Location = new System.Drawing.Point(0, 572);
             this.exportProgress.Name = "exportProgress";
-            this.exportProgress.Size = new System.Drawing.Size(536, 28);
+            this.exportProgress.Size = new System.Drawing.Size(536, 32);
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
             this.exportProgress.Click += new System.EventHandler(this.exportProgress_Click);
             // 
-            // bakeMissingNormalsCheckbox
+            // bakeNormals
             // 
-            this.bakeMissingNormalsCheckbox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.bakeMissingNormalsCheckbox.AutoSize = true;
-            this.bakeMissingNormalsCheckbox.Location = new System.Drawing.Point(164, 578);
-            this.bakeMissingNormalsCheckbox.Name = "bakeMissingNormalsCheckbox";
-            this.bakeMissingNormalsCheckbox.Size = new System.Drawing.Size(116, 19);
-            this.bakeMissingNormalsCheckbox.TabIndex = 39;
-            this.bakeMissingNormalsCheckbox.Text = "Generate Normal";
-            this.bakeMissingNormalsCheckbox.UseVisualStyleBackColor = true;
-            this.bakeMissingNormalsCheckbox.CheckedChanged += new System.EventHandler(this.bakeMissingNormalsCheckbox_CheckedChanged);
+            this.bakeNormals.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.bakeNormals.AutoSize = true;
+            this.bakeNormals.Location = new System.Drawing.Point(164, 578);
+            this.bakeNormals.Name = "bakeNormals";
+            this.bakeNormals.Size = new System.Drawing.Size(116, 19);
+            this.bakeNormals.TabIndex = 39;
+            this.bakeNormals.Text = "Generate Normal";
+            this.bakeNormals.UseVisualStyleBackColor = true;
+            this.bakeNormals.CheckedChanged += new System.EventHandler(this.bakeMissingNormalsCheckbox_CheckedChanged);
             // 
             // generateMultiCheckBox
             // 
@@ -704,25 +710,30 @@
             this.generateMultiCheckBox.UseVisualStyleBackColor = true;
             this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
             // 
-            // normalMask
+            // mask
             // 
-            this.normalMask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.normalMask.Index = -1;
-            this.normalMask.Location = new System.Drawing.Point(12, 544);
-            this.normalMask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.normalMask.MinimumSize = new System.Drawing.Size(300, 28);
-            this.normalMask.Name = "normalMask";
-            this.normalMask.Size = new System.Drawing.Size(520, 28);
-            this.normalMask.TabIndex = 41;
+            this.mask.CurrentPath = null;
+            this.mask.Enabled = false;
+            this.mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            this.mask.Index = -1;
+            this.mask.Location = new System.Drawing.Point(12, 544);
+            this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.mask.MinimumSize = new System.Drawing.Size(300, 28);
+            this.mask.Name = "mask";
+            this.mask.Size = new System.Drawing.Size(520, 28);
+            this.mask.TabIndex = 41;
+            this.mask.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.mask.Enter += new System.EventHandler(this.multi_Enter);
+            this.mask.Leave += new System.EventHandler(this.multi_Leave);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 603);
-            this.Controls.Add(this.normalMask);
+            this.Controls.Add(this.mask);
             this.Controls.Add(this.generateMultiCheckBox);
-            this.Controls.Add(this.bakeMissingNormalsCheckbox);
+            this.Controls.Add(this.bakeNormals);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.generationType);
             this.Controls.Add(this.moveDownButton);
@@ -832,12 +843,12 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem bulkTexViewerToolStripMenuItem;
         private ProgressBar exportProgress;
-        private CheckBox bakeMissingNormalsCheckbox;
+        private CheckBox bakeNormals;
         private CheckBox generateMultiCheckBox;
         private ToolStripMenuItem bulkReplaceToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
         private ToolStripMenuItem diffuseMergerToolStripMenuItem;
-        private FFXIVVoicePackCreator.FilePicker normalMask;
+        private FFXIVVoicePackCreator.FilePicker mask;
     }
 }

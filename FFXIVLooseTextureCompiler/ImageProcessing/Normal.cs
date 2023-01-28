@@ -1,6 +1,7 @@
 ﻿using KVImage;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -56,9 +57,8 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 return normal;
             }
         }
-        public static Bitmap Calculate(Bitmap file) {
+        public static Bitmap Calculate(Bitmap file, Bitmap normalMask = null) {
             Bitmap image = file;
-            image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             #region Global Variables
             int w = image.Width - 1;
             int h = image.Height - 1;
@@ -68,6 +68,11 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             float sample_d;
             float x_vector;
             float y_vector;
+            if (normalMask != null) {
+                Graphics g = Graphics.FromImage(image);
+                g.DrawImage(normalMask, 0, 0, normalMask.Width, normalMask.Height);
+            }
+            image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Bitmap normal = new Bitmap(image.Width, image.Height);
             LockBitmap source = new LockBitmap(image);
             LockBitmap destination = new LockBitmap(normal);
@@ -91,7 +96,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             normal.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Bitmap normal2 = new Bitmap(normal);
             KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-            return imageBlender.BlendImages(normal, 0, 0, normal.Width, normal.Height, Contrast.AdjustContrast(normal2, 120), 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay); ;
+            return imageBlender.BlendImages(normal, 0, 0, normal.Width, normal.Height, Contrast.AdjustContrast(normal2, 120), 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
         }
     }
 }
