@@ -30,6 +30,8 @@ namespace FFXIVVoicePackCreator {
         private bool muteState;
         private int maxTime = 4000;
         private Color color;
+        private string currentPath;
+
         [Category("Filter"), Description("Changes what type of selection is made")]
         public string Filter { get => filter; set => filter = value; }
         public bool Enabled {
@@ -40,6 +42,9 @@ namespace FFXIVVoicePackCreator {
                 }
             }
         }
+
+        public string CurrentPath { get => currentPath; set { currentPath = value; filePath.Text = value; } }
+
         private void filePicker_Load(object sender, EventArgs e) {
             color = BackColor;
             AutoScaleDimensions = new SizeF(96, 96);
@@ -73,12 +78,14 @@ namespace FFXIVVoicePackCreator {
                 openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     filePath.Text = openFileDialog.FileName;
+                    currentPath = openFileDialog.FileName;
                 }
             } else {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = filter;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     filePath.Text = saveFileDialog.FileName;
+                    currentPath = saveFileDialog.FileName;
                 }
             }
             if (OnFileSelected != null) {
@@ -91,7 +98,10 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_TextChanged(object sender, EventArgs e) {
-
+            //if (string.IsNullOrEmpty(filePath.Text)) {
+            //    currentPath = null;
+            //}
+            //filePath.Text = currentPath;
         }
 
         private void filePath_DragEnter(object sender, DragEventArgs e) {
@@ -108,6 +118,7 @@ namespace FFXIVVoicePackCreator {
                 if (OnFileSelected != null) {
                     OnFileSelected.Invoke(this, EventArgs.Empty);
                 }
+                currentPath = file;
             } else {
                 MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
             }
@@ -115,7 +126,7 @@ namespace FFXIVVoicePackCreator {
         private bool CheckExtentions(string file) {
             string[] extentions = new string[] { ".png", ".dds", ".bmp", ".tex" };
             foreach (string extention in extentions) {
-                if (file.Contains(extention)) {
+                if (file.EndsWith(extention)) {
                     return true;
                 }
             }
