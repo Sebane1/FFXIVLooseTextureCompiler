@@ -33,7 +33,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case ".dds":
-                    using (Bitmap source = DDS.DDSToBitmap(path)) {
+                    using (Bitmap source = TexLoader.DDSToBitmap(path)) {
                         Bitmap target = new Bitmap(source.Size.Width, source.Size.Height);
                         Graphics g = Graphics.FromImage(target);
                         g.Clear(Color.White);

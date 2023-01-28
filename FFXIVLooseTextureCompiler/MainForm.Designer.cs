@@ -84,6 +84,7 @@
             this.exportProgress = new System.Windows.Forms.ProgressBar();
             this.bakeMissingNormalsCheckbox = new System.Windows.Forms.CheckBox();
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
+            this.normalMask = new FFXIVVoicePackCreator.FilePicker();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -161,9 +162,8 @@
             // 
             // generateButton
             // 
-            this.generateButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateButton.Location = new System.Drawing.Point(404, 545);
+            this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.generateButton.Location = new System.Drawing.Point(404, 575);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(124, 24);
             this.generateButton.TabIndex = 7;
@@ -649,11 +649,12 @@
             // 
             // generationType
             // 
+            this.generationType.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generationType.FormattingEnabled = true;
             this.generationType.Items.AddRange(new object[] {
             "Verbose",
             "Compact"});
-            this.generationType.Location = new System.Drawing.Point(90, 544);
+            this.generationType.Location = new System.Drawing.Point(90, 574);
             this.generationType.Name = "generationType";
             this.generationType.Size = new System.Drawing.Size(70, 23);
             this.generationType.TabIndex = 36;
@@ -662,8 +663,9 @@
             // 
             // label5
             // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 548);
+            this.label5.Location = new System.Drawing.Point(12, 578);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 15);
             this.label5.TabIndex = 37;
@@ -671,17 +673,18 @@
             // 
             // exportProgress
             // 
-            this.exportProgress.Location = new System.Drawing.Point(4, 544);
+            this.exportProgress.Location = new System.Drawing.Point(0, 576);
             this.exportProgress.Name = "exportProgress";
-            this.exportProgress.Size = new System.Drawing.Size(532, 28);
+            this.exportProgress.Size = new System.Drawing.Size(536, 28);
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
             this.exportProgress.Click += new System.EventHandler(this.exportProgress_Click);
             // 
             // bakeMissingNormalsCheckbox
             // 
+            this.bakeMissingNormalsCheckbox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bakeMissingNormalsCheckbox.AutoSize = true;
-            this.bakeMissingNormalsCheckbox.Location = new System.Drawing.Point(164, 548);
+            this.bakeMissingNormalsCheckbox.Location = new System.Drawing.Point(164, 578);
             this.bakeMissingNormalsCheckbox.Name = "bakeMissingNormalsCheckbox";
             this.bakeMissingNormalsCheckbox.Size = new System.Drawing.Size(116, 19);
             this.bakeMissingNormalsCheckbox.TabIndex = 39;
@@ -691,8 +694,9 @@
             // 
             // generateMultiCheckBox
             // 
+            this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(296, 548);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(296, 578);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -700,11 +704,23 @@
             this.generateMultiCheckBox.UseVisualStyleBackColor = true;
             this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
             // 
+            // normalMask
+            // 
+            this.normalMask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            this.normalMask.Index = -1;
+            this.normalMask.Location = new System.Drawing.Point(12, 544);
+            this.normalMask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.normalMask.MinimumSize = new System.Drawing.Size(300, 28);
+            this.normalMask.Name = "normalMask";
+            this.normalMask.Size = new System.Drawing.Size(520, 28);
+            this.normalMask.TabIndex = 41;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(537, 573);
+            this.ClientSize = new System.Drawing.Size(537, 603);
+            this.Controls.Add(this.normalMask);
             this.Controls.Add(this.generateMultiCheckBox);
             this.Controls.Add(this.bakeMissingNormalsCheckbox);
             this.Controls.Add(this.label5);
@@ -822,5 +838,6 @@
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
         private ToolStripMenuItem diffuseMergerToolStripMenuItem;
+        private FFXIVVoicePackCreator.FilePicker normalMask;
     }
 }
