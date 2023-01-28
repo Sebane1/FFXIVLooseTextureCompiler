@@ -140,25 +140,29 @@ namespace FFXIVLooseTextureCompiler {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse"), 0);
                                     option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
-                                    ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
+                                    if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeMissingNormalsCheckbox.Checked)){
+                                        ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++), ExportType.Normal, materialSet.Diffuse);
+                                    } else {
+                                        ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
+                                    }
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
-                                } else {
+                                } else { 
                                     exportProgress.Maximum--;
                                 }
                                 if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
-                                    if (!bakeMissingNormalsCheckbox.Checked) {
-                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
-                                    } else {
+                                    if (bakeMissingNormalsCheckbox.Checked && !materialSet.MaterialSetName.ToLower().Contains("eye")) {
                                         ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.MergeNormal, materialSet.Diffuse);
-                                    }
+                                    } else {
+                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
+                                    }           
                                     exportProgress.Increment(1);
                                     Refresh();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked) {
+                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeMissingNormalsCheckbox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
                                     option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
@@ -177,7 +181,7 @@ namespace FFXIVLooseTextureCompiler {
                                     exportProgress.Increment(1);
                                     Refresh();
                                     Application.DoEvents();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked) {
+                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
                                     option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
                                     option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
                                     group.Options.Add(option);
@@ -284,27 +288,7 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please enter a mod name!");
             }
         }
-        public Bitmap RGBAToBitmap(byte[] RGBAPixels, int width, int height) {
-            Bitmap output = new Bitmap(width, height);
-            Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
-            BitmapData bmpData = output.LockBits(rect, ImageLockMode.ReadWrite, output.PixelFormat);
-            IntPtr ptr = bmpData.Scan0;
-            for (int i = 0; i < RGBAPixels.Length; i += 4) {
-                byte R = RGBAPixels[i];
-                byte G = RGBAPixels[i + 1];
-                byte B = RGBAPixels[i + 2];
-                byte A = RGBAPixels[i + 3];
 
-                RGBAPixels[i] = B;
-                RGBAPixels[i + 1] = G;
-                RGBAPixels[i + 2] = R;
-                RGBAPixels[i + 3] = A;
-
-            }
-            System.Runtime.InteropServices.Marshal.Copy(RGBAPixels, 0, ptr, RGBAPixels.Length);
-            output.UnlockBits(bmpData);
-            return output;
-        }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
             if (e.Control && e.KeyCode == Keys.S) {
                 Save();
@@ -375,7 +359,7 @@ namespace FFXIVLooseTextureCompiler {
                     case ExportType.MergeNormal:
                         using (MemoryStream stream = new MemoryStream()) {
                             if (!normalCache.ContainsKey(diffuseNormal)) {
-                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
+                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
                                     using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.White);
@@ -416,7 +400,7 @@ namespace FFXIVLooseTextureCompiler {
                         case ExportType.Normal:
                             using (MemoryStream stream = new MemoryStream()) {
                                 if (!normalCache.ContainsKey(inputFile)) {
-                                    using (Bitmap bitmap = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
+                                    using (Bitmap bitmap = DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
                                         using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
                                             Graphics g = Graphics.FromImage(target);
                                             g.Clear(Color.White);
@@ -436,7 +420,7 @@ namespace FFXIVLooseTextureCompiler {
                         case ExportType.MultiFace:
                             using (MemoryStream stream = new MemoryStream()) {
                                 if (!multiCache.ContainsKey(inputFile)) {
-                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))), 255, 126, 0);
+                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height))), 255, 126, 0);
                                     multi.Save(stream, ImageFormat.Png);
                                 } else {
                                     multiCache[inputFile].Save(stream, ImageFormat.Png);
@@ -448,14 +432,14 @@ namespace FFXIVLooseTextureCompiler {
                         case ExportType.MergeNormal:
                             using (MemoryStream stream = new MemoryStream()) {
                                 if (!normalCache.ContainsKey(diffuseNormal)) {
-                                    using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
+                                    using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
                                         using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
                                             Graphics g = Graphics.FromImage(target);
                                             g.Clear(Color.White);
                                             g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
                                             Bitmap normal = Normal.Calculate(target);
                                             KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                                            using (Bitmap originalNormal = RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
+                                            using (Bitmap originalNormal = DDS.RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height)) {
                                                 using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
                                                     try {
                                                         Bitmap output = imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, normal, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
@@ -519,7 +503,7 @@ namespace FFXIVLooseTextureCompiler {
                             break;
                         case ExportType.MergeNormal:
                             if (!normalCache.ContainsKey(diffuseNormal)) {
-                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
+                                using (Bitmap bitmap = (diffuseNormal.EndsWith(".dds") ? DDS.DDSToBitmap(diffuseNormal) : new Bitmap(diffuseNormal))) {
                                     using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.White);
@@ -554,13 +538,7 @@ namespace FFXIVLooseTextureCompiler {
             Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
             File.WriteAllBytes(outputFile, data);
         }
-        public Bitmap DDSToBitmap(string inputFile) {
-            using (var scratch = ScratchImage.LoadDDS(inputFile)) {
-                var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                byte[] ddsFile = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-                return RGBAToBitmap(ddsFile, scratch.Meta.Width, scratch.Meta.Height);
-            }
-        }
+
         private void ExportJson() {
             string jsonText = @"{
   ""Name"": """",
@@ -1296,6 +1274,14 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void exportProgress_Click(object sender, EventArgs e) {
+
+        }
+
+        private void diffuseMergerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new DiffuseMerger().Show();
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e) {
 
         }
     }

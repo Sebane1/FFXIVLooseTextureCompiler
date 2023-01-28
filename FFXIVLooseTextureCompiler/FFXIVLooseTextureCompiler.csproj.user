@@ -7,6 +7,9 @@
     <Compile Update="CustomPathDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="DiffuseMerger.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="FilePicker.cs">
       <SubType>UserControl</SubType>
     </Compile>

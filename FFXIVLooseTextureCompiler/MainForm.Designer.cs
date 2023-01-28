@@ -58,6 +58,7 @@
             this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
@@ -436,6 +437,7 @@
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
             // findAndBulkReplaceToolStripMenuItem
             // 
@@ -447,7 +449,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bulkTexViewerToolStripMenuItem});
+            this.bulkTexViewerToolStripMenuItem,
+            this.diffuseMergerToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -458,6 +461,13 @@
             this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
             this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
+            // 
+            // diffuseMergerToolStripMenuItem
+            // 
+            this.diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
+            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
+            this.diffuseMergerToolStripMenuItem.Click += new System.EventHandler(this.diffuseMergerToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -811,5 +821,6 @@
         private ToolStripMenuItem bulkReplaceToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
+        private ToolStripMenuItem diffuseMergerToolStripMenuItem;
     }
 }
