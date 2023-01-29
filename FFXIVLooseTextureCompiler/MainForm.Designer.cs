@@ -85,6 +85,8 @@
             this.bakeNormals = new System.Windows.Forms.CheckBox();
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
             this.mask = new FFXIVVoicePackCreator.FilePicker();
+            this.discordButton = new System.Windows.Forms.Button();
+            this.facePaint = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -232,11 +234,11 @@
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(292, 144);
+            this.asymCheckbox.Location = new System.Drawing.Point(332, 144);
             this.asymCheckbox.Name = "asymCheckbox";
-            this.asymCheckbox.Size = new System.Drawing.Size(126, 19);
+            this.asymCheckbox.Size = new System.Drawing.Size(83, 19);
             this.asymCheckbox.TabIndex = 23;
-            this.asymCheckbox.Text = "Asymmetrical Face";
+            this.asymCheckbox.Text = "Asym Face";
             this.asymCheckbox.UseVisualStyleBackColor = true;
             // 
             // facePart
@@ -246,12 +248,14 @@
             "Face",
             "Eyebrows",
             "Eyes",
-            "Ears"});
+            "Ears",
+            "Face Paint"});
             this.facePart.Location = new System.Drawing.Point(200, 140);
             this.facePart.Name = "facePart";
             this.facePart.Size = new System.Drawing.Size(84, 23);
             this.facePart.TabIndex = 4;
             this.facePart.Text = "Eyebrows";
+            this.facePart.SelectedIndexChanged += new System.EventHandler(this.facePart_SelectedIndexChanged);
             // 
             // faceType
             // 
@@ -564,7 +568,7 @@
             // 
             // addFaceButton
             // 
-            this.addFaceButton.Location = new System.Drawing.Point(420, 144);
+            this.addFaceButton.Location = new System.Drawing.Point(420, 140);
             this.addFaceButton.Name = "addFaceButton";
             this.addFaceButton.Size = new System.Drawing.Size(112, 23);
             this.addFaceButton.TabIndex = 28;
@@ -614,7 +618,7 @@
             // 
             // addCustomPathButton
             // 
-            this.addCustomPathButton.Location = new System.Drawing.Point(416, 176);
+            this.addCustomPathButton.Location = new System.Drawing.Point(416, 168);
             this.addCustomPathButton.Name = "addCustomPathButton";
             this.addCustomPathButton.Size = new System.Drawing.Size(116, 23);
             this.addCustomPathButton.TabIndex = 33;
@@ -726,11 +730,44 @@
             this.mask.Enter += new System.EventHandler(this.multi_Enter);
             this.mask.Leave += new System.EventHandler(this.multi_Leave);
             // 
+            // discordButton
+            // 
+            this.discordButton.BackColor = System.Drawing.Color.MediumSlateBlue;
+            this.discordButton.ForeColor = System.Drawing.Color.White;
+            this.discordButton.Location = new System.Drawing.Point(388, 0);
+            this.discordButton.Name = "discordButton";
+            this.discordButton.Size = new System.Drawing.Size(75, 23);
+            this.discordButton.TabIndex = 42;
+            this.discordButton.Text = "Discord";
+            this.discordButton.UseVisualStyleBackColor = false;
+            this.discordButton.Click += new System.EventHandler(this.discordButton_Click);
+            // 
+            // facePaint
+            // 
+            this.facePaint.Enabled = false;
+            this.facePaint.FormattingEnabled = true;
+            this.facePaint.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"});
+            this.facePaint.Location = new System.Drawing.Point(288, 140);
+            this.facePaint.Name = "facePaint";
+            this.facePaint.Size = new System.Drawing.Size(36, 23);
+            this.facePaint.TabIndex = 43;
+            this.facePaint.Text = "99";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 603);
+            this.Controls.Add(this.facePaint);
+            this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
             this.Controls.Add(this.generateMultiCheckBox);
             this.Controls.Add(this.bakeNormals);
@@ -850,5 +887,7 @@
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
         private ToolStripMenuItem diffuseMergerToolStripMenuItem;
         private FFXIVVoicePackCreator.FilePicker mask;
+        private Button discordButton;
+        private ComboBox facePaint;
     }
 }
