@@ -87,7 +87,10 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "", "", "", "", "", "", "raen", "xaela", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = generationType.SelectedIndex = 0;
+            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = facePaint.SelectedIndex = generationType.SelectedIndex = 0;
+            for (int i = 0; i < 99; i++) {
+                facePaint.Items.Add((i + 1) + "");
+            }
             CleanDirectory();
             CheckForCommandArguments();
         }
@@ -261,19 +264,19 @@ namespace FFXIVLooseTextureCompiler {
                     Hook.SendSyncKey(Keys.Enter);
                     Thread.Sleep(500);
                     Hook.SendString(@"/penumbra redraw");
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     Hook.SendSyncKey(Keys.Enter);
                 } else {
                     Hook.SendSyncKey(Keys.Enter);
                     Thread.Sleep(500);
                     Hook.SendString(@"/penumbra reload");
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     Hook.SendSyncKey(Keys.Enter);
                     Thread.Sleep(2000);
                     Hook.SendSyncKey(Keys.Enter);
                     Thread.Sleep(500);
                     Hook.SendString(@"/penumbra redraw");
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     Hook.SendSyncKey(Keys.Enter);
                     generatedOnce = true;
                 }
@@ -736,15 +739,22 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             generatedOnce = false;
             MaterialSet materialSet = new MaterialSet();
-            materialSet.MaterialSetName = facePart.Text + ", " + genderListBody.Text + ", " + subRaceList.Text + ", " + faceType.Text;
-            if (facePart.SelectedIndex != 2) {
-                materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
-                materialSet.InternalNormalPath = GetFaceMaterialPath(1);
-                materialSet.InternalMultiPath = GetFaceMaterialPath(2);
-            } else {
-                materialSet.InternalDiffusePath = GetFaceMaterialPath(1);
-                materialSet.InternalNormalPath = GetFaceMaterialPath(2);
-                materialSet.InternalMultiPath = GetFaceMaterialPath(3);
+            materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (facePaint.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
+            switch (facePart.SelectedIndex) {
+                default:
+                    materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
+                    materialSet.InternalNormalPath = GetFaceMaterialPath(1);
+                    materialSet.InternalMultiPath = GetFaceMaterialPath(2);
+                    break;
+                case 2:
+                    materialSet.InternalDiffusePath = GetFaceMaterialPath(1);
+                    materialSet.InternalNormalPath = GetFaceMaterialPath(2);
+                    materialSet.InternalMultiPath = GetFaceMaterialPath(3);
+                    break;
+                case 4:
+                    materialSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (facePaint.SelectedIndex + 1) + ".tex";
+                    break;
+
             }
             materialList.Items.Add(materialSet);
             HasSaved = false;
@@ -767,7 +777,7 @@ namespace FFXIVLooseTextureCompiler {
 
                 diffuse.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
-                multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalDiffusePath);
+                multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eye")) {
@@ -1141,6 +1151,28 @@ namespace FFXIVLooseTextureCompiler {
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e) {
 
+        }
+
+        private void discordButton_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://discord.gg/rtGXwMn7pX",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
+            if (facePart.SelectedIndex == 4) {
+                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
+                facePaint.Enabled = true;
+            } else {
+                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
+                facePaint.Enabled = false;
+            }
         }
     }
 }
