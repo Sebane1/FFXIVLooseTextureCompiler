@@ -36,6 +36,7 @@ Just hit rediscover in penumbra and use.
 Requires Penumbra to use.
 
 Core features:
+- Near instant visual feedback thanks to using penumbra
 - Drag and drop texture assignment
 - Automatic path generation
 - Automatic penumbra options, and ability to customize groups for exports to penumbra
@@ -47,5 +48,4 @@ Core features:
 
 
 Support Discord: https://discord.gg/rtGXwMn7pX
-
 If you wish to donate you can do so here: https://ko-fi.com/sebastina
