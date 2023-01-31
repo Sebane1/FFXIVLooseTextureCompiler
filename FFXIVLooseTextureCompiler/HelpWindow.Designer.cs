@@ -27,69 +27,89 @@
             this.getBibo = new System.Windows.Forms.Button();
             this.getEve = new System.Windows.Forms.Button();
             this.getScalesPlus = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.getTBSE = new System.Windows.Forms.Button();
+            this.getHRBODY = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // getBibo
             // 
-            this.getBibo.Location = new System.Drawing.Point(0, 4);
+            this.getBibo.Location = new System.Drawing.Point(0, 36);
             this.getBibo.Name = "getBibo";
             this.getBibo.Size = new System.Drawing.Size(212, 24);
             this.getBibo.TabIndex = 0;
-            this.getBibo.Text = "Get Bibo Textures";
+            this.getBibo.Text = "Get Bibo+ Textures";
             this.getBibo.UseVisualStyleBackColor = true;
+            this.getBibo.Click += new System.EventHandler(this.getBibo_Click);
             // 
             // getEve
             // 
-            this.getEve.Location = new System.Drawing.Point(0, 32);
+            this.getEve.Location = new System.Drawing.Point(0, 64);
             this.getEve.Name = "getEve";
             this.getEve.Size = new System.Drawing.Size(212, 24);
             this.getEve.TabIndex = 1;
             this.getEve.Text = "Get Eve/T&&F/Gen3 Textures";
             this.getEve.UseVisualStyleBackColor = true;
+            this.getEve.Click += new System.EventHandler(this.getGen3_Click);
             // 
             // getScalesPlus
             // 
-            this.getScalesPlus.Location = new System.Drawing.Point(0, 60);
+            this.getScalesPlus.Location = new System.Drawing.Point(0, 92);
             this.getScalesPlus.Name = "getScalesPlus";
             this.getScalesPlus.Size = new System.Drawing.Size(212, 24);
             this.getScalesPlus.TabIndex = 2;
             this.getScalesPlus.Text = "Get Scales+Textures";
             this.getScalesPlus.UseVisualStyleBackColor = true;
+            this.getScalesPlus.Click += new System.EventHandler(this.getScalesPlus_Click);
             // 
-            // button1
+            // getTBSE
             // 
-            this.button1.Location = new System.Drawing.Point(0, 88);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(212, 24);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Get TBSE Textures";
-            this.button1.UseVisualStyleBackColor = true;
+            this.getTBSE.Location = new System.Drawing.Point(0, 120);
+            this.getTBSE.Name = "getTBSE";
+            this.getTBSE.Size = new System.Drawing.Size(212, 24);
+            this.getTBSE.TabIndex = 3;
+            this.getTBSE.Text = "Get TBSE Textures";
+            this.getTBSE.UseVisualStyleBackColor = true;
+            this.getTBSE.Click += new System.EventHandler(this.getTBSE_Click);
             // 
-            // button2
+            // getHRBODY
             // 
-            this.button2.Location = new System.Drawing.Point(0, 116);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(212, 24);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Get HRBODY Textures";
-            this.button2.UseVisualStyleBackColor = true;
+            this.getHRBODY.Location = new System.Drawing.Point(0, 148);
+            this.getHRBODY.Name = "getHRBODY";
+            this.getHRBODY.Size = new System.Drawing.Size(212, 24);
+            this.getHRBODY.TabIndex = 4;
+            this.getHRBODY.Text = "Get HRBODY Textures";
+            this.getHRBODY.UseVisualStyleBackColor = true;
+            this.getHRBODY.Click += new System.EventHandler(this.getHRBODY_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(8, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(198, 17);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "These link to direct downloads";
             // 
             // HelpWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(213, 296);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(213, 178);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.getHRBODY);
+            this.Controls.Add(this.getTBSE);
             this.Controls.Add(this.getScalesPlus);
             this.Controls.Add(this.getEve);
             this.Controls.Add(this.getBibo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "HelpWindow";
-            this.Text = "Form1";
+            this.Text = "Help";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -98,7 +118,8 @@
         private Button getBibo;
         private Button getEve;
         private Button getScalesPlus;
-        private Button button1;
-        private Button button2;
+        private Button getTBSE;
+        private Button getHRBODY;
+        private Label label1;
     }
 }
