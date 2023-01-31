@@ -87,6 +87,8 @@
             this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.discordButton = new System.Windows.Forms.Button();
             this.facePaint = new System.Windows.Forms.ComboBox();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -394,7 +396,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
-            this.configToolStripMenuItem});
+            this.configToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(537, 24);
@@ -761,6 +764,21 @@
             this.facePaint.TabIndex = 43;
             this.facePaint.Text = "99";
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.howToGetTexturesToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // howToGetTexturesToolStripMenuItem
+            // 
+            this.howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
+            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.howToGetTexturesToolStripMenuItem.Text = "How to get textures?";
+            this.howToGetTexturesToolStripMenuItem.Click += new System.EventHandler(this.howToGetTexturesToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -889,5 +907,7 @@
         private FFXIVVoicePackCreator.FilePicker mask;
         private Button discordButton;
         private ComboBox facePaint;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem howToGetTexturesToolStripMenuItem;
     }
 }
