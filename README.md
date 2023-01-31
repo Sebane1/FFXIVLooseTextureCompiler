@@ -47,5 +47,9 @@ Core features:
 - Low learning curve.
 
 
-Support Discord: https://discord.gg/rtGXwMn7pX
-If you wish to donate you can do so here: https://ko-fi.com/sebastina
+Support Discord: 
+
+https://discord.gg/rtGXwMn7pX
+If you wish to donate you can do so here:
+
+https://ko-fi.com/sebastina
