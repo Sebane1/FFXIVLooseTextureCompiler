@@ -50,6 +50,8 @@ Core features:
 Support Discord: 
 
 https://discord.gg/rtGXwMn7pX
+
+
 If you wish to donate you can do so here:
 
 https://ko-fi.com/sebastina
