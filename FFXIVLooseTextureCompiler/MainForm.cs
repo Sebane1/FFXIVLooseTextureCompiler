@@ -1174,5 +1174,9 @@ namespace FFXIVLooseTextureCompiler {
                 facePaint.Enabled = false;
             }
         }
+
+        private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
+            new HelpWindow().Show();
+        }
     }
 }
