@@ -47,12 +47,29 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         }
         public static Bitmap ResolveBitmap(string inputFile) {
             if (!string.IsNullOrEmpty(inputFile)) {
+                while (IsFileLocked(inputFile)) ;
                 using (Bitmap bitmap = inputFile.EndsWith(".tex") ? TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
                     return new Bitmap(bitmap);
                 }
             } else {
                 return null;
             }
+        }
+        public static bool IsFileLocked(string file) {
+            try {
+                using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)) {
+                    stream.Close();
+                }
+            } catch (IOException) {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+
+            //file is not locked
+            return false;
         }
     }
 }
