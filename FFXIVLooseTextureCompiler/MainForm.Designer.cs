@@ -817,7 +817,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 603);
-            this.Controls.Add(this.exportPanel);
             this.Controls.Add(this.facePaint);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
@@ -861,6 +860,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.exportProgress);
+            this.Controls.Add(this.exportPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
