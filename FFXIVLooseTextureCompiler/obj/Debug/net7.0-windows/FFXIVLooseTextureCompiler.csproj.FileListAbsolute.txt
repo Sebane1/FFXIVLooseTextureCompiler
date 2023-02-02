@@ -54,3 +54,4 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.BulkTexManager.resources
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.FindAndReplace.resources
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.DiffuseMerger.resources
+C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.HelpWindow.resources

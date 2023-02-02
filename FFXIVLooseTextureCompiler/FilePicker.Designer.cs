@@ -45,6 +45,7 @@ namespace FFXIVVoicePackCreator {
             this.filePath.TextChanged += new System.EventHandler(this.filePath_TextChanged);
             this.filePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.filePath_DragDrop);
             this.filePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.filePath_DragEnter);
+            this.filePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.filePath_KeyPress);
             this.filePath.MouseDown += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseDown);
             this.filePath.MouseMove += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseMove);
             // 

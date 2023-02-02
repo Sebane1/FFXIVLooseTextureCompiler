@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Timer autoGenerateTImer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.genderListBody = new System.Windows.Forms.ComboBox();
             this.raceList = new System.Windows.Forms.ComboBox();
@@ -61,6 +62,8 @@
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.materialList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -87,11 +90,18 @@
             this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.discordButton = new System.Windows.Forms.Button();
             this.facePaint = new System.Windows.Forms.ComboBox();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
+            this.exportPanel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // autoGenerateTImer
+            // 
+            autoGenerateTImer.Interval = 200;
+            autoGenerateTImer.Tick += new System.EventHandler(this.autoGenerateTImer_Tick);
             // 
             // genderListBody
             // 
@@ -214,6 +224,7 @@
             this.normal.Size = new System.Drawing.Size(520, 28);
             this.normal.TabIndex = 18;
             this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.normal.Load += new System.EventHandler(this.normal_Load);
             this.normal.Enter += new System.EventHandler(this.multi_Enter);
             this.normal.Leave += new System.EventHandler(this.multi_Leave);
             // 
@@ -497,6 +508,21 @@
             this.changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
             this.changePenumbraPathToolStripMenuItem.Click += new System.EventHandler(this.changePenumbraPathToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.howToGetTexturesToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // howToGetTexturesToolStripMenuItem
+            // 
+            this.howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
+            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.howToGetTexturesToolStripMenuItem.Text = "How to get textures?";
+            this.howToGetTexturesToolStripMenuItem.Click += new System.EventHandler(this.howToGetTexturesToolStripMenuItem_Click);
+            // 
             // donateButton
             // 
             this.donateButton.BackColor = System.Drawing.Color.IndianRed;
@@ -764,26 +790,34 @@
             this.facePaint.TabIndex = 43;
             this.facePaint.Text = "99";
             // 
-            // helpToolStripMenuItem
+            // exportPanel
             // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.howToGetTexturesToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
+            this.exportPanel.Controls.Add(this.label7);
+            this.exportPanel.Location = new System.Drawing.Point(0, 0);
+            this.exportPanel.Name = "exportPanel";
+            this.exportPanel.Size = new System.Drawing.Size(536, 572);
+            this.exportPanel.TabIndex = 44;
+            this.exportPanel.Visible = false;
             // 
-            // howToGetTexturesToolStripMenuItem
+            // label7
             // 
-            this.howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
-            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.howToGetTexturesToolStripMenuItem.Text = "How to get textures?";
-            this.howToGetTexturesToolStripMenuItem.Click += new System.EventHandler(this.howToGetTexturesToolStripMenuItem_Click);
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.SystemColors.GrayText;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label7.ForeColor = System.Drawing.Color.Snow;
+            this.label7.Location = new System.Drawing.Point(140, 264);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(252, 65);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Exporting";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 603);
+            this.Controls.Add(this.exportPanel);
             this.Controls.Add(this.facePaint);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
@@ -839,6 +873,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.materialListContextMenu.ResumeLayout(false);
+            this.exportPanel.ResumeLayout(false);
+            this.exportPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -909,5 +945,8 @@
         private ComboBox facePaint;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem howToGetTexturesToolStripMenuItem;
+        private System.Windows.Forms.Timer autoGenerateTImer;
+        private Panel exportPanel;
+        private Label label7;
     }
 }

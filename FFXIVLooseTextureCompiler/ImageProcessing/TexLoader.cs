@@ -46,7 +46,9 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             }
         }
         public static Bitmap ResolveBitmap(string inputFile) {
-            return inputFile.EndsWith(".tex") ? TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile));
+            using (Bitmap bitmap = inputFile.EndsWith(".tex") ? TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+                return new Bitmap(bitmap);
+            }
         }
     }
 }
