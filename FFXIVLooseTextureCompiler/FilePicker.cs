@@ -98,10 +98,7 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_TextChanged(object sender, EventArgs e) {
-            //if (string.IsNullOrEmpty(filePath.Text)) {
-            //    currentPath = null;
-            //}
-            //filePath.Text = currentPath;
+
         }
 
         private void filePath_DragEnter(object sender, DragEventArgs e) {
@@ -115,10 +112,10 @@ namespace FFXIVVoicePackCreator {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
             if (CheckExtentions(file)) {
                 filePath.Text = file;
+                currentPath = file;
                 if (OnFileSelected != null) {
                     OnFileSelected.Invoke(this, EventArgs.Empty);
                 }
-                currentPath = file;
             } else {
                 MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
             }
@@ -135,6 +132,23 @@ namespace FFXIVVoicePackCreator {
 
         private void playButton_Click(object sender, EventArgs e) {
 
+        }
+
+        private void filePath_Enter(object sender, EventArgs e) {
+
+        }
+
+        private void filePath_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar == 13) {
+                if (CheckExtentions(FilePath.SelectedText)) {
+                    currentPath = FilePath.SelectedText;
+                    if (OnFileSelected != null) {
+                        OnFileSelected.Invoke(this, EventArgs.Empty);
+                    }
+                } else if (string.IsNullOrWhiteSpace(FilePath.SelectedText)) {
+                    currentPath = null;
+                }
+            }
         }
     }
 }

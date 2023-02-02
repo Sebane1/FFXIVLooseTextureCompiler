@@ -7,6 +7,7 @@ using Lumina.Data.Files;
 using Newtonsoft.Json;
 using OtterTex;
 using Penumbra.Import.Dds;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -37,6 +38,8 @@ namespace FFXIVLooseTextureCompiler {
         private int fileCount;
         private Dictionary<string, Bitmap> normalCache;
         private Dictionary<string, Bitmap> multiCache;
+        Dictionary<string, FileSystemWatcher> watchers = new Dictionary<string, FileSystemWatcher>();
+        private bool exportingTex;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -57,6 +60,7 @@ namespace FFXIVLooseTextureCompiler {
             GetAuthorName();
             GetPenumbraPath();
             Text += " " + Application.ProductVersion;
+            Control.CheckForIllegalCrossThreadCalls = false;
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -103,194 +107,205 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void generateButton_Click(object sender, EventArgs e) {
-            if (string.IsNullOrEmpty(penumbraModPath)) {
-                ConfigurePenumbraModFolder();
-            }
-            if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
-                string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
-                jsonFilepath = Path.Combine(modPath, "default_mod.json");
-                metaFilePath = Path.Combine(modPath, "meta.json");
-                if (Directory.Exists(modPath)) {
-                    Directory.Delete(modPath, true);
-                } else {
-                    generatedOnce = false;
+            if (!exportingTex && !generationCooldown.Enabled) {
+                exportingTex = true;
+                exportPanel.Visible = true;
+                exportPanel.BringToFront();
+                if (string.IsNullOrEmpty(penumbraModPath)) {
+                    ConfigurePenumbraModFolder();
                 }
-                Directory.CreateDirectory(modPath);
-                int i = 0;
-                fileCount = 0;
-                exportProgress.BringToFront();
-                exportProgress.Maximum = materialList.Items.Count * 3;
-                exportProgress.Visible = true;
-                Refresh();
-                Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
-                normalCache = new Dictionary<string, Bitmap>();
-                multiCache = new Dictionary<string, Bitmap>();
-                foreach (MaterialSet materialSet in materialList.Items) {
-                    if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
-                        groups.Add(materialSet.MaterialGroupName, new List<MaterialSet>() { materialSet });
+                if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
+                    string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                    jsonFilepath = Path.Combine(modPath, "default_mod.json");
+                    metaFilePath = Path.Combine(modPath, "meta.json");
+                    if (Directory.Exists(modPath)) {
+                        try {
+                            Directory.Delete(modPath, true);
+                        } catch {
+
+                        }
                     } else {
-                        groups[materialSet.MaterialGroupName].Add(materialSet);
+                        generatedOnce = false;
                     }
-                }
-                foreach (List<MaterialSet> materialSets in groups.Values) {
-                    Group group = new Group(materialSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
-                    Option option = null;
-                    foreach (MaterialSet materialSet in materialSets) {
-                        string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
-                        string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
-                        string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
-                        switch (generationType.SelectedIndex) {
-                            case 0:
-                                if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse"), 0);
-                                    option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
-                                    group.Options.Add(option);
-                                    if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeNormals.Checked)) {
-                                        ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++), ExportType.Normal, materialSet.Diffuse);
-                                    } else {
-                                        ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
-                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
-                                    group.Options.Add(option);
-                                    if (bakeNormals.Checked && !materialSet.MaterialSetName.ToLower().Contains("eye")) {
-                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
-                                    } else {
-                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeNormals.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
-                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
-                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
-                                    group.Options.Add(option);
-                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.Normal);
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
-                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
-                                    group.Options.Add(option);
-                                    ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
-                                    option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
-                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
-                                    group.Options.Add(option);
-                                    ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), ExportType.MultiFace);
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                break;
-                            case 1:
-                                option = new Option(materialSet.MaterialSetName == materialSet.MaterialGroupName ? "Enable" : materialSet.MaterialSetName, 0);
-                                group.Options.Add(option);
-                                if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                                    ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
-                                    option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                                    if (!bakeNormals.Checked) {
-                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
-                                    } else {
-                                        ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
-                                    }
-                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeNormals.Checked) {
-                                    ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), ExportType.Normal);
-                                    option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                                    ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
-                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked) {
-                                    ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), ExportType.MultiFace);
-                                    option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                } else {
-                                    exportProgress.Maximum--;
-                                }
-                                break;
+                    Directory.CreateDirectory(modPath);
+                    int i = 0;
+                    fileCount = 0;
+                    exportProgress.BringToFront();
+                    exportProgress.Maximum = materialList.Items.Count * 3;
+                    exportProgress.Visible = true;
+                    Refresh();
+                    Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
+                    normalCache = new Dictionary<string, Bitmap>();
+                    multiCache = new Dictionary<string, Bitmap>();
+                    foreach (MaterialSet materialSet in materialList.Items) {
+                        if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
+                            groups.Add(materialSet.MaterialGroupName, new List<MaterialSet>() { materialSet });
+                        } else {
+                            groups[materialSet.MaterialGroupName].Add(materialSet);
                         }
                     }
-                    if (group.Options.Count > 0) {
-                        string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
-                        ExportGroup(groupPath, group);
+                    foreach (List<MaterialSet> materialSets in groups.Values) {
+                        Group group = new Group(materialSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
+                        Option option = null;
+                        foreach (MaterialSet materialSet in materialSets) {
+                            string diffuseBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
+                            string normalBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
+                            string multiBodyDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
+                            switch (generationType.SelectedIndex) {
+                                case 0:
+                                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Normal" : "Diffuse"), 0);
+                                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeNormals.Checked)) {
+                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++), ExportType.Normal, materialSet.Diffuse);
+                                        } else {
+                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount++));
+                                        }
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
+                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        if (bakeNormals.Checked && !materialSet.MaterialSetName.ToLower().Contains("eye")) {
+                                            ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
+                                        } else {
+                                            ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount++));
+                                        }
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeNormals.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Multi" : "Normal"), 0);
+                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount++), ExportType.Normal);
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eye"))) {
+                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") + (materialSet.MaterialSetName.ToLower().Contains("eye") ? "Catchlight" : "Multi"), 0);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount));
+                                        group.Options.Add(option);
+                                        ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), ExportType.MultiFace);
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    break;
+                                case 1:
+                                    option = new Option(materialSet.MaterialSetName == materialSet.MaterialGroupName ? "Enable" : materialSet.MaterialSetName, 0);
+                                    group.Options.Add(option);
+                                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
+                                        ExportTex(materialSet.Diffuse, AppendNumber(diffuseBodyDiskPath, fileCount));
+                                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
+                                        if (!bakeNormals.Checked) {
+                                            ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount));
+                                        } else {
+                                            ExportTex(materialSet.Normal, AppendNumber(normalBodyDiskPath, fileCount), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
+                                        }
+                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath) && bakeNormals.Checked) {
+                                        ExportTex(materialSet.Diffuse, AppendNumber(normalBodyDiskPath, fileCount), ExportType.Normal);
+                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
+                                        ExportTex(materialSet.Multi, AppendNumber(multiBodyDiskPath, fileCount));
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath) && generateMultiCheckBox.Checked) {
+                                        ExportTex(materialSet.Diffuse, AppendNumber(multiBodyDiskPath, fileCount), ExportType.MultiFace);
+                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                        exportProgress.Increment(1);
+                                        Refresh();
+                                        Application.DoEvents();
+                                    } else {
+                                        exportProgress.Maximum--;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (group.Options.Count > 0) {
+                            string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                            ExportGroup(groupPath, group);
+                        }
                     }
-                }
-                foreach (Bitmap value in normalCache.Values) {
-                    value.Dispose();
-                }
-                foreach (Bitmap value in multiCache.Values) {
-                    value.Dispose();
-                }
-                ExportJson();
-                ExportMeta();
-                if (generatedOnce) {
-                    Hook.SendSyncKey(Keys.Enter);
-                    Thread.Sleep(500);
-                    Hook.SendString(@"/penumbra redraw");
-                    Thread.Sleep(200);
-                    Hook.SendSyncKey(Keys.Enter);
+                    foreach (Bitmap value in normalCache.Values) {
+                        value.Dispose();
+                    }
+                    foreach (Bitmap value in multiCache.Values) {
+                        value.Dispose();
+                    }
+                    ExportJson();
+                    ExportMeta();
+                    if (generatedOnce) {
+                        Hook.SendSyncKey(Keys.Enter);
+                        Thread.Sleep(500);
+                        Hook.SendString(@"/penumbra redraw self");
+                        Thread.Sleep(200);
+                        Hook.SendSyncKey(Keys.Enter);
+                    } else {
+                        Hook.SendSyncKey(Keys.Enter);
+                        Thread.Sleep(500);
+                        Hook.SendString(@"/penumbra reload");
+                        Thread.Sleep(200);
+                        Hook.SendSyncKey(Keys.Enter);
+                        Thread.Sleep(2000);
+                        Hook.SendSyncKey(Keys.Enter);
+                        Thread.Sleep(500);
+                        Hook.SendString(@"/penumbra redraw self");
+                        Thread.Sleep(200);
+                        Hook.SendSyncKey(Keys.Enter);
+                        generatedOnce = true;
+                    }
+                    TopMost = true;
+                    BringToFront();
+                    TopMost = false;
+                    generateButton.Enabled = false;
+                    generationCooldown.Start();
+                    // generateButton.Text = "Success!";
+                    exportProgress.Visible = false;
+                    exportProgress.Value = 0;
+                    exportingTex = false;
+                    //MessageBox.Show("Export succeeded!");
+                    exportPanel.Visible = false;
                 } else {
-                    Hook.SendSyncKey(Keys.Enter);
-                    Thread.Sleep(500);
-                    Hook.SendString(@"/penumbra reload");
-                    Thread.Sleep(200);
-                    Hook.SendSyncKey(Keys.Enter);
-                    Thread.Sleep(2000);
-                    Hook.SendSyncKey(Keys.Enter);
-                    Thread.Sleep(500);
-                    Hook.SendString(@"/penumbra redraw");
-                    Thread.Sleep(200);
-                    Hook.SendSyncKey(Keys.Enter);
-                    generatedOnce = true;
+                    MessageBox.Show("Please enter a mod name!");
                 }
-                TopMost = true;
-                BringToFront();
-                TopMost = false;
-                generateButton.Enabled = false;
-                generateButton.Text = "Success!";
-                generationCooldown.Start();
-                exportProgress.Visible = false;
-                exportProgress.Value = 0;
-                //MessageBox.Show("Export succeeded!");
-            } else {
-                MessageBox.Show("Please enter a mod name!");
             }
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
@@ -320,7 +335,6 @@ namespace FFXIVLooseTextureCompiler {
             byte[] data = new byte[0];
             int contrast = 500;
             int contrastFace = 100;
-
             using (MemoryStream stream = new MemoryStream()) {
                 switch (exportType) {
                     case ExportType.None:
@@ -385,12 +399,16 @@ namespace FFXIVLooseTextureCompiler {
                             normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                         }
                         stream.Position = 0;
-                        TextureImporter.PngToTex(stream, out data);
+                        if (stream.Length > 0) {
+                            TextureImporter.PngToTex(stream, out data);
+                        }
                         break;
                 }
             }
-            Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-            File.WriteAllBytes(outputFile, data);
+            if (data.Length > 0) {
+                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+                File.WriteAllBytes(outputFile, data);
+            }
         }
         private void ExportJson() {
             string jsonText = @"{
@@ -794,10 +812,55 @@ namespace FFXIVLooseTextureCompiler {
         public void SetPaths() {
             if (materialList.SelectedIndex != -1) {
                 MaterialSet materialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                string directory = Path.GetDirectoryName(materialSet.Diffuse);
+                if (!string.IsNullOrWhiteSpace(directory)) {
+                    if (watchers.ContainsKey(directory)) {
+                        if (materialSet.Diffuse != diffuse.CurrentPath) {
+                            watchers[directory].Dispose();
+                            watchers.Remove(directory);
+                        }
+                    }
+                }
                 materialSet.Diffuse = diffuse.CurrentPath;
                 materialSet.Normal = normal.CurrentPath;
                 materialSet.Multi = multi.CurrentPath;
                 materialSet.NormalMask = mask.CurrentPath;
+
+                directory = Path.GetDirectoryName(materialSet.Diffuse);
+                if (!string.IsNullOrWhiteSpace(directory)) {
+                    if (!watchers.ContainsKey(directory)) {
+                        FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
+                        fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                        fileSystemWatcher.Changed += delegate {
+                            StartGeneration();
+                            return;
+                        };
+                        fileSystemWatcher.Path = directory;
+                        fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(materialSet.Diffuse);
+                        watchers.Add(directory, fileSystemWatcher);
+                    } else {
+                        watchers[directory].Path = directory;
+                        watchers[directory].EnableRaisingEvents = !string.IsNullOrEmpty(materialSet.Diffuse);
+                    }
+                }
+            }
+        }
+        public void StartGeneration() {
+            if (!exportingTex) {
+                if (generateButton.InvokeRequired) {
+                    Action safeWrite = delegate { StartGeneration(); };
+                    generateButton.Invoke(safeWrite);
+                } else {
+                    if (autoGenerateTImer == null) {
+                        autoGenerateTImer = new System.Windows.Forms.Timer();
+                        autoGenerateTImer.Interval = 10;
+                        autoGenerateTImer.Tick += autoGenerateTImer_Tick;
+                    }
+                    if (!autoGenerateTImer.Enabled) {
+                        autoGenerateTImer.Stop();
+                        autoGenerateTImer.Start();
+                    }
+                }
             }
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -851,6 +914,10 @@ namespace FFXIVLooseTextureCompiler {
             multi.Enabled = false;
             mask.Enabled = false;
             HasSaved = true;
+            foreach (FileSystemWatcher watcher in watchers.Values) {
+                watcher.Dispose();
+            }
+            watchers.Clear();
             currentEditLabel.Text = "Please select a texture set to start importing";
         }
         private void multi_Leave(object sender, EventArgs e) {
@@ -974,6 +1041,23 @@ namespace FFXIVLooseTextureCompiler {
                 generateMultiCheckBox.Checked = projectFile.GenerateMulti;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
+                foreach (MaterialSet materialSet in projectFile.MaterialSets) {
+                    if (!string.IsNullOrEmpty(materialSet.Diffuse)) {
+                        if (!watchers.ContainsKey(materialSet.Diffuse)) {
+                            FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
+                            fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                            fileSystemWatcher.Changed += delegate {
+                                StartGeneration();
+                            };
+                            fileSystemWatcher.Path = Path.GetDirectoryName(materialSet.Diffuse);
+                            fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(materialSet.Diffuse);
+                            watchers.Add(materialSet.Diffuse, fileSystemWatcher);
+                        } else {
+                            watchers[materialSet.Diffuse].Path = Path.GetDirectoryName(materialSet.Diffuse);
+                            watchers[materialSet.Diffuse].EnableRaisingEvents = !string.IsNullOrEmpty(materialSet.Diffuse);
+                        }
+                    }
+                }
             }
             HasSaved = true;
         }
@@ -1177,6 +1261,15 @@ namespace FFXIVLooseTextureCompiler {
 
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
+        }
+
+        private void autoGenerateTImer_Tick(object sender, EventArgs e) {
+            generateButton_Click(this, EventArgs.Empty);
+            autoGenerateTImer.Stop();
+        }
+
+        private void normal_Load(object sender, EventArgs e) {
+
         }
     }
 }
