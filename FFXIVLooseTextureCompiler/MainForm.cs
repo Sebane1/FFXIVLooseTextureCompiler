@@ -339,29 +339,33 @@ namespace FFXIVLooseTextureCompiler {
                 switch (exportType) {
                     case ExportType.None:
                         using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                            bitmap.Save(stream, ImageFormat.Png);
-                            stream.Flush();
-                            stream.Position = 0;
-                            TextureImporter.PngToTex(stream, out data);
+                            if (bitmap != null) {
+                                bitmap.Save(stream, ImageFormat.Png);
+                                stream.Flush();
+                                stream.Position = 0;
+                                TextureImporter.PngToTex(stream, out data);
+                            }
                         }
                         break;
                     case ExportType.Normal:
                         if (!normalCache.ContainsKey(inputFile)) {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                                using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                    Graphics g = Graphics.FromImage(target);
-                                    g.Clear(Color.White);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap output = null;
-                                    if (File.Exists(normalMask)) {
-                                        using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(normalMask)) {
-                                            output = Normal.Calculate(target, normalMaskBitmap);
+                                if (bitmap != null) {
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Graphics g = Graphics.FromImage(target);
+                                        g.Clear(Color.White);
+                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        Bitmap output = null;
+                                        if (File.Exists(normalMask)) {
+                                            using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(normalMask)) {
+                                                output = Normal.Calculate(target, normalMaskBitmap);
+                                            }
+                                        } else {
+                                            output = Normal.Calculate(target);
                                         }
-                                    } else {
-                                        output = Normal.Calculate(target);
+                                        output.Save(stream, ImageFormat.Png);
+                                        normalCache.Add(inputFile, output);
                                     }
-                                    output.Save(stream, ImageFormat.Png);
-                                    normalCache.Add(inputFile, output);
                                 }
                             }
                         } else {
@@ -370,8 +374,12 @@ namespace FFXIVLooseTextureCompiler {
                         break;
                     case ExportType.MultiFace:
                         if (!multiCache.ContainsKey(inputFile)) {
-                            using (Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(TexLoader.ResolveBitmap(inputFile))), 255, 126, 0)) {
-                                multi.Save(stream, ImageFormat.Png);
+                            using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
+                                if (bitmap != null) {
+                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(bitmap)), 255, 126, 0);
+                                    multi.Save(stream, ImageFormat.Png);
+                                    multiCache.Add(inputFile, multi);
+                                }
                             }
                         } else {
                             multiCache[inputFile].Save(stream, ImageFormat.Png);
@@ -382,17 +390,19 @@ namespace FFXIVLooseTextureCompiler {
                     case ExportType.MergeNormal:
                         if (!normalCache.ContainsKey(diffuseNormal)) {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(diffuseNormal)) {
-                                using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                    Bitmap output = null;
-                                    if (File.Exists(normalMask)) {
-                                        using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(normalMask)) {
-                                            output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                if (bitmap != null) {
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                        Bitmap output = null;
+                                        if (File.Exists(normalMask)) {
+                                            using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(normalMask)) {
+                                                output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                            }
+                                        } else {
+                                            output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
                                         }
-                                    } else {
-                                        output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
+                                        output.Save(stream, ImageFormat.Png);
+                                        normalCache.Add(diffuseNormal, output);
                                     }
-                                    output.Save(stream, ImageFormat.Png);
-                                    normalCache.Add(diffuseNormal, output);
                                 }
                             }
                         } else {
