@@ -277,7 +277,9 @@
             "Face 1",
             "Face 2",
             "Face 3",
-            "Face 4"});
+            "Face 4",
+            "Face 5",
+            "Face 6"});
             this.faceType.Location = new System.Drawing.Point(120, 140);
             this.faceType.Name = "faceType";
             this.faceType.Size = new System.Drawing.Size(76, 23);
