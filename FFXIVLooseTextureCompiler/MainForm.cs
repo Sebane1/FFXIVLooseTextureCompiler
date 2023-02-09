@@ -1,3 +1,4 @@
+using Anamnesis.Penumbra;
 using FFBardMusicPlayer.FFXIV;
 using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVLooseTextureCompiler.ImageProcessing;
@@ -273,23 +274,14 @@ namespace FFXIVLooseTextureCompiler {
                     ExportJson();
                     ExportMeta();
                     if (generatedOnce) {
-                        Hook.SendSyncKey(Keys.Enter);
-                        Thread.Sleep(500);
-                        Hook.SendString(@"/penumbra redraw self");
-                        Thread.Sleep(200);
-                        Hook.SendSyncKey(Keys.Enter);
+                        PenumbraRedraw.Redraw(0, Hook);
                     } else {
                         Hook.SendSyncKey(Keys.Enter);
                         Thread.Sleep(500);
                         Hook.SendString(@"/penumbra reload");
                         Thread.Sleep(200);
                         Hook.SendSyncKey(Keys.Enter);
-                        Thread.Sleep(2000);
-                        Hook.SendSyncKey(Keys.Enter);
-                        Thread.Sleep(500);
-                        Hook.SendString(@"/penumbra redraw self");
-                        Thread.Sleep(200);
-                        Hook.SendSyncKey(Keys.Enter);
+                        PenumbraRedraw.Redraw(0, Hook);
                         generatedOnce = true;
                     }
                     TopMost = true;
