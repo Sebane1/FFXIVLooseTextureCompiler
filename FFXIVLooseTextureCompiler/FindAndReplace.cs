@@ -36,6 +36,12 @@ namespace FFXIVLooseTextureCompiler {
                         if (!string.IsNullOrEmpty(multi.FilePath.Text)) {
                             materialSet.Multi = multi.FilePath.Text;
                         }
+                        if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
+                            materialSet.NormalMask = mask.FilePath.Text;
+                        }
+                        if (!string.IsNullOrEmpty(glow.FilePath.Text)) {
+                            materialSet.Glow = glow.FilePath.Text;
+                        }
                     }
                 }
                 DialogResult = DialogResult.OK;

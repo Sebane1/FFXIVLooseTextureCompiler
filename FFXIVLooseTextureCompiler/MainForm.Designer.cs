@@ -92,6 +92,7 @@
             this.facePaint = new System.Windows.Forms.ComboBox();
             this.exportPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.glow = new FFXIVVoicePackCreator.FilePicker();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -177,7 +178,7 @@
             // generateButton
             // 
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateButton.Location = new System.Drawing.Point(404, 575);
+            this.generateButton.Location = new System.Drawing.Point(404, 608);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(124, 24);
             this.generateButton.TabIndex = 7;
@@ -685,7 +686,7 @@
             // 
             // generationCooldown
             // 
-            this.generationCooldown.Interval = 3000;
+            this.generationCooldown.Interval = 1000;
             this.generationCooldown.Tick += new System.EventHandler(this.generationCooldown_Tick);
             // 
             // generationType
@@ -695,7 +696,7 @@
             this.generationType.Items.AddRange(new object[] {
             "Verbose",
             "Compact"});
-            this.generationType.Location = new System.Drawing.Point(90, 574);
+            this.generationType.Location = new System.Drawing.Point(90, 607);
             this.generationType.Name = "generationType";
             this.generationType.Size = new System.Drawing.Size(70, 23);
             this.generationType.TabIndex = 36;
@@ -706,7 +707,7 @@
             // 
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 578);
+            this.label5.Location = new System.Drawing.Point(12, 611);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 15);
             this.label5.TabIndex = 37;
@@ -714,7 +715,7 @@
             // 
             // exportProgress
             // 
-            this.exportProgress.Location = new System.Drawing.Point(0, 572);
+            this.exportProgress.Location = new System.Drawing.Point(0, 604);
             this.exportProgress.Name = "exportProgress";
             this.exportProgress.Size = new System.Drawing.Size(536, 32);
             this.exportProgress.TabIndex = 38;
@@ -725,7 +726,7 @@
             // 
             this.bakeNormals.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bakeNormals.AutoSize = true;
-            this.bakeNormals.Location = new System.Drawing.Point(164, 578);
+            this.bakeNormals.Location = new System.Drawing.Point(164, 611);
             this.bakeNormals.Name = "bakeNormals";
             this.bakeNormals.Size = new System.Drawing.Size(116, 19);
             this.bakeNormals.TabIndex = 39;
@@ -737,7 +738,7 @@
             // 
             this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(296, 578);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(296, 611);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -751,7 +752,7 @@
             this.mask.Enabled = false;
             this.mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.mask.Index = -1;
-            this.mask.Location = new System.Drawing.Point(12, 544);
+            this.mask.Location = new System.Drawing.Point(12, 576);
             this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.mask.MinimumSize = new System.Drawing.Size(300, 28);
             this.mask.Name = "mask";
@@ -798,7 +799,7 @@
             this.exportPanel.Controls.Add(this.label7);
             this.exportPanel.Location = new System.Drawing.Point(0, 0);
             this.exportPanel.Name = "exportPanel";
-            this.exportPanel.Size = new System.Drawing.Size(536, 572);
+            this.exportPanel.Size = new System.Drawing.Size(536, 608);
             this.exportPanel.TabIndex = 44;
             this.exportPanel.Visible = false;
             // 
@@ -814,11 +815,28 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Exporting";
             // 
+            // glow
+            // 
+            this.glow.CurrentPath = null;
+            this.glow.Enabled = false;
+            this.glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            this.glow.Index = -1;
+            this.glow.Location = new System.Drawing.Point(12, 544);
+            this.glow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.glow.MinimumSize = new System.Drawing.Size(300, 28);
+            this.glow.Name = "glow";
+            this.glow.Size = new System.Drawing.Size(520, 28);
+            this.glow.TabIndex = 45;
+            this.glow.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
+            this.glow.Enter += new System.EventHandler(this.multi_Enter);
+            this.glow.Leave += new System.EventHandler(this.multi_Leave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(537, 603);
+            this.ClientSize = new System.Drawing.Size(537, 636);
+            this.Controls.Add(this.glow);
             this.Controls.Add(this.facePaint);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
@@ -950,5 +968,6 @@
         private System.Windows.Forms.Timer autoGenerateTImer;
         private Panel exportPanel;
         private Label label7;
+        private FFXIVVoicePackCreator.FilePicker glow;
     }
 }

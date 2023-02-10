@@ -16,7 +16,7 @@ internal static class PenumbraApi
 {
 	private const string Url = "http://localhost:42069/api";
 	private const int TimeoutMs = 500;
-
+	private static bool calledWarningOnce = false;
 	public static async Task Post(string route, object content, FFXIVHook hook)
 	{
 		await PostRequest(route, content, hook);
@@ -53,13 +53,16 @@ internal static class PenumbraApi
 			return response;
 		}
 		catch (Exception ex) {
-            //MessageBox.Show(@"Please select ""Enable HTTP API"" inside of penumbra for automatic refresh.");
             hook.SendSyncKey(Keys.Enter);
 			Thread.Sleep(500);
             hook.SendString(@"/penumbra redraw self");
 			Thread.Sleep(200);
             hook.SendSyncKey(Keys.Enter);
-			return null;
+			if (!calledWarningOnce) {
+				MessageBox.Show(@"Select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"" for better automatic refresh.");
+				calledWarningOnce = true;
+			}
+            return null;
 		}
 	}
 }
