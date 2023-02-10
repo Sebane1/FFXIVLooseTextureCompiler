@@ -1062,6 +1062,7 @@ namespace FFXIVLooseTextureCompiler {
         private void multi_OnFileSelected(object sender, EventArgs e) {
             SetPaths();
             HasSaved = false;
+            hasDoneReload = false;
         }
 
         private void modDescriptionTextBox_TextChanged(object sender, EventArgs e) {
