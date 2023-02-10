@@ -93,6 +93,7 @@
             this.exportPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -552,12 +553,13 @@
             // materialListContextMenu
             // 
             this.materialListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editPathsToolStripMenuItem,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
             this.bulkReplaceToolStripMenuItem,
-            this.editPathsToolStripMenuItem});
+            this.deleteToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(239, 92);
+            this.materialListContextMenu.Size = new System.Drawing.Size(239, 136);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
             // 
             // moveUpToolStripMenuItem
@@ -831,6 +833,13 @@
             this.glow.Enter += new System.EventHandler(this.multi_Enter);
             this.glow.Leave += new System.EventHandler(this.multi_Leave);
             // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.removeSelectionButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -969,5 +978,6 @@
         private Panel exportPanel;
         private Label label7;
         private FFXIVVoicePackCreator.FilePicker glow;
+        private ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
