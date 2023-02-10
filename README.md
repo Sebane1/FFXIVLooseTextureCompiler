@@ -5,7 +5,7 @@ Download:
 
 https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
 
-![d26f474ebb90223371d7c6a92c1f7294](https://i.gyazo.com/2ebff26e98d7be8eb4f548c157e4f475.png)
+![6e1ef3e580ba83a3fc9b5a3acab7ba87](https://user-images.githubusercontent.com/7157688/217992829-f3d36106-2e42-424c-a723-a9ae04626823.png)
 
 Video demonstration:
 
