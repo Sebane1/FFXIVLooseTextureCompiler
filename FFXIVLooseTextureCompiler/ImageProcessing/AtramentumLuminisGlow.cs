@@ -42,7 +42,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 for (int y = 0; y < image.Height; y++) {
                     for (int x = 0; x < image.Width; x++) {
                         Color sourcePixel = source.GetPixel(x, y);
-                        Color destinationPixel = source.GetPixel(x, y);
+                        Color destinationPixel = destination.GetPixel(x, y);
                         if (sourcePixel.A > 0) {
                             Color col = Color.FromArgb(255 - sourcePixel.A, destinationPixel.R, destinationPixel.G, destinationPixel.B);
                             destination.SetPixel(x, y, col);

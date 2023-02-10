@@ -35,12 +35,12 @@ namespace FFXIVLooseTextureCompiler {
         private string savePath;
         private bool hasSaved;
         private bool foundInstance;
-        private bool generatedOnce;
+        private bool hasDoneReload;
         private int fileCount;
         private Dictionary<string, Bitmap> normalCache;
         private Dictionary<string, Bitmap> multiCache;
         Dictionary<string, FileSystemWatcher> watchers = new Dictionary<string, FileSystemWatcher>();
-        private bool exportingTex;
+        private bool lockDuplicateGeneration;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -110,8 +110,8 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void generateButton_Click(object sender, EventArgs e) {
-            if (!exportingTex && !generationCooldown.Enabled) {
-                exportingTex = true;
+            if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
+                lockDuplicateGeneration = true;
                 exportPanel.Visible = true;
                 exportPanel.BringToFront();
                 if (string.IsNullOrEmpty(penumbraModPath)) {
@@ -128,7 +128,7 @@ namespace FFXIVLooseTextureCompiler {
 
                         }
                     } else {
-                        generatedOnce = false;
+                        hasDoneReload = false;
                     }
                     Directory.CreateDirectory(modPath);
                     int i = 0;
@@ -295,7 +295,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     ExportJson();
                     ExportMeta();
-                    if (generatedOnce) {
+                    if (hasDoneReload) {
                         PenumbraRedraw.Redraw(0, Hook);
                     } else {
                         Hook.SendSyncKey(Keys.Enter);
@@ -305,7 +305,7 @@ namespace FFXIVLooseTextureCompiler {
                         Hook.SendSyncKey(Keys.Enter);
                         Thread.Sleep(2000);
                         PenumbraRedraw.Redraw(0, Hook);
-                        generatedOnce = true;
+                        hasDoneReload = true;
                         TopMost = true;
                         BringToFront();
                         TopMost = false;
@@ -315,7 +315,7 @@ namespace FFXIVLooseTextureCompiler {
                     // generateButton.Text = "Success!";
                     exportProgress.Visible = false;
                     exportProgress.Value = 0;
-                    exportingTex = false;
+                    lockDuplicateGeneration = false;
                     //MessageBox.Show("Export succeeded!");
                     exportPanel.Visible = false;
                 } else {
@@ -792,7 +792,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void addBodyEditButton_Click(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
             MaterialSet materialSet = new MaterialSet();
             materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
             materialSet.InternalDiffusePath = GetBodyMaterialPath(0);
@@ -803,7 +803,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
             MaterialSet materialSet = new MaterialSet();
             materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (facePaint.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
@@ -943,7 +943,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void StartGeneration() {
-            if (!exportingTex) {
+            if (!lockDuplicateGeneration) {
                 if (generateButton.InvokeRequired) {
                     Action safeWrite = delegate { StartGeneration(); };
                     generateButton.Invoke(safeWrite);
@@ -994,7 +994,8 @@ namespace FFXIVLooseTextureCompiler {
             return false;
         }
         private void NewProject() {
-            generatedOnce = false;
+            lockDuplicateGeneration = true;
+            hasDoneReload = false;
             Text = Application.ProductName + " " + Application.ProductVersion;
             savePath = null;
             materialList.Items.Clear();
@@ -1019,6 +1020,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             watchers.Clear();
             currentEditLabel.Text = "Please select a texture set to start importing";
+            lockDuplicateGeneration = false;
         }
         private void multi_Leave(object sender, EventArgs e) {
             SetPaths();
@@ -1029,7 +1031,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
             materialList.Items.RemoveAt(materialList.SelectedIndex);
             diffuse.CurrentPath = "";
             normal.CurrentPath = "";
@@ -1038,7 +1040,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void clearList_Click(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
             if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 {
                     materialList.Items.Clear();
@@ -1110,17 +1112,21 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
+            lockDuplicateGeneration = true;
             if (CleanSlate()) {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     savePath = openFileDialog.FileName;
                     OpenProject(savePath);
+                    generationCooldown.Start();
                 }
                 HasSaved = true;
             }
+            lockDuplicateGeneration = false;
         }
         private void Save() {
+            lockDuplicateGeneration = true;
             if (savePath == null) {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
@@ -1130,7 +1136,9 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (savePath != null) {
                 SaveProject(savePath);
+                generationCooldown.Start();
             }
+            lockDuplicateGeneration = false;
         }
         public void OpenProject(string path) {
             using (StreamReader file = File.OpenText(path)) {
@@ -1239,6 +1247,7 @@ namespace FFXIVLooseTextureCompiler {
                 customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
                 if (customPathDialog.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Material Set has been edited successfully", VersionText);
+                    hasDoneReload = false;
                 }
             }
             RefreshList();
@@ -1286,16 +1295,16 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void generationType_SelectedIndexChanged(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
         }
 
         private void bakeMissingNormalsCheckbox_CheckedChanged(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
             mask.Enabled = bakeNormals.Checked && materialList.SelectedIndex > -1;
         }
 
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
-            generatedOnce = false;
+            hasDoneReload = false;
         }
 
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
