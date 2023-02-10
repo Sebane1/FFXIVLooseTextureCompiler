@@ -847,7 +847,7 @@ namespace FFXIVLooseTextureCompiler {
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
-                glow.Enabled = true;
+                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint");
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eye")) {
                     diffuse.LabelName.Text = "normal";
