@@ -34,11 +34,14 @@ namespace FFXIVLooseTextureCompiler {
             this.normal = new FFXIVVoicePackCreator.FilePicker();
             this.multi = new FFXIVVoicePackCreator.FilePicker();
             this.diffuse = new FFXIVVoicePackCreator.FilePicker();
+            this.mask = new FFXIVVoicePackCreator.FilePicker();
+            this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.SuspendLayout();
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(200, 190);
+            this.acceptChangesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptChangesButton.Location = new System.Drawing.Point(200, 253);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(143, 24);
             this.acceptChangesButton.TabIndex = 8;
@@ -48,7 +51,8 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(344, 190);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(344, 253);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 24);
             this.button1.TabIndex = 9;
@@ -87,6 +91,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // normal
             // 
+            this.normal.CurrentPath = null;
             this.normal.Filter = null;
             this.normal.Index = -1;
             this.normal.Location = new System.Drawing.Point(5, 128);
@@ -98,6 +103,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // multi
             // 
+            this.multi.CurrentPath = null;
             this.multi.Filter = null;
             this.multi.Index = -1;
             this.multi.Location = new System.Drawing.Point(5, 160);
@@ -109,6 +115,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // diffuse
             // 
+            this.diffuse.CurrentPath = null;
             this.diffuse.Filter = null;
             this.diffuse.Index = -1;
             this.diffuse.Location = new System.Drawing.Point(5, 94);
@@ -118,11 +125,37 @@ namespace FFXIVLooseTextureCompiler {
             this.diffuse.Size = new System.Drawing.Size(404, 28);
             this.diffuse.TabIndex = 16;
             // 
+            // mask
+            // 
+            this.mask.CurrentPath = null;
+            this.mask.Filter = null;
+            this.mask.Index = -1;
+            this.mask.Location = new System.Drawing.Point(5, 192);
+            this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.mask.MinimumSize = new System.Drawing.Size(300, 28);
+            this.mask.Name = "mask";
+            this.mask.Size = new System.Drawing.Size(404, 28);
+            this.mask.TabIndex = 17;
+            // 
+            // glow
+            // 
+            this.glow.CurrentPath = null;
+            this.glow.Filter = null;
+            this.glow.Index = -1;
+            this.glow.Location = new System.Drawing.Point(5, 224);
+            this.glow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.glow.MinimumSize = new System.Drawing.Size(300, 28);
+            this.glow.Name = "glow";
+            this.glow.Size = new System.Drawing.Size(404, 28);
+            this.glow.TabIndex = 18;
+            // 
             // FindAndReplace
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(414, 216);
+            this.ClientSize = new System.Drawing.Size(414, 279);
+            this.Controls.Add(this.glow);
+            this.Controls.Add(this.mask);
             this.Controls.Add(this.diffuse);
             this.Controls.Add(this.multi);
             this.Controls.Add(this.normal);
@@ -152,10 +185,14 @@ namespace FFXIVLooseTextureCompiler {
         private FFXIVVoicePackCreator.FilePicker normal;
         private FFXIVVoicePackCreator.FilePicker multi;
         private FFXIVVoicePackCreator.FilePicker diffuse;
+        private FilePicker mask;
+        private FilePicker glow;
 
         public FilePicker Diffuse { get => diffuse; set => diffuse = value; }
         public FilePicker Multi { get => multi; set => multi = value; }
         public FilePicker Normal { get => normal; set => normal = value; }
         public TextBox ReplacementString { get => replacementString; set => replacementString = value; }
+        public FilePicker Mask { get => mask; set => mask = value; }
+        public FilePicker Glow { get => glow; set => glow = value; }
     }
 }
