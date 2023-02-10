@@ -226,12 +226,12 @@ namespace FFXIVLooseTextureCompiler {
                                     group.Options.Add(option);
                                     if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
                                         if ((materialSet.MaterialSetName.ToLower().Contains("eye") && bakeNormals.Checked)) {
-                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal, materialSet.Diffuse);
+                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Normal, materialSet.Diffuse);
                                         } else {
                                             if (string.IsNullOrEmpty(materialSet.Glow)) {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++));
+                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount));
                                             } else {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "", materialSet.Glow);
+                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "", materialSet.Glow);
                                             }
                                         }
                                         option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
@@ -244,9 +244,9 @@ namespace FFXIVLooseTextureCompiler {
                                     if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
                                         if (!bakeNormals.Checked || materialSet.MaterialSetName.ToLower().Contains("eye")) {
                                             if (!string.IsNullOrEmpty(materialSet.Glow) && (materialSet.MaterialSetName.ToLower().Contains("eye"))) {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "", materialSet.Glow);
+                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowMulti, "", materialSet.Glow);
                                             } else {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount++));
+                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount));
                                             }
                                         } else {
                                             ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
