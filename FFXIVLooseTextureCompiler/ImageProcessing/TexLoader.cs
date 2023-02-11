@@ -2,6 +2,7 @@
 using Penumbra.Import.Textures;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -46,10 +47,33 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             }
         }
         public static Bitmap ResolveBitmap(string inputFile) {
+            bool failSafeTriggered = false;
             if (!string.IsNullOrEmpty(inputFile)) {
-                while (IsFileLocked(inputFile)) ;
-                using (Bitmap bitmap = inputFile.EndsWith(".tex") ? TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
-                    return new Bitmap(bitmap);
+                if (File.Exists(inputFile)) {
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    while (IsFileLocked(inputFile)) {
+                        Application.DoEvents();
+                        if (stopwatch.ElapsedMilliseconds > 15000 && stopwatch.IsRunning) {
+                            MessageBox.Show(inputFile + " is taking an abnormal amount of time to be released. The tool will now skip it.");
+                            stopwatch.Stop();
+                            stopwatch.Reset();
+                            failSafeTriggered = true;
+                            break;
+                        }
+                    }
+                    if (!failSafeTriggered) {
+                        using (Bitmap bitmap = inputFile.EndsWith(".tex") ?
+                            TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ?
+                            TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+                            return new Bitmap(bitmap);
+                        }
+                    } else {
+                        MessageBox.Show(inputFile + " is missing. The tool will now skip it.");
+                        return new Bitmap(1024, 1024);
+                    }
+                } else {
+                    return new Bitmap(1024, 1024);
                 }
             } else {
                 return null;
