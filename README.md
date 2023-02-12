@@ -11,6 +11,10 @@ Video demonstration:
 
 https://www.youtube.com/watch?v=YmxmL5ccL2Y
 
+Video intro tutorial:
+
+https://www.youtube.com/watch?v=8yjPDb32XMA
+
 How to find original loose body textures:
 
 https://docs.google.com/document/d/1QR0b1D6Dr_-UCoLIVKi82p2dMF69BmzXutxcpwfmJTo/edit?usp=sharing
