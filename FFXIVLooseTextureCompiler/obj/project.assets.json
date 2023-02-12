@@ -568,7 +568,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "1.0.2.8",
+    "version": "1.0.2.9",
     "restore": {
       "projectUniqueName": "C:\\Users\\stel9\\source\\repos\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler\\FFXIVLooseTextureCompiler.csproj",
       "projectName": "FFXIVLooseTextureCompiler",

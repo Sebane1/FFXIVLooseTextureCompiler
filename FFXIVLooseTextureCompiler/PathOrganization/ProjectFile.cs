@@ -16,6 +16,6 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public bool GenerateMulti { get; set; }
 
         public int ExportType { get; set; }
-        public List<MaterialSet> MaterialSets { get; set; }
+        public List<TextureSet> MaterialSets { get; set; }
     }
 }

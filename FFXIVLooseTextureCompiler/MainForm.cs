@@ -137,20 +137,20 @@ namespace FFXIVLooseTextureCompiler {
                     exportProgress.Maximum = materialList.Items.Count * 3;
                     exportProgress.Visible = true;
                     Refresh();
-                    Dictionary<string, List<MaterialSet>> groups = new Dictionary<string, List<MaterialSet>>();
+                    Dictionary<string, List<TextureSet>> groups = new Dictionary<string, List<TextureSet>>();
                     normalCache = new Dictionary<string, Bitmap>();
                     multiCache = new Dictionary<string, Bitmap>();
-                    foreach (MaterialSet materialSet in materialList.Items) {
+                    foreach (TextureSet materialSet in materialList.Items) {
                         if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
-                            groups.Add(materialSet.MaterialGroupName, new List<MaterialSet>() { materialSet });
+                            groups.Add(materialSet.MaterialGroupName, new List<TextureSet>() { materialSet });
                         } else {
                             groups[materialSet.MaterialGroupName].Add(materialSet);
                         }
                     }
-                    foreach (List<MaterialSet> materialSets in groups.Values) {
+                    foreach (List<TextureSet> materialSets in groups.Values) {
                         Group group = new Group(materialSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
                         Option option = null;
-                        foreach (MaterialSet materialSet in materialSets) {
+                        foreach (TextureSet materialSet in materialSets) {
                             string diffuseDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ? Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
                             string normalDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ? Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
                             string multiDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ? Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
@@ -298,6 +298,14 @@ namespace FFXIVLooseTextureCompiler {
                     if (hasDoneReload) {
                         PenumbraRedraw.Redraw(0, Hook);
                     } else {
+                        modNameTextBox.Enabled = modAuthorTextBox.Enabled 
+                        = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled 
+                        = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = false;
+                        diffuse.FilePath.Enabled = false;
+                        normal.FilePath.Enabled = false;
+                        multi.FilePath.Enabled = false;
+                        mask.FilePath.Enabled = false;
+                        glow.FilePath.Enabled = false;
                         Hook.SendSyncKey(Keys.Enter);
                         Thread.Sleep(500);
                         Hook.SendString(@"/penumbra reload");
@@ -309,6 +317,7 @@ namespace FFXIVLooseTextureCompiler {
                         TopMost = true;
                         BringToFront();
                         TopMost = false;
+                        materialList_SelectedIndexChanged(this, EventArgs.Empty);
                     }
                     generateButton.Enabled = false;
                     generationCooldown.Start();
@@ -317,6 +326,9 @@ namespace FFXIVLooseTextureCompiler {
                     exportProgress.Value = 0;
                     lockDuplicateGeneration = false;
                     //MessageBox.Show("Export succeeded!");
+                    modNameTextBox.Enabled = modAuthorTextBox.Enabled
+                    = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
+                    = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = true;
                     exportPanel.Visible = false;
                 } else {
                     MessageBox.Show("Please enter a mod name!");
@@ -401,14 +413,22 @@ namespace FFXIVLooseTextureCompiler {
                                         } else {
                                             output = Normal.Calculate(target);
                                         }
-                                        output.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(inputFile, output);
+                                        if (outputFile.Contains("fac_b_n")) {
+                                            Bitmap resize = new Bitmap(output, new Size(1024, 1024));
+                                            resize.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(inputFile, resize);
+                                        } else {
+                                            output.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(inputFile, output);
+                                        }
                                     }
                                 }
                             }
                         } else {
                             normalCache[inputFile].Save(stream, ImageFormat.Png);
                         }
+                        stream.Position = 0;
+                        TextureImporter.PngToTex(stream, out data);
                         break;
                     case ExportType.MultiFace:
                         if (!multiCache.ContainsKey(inputFile)) {
@@ -433,7 +453,15 @@ namespace FFXIVLooseTextureCompiler {
                                         Bitmap output = null;
                                         if (File.Exists(mask)) {
                                             using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                                output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                                if (outputFile.Contains("fac_b_n")) {
+                                                    Bitmap resize = new Bitmap(bitmap, new Size(1024, 1024));
+                                                    output = ImageManipulation.MergeNormals(inputFile, resize, target, normalMaskBitmap, diffuseNormal);
+                                                    output.Save(stream, ImageFormat.Png);
+                                                    normalCache.Add(inputFile, resize);
+                                                } else {
+                                                    output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                                    normalCache.Add(inputFile, output);
+                                                }
                                             }
                                         } else {
                                             output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
@@ -793,7 +821,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            MaterialSet materialSet = new MaterialSet();
+            TextureSet materialSet = new TextureSet();
             materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
             materialSet.InternalDiffusePath = GetBodyMaterialPath(0);
             materialSet.InternalNormalPath = GetBodyMaterialPath(1);
@@ -804,7 +832,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            MaterialSet materialSet = new MaterialSet();
+            TextureSet materialSet = new TextureSet();
             materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (facePaint.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
@@ -835,7 +863,7 @@ namespace FFXIVLooseTextureCompiler {
                 mask.Enabled = false;
                 glow.Enabled = false;
             } else {
-                MaterialSet materialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                TextureSet materialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
                 currentEditLabel.Text = "Editing: " + materialSet.MaterialSetName;
                 diffuse.CurrentPath = materialSet.Diffuse;
                 normal.CurrentPath = materialSet.Normal;
@@ -862,7 +890,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void SetPaths() {
             if (materialList.SelectedIndex != -1) {
-                MaterialSet materialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                TextureSet materialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
                 string directoryDiffuse = Path.GetDirectoryName(materialSet.Diffuse);
                 if (!string.IsNullOrWhiteSpace(directoryDiffuse)) {
                     if (watchers.ContainsKey(directoryDiffuse)) {
@@ -1032,11 +1060,13 @@ namespace FFXIVLooseTextureCompiler {
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            materialList.Items.RemoveAt(materialList.SelectedIndex);
-            diffuse.CurrentPath = "";
-            normal.CurrentPath = "";
-            multi.CurrentPath = "";
-            glow.CurrentPath = "";
+            if (materialList.SelectedIndex > -1) {
+                materialList.Items.RemoveAt(materialList.SelectedIndex);
+                diffuse.CurrentPath = "";
+                normal.CurrentPath = "";
+                multi.CurrentPath = "";
+                glow.CurrentPath = "";
+            }
         }
 
         private void clearList_Click(object sender, EventArgs e) {
@@ -1155,7 +1185,7 @@ namespace FFXIVLooseTextureCompiler {
                 generateMultiCheckBox.Checked = projectFile.GenerateMulti;
                 materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
-                foreach (MaterialSet materialSet in projectFile.MaterialSets) {
+                foreach (TextureSet materialSet in projectFile.MaterialSets) {
                     AddWatcher(materialSet.Diffuse);
                     AddWatcher(materialSet.Normal);
                     AddWatcher(materialSet.Multi);
@@ -1174,11 +1204,11 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.Version = modVersionTextBox.Text;
                 projectFile.Description = modDescriptionTextBox.Text;
                 projectFile.Website = modWebsiteTextBox.Text;
-                projectFile.MaterialSets = new List<MaterialSet>();
+                projectFile.MaterialSets = new List<TextureSet>();
                 projectFile.ExportType = generationType.SelectedIndex;
                 projectFile.BakeMissingNormals = bakeNormals.Checked;
                 projectFile.GenerateMulti = generateMultiCheckBox.Checked;
-                foreach (MaterialSet materialSet in materialList.Items) {
+                foreach (TextureSet materialSet in materialList.Items) {
                     projectFile.MaterialSets.Add(materialSet);
                 }
                 serializer.Serialize(writer, projectFile);
@@ -1245,7 +1275,7 @@ namespace FFXIVLooseTextureCompiler {
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
             CustomPathDialog customPathDialog = new CustomPathDialog();
             if (materialList.SelectedIndex != -1) {
-                customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as MaterialSet);
+                customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
                 if (customPathDialog.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Material Set has been edited successfully", VersionText);
                     hasDoneReload = false;
@@ -1310,7 +1340,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
-            Tokenizer tokenizer = new Tokenizer((materialList.Items[materialList.SelectedIndex] as MaterialSet).MaterialSetName);
+            Tokenizer tokenizer = new Tokenizer((materialList.Items[materialList.SelectedIndex] as TextureSet).MaterialSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
@@ -1318,7 +1348,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.Mask.CurrentPath = mask.CurrentPath;
             findAndReplace.Glow.CurrentPath = glow.CurrentPath;
 
-            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<MaterialSet>().ToArray());
+            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
@@ -1326,7 +1356,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void findAndBulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
-            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<MaterialSet>().ToArray());
+            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
