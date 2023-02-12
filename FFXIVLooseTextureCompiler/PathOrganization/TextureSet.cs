@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.PathOrganization {
-    public class MaterialSet {
+    public class TextureSet {
         string materialSetName;
         string materialGroupName;
 

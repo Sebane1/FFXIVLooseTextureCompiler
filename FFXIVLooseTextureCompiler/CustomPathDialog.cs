@@ -15,9 +15,9 @@ namespace FFXIVLooseTextureCompiler {
         public CustomPathDialog() {
             InitializeComponent();
         }
-        MaterialSet materialSet = new MaterialSet();
+        TextureSet materialSet = new TextureSet();
 
-        public MaterialSet MaterialSet {
+        public TextureSet MaterialSet {
             get => materialSet;
             set {
                 materialSet = value;
