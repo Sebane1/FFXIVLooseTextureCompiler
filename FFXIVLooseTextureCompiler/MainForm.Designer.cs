@@ -65,7 +65,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
-            this.materialList = new System.Windows.Forms.ListBox();
+            this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -433,28 +433,28 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -539,16 +539,16 @@
             this.donateButton.UseVisualStyleBackColor = false;
             this.donateButton.Click += new System.EventHandler(this.donateButton_Click);
             // 
-            // materialList
+            // textureList
             // 
-            this.materialList.ContextMenuStrip = this.materialListContextMenu;
-            this.materialList.FormattingEnabled = true;
-            this.materialList.ItemHeight = 15;
-            this.materialList.Location = new System.Drawing.Point(12, 204);
-            this.materialList.Name = "materialList";
-            this.materialList.Size = new System.Drawing.Size(520, 184);
-            this.materialList.TabIndex = 26;
-            this.materialList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
+            this.textureList.ContextMenuStrip = this.materialListContextMenu;
+            this.textureList.FormattingEnabled = true;
+            this.textureList.ItemHeight = 15;
+            this.textureList.Location = new System.Drawing.Point(12, 204);
+            this.textureList.Name = "textureList";
+            this.textureList.Size = new System.Drawing.Size(520, 184);
+            this.textureList.TabIndex = 26;
+            this.textureList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
             // 
             // materialListContextMenu
             // 
@@ -559,41 +559,41 @@
             this.bulkReplaceToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(239, 114);
+            this.materialListContextMenu.Size = new System.Drawing.Size(234, 114);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
             // 
             // editPathsToolStripMenuItem
             // 
             this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
-            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.editPathsToolStripMenuItem.Text = "Edit Internal Material Set Values";
+            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.editPathsToolStripMenuItem.Text = "Edit Internal Texture Set Values";
             this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
             // 
             // moveUpToolStripMenuItem
             // 
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.moveUpToolStripMenuItem.Text = "Move Up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpButton_Click);
             // 
             // moveDownToolStripMenuItem
             // 
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
             // bulkReplaceToolStripMenuItem
             // 
             this.bulkReplaceToolStripMenuItem.Name = "bulkReplaceToolStripMenuItem";
-            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
             this.bulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.bulkReplaceToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.removeSelectionButton_Click);
             // 
@@ -867,7 +867,7 @@
             this.Controls.Add(this.normal);
             this.Controls.Add(this.uniqueAuRa);
             this.Controls.Add(this.diffuse);
-            this.Controls.Add(this.materialList);
+            this.Controls.Add(this.textureList);
             this.Controls.Add(this.facePart);
             this.Controls.Add(this.donateButton);
             this.Controls.Add(this.faceType);
@@ -937,7 +937,7 @@
         private Button donateButton;
         private CheckBox asymCheckbox;
         private CheckBox uniqueAuRa;
-        private ListBox materialList;
+        private ListBox textureList;
         private Button addBodyButton;
         private Button addFaceButton;
         private Label currentEditLabel;
