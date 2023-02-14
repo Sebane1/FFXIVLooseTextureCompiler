@@ -36,7 +36,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                         } else if (sourcePixel.A > 10) {
                             Color col = Color.FromArgb(255 - sourcePixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
                             destination.SetPixel(x, y, col);
-                        } else {
+                        } else if (sourcePixel.A > 0) {
                             Color col = Color.FromArgb(mergedPixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
                             destination.SetPixel(x, y, col);
                         }
