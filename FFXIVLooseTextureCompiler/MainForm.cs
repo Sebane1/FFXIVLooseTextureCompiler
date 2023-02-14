@@ -134,13 +134,13 @@ namespace FFXIVLooseTextureCompiler {
                     int i = 0;
                     fileCount = 0;
                     exportProgress.BringToFront();
-                    exportProgress.Maximum = materialList.Items.Count * 3;
+                    exportProgress.Maximum = textureList.Items.Count * 3;
                     exportProgress.Visible = true;
                     Refresh();
                     Dictionary<string, List<TextureSet>> groups = new Dictionary<string, List<TextureSet>>();
                     normalCache = new Dictionary<string, Bitmap>();
                     multiCache = new Dictionary<string, Bitmap>();
-                    foreach (TextureSet materialSet in materialList.Items) {
+                    foreach (TextureSet materialSet in textureList.Items) {
                         if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
                             groups.Add(materialSet.MaterialGroupName, new List<TextureSet>() { materialSet });
                         } else {
@@ -298,8 +298,8 @@ namespace FFXIVLooseTextureCompiler {
                     if (hasDoneReload) {
                         PenumbraRedraw.Redraw(0, Hook);
                     } else {
-                        modNameTextBox.Enabled = modAuthorTextBox.Enabled 
-                        = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled 
+                        modNameTextBox.Enabled = modAuthorTextBox.Enabled
+                        = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
                         = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = false;
                         diffuse.FilePath.Enabled = false;
                         normal.FilePath.Enabled = false;
@@ -549,24 +549,24 @@ namespace FFXIVLooseTextureCompiler {
                 WritePenumbraPath(penumbraModPath);
             }
         }
-        private string GetBodyMaterialPath(int material) {
+        private string GetBodyTexturePath(int texture) {
             string result = "";
             string unique = (((string)raceList.Items[raceList.SelectedIndex]).Contains("Xaela") ? "0101" : "0001");
             switch (baseBodyList.SelectedIndex) {
                 case 0:
                     // Vanila
-                    if (material != 2) {
-                        string genderCode = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
-                        result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(material) + ".tex";
-                    } else {
+                    if (texture == 2 && raceList.SelectedIndex == 5) {
                         result = @"chara/common/texture/skin_m.tex";
+                    } else {
+                        string genderCode = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
+                        result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(texture) + ".tex";
                     }
                     break;
                 case 1:
                     // Bibo+
                     if (raceList.SelectedIndex != 5) {
                         if (genderListBody.SelectedIndex == 1) {
-                            result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
+                            result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Bibo+ is only compatible with feminine characters", VersionText);
@@ -579,7 +579,7 @@ namespace FFXIVLooseTextureCompiler {
                     // Eve
                     if (raceList.SelectedIndex != 5) {
                         if (genderListBody.SelectedIndex == 1) {
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Eve is only compatible with feminine characters", VersionText);
@@ -592,7 +592,7 @@ namespace FFXIVLooseTextureCompiler {
                     // Gen3 and T&F3
                     if (raceList.SelectedIndex != 5) {
                         if (genderListBody.SelectedIndex == 1) {
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/tfgen3" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(material) + ".tex";
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/tfgen3" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters", VersionText);
@@ -606,7 +606,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (raceList.SelectedIndex != 5) {
                         if (raceList.SelectedIndex == 6 || raceList.SelectedIndex == 7) {
                             if (genderListBody.SelectedIndex == 1) {
-                                result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(material) + ".tex";
+                                result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(texture) + ".tex";
                             } else {
                                 result = "";
                                 MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
@@ -622,7 +622,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (raceList.SelectedIndex != 5) {
                         if (genderListBody.SelectedIndex == 0) {
                             // TBSE and HRBODY
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001") + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(material) + ".tex";
+                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001") + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
@@ -633,12 +633,12 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 6:
                     string xaelaCheck = (raceList.SelectedIndex == 7 ? "0004" : "0104");
-                    result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "_etc_" + xaelaCheck + GetTextureType(material) + ".tex";
+                    result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + raceCodeBody.Feminine[raceList.SelectedIndex] + "_etc_" + xaelaCheck + GetTextureType(texture) + ".tex";
                     break;
             }
             return result;
         }
-        public string GetFaceMaterialPath(int material) {
+        public string GetFaceTexturePath(int material) {
             if (material != 3) {
                 string faceIdCheck = "000";
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
@@ -823,10 +823,10 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             TextureSet materialSet = new TextureSet();
             materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
-            materialSet.InternalDiffusePath = GetBodyMaterialPath(0);
-            materialSet.InternalNormalPath = GetBodyMaterialPath(1);
-            materialSet.InternalMultiPath = GetBodyMaterialPath(2);
-            materialList.Items.Add(materialSet);
+            materialSet.InternalDiffusePath = GetBodyTexturePath(0);
+            materialSet.InternalNormalPath = GetBodyTexturePath(1);
+            materialSet.InternalMultiPath = GetBodyTexturePath(2);
+            textureList.Items.Add(materialSet);
             HasSaved = false;
         }
 
@@ -836,26 +836,26 @@ namespace FFXIVLooseTextureCompiler {
             materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (facePaint.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
-                    materialSet.InternalDiffusePath = GetFaceMaterialPath(0);
-                    materialSet.InternalNormalPath = GetFaceMaterialPath(1);
-                    materialSet.InternalMultiPath = GetFaceMaterialPath(2);
+                    materialSet.InternalDiffusePath = GetFaceTexturePath(0);
+                    materialSet.InternalNormalPath = GetFaceTexturePath(1);
+                    materialSet.InternalMultiPath = GetFaceTexturePath(2);
                     break;
                 case 2:
-                    materialSet.InternalDiffusePath = GetFaceMaterialPath(1);
-                    materialSet.InternalNormalPath = GetFaceMaterialPath(2);
-                    materialSet.InternalMultiPath = GetFaceMaterialPath(3);
+                    materialSet.InternalDiffusePath = GetFaceTexturePath(1);
+                    materialSet.InternalNormalPath = GetFaceTexturePath(2);
+                    materialSet.InternalMultiPath = GetFaceTexturePath(3);
                     break;
                 case 4:
                     materialSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (facePaint.SelectedIndex + 1) + ".tex";
                     break;
 
             }
-            materialList.Items.Add(materialSet);
+            textureList.Items.Add(materialSet);
             HasSaved = false;
         }
 
         private void materialList_SelectedIndexChanged(object sender, EventArgs e) {
-            if (materialList.SelectedIndex == -1) {
+            if (textureList.SelectedIndex == -1) {
                 currentEditLabel.Text = "Please select a texture set to start importing";
                 diffuse.Enabled = false;
                 normal.Enabled = false;
@@ -863,7 +863,7 @@ namespace FFXIVLooseTextureCompiler {
                 mask.Enabled = false;
                 glow.Enabled = false;
             } else {
-                TextureSet materialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
+                TextureSet materialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
                 currentEditLabel.Text = "Editing: " + materialSet.MaterialSetName;
                 diffuse.CurrentPath = materialSet.Diffuse;
                 normal.CurrentPath = materialSet.Normal;
@@ -889,8 +889,8 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void SetPaths() {
-            if (materialList.SelectedIndex != -1) {
-                TextureSet materialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
+            if (textureList.SelectedIndex != -1) {
+                TextureSet materialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
                 string directoryDiffuse = Path.GetDirectoryName(materialSet.Diffuse);
                 if (!string.IsNullOrWhiteSpace(directoryDiffuse)) {
                     if (watchers.ContainsKey(directoryDiffuse)) {
@@ -952,20 +952,22 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddWatcher(string path) {
             string directory = Path.GetDirectoryName(path);
-            if (!string.IsNullOrWhiteSpace(directory)) {
-                if (!watchers.ContainsKey(directory)) {
-                    FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
-                    fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                    fileSystemWatcher.Changed += delegate {
-                        StartGeneration();
-                        return;
-                    };
-                    fileSystemWatcher.Path = directory;
-                    fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(path);
-                    watchers.Add(directory, fileSystemWatcher);
-                } else {
-                    watchers[directory].Path = directory;
-                    watchers[directory].EnableRaisingEvents = !string.IsNullOrEmpty(path);
+            if (Directory.Exists(directory)) {
+                if (!string.IsNullOrWhiteSpace(directory)) {
+                    if (!watchers.ContainsKey(directory)) {
+                        FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
+                        fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                        fileSystemWatcher.Changed += delegate {
+                            StartGeneration();
+                            return;
+                        };
+                        fileSystemWatcher.Path = directory;
+                        fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(path);
+                        watchers.Add(directory, fileSystemWatcher);
+                    } else {
+                        watchers[directory].Path = directory;
+                        watchers[directory].EnableRaisingEvents = !string.IsNullOrEmpty(path);
+                    }
                 }
             }
         }
@@ -1026,7 +1028,7 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             Text = Application.ProductName + " " + Application.ProductVersion;
             savePath = null;
-            materialList.Items.Clear();
+            textureList.Items.Clear();
             modNameTextBox.Text = "";
             modAuthorTextBox.Text = _defaultAuthor;
             modVersionTextBox.Text = "1.0.0";
@@ -1060,8 +1062,8 @@ namespace FFXIVLooseTextureCompiler {
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            if (materialList.SelectedIndex > -1) {
-                materialList.Items.RemoveAt(materialList.SelectedIndex);
+            if (textureList.SelectedIndex > -1) {
+                textureList.Items.RemoveAt(textureList.SelectedIndex);
                 diffuse.CurrentPath = "";
                 normal.CurrentPath = "";
                 multi.CurrentPath = "";
@@ -1073,7 +1075,7 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 {
-                    materialList.Items.Clear();
+                    textureList.Items.Clear();
                 }
             }
             diffuse.CurrentPath = "";
@@ -1183,7 +1185,7 @@ namespace FFXIVLooseTextureCompiler {
                 generationType.SelectedIndex = projectFile.ExportType;
                 bakeNormals.Checked = projectFile.BakeMissingNormals;
                 generateMultiCheckBox.Checked = projectFile.GenerateMulti;
-                materialList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+                textureList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
                 foreach (TextureSet materialSet in projectFile.MaterialSets) {
                     AddWatcher(materialSet.Diffuse);
@@ -1208,7 +1210,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.ExportType = generationType.SelectedIndex;
                 projectFile.BakeMissingNormals = bakeNormals.Checked;
                 projectFile.GenerateMulti = generateMultiCheckBox.Checked;
-                foreach (TextureSet materialSet in materialList.Items) {
+                foreach (TextureSet materialSet in textureList.Items) {
                     projectFile.MaterialSets.Add(materialSet);
                 }
                 serializer.Serialize(writer, projectFile);
@@ -1261,12 +1263,12 @@ namespace FFXIVLooseTextureCompiler {
         private void addCustomPathButton_Click(object sender, EventArgs e) {
             CustomPathDialog customPathDialog = new CustomPathDialog();
             if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                materialList.Items.Add(customPathDialog.MaterialSet);
+                textureList.Items.Add(customPathDialog.MaterialSet);
             }
         }
 
         private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (materialList.Items.Count < 1 || materialList.SelectedIndex < 0) {
+            if (textureList.Items.Count < 1 || textureList.SelectedIndex < 0) {
                 e.Cancel = true;
                 materialListContextMenu.Close();
             }
@@ -1274,8 +1276,8 @@ namespace FFXIVLooseTextureCompiler {
 
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
             CustomPathDialog customPathDialog = new CustomPathDialog();
-            if (materialList.SelectedIndex != -1) {
-                customPathDialog.MaterialSet = (materialList.Items[materialList.SelectedIndex] as TextureSet);
+            if (textureList.SelectedIndex != -1) {
+                customPathDialog.MaterialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
                 if (customPathDialog.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Material Set has been edited successfully", VersionText);
                     hasDoneReload = false;
@@ -1284,30 +1286,30 @@ namespace FFXIVLooseTextureCompiler {
             RefreshList();
         }
         private void RefreshList() {
-            for (int i = 0; i < materialList.Items.Count; i++) {
-                materialList.Items[i] = materialList.Items[i];
+            for (int i = 0; i < textureList.Items.Count; i++) {
+                textureList.Items[i] = textureList.Items[i];
             }
         }
 
         private void moveUpButton_Click(object sender, EventArgs e) {
-            if (materialList.SelectedIndex > 0) {
-                object object1 = materialList.Items[materialList.SelectedIndex - 1];
-                object object2 = materialList.Items[materialList.SelectedIndex];
+            if (textureList.SelectedIndex > 0) {
+                object object1 = textureList.Items[textureList.SelectedIndex - 1];
+                object object2 = textureList.Items[textureList.SelectedIndex];
 
-                materialList.Items[materialList.SelectedIndex] = object1;
-                materialList.Items[materialList.SelectedIndex - 1] = object2;
-                materialList.SelectedIndex -= 1;
+                textureList.Items[textureList.SelectedIndex] = object1;
+                textureList.Items[textureList.SelectedIndex - 1] = object2;
+                textureList.SelectedIndex -= 1;
             }
         }
 
         private void moveDownButton_Click(object sender, EventArgs e) {
-            if (materialList.SelectedIndex + 1 < materialList.Items.Count && materialList.SelectedIndex != -1) {
-                object object1 = materialList.Items[materialList.SelectedIndex + 1];
-                object object2 = materialList.Items[materialList.SelectedIndex];
+            if (textureList.SelectedIndex + 1 < textureList.Items.Count && textureList.SelectedIndex != -1) {
+                object object1 = textureList.Items[textureList.SelectedIndex + 1];
+                object object2 = textureList.Items[textureList.SelectedIndex];
 
-                materialList.Items[materialList.SelectedIndex] = object1;
-                materialList.Items[materialList.SelectedIndex + 1] = object2;
-                materialList.SelectedIndex += 1;
+                textureList.Items[textureList.SelectedIndex] = object1;
+                textureList.Items[textureList.SelectedIndex + 1] = object2;
+                textureList.SelectedIndex += 1;
             }
         }
 
@@ -1331,7 +1333,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void bakeMissingNormalsCheckbox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
-            mask.Enabled = bakeNormals.Checked && materialList.SelectedIndex > -1;
+            mask.Enabled = bakeNormals.Checked && textureList.SelectedIndex > -1;
         }
 
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
@@ -1340,7 +1342,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
-            Tokenizer tokenizer = new Tokenizer((materialList.Items[materialList.SelectedIndex] as TextureSet).MaterialSetName);
+            Tokenizer tokenizer = new Tokenizer((textureList.Items[textureList.SelectedIndex] as TextureSet).MaterialSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
@@ -1348,7 +1350,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.Mask.CurrentPath = mask.CurrentPath;
             findAndReplace.Glow.CurrentPath = glow.CurrentPath;
 
-            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<TextureSet>().ToArray());
+            findAndReplace.MaterialSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
@@ -1356,7 +1358,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void findAndBulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
-            findAndReplace.MaterialSets.AddRange(materialList.Items.Cast<TextureSet>().ToArray());
+            findAndReplace.MaterialSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
