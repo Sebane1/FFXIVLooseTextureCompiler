@@ -1,6 +1,7 @@
 ﻿using Lumina.Data.Parsing;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +11,33 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         public static Bitmap CalculateDiffuse(Bitmap file, Bitmap glow) {
             Bitmap image = glow;
             Bitmap diffuse = new Bitmap(file);
+            Bitmap mergedImage = new Bitmap(diffuse);
+
+            Bitmap glowMultiply = new Bitmap(mergedImage);
+            Graphics g = Graphics.FromImage(glowMultiply);
+            g.Clear(Color.White);
+            g.DrawImage(glow, 0, 0, glow.Width, glow.Height);
+            new KVImage.ImageBlender().BlendImages(mergedImage, glowMultiply, KVImage.ImageBlender.BlendOperation.Blend_Multiply);
+
             LockBitmap source = new LockBitmap(image);
             LockBitmap destination = new LockBitmap(diffuse);
+            LockBitmap mergedImagePixels = new LockBitmap(mergedImage);
             source.LockBits();
             destination.LockBits();
+            mergedImagePixels.LockBits();
             if (file.Width == glow.Width && file.Height == glow.Height) {
                 for (int y = 0; y < image.Height; y++) {
                     for (int x = 0; x < image.Width; x++) {
                         Color sourcePixel = source.GetPixel(x, y);
-                        if (sourcePixel.A > 0) {
+                        Color mergedPixel = mergedImagePixels.GetPixel(x, y);
+                        if (sourcePixel.A > 20) {
                             Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                            destination.SetPixel(x, y, col);
+                        } else if (sourcePixel.A > 10) {
+                            Color col = Color.FromArgb(255 - sourcePixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
+                            destination.SetPixel(x, y, col);
+                        } else {
+                            Color col = Color.FromArgb(mergedPixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
                             destination.SetPixel(x, y, col);
                         }
                     }
@@ -29,6 +47,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             }
             destination.UnlockBits();
             source.UnlockBits();
+            mergedImagePixels.UnlockBits();
             return diffuse;
         }
         public static Bitmap CalculateMulti(Bitmap file, Bitmap glow) {
@@ -55,6 +74,10 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             destination.UnlockBits();
             source.UnlockBits();
             return multi;
+        }
+        byte Calc(byte c1, byte c2) {
+            var cr = c1 / 255d * c2 / 255d * 255d;
+            return (byte)(cr > 255 ? 255 : cr);
         }
     }
 }
