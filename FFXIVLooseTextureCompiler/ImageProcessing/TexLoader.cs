@@ -63,10 +63,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                         }
                     }
                     if (!failSafeTriggered) {
-                        using (Bitmap bitmap = inputFile.EndsWith(".tex") ?
-                            TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ?
-                            TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
-                            return new Bitmap(bitmap);
+                        try {
+                            using (Bitmap bitmap = inputFile.EndsWith(".tex") ?
+                                TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ?
+                                TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+                                return new Bitmap(bitmap);
+                            }
+                        } catch {
+                            MessageBox.Show(inputFile + " failed to read. The tool will now skip it.");
+                            return new Bitmap(1024, 1024);
                         }
                     } else {
                         MessageBox.Show(inputFile + " is missing. The tool will now skip it.");

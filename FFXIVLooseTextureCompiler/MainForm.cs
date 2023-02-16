@@ -74,6 +74,9 @@ namespace FFXIVLooseTextureCompiler {
             glow.FilePath.Enabled = false;
             raceCodeBody = new RaceCode();
             raceCodeFace = new RaceCode();
+            for (int i = 0; i < 99; i++) {
+                facePaint.Items.Add((i + 1) + "");
+            }
             raceCodeBody.Masculine = new string[] {
             "0101","0301","0101","0101","0901","1101","1301","1301","1501","1701"};
             raceCodeBody.Feminine = new string[] {
@@ -95,9 +98,6 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = facePaint.SelectedIndex = generationType.SelectedIndex = 0;
-            for (int i = 0; i < 99; i++) {
-                facePaint.Items.Add((i + 1) + "");
-            }
             CleanDirectory();
             CheckForCommandArguments();
         }

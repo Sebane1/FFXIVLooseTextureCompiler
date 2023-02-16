@@ -787,15 +787,6 @@
             // 
             this.facePaint.Enabled = false;
             this.facePaint.FormattingEnabled = true;
-            this.facePaint.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8"});
             this.facePaint.Location = new System.Drawing.Point(288, 140);
             this.facePaint.Name = "facePaint";
             this.facePaint.Size = new System.Drawing.Size(36, 23);
