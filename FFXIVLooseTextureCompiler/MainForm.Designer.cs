@@ -127,7 +127,7 @@
             "Elezen",
             "Miqo\'te",
             "Roegadyn",
-            "Lalalfell",
+            "Lalafell",
             "Raen",
             "Xaela",
             "Hrothgar",

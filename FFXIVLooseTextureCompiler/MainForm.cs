@@ -296,7 +296,7 @@ namespace FFXIVLooseTextureCompiler {
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
-                        PenumbraRedraw.Redraw(0, Hook);
+                        PenumbraHttpApi.Redraw(0, Hook);
                     } else {
                         modNameTextBox.Enabled = modAuthorTextBox.Enabled
                         = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
@@ -306,17 +306,9 @@ namespace FFXIVLooseTextureCompiler {
                         multi.FilePath.Enabled = false;
                         mask.FilePath.Enabled = false;
                         glow.FilePath.Enabled = false;
-                        Hook.SendSyncKey(Keys.Enter);
-                        Thread.Sleep(500);
-                        Hook.SendString(@"/penumbra reload");
-                        Thread.Sleep(200);
-                        Hook.SendSyncKey(Keys.Enter);
-                        Thread.Sleep(2000);
-                        PenumbraRedraw.Redraw(0, Hook);
+                        PenumbraHttpApi.Reload(modPath, modNameTextBox.Text, Hook);
+                        PenumbraHttpApi.Redraw(0, Hook);
                         hasDoneReload = true;
-                        TopMost = true;
-                        BringToFront();
-                        TopMost = false;
                         materialList_SelectedIndexChanged(this, EventArgs.Empty);
                     }
                     generateButton.Enabled = false;
