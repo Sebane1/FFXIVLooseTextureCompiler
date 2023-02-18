@@ -53,11 +53,21 @@ internal static class PenumbraApi
 			return response;
 		}
 		catch (Exception ex) {
-            hook.SendSyncKey(Keys.Enter);
-			Thread.Sleep(500);
-            hook.SendString(@"/penumbra redraw self");
-			Thread.Sleep(200);
-            hook.SendSyncKey(Keys.Enter);
+			if (route.Contains("reload")) {
+                hook.SendSyncKey(Keys.Enter);
+                Thread.Sleep(500);
+                hook.SendString(@"/penumbra reload");
+                Thread.Sleep(200);
+                hook.SendSyncKey(Keys.Enter);
+                Thread.Sleep(2000);
+            }
+			if (route.Contains("redraw")) {
+				hook.SendSyncKey(Keys.Enter);
+				Thread.Sleep(500);
+				hook.SendString(@"/penumbra redraw self");
+				Thread.Sleep(200);
+				hook.SendSyncKey(Keys.Enter);
+			}
 			if (!calledWarningOnce) {
 				MessageBox.Show(@"Select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"" for better automatic refresh.");
 				calledWarningOnce = true;
