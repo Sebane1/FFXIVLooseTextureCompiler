@@ -52,6 +52,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="MultiCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="FindAndReplace.cs">
       <SubType>Form</SubType>
     </Compile>
