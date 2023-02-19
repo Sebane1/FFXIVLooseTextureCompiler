@@ -639,9 +639,9 @@
             // 
             // removeSelection
             // 
-            this.removeSelection.Location = new System.Drawing.Point(344, 388);
+            this.removeSelection.Location = new System.Drawing.Point(12, 388);
             this.removeSelection.Name = "removeSelection";
-            this.removeSelection.Size = new System.Drawing.Size(116, 23);
+            this.removeSelection.Size = new System.Drawing.Size(112, 23);
             this.removeSelection.TabIndex = 31;
             this.removeSelection.Text = "Remove Selection From List";
             this.removeSelection.UseVisualStyleBackColor = true;
@@ -649,7 +649,7 @@
             // 
             // clearList
             // 
-            this.clearList.Location = new System.Drawing.Point(460, 388);
+            this.clearList.Location = new System.Drawing.Point(124, 388);
             this.clearList.Name = "clearList";
             this.clearList.Size = new System.Drawing.Size(72, 23);
             this.clearList.TabIndex = 32;

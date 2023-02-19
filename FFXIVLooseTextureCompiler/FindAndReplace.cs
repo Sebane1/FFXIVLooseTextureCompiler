@@ -60,7 +60,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
-            if (replacementString.Text.ToLower().Contains("eye")) {
+            if (replacementString.Text.ToLower().Contains("eyes")) {
                 diffuse.LabelName.Text = "normal";
                 normal.LabelName.Text = "multi";
                 multi.LabelName.Text = "catchlight";
@@ -76,7 +76,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void replacementString_TextChanged(object sender, EventArgs e) {
-            if (replacementString.Text.ToLower().Contains("eye")) {
+            if (replacementString.Text.ToLower().Contains("eyes")) {
                 diffuse.LabelName.Text = "normal";
                 normal.LabelName.Text = "multi";
                 multi.LabelName.Text = "catchlight";
