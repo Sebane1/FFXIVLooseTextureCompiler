@@ -19,6 +19,9 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         private string normalMask;
         private string glow;
 
+        private bool ignoreNormalGeneration;
+        private bool ignoreMultiGeneration;
+
         public string MaterialSetName { get => materialSetName; set => materialSetName = value; }
         public string Diffuse { get => diffuse; set => diffuse = value; }
         public string Normal { get => normal; set => normal = value; }
@@ -37,6 +40,9 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             }
             set => materialGroupName = value;
         }
+
+        public bool IgnoreMultiGeneration { get => ignoreMultiGeneration; set => ignoreMultiGeneration = value; }
+        public bool IgnoreNormalGeneration { get => ignoreNormalGeneration; set => ignoreNormalGeneration = value; }
 
         public override string ToString() {
             return materialSetName + (MaterialGroupName != materialSetName ? $"| Group({materialGroupName})" : "");
