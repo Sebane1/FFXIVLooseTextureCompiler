@@ -27,6 +27,8 @@ namespace FFXIVLooseTextureCompiler {
                     internalDiffusePathTextBox.Text = materialSet.InternalDiffusePath;
                     internalNormalPathTextBox.Text = materialSet.InternalNormalPath;
                     internalMultiPathTextbox.Text = materialSet.InternalMultiPath;
+                    ignoreNormalsCheckbox.Checked = materialSet.IgnoreNormalGeneration;
+                    ignoreMultiCheckbox.Checked = materialSet.IgnoreMultiGeneration;
                 }
             }
         }
@@ -58,6 +60,8 @@ namespace FFXIVLooseTextureCompiler {
                     DialogResult = DialogResult.OK;
                     Close();
                 }
+                materialSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
+                materialSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
             }
@@ -80,7 +84,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
-            if (materialSetNameTextBox.Text.ToLower().Contains("eye")) {
+            if (materialSetNameTextBox.Text.ToLower().Contains("eyes")) {
                 diffuseLabel.Text = "Internal Normal";
                 normalLabel.Text = "Internal Multi";
                 multiLabel.Text = "Internal Catchlight";
