@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Windows.Interop;
 using TypingConnector;
 
 namespace FFXIVLooseTextureCompiler {
@@ -74,8 +75,8 @@ namespace FFXIVLooseTextureCompiler {
             glow.FilePath.Enabled = false;
             raceCodeBody = new RaceCode();
             raceCodeFace = new RaceCode();
-            for (int i = 0; i < 99; i++) {
-                facePaint.Items.Add((i + 1) + "");
+            for (int i = 0; i < 300; i++) {
+                faceExtra.Items.Add((i + 1) + "");
             }
             uniqueAuRa.Enabled = false;
             raceCodeBody.Masculine = new string[] {
@@ -98,7 +99,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "", "", "", "", "", "", "raen", "xaela", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = facePaint.SelectedIndex = generationType.SelectedIndex = 0;
+            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
         }
@@ -670,6 +671,22 @@ namespace FFXIVLooseTextureCompiler {
                 return "chara/common/texture/catchlight_1.tex";
             }
         }
+        public string GetHairTexturePath(int material) {
+            string hairValue = NumberPadder(faceExtra.SelectedIndex + 1);
+            string genderCode = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
+            string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
+            return "chara/human/c" + genderCode + "/obj/hair/h" + hairValue + "/texture/--c" + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, true) + ".tex";
+        }
+
+        public string NumberPadder(int value) {
+            int numbersToPad = 4 - value.ToString().Length;
+            string result = "";
+            for (int i = 0; i < numbersToPad; i++) {
+                result += "0";
+            }
+            result += value;
+            return result;
+        }
 
         public string GetTextureType(int material, bool isface = false) {
             switch (material) {
@@ -859,7 +876,7 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet materialSet = new TextureSet();
-            materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (facePaint.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
+            materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
                     materialSet.InternalDiffusePath = GetFaceTexturePath(0);
@@ -872,7 +889,12 @@ namespace FFXIVLooseTextureCompiler {
                     materialSet.InternalMultiPath = GetFaceTexturePath(3);
                     break;
                 case 4:
-                    materialSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (facePaint.SelectedIndex + 1) + ".tex";
+                    materialSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
+                    break;
+                case 5:
+                    materialSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text + ", " + subRaceList.Text;
+                    materialSet.InternalNormalPath = GetHairTexturePath(1);
+                    materialSet.InternalMultiPath = GetHairTexturePath(2);
                     break;
 
             }
@@ -902,7 +924,7 @@ namespace FFXIVLooseTextureCompiler {
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
-                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint");
+                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") && !materialSet.MaterialSetName.ToLower().Contains("hair");
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eyes")) {
                     diffuse.LabelName.Text = "normal";
@@ -1416,12 +1438,12 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
-            if (facePart.SelectedIndex == 4) {
+            if (facePart.SelectedIndex == 4 || facePart.SelectedIndex == 5) {
                 asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
-                facePaint.Enabled = true;
+                faceExtra.Enabled = true;
             } else {
                 asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
-                facePaint.Enabled = false;
+                faceExtra.Enabled = false;
             }
         }
 

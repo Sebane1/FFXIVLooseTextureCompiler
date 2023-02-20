@@ -90,7 +90,7 @@
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
             this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.discordButton = new System.Windows.Forms.Button();
-            this.facePaint = new System.Windows.Forms.ComboBox();
+            this.faceExtra = new System.Windows.Forms.ComboBox();
             this.exportPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
@@ -249,7 +249,7 @@
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(332, 144);
+            this.asymCheckbox.Location = new System.Drawing.Point(336, 144);
             this.asymCheckbox.Name = "asymCheckbox";
             this.asymCheckbox.Size = new System.Drawing.Size(83, 19);
             this.asymCheckbox.TabIndex = 23;
@@ -264,7 +264,8 @@
             "Eyebrows",
             "Eyes",
             "Ears",
-            "Face Paint"});
+            "Face Paint",
+            "Hair"});
             this.facePart.Location = new System.Drawing.Point(200, 140);
             this.facePart.Name = "facePart";
             this.facePart.Size = new System.Drawing.Size(84, 23);
@@ -783,15 +784,15 @@
             this.discordButton.UseVisualStyleBackColor = false;
             this.discordButton.Click += new System.EventHandler(this.discordButton_Click);
             // 
-            // facePaint
+            // faceExtra
             // 
-            this.facePaint.Enabled = false;
-            this.facePaint.FormattingEnabled = true;
-            this.facePaint.Location = new System.Drawing.Point(288, 140);
-            this.facePaint.Name = "facePaint";
-            this.facePaint.Size = new System.Drawing.Size(36, 23);
-            this.facePaint.TabIndex = 43;
-            this.facePaint.Text = "99";
+            this.faceExtra.Enabled = false;
+            this.faceExtra.FormattingEnabled = true;
+            this.faceExtra.Location = new System.Drawing.Point(288, 140);
+            this.faceExtra.Name = "faceExtra";
+            this.faceExtra.Size = new System.Drawing.Size(48, 23);
+            this.faceExtra.TabIndex = 43;
+            this.faceExtra.Text = "999";
             // 
             // exportPanel
             // 
@@ -837,7 +838,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
             this.Controls.Add(this.glow);
-            this.Controls.Add(this.facePaint);
+            this.Controls.Add(this.faceExtra);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
             this.Controls.Add(this.generateMultiCheckBox);
@@ -962,7 +963,7 @@
         private ToolStripMenuItem diffuseMergerToolStripMenuItem;
         private FFXIVVoicePackCreator.FilePicker mask;
         private Button discordButton;
-        private ComboBox facePaint;
+        private ComboBox faceExtra;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem howToGetTexturesToolStripMenuItem;
         private System.Windows.Forms.Timer autoGenerateTImer;
