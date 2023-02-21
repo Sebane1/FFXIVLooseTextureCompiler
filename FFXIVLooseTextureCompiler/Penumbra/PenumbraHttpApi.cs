@@ -22,7 +22,7 @@ public static partial class PenumbraHttpApi {
         data.ModPath = modPath;
         data.ModName = modName;
 
-        await PenumbraApi.Post("/reload", data, hook);
+        await PenumbraApi.Post("/reloadmod", data, hook);
 
         await Task.Delay(500);
     }
