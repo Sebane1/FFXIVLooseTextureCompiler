@@ -35,6 +35,9 @@ namespace FFXIVVoicePackCreator {
         [Category("Filter"), Description("Changes what type of selection is made")]
         public string Filter { get => filter; set => filter = value; }
         public bool Enabled {
+            get {
+                return filePath.Enabled;
+            }
             set {
                 openButton.Enabled = filePath.Enabled = value;
                 if (!value) {
