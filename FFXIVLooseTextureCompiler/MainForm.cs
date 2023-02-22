@@ -654,7 +654,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 6:
                     string xaelaCheck = (raceList.SelectedIndex == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
                     string gender = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
-                    result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "lt" + xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
+                    result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "t" + xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
                     break;
             }
             return result;
@@ -810,7 +810,7 @@ namespace FFXIVLooseTextureCompiler {
             if (baseBodyList.SelectedIndex == 6) {
                 if (raceList.SelectedIndex != 3 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     raceList.SelectedIndex = 3;
-                    MessageBox.Show("Tail is only compatible with Xaela, and Raen", VersionText);
+                    MessageBox.Show("Tail is only compatible with Miqo'te Xaela, and Raen", VersionText);
                 }
             } else if (baseBodyList.SelectedIndex == 4) {
                 if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
@@ -867,7 +867,9 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             TextureSet materialSet = new TextureSet();
             materialSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + genderListBody.Text + ", " + raceList.Text;
-            materialSet.InternalDiffusePath = GetBodyTexturePath(0);
+            if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
+                materialSet.InternalDiffusePath = GetBodyTexturePath(0);
+            }
             materialSet.InternalNormalPath = GetBodyTexturePath(1);
             materialSet.InternalMultiPath = GetBodyTexturePath(2);
             textureList.Items.Add(materialSet);
@@ -925,7 +927,7 @@ namespace FFXIVLooseTextureCompiler {
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
-                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") && !materialSet.MaterialSetName.ToLower().Contains("hair");
+                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") && !materialSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eyes")) {
                     diffuse.LabelName.Text = "normal";
