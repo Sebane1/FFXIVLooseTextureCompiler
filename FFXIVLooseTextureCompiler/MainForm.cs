@@ -654,7 +654,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 6:
                     string xaelaCheck = (raceList.SelectedIndex == 7 ?  "0104" : "0004");
                     string gender = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
-                    result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "lt" + xaelaCheck + "_etc_" + GetTextureType(texture) + ".tex";
+                    result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "lt" + xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
                     break;
             }
             return result;
