@@ -652,7 +652,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case 6:
-                    string xaelaCheck = (raceList.SelectedIndex == 7 ?  "0104" : "0004");
+                    string xaelaCheck = (raceList.SelectedIndex == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
                     string gender = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex] : raceCodeBody.Feminine[raceList.SelectedIndex]);
                     result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "lt" + xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
                     break;
@@ -866,7 +866,7 @@ namespace FFXIVLooseTextureCompiler {
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet materialSet = new TextureSet();
-            materialSet.MaterialSetName = baseBodyList.Text + ", " + genderListBody.Text + ", " + raceList.Text;
+            materialSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + genderListBody.Text + ", " + raceList.Text;
             materialSet.InternalDiffusePath = GetBodyTexturePath(0);
             materialSet.InternalNormalPath = GetBodyTexturePath(1);
             materialSet.InternalMultiPath = GetBodyTexturePath(2);
