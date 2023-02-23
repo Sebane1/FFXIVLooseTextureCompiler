@@ -663,7 +663,7 @@ namespace FFXIVLooseTextureCompiler {
             if (material != 3) {
                 string faceIdCheck = "000";
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
-                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander" || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk" || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)) {
+                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander" || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk" || selectedText.ToLower() == "xaela" || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)) {
                     faceIdCheck = "010";
                 }
                 string subRace = (genderListBody.SelectedIndex == 0 ? raceCodeFace.Masculine[subRaceList.SelectedIndex] : raceCodeFace.Feminine[subRaceList.SelectedIndex]);
