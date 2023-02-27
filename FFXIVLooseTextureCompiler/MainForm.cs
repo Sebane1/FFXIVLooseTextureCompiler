@@ -102,6 +102,9 @@ namespace FFXIVLooseTextureCompiler {
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex = subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
+            if (IntegrityChecker.IntegrityCheck()) {
+                IntegrityChecker.ShowRules();
+            }
         }
         private void RefreshFFXIVInstance() {
             var processes = new List<Process>(Process.GetProcessesByName("ffxiv_dx11"));
@@ -326,21 +329,23 @@ namespace FFXIVLooseTextureCompiler {
                         glow.FilePath.Enabled = false;
                         PenumbraHttpApi.Reload(modPath, modNameTextBox.Text, Hook);
                         PenumbraHttpApi.Redraw(0, Hook);
+                        if (IntegrityChecker.IntegrityCheck()) {
+                            IntegrityChecker.ShowConsolation();
+                        }
                         hasDoneReload = true;
                         materialList_SelectedIndexChanged(this, EventArgs.Empty);
                     }
                     generateButton.Enabled = false;
                     generationCooldown.Start();
-                    // generateButton.Text = "Success!";
                     exportProgress.Visible = false;
                     exportProgress.Value = 0;
                     lockDuplicateGeneration = false;
-                    //MessageBox.Show("Export succeeded!");
                     modNameTextBox.Enabled = modAuthorTextBox.Enabled
                     = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
                     = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = true;
                     exportPanel.Visible = false;
                 } else {
+                    exportPanel.Visible = false;
                     MessageBox.Show("Please enter a mod name!");
                 }
             }
@@ -1185,6 +1190,9 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             Save();
+            if (IntegrityChecker.IntegrityCheck()) {
+                IntegrityChecker.ShowSave();
+            }
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1205,6 +1213,9 @@ namespace FFXIVLooseTextureCompiler {
                     savePath = openFileDialog.FileName;
                     OpenProject(savePath);
                     generationCooldown.Start();
+                    if (IntegrityChecker.IntegrityCheck()) {
+                        IntegrityChecker.ShowOpen();
+                    }
                 }
                 HasSaved = true;
             }
@@ -1268,6 +1279,7 @@ namespace FFXIVLooseTextureCompiler {
                 serializer.Serialize(writer, projectFile);
             }
             HasSaved = true;
+            MessageBox.Show("Save successfull", VersionText);
         }
         private void CheckForCommandArguments() {
             string[] args = Environment.GetCommandLineArgs();
