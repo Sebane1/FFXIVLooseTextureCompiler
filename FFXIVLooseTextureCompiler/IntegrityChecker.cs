@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler {
     public static class IntegrityChecker {
+        #region Rules
         static string rule1 = "Never gonna give you up.";
         static string rule2 = "Never gonna let you down";
         static string rule3 = "Never gonna run around and desert you";
         static string rule4 = "Never gonna make you cry";
         static string rule5 = "Never gonna say goodbye";
         static string rule6 = "Never gonna tell a lie and hurt you";
+        #endregion
 
+        #region Checks
         static string[] consolations = new string[] {
             "This tool does not make your character sentient",
             "Your texture edit is very, very good!",
@@ -43,7 +46,7 @@ namespace FFXIVLooseTextureCompiler {
             "I dont like gluten. I made sure your save doesnt have any.",
             "Your save file is looking very healthy :3",
             "You're doing great work!" };
-
+        #endregion 
         public static bool IntegrityCheck() {
             return DateTime.Now.Month == 4 && DateTime.Now.Day == 1 || System.Diagnostics.Debugger.IsAttached;
         }
