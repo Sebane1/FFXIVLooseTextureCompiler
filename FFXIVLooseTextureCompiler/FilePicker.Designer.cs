@@ -46,6 +46,7 @@ namespace FFXIVVoicePackCreator {
             this.filePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.filePath_DragDrop);
             this.filePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.filePath_DragEnter);
             this.filePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.filePath_KeyPress);
+            this.filePath.Leave += new System.EventHandler(this.filePath_Leave);
             this.filePath.MouseDown += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseDown);
             this.filePath.MouseMove += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseMove);
             // 
@@ -72,6 +73,7 @@ namespace FFXIVVoicePackCreator {
             this.labelName.TabIndex = 2;
             this.labelName.Text = "surprised";
             this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelName.Click += new System.EventHandler(this.labelName_Click);
             // 
             // tableLayoutPanel1
             // 
