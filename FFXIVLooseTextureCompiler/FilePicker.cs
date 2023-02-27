@@ -153,6 +153,23 @@ namespace FFXIVVoicePackCreator {
                 }
             }
         }
+
+        private void labelName_Click(object sender, EventArgs e) {
+
+        }
+
+        private void filePath_Leave(object sender, EventArgs e) {
+            if (CheckExtentions(filePath.Text)) {
+                filePath.Text = filePath.Text;
+                currentPath = filePath.Text;
+                if (OnFileSelected != null) {
+                    OnFileSelected.Invoke(this, EventArgs.Empty);
+                }
+            } else {
+                CurrentPath = "";
+                MessageBox.Show("This is not a valid file this tool supports.", ParentForm.Text);
+            }
+        }
     }
 }
 
