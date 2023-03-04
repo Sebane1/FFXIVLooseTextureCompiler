@@ -4,7 +4,6 @@
 namespace Anamnesis.Penumbra;
 
 using FFBardMusicPlayer.FFXIV;
-using FFXIVLooseTextureCompiler.Penumbra;
 using System.Threading.Tasks;
 
 public static partial class PenumbraHttpApi {
@@ -18,13 +17,15 @@ public static partial class PenumbraHttpApi {
         await Task.Delay(500);
     }
     public static async Task Reload(string modPath, string modName, FFXIVHook hook) {
-        ReloadData data = new();
-        data.ModPath = modPath;
-        data.ModName = modName;
-
+        ModReloadData data = new ModReloadData(modPath, modName);
         await PenumbraApi.Post("/reloadmod", data, hook);
 
         await Task.Delay(500);
+    }
+
+    private record ModReloadData(string Path, string Name) {
+        public ModReloadData()
+            : this(string.Empty, string.Empty) { }
     }
 
     public class RedrawData {
