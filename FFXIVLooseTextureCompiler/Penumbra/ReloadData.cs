@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.Penumbra {
     public class ReloadData {
-        public string ModPath { get; set; } = string.Empty;
-        public string ModName { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }
