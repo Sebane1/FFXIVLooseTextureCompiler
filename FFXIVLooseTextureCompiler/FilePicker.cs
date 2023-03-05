@@ -143,8 +143,8 @@ namespace FFXIVVoicePackCreator {
 
         private void filePath_KeyPress(object sender, KeyPressEventArgs e) {
             if (e.KeyChar == 13) {
-                if (CheckExtentions(FilePath.SelectedText)) {
-                    currentPath = FilePath.SelectedText;
+                if (CheckExtentions(FilePath.Text) || string.IsNullOrEmpty(filePath.Text)) {
+                    currentPath = FilePath.Text;
                     if (OnFileSelected != null) {
                         OnFileSelected.Invoke(this, EventArgs.Empty);
                     }
@@ -159,14 +159,14 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_Leave(object sender, EventArgs e) {
-            if (CheckExtentions(filePath.Text)) {
+            if (CheckExtentions(filePath.Text) || string.IsNullOrEmpty(filePath.Text)) {
                 filePath.Text = filePath.Text;
                 currentPath = filePath.Text;
                 if (OnFileSelected != null) {
                     OnFileSelected.Invoke(this, EventArgs.Empty);
                 }
             } else {
-                CurrentPath = "";
+                filePath.Text = CurrentPath;
                 MessageBox.Show("This is not a valid file this tool supports.", ParentForm.Text);
             }
         }
