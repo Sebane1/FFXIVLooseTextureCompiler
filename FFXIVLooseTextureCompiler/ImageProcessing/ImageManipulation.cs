@@ -12,7 +12,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             g.Clear(Color.White);
             g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
             Bitmap normal = Normal.Calculate(target, normalMask);
-            using (Bitmap originalNormal = (inputFile.EndsWith(".dds") ? TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+            using (Bitmap originalNormal = TexLoader.ResolveBitmap(inputFile)) {
                 using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
                     try {
                         KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
