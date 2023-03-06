@@ -490,33 +490,37 @@ namespace FFXIVLooseTextureCompiler {
                         TextureImporter.PngToTex(stream, out data);
                         break;
                     case ExportType.MergeNormal:
-                        if (!normalCache.ContainsKey(diffuseNormal)) {
-                            using (Bitmap bitmap = TexLoader.ResolveBitmap(diffuseNormal)) {
-                                if (bitmap != null) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Bitmap output = null;
-                                        if (File.Exists(mask)) {
-                                            using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                                if (outputFile.Contains("fac_b_n")) {
-                                                    Bitmap resize = new Bitmap(bitmap, new Size(1024, 1024));
-                                                    output = ImageManipulation.MergeNormals(inputFile, resize, target, normalMaskBitmap, diffuseNormal);
-                                                    output.Save(stream, ImageFormat.Png);
-                                                    normalCache.Add(inputFile, resize);
-                                                } else {
-                                                    output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
-                                                    normalCache.Add(inputFile, output);
+                        if (string.IsNullOrEmpty(diffuseNormal)) {
+
+                        } else {
+                            if (!normalCache.ContainsKey(diffuseNormal)) {
+                                using (Bitmap bitmap = TexLoader.ResolveBitmap(diffuseNormal)) {
+                                    if (bitmap != null) {
+                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                            Bitmap output = null;
+                                            if (File.Exists(mask)) {
+                                                using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
+                                                    if (outputFile.Contains("fac_b_n")) {
+                                                        Bitmap resize = new Bitmap(bitmap, new Size(1024, 1024));
+                                                        output = ImageManipulation.MergeNormals(inputFile, resize, target, normalMaskBitmap, diffuseNormal);
+                                                        output.Save(stream, ImageFormat.Png);
+                                                        normalCache.Add(inputFile, resize);
+                                                    } else {
+                                                        output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                                        normalCache.Add(inputFile, output);
+                                                    }
                                                 }
+                                            } else {
+                                                output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
                                             }
-                                        } else {
-                                            output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
+                                            output.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, output);
                                         }
-                                        output.Save(stream, ImageFormat.Png);
-                                        normalCache.Add(diffuseNormal, output);
                                     }
                                 }
+                            } else {
+                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                             }
-                        } else {
-                            normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                         }
                         stream.Position = 0;
                         if (stream.Length > 0) {
