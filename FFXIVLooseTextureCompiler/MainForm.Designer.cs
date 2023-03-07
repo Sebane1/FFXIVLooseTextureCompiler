@@ -265,7 +265,9 @@
             "Eyes",
             "Ears",
             "Face Paint",
-            "Hair"});
+            "Hair",
+            "Face B",
+            "Etc B"});
             this.facePart.Location = new System.Drawing.Point(200, 140);
             this.facePart.Name = "facePart";
             this.facePart.Size = new System.Drawing.Size(84, 23);
