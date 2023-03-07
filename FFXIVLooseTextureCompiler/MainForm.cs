@@ -778,6 +778,10 @@ namespace FFXIVLooseTextureCompiler {
                     return "_iri";
                 case 3:
                     return "_etc";
+                case 6:
+                    return "_fac_b";
+                case 7:
+                    return "_etc_b";
             }
             return null;
         }
