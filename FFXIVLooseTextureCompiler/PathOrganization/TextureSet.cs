@@ -25,7 +25,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
 
         List<TextureSet> childSets = new List<TextureSet>();
         public string MaterialSetName { get => materialSetName; set => materialSetName = value; }
-        public string Diffuse { get { if (diffuse == null) { diffuse = ""; } return normal; } set => diffuse = value; }
+        public string Diffuse { get { if (diffuse == null) { diffuse = ""; } return diffuse; } set => diffuse = value; }
         public string Normal { get { if (normal == null) { normal = ""; } return normal; } set => normal = value; }
         public string Multi { get { if (multi == null) { multi = ""; } return multi; } set => multi = value; }
         public string NormalMask { get => normalMask; set => normalMask = value; }
