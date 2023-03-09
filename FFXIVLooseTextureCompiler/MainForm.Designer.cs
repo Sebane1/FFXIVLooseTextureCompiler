@@ -59,7 +59,15 @@
             this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertStandaloneTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.biboToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.biboToGen2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gen3ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gen3ToGen2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.gen2ToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gen2ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +104,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
-            this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -484,6 +491,7 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bulkTexViewerToolStripMenuItem,
+            this.convertStandaloneTextureToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
             this.xNormalToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -493,16 +501,78 @@
             // bulkTexViewerToolStripMenuItem
             // 
             this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
-            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
             this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
+            // 
+            // convertStandaloneTextureToolStripMenuItem
+            // 
+            this.convertStandaloneTextureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.biboToGen3ToolStripMenuItem,
+            this.biboToGen2ToolStripMenuItem,
+            this.gen3ToBiboToolStripMenuItem,
+            this.gen3ToGen2ToolStripMenuItem1,
+            this.gen2ToGen3ToolStripMenuItem,
+            this.gen2ToBiboToolStripMenuItem});
+            this.convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
+            this.convertStandaloneTextureToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
+            // 
+            // biboToGen3ToolStripMenuItem
+            // 
+            this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
+            this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
+            // 
+            // biboToGen2ToolStripMenuItem
+            // 
+            this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
+            this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
+            // 
+            // gen3ToBiboToolStripMenuItem
+            // 
+            this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
+            this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
+            // 
+            // gen3ToGen2ToolStripMenuItem1
+            // 
+            this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
+            this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
+            // 
+            // gen2ToGen3ToolStripMenuItem
+            // 
+            this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
+            this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
+            // 
+            // gen2ToBiboToolStripMenuItem
+            // 
+            this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
+            this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
             // 
             // diffuseMergerToolStripMenuItem
             // 
             this.diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
-            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
             this.diffuseMergerToolStripMenuItem.Click += new System.EventHandler(this.diffuseMergerToolStripMenuItem_Click);
+            // 
+            // xNormalToolStripMenuItem
+            // 
+            this.xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
+            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.xNormalToolStripMenuItem.Text = "XNormal";
+            this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -857,13 +927,6 @@
             this.finalizeButton.UseVisualStyleBackColor = true;
             this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
             // 
-            // xNormalToolStripMenuItem
-            // 
-            this.xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
-            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.xNormalToolStripMenuItem.Text = "XNormal";
-            this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1007,5 +1070,12 @@
         private ToolStripMenuItem omniExportModeToolStripMenuItem;
         private Button finalizeButton;
         private ToolStripMenuItem xNormalToolStripMenuItem;
+        private ToolStripMenuItem convertStandaloneTextureToolStripMenuItem;
+        private ToolStripMenuItem biboToGen3ToolStripMenuItem;
+        private ToolStripMenuItem biboToGen2ToolStripMenuItem;
+        private ToolStripMenuItem gen3ToBiboToolStripMenuItem;
+        private ToolStripMenuItem gen3ToGen2ToolStripMenuItem1;
+        private ToolStripMenuItem gen2ToGen3ToolStripMenuItem;
+        private ToolStripMenuItem gen2ToBiboToolStripMenuItem;
     }
 }
