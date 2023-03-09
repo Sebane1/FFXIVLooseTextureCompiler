@@ -207,6 +207,7 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
+
                                     if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
                                             + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
@@ -228,7 +229,14 @@ namespace FFXIVLooseTextureCompiler {
                                                     textureSet.Glow);
                                             } else {
                                                 ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "",
-                                                    textureSet.Glow);
+                                                    "", textureSet.Diffuse.Replace(".", "_xnormal."));
+                                                foreach (TextureSet child in textureSet.ChildSets) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                         exportProgress.Increment(1);
@@ -245,7 +253,7 @@ namespace FFXIVLooseTextureCompiler {
                                             foreach (TextureSet child in textureSet.ChildSets) {
                                                 if (finalizeResults || !File.Exists(child.Normal)) {
                                                     if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
                                                     }
                                                 }
                                             }
@@ -318,6 +326,7 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
+
                                     if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                         if (!bakeNormals.Checked || textureSet.MaterialSetName.ToLower().Contains("eyes")) {
                                             if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
@@ -328,7 +337,7 @@ namespace FFXIVLooseTextureCompiler {
                                                 foreach (TextureSet child in textureSet.ChildSets) {
                                                     if (finalizeResults || !File.Exists(child.Normal)) {
                                                         if (child.Normal.Contains("baseTexBaked")) {
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
                                                         }
                                                     }
                                                 }
@@ -339,7 +348,7 @@ namespace FFXIVLooseTextureCompiler {
                                             foreach (TextureSet child in textureSet.ChildSets) {
                                                 if (finalizeResults || !File.Exists(child.Normal)) {
                                                     if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
                                                     }
                                                 }
                                             }
@@ -566,7 +575,9 @@ namespace FFXIVLooseTextureCompiler {
                                                 output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
                                             }
                                             output.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(diffuseNormal, output);
+                                            if (!normalCache.ContainsKey(diffuseNormal)) {
+                                                normalCache.Add(diffuseNormal, output);
+                                            }
                                         }
                                     }
                                 }
@@ -1644,7 +1655,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, ReverseRaceLookup(textureSet.InternalNormalPath));
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
                 eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
-                eve.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                eve.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
@@ -1652,7 +1663,7 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, ReverseRaceLookup(textureSet.InternalNormalPath));
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
                 gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
-                gen3.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                gen3.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(eve);
@@ -1672,7 +1683,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
                 bibo.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
@@ -1705,7 +1716,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
                 bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
