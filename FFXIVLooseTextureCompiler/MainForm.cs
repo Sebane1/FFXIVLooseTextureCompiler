@@ -40,8 +40,10 @@ namespace FFXIVLooseTextureCompiler {
         private int fileCount;
         private Dictionary<string, Bitmap> normalCache;
         private Dictionary<string, Bitmap> multiCache;
+        private Dictionary<string, string> xnormalCache;
         Dictionary<string, FileSystemWatcher> watchers = new Dictionary<string, FileSystemWatcher>();
         private bool lockDuplicateGeneration;
+        private bool finalizeResults;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -92,12 +94,12 @@ namespace FFXIVLooseTextureCompiler {
                 "0801", "1001", "1001", "1201", "1201",
                 "1401", "1401", "0000", "0000", "1801", "1801" };
 
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+", new List<string>() { "midlander", "highlander", "midlander", "midlander", "highlander", "", "raen", "xaela", "", "viera" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE", new List<string>() { "middie", "buffie", "middie", "middie", "buffie", "", "lizard", "lizard2", "", "bunny" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("GEN3", new List<string>() { "mid", "high", "mid", "mid", "high", "", "raen", "xaela", "", "viera" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "", "", "", "", "", "", "raen", "xaela", "", "" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "", "", "", "", "", "", "", "", "", "" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA", new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+", new List<string>() { "midlander", "highlander", "midlander", "midlander", "highlander", "Invalid", "raen", "xaela", "Invalid", "viera" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE", new List<string>() { "middie", "buffie", "middie", "middie", "buffie", "Invalid", "lizard", "lizard2", "Invalid", "bunny" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("GEN3", new List<string>() { "mid", "high", "mid", "mid", "high", "Invalid", "raen", "xaela", "Invalid", "viera" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "raen", "xaela", "Invalid", "Invalid" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
                 subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
@@ -146,40 +148,57 @@ namespace FFXIVLooseTextureCompiler {
                     Dictionary<string, List<TextureSet>> groups = new Dictionary<string, List<TextureSet>>();
                     normalCache = new Dictionary<string, Bitmap>();
                     multiCache = new Dictionary<string, Bitmap>();
-                    foreach (TextureSet materialSet in textureList.Items) {
-                        if (!groups.ContainsKey(materialSet.MaterialGroupName)) {
-                            groups.Add(materialSet.MaterialGroupName, new List<TextureSet>() { materialSet });
+                    xnormalCache = new Dictionary<string, string>();
+                    foreach (TextureSet textureSet in textureList.Items) {
+                        if (!groups.ContainsKey(textureSet.MaterialGroupName)) {
+                            groups.Add(textureSet.MaterialGroupName, new List<TextureSet>() { textureSet });
+                            foreach (TextureSet childSet in textureSet.ChildSets) {
+                                childSet.MaterialGroupName = textureSet.MaterialGroupName;
+                                groups[textureSet.MaterialGroupName].Add(childSet);
+                            }
                         } else {
-                            groups[materialSet.MaterialGroupName].Add(materialSet);
+                            groups[textureSet.MaterialGroupName].Add(textureSet);
+                            foreach (TextureSet childSet in textureSet.ChildSets) {
+                                childSet.MaterialGroupName = textureSet.MaterialGroupName;
+                                groups[textureSet.MaterialGroupName].Add(childSet);
+                            }
                         }
                     }
-                    foreach (List<TextureSet> materialSets in groups.Values) {
-                        Group group = new Group(materialSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
+                    foreach (List<TextureSet> textureSets in groups.Values) {
+                        Group group = new Group(textureSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
                         Option option = null;
-                        foreach (TextureSet materialSet in materialSets) {
-                            string diffuseDiskPath = !string.IsNullOrEmpty(materialSet.InternalDiffusePath) ?
-                                Path.Combine(modPath, materialSet.InternalDiffusePath.Replace("/", @"\")) : "";
-                            string normalDiskPath = !string.IsNullOrEmpty(materialSet.InternalNormalPath) ?
-                                Path.Combine(modPath, materialSet.InternalNormalPath.Replace("/", @"\")) : "";
-                            string multiDiskPath = !string.IsNullOrEmpty(materialSet.InternalMultiPath) ?
-                                Path.Combine(modPath, materialSet.InternalMultiPath.Replace("/", @"\")) : "";
+                        foreach (TextureSet textureSet in textureSets) {
+                            string diffuseDiskPath = !string.IsNullOrEmpty(textureSet.InternalDiffusePath) ?
+                                Path.Combine(modPath, textureSet.InternalDiffusePath.Replace("/", @"\")) : "";
+                            string normalDiskPath = !string.IsNullOrEmpty(textureSet.InternalNormalPath) ?
+                                Path.Combine(modPath, textureSet.InternalNormalPath.Replace("/", @"\")) : "";
+                            string multiDiskPath = !string.IsNullOrEmpty(textureSet.InternalMultiPath) ?
+                                Path.Combine(modPath, textureSet.InternalMultiPath.Replace("/", @"\")) : "";
                             switch (generationType.SelectedIndex) {
                                 case 0:
-                                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "")
-                                            + (materialSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse"), 0);
-                                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"),
+                                    if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
+                                            + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse"), 0);
+                                        option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        if ((materialSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
-                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal,
-                                                materialSet.Diffuse);
+                                        if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
+                                            ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal,
+                                                textureSet.Diffuse);
                                         } else {
-                                            if (string.IsNullOrEmpty(materialSet.Glow)) {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++));
+                                            if (string.IsNullOrEmpty(textureSet.Glow)) {
+                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.None,
+                                                    "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
                                             } else {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "",
-                                                    materialSet.Glow);
+                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "",
+                                                    textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
+                                            }
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Diffuse)) {
+                                                    if (child.Diffuse.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                    }
+                                                }
                                             }
                                         }
                                         exportProgress.Increment(1);
@@ -188,33 +207,48 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
-                                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "")
-                                            + (materialSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
-                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"),
+                                    if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
+                                            + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
+                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        if (bakeNormals.Checked && !materialSet.MaterialSetName.ToLower().Contains("eyes")) {
-                                            ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, materialSet.Diffuse, materialSet.NormalMask);
+                                        if (bakeNormals.Checked && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
+                                            ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.OmniExportMode ? textureSet.Normal.Replace(".", "_xnormal.") : "");
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Normal)) {
+                                                    if (child.Normal.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                    }
+                                                }
+                                            }
                                         } else {
-                                            if (!string.IsNullOrEmpty(materialSet.Glow) && (materialSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
-                                                    materialSet.Glow);
+                                            if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
+                                                    textureSet.Glow);
                                             } else {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount++));
+                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "",
+                                                    textureSet.Glow);
                                             }
                                         }
                                         exportProgress.Increment(1);
                                         Refresh();
-                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)
-                                        && bakeNormals.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!materialSet.IgnoreNormalGeneration) {
-                                            option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") +
-                                                (materialSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
-                                            option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"),
+                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
+                                        && bakeNormals.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                                        if (!textureSet.IgnoreNormalGeneration) {
+                                            option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
+                                                (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
+                                            option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                                 fileCount));
                                             group.Options.Add(option);
-                                            ExportTex(materialSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal);
+                                            ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_normal_xnormal.") : "");
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Normal)) {
+                                                    if (child.Normal.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                    }
+                                                }
+                                            }
                                             exportProgress.Increment(1);
                                             Refresh();
                                             Application.DoEvents();
@@ -224,25 +258,25 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
-                                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                                        option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") +
-                                            (materialSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
-                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"),
+                                    if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
+                                            (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
+                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        ExportTex(materialSet.Multi, AppendNumber(multiDiskPath, fileCount++));
+                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++));
                                         exportProgress.Increment(1);
                                         Refresh();
                                         Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)
-                                        && generateMultiCheckBox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!materialSet.IgnoreMultiGeneration) {
-                                            option = new Option((materialSets.Count > 1 ? materialSet.MaterialSetName + " " : "") +
-                                                (materialSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
-                                            option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"),
+                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
+                                        && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                                        if (!textureSet.IgnoreMultiGeneration) {
+                                            option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
+                                                (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
+                                            option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                                 fileCount));
                                             group.Options.Add(option);
-                                            ExportTex(materialSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
+                                            ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
                                             exportProgress.Increment(1);
                                             Refresh();
                                             Application.DoEvents();
@@ -254,20 +288,29 @@ namespace FFXIVLooseTextureCompiler {
                                     }
                                     break;
                                 case 1:
-                                    option = new Option(materialSet.MaterialSetName == materialSet.MaterialGroupName ? "Enable"
-                                        : materialSet.MaterialSetName, 0);
+                                    option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
+                                        : textureSet.MaterialSetName, 0);
                                     group.Options.Add(option);
-                                    if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalDiffusePath)) {
-                                        if ((materialSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
-                                            ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Normal, materialSet.Diffuse);
+                                    if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
+                                        if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
+                                            ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Normal, textureSet.Diffuse);
                                         } else {
-                                            if (string.IsNullOrEmpty(materialSet.Glow)) {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount));
+                                            if (string.IsNullOrEmpty(textureSet.Glow)) {
+                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.None,
+                                                    "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
                                             } else {
-                                                ExportTex(materialSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "", materialSet.Glow);
+                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "",
+                                                    textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
+                                            }
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Diffuse)) {
+                                                    if (child.Diffuse.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                    }
+                                                }
                                             }
                                         }
-                                        option.Files.Add(materialSet.InternalDiffusePath, AppendNumber(materialSet.InternalDiffusePath.Replace("/", @"\"),
+                                        option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
                                             fileCount++));
                                         exportProgress.Increment(1);
                                         Refresh();
@@ -275,28 +318,49 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
-                                    if (!string.IsNullOrEmpty(materialSet.Normal) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)) {
-                                        if (!bakeNormals.Checked || materialSet.MaterialSetName.ToLower().Contains("eyes")) {
-                                            if (!string.IsNullOrEmpty(materialSet.Glow) && (materialSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowMulti, "",
-                                                    materialSet.Glow);
+                                    if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
+                                        if (!bakeNormals.Checked || textureSet.MaterialSetName.ToLower().Contains("eyes")) {
+                                            if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowMulti, "",
+                                                    textureSet.Glow);
                                             } else {
-                                                ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount));
+                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", textureSet.Normal.Replace(".", "_xnormal."));
+                                                foreach (TextureSet child in textureSet.ChildSets) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         } else {
-                                            ExportTex(materialSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal,
-                                                materialSet.Diffuse, materialSet.NormalMask);
+                                            ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal,
+                                                textureSet.Diffuse, textureSet.NormalMask, textureSet.Normal.Replace(".", "_xnormal."));
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Normal)) {
+                                                    if (child.Normal.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                    }
+                                                }
+                                            }
                                         }
-                                        option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"),
+                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                             fileCount++));
                                         exportProgress.Increment(1);
                                         Refresh();
                                         Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalNormalPath)
+                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
                                         && bakeNormals.Checked) {
-                                        if (!materialSet.IgnoreNormalGeneration) {
-                                            ExportTex(materialSet.Diffuse, AppendNumber(normalDiskPath, fileCount), ExportType.Normal);
-                                            option.Files.Add(materialSet.InternalNormalPath, AppendNumber(materialSet.InternalNormalPath.Replace("/", @"\"),
+                                        if (!textureSet.IgnoreNormalGeneration) {
+                                            ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount), ExportType.Normal, textureSet.Diffuse.Replace(".", "_normal_xnormal."));
+                                            foreach (TextureSet child in textureSet.ChildSets) {
+                                                if (finalizeResults || !File.Exists(child.Normal)) {
+                                                    if (child.Normal.Contains("baseTexBaked")) {
+                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                    }
+                                                }
+                                            }
+                                            option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                                 fileCount++));
                                             exportProgress.Increment(1);
                                             Refresh();
@@ -307,18 +371,18 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         exportProgress.Maximum--;
                                     }
-                                    if (!string.IsNullOrEmpty(materialSet.Multi) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)) {
-                                        ExportTex(materialSet.Multi, AppendNumber(multiDiskPath, fileCount));
-                                        option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"),
+                                    if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
+                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount));
+                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                             fileCount++));
                                         exportProgress.Increment(1);
                                         Refresh();
                                         Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(materialSet.Diffuse) && !string.IsNullOrEmpty(materialSet.InternalMultiPath)
-                                        && generateMultiCheckBox.Checked && !(materialSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!materialSet.IgnoreMultiGeneration) {
-                                            ExportTex(materialSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
-                                            option.Files.Add(materialSet.InternalMultiPath, AppendNumber(materialSet.InternalMultiPath.Replace("/", @"\"),
+                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
+                                        && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                                        if (!textureSet.IgnoreMultiGeneration) {
+                                            ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
+                                            option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                                 fileCount++));
                                             exportProgress.Increment(1);
                                             Refresh();
@@ -364,7 +428,7 @@ namespace FFXIVLooseTextureCompiler {
                         hasDoneReload = true;
                         materialList_SelectedIndexChanged(this, EventArgs.Empty);
                     }
-                    generateButton.Enabled = false;
+                    finalizeButton.Enabled = generateButton.Enabled = false;
                     generationCooldown.Start();
                     exportProgress.Visible = false;
                     exportProgress.Value = 0;
@@ -373,6 +437,7 @@ namespace FFXIVLooseTextureCompiler {
                     = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
                     = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = true;
                     exportPanel.Visible = false;
+                    finalizeResults = false;
                 } else {
                     exportPanel.Visible = false;
                     MessageBox.Show("Please enter a mod name!");
@@ -403,7 +468,7 @@ namespace FFXIVLooseTextureCompiler {
             Glow,
             GlowMulti
         }
-        public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None, string diffuseNormal = "", string mask = "") {
+        public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None, string diffuseNormal = "", string mask = "", string rawDataExport = "") {
             byte[] data = new byte[0];
             int contrast = 500;
             int contrastFace = 100;
@@ -413,9 +478,6 @@ namespace FFXIVLooseTextureCompiler {
                         using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                             if (bitmap != null) {
                                 bitmap.Save(stream, ImageFormat.Png);
-                                stream.Flush();
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
                             }
                         }
                         break;
@@ -424,9 +486,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (bitmap != null) {
                                 Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(bitmap, TexLoader.ResolveBitmap(mask));
                                 glowBitmap.Save(stream, ImageFormat.Png);
-                                stream.Flush();
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
                             }
                         }
                         break;
@@ -435,9 +494,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (bitmap != null) {
                                 Bitmap glowBitmap = AtramentumLuminisGlow.CalculateMulti(bitmap, TexLoader.ResolveBitmap(mask));
                                 glowBitmap.Save(stream, ImageFormat.Png);
-                                stream.Flush();
-                                stream.Position = 0;
-                                TextureImporter.PngToTex(stream, out data);
                             }
                         }
                         break;
@@ -471,8 +527,6 @@ namespace FFXIVLooseTextureCompiler {
                         } else {
                             normalCache[inputFile].Save(stream, ImageFormat.Png);
                         }
-                        stream.Position = 0;
-                        TextureImporter.PngToTex(stream, out data);
                         break;
                     case ExportType.MultiFace:
                         if (!multiCache.ContainsKey(inputFile)) {
@@ -486,8 +540,6 @@ namespace FFXIVLooseTextureCompiler {
                         } else {
                             multiCache[inputFile].Save(stream, ImageFormat.Png);
                         }
-                        stream.Position = 0;
-                        TextureImporter.PngToTex(stream, out data);
                         break;
                     case ExportType.MergeNormal:
                         if (string.IsNullOrEmpty(diffuseNormal)) {
@@ -522,11 +574,18 @@ namespace FFXIVLooseTextureCompiler {
                                 normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
                             }
                         }
-                        stream.Position = 0;
-                        if (stream.Length > 0) {
-                            TextureImporter.PngToTex(stream, out data);
-                        }
                         break;
+                }
+                stream.Flush();
+                stream.Position = 0;
+                if (stream.Length > 0) {
+                    TextureImporter.PngToTex(stream, out data);
+                    stream.Position = 0;
+                    if (!string.IsNullOrEmpty(rawDataExport)) {
+                        using (FileStream fileStream = new FileStream(rawDataExport, FileMode.Create, FileAccess.Write)) {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
                 }
             }
             if (data.Length > 0) {
@@ -598,26 +657,26 @@ namespace FFXIVLooseTextureCompiler {
                 WritePenumbraPath(penumbraModPath);
             }
         }
-        private string GetBodyTexturePath(int texture) {
+        private string GetBodyTexturePath(int texture, int genderValue, int baseBody, int race) {
             string result = "";
-            string unique = (((string)raceList.Items[raceList.SelectedIndex]).Contains("Xaela") ? "0101" : "0001");
-            switch (baseBodyList.SelectedIndex) {
+            string unique = (((string)raceList.Items[race]).Contains("Xaela") ? "0101" : "0001");
+            switch (baseBody) {
                 case 0:
                     // Vanila
-                    if (texture == 2 && raceList.SelectedIndex == 5) {
+                    if (texture == 2 && race == 5) {
                         result = @"chara/common/texture/skin_m.tex";
                     } else {
-                        string genderCode = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex]
-                            : raceCodeBody.Feminine[raceList.SelectedIndex]);
+                        string genderCode = (genderValue == 0 ? raceCodeBody.Masculine[race]
+                            : raceCodeBody.Feminine[race]);
                         result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique
                             + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(texture) + ".tex";
                     }
                     break;
                 case 1:
                     // Bibo+
-                    if (raceList.SelectedIndex != 5) {
-                        if (genderListBody.SelectedIndex == 1) {
-                            result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex]
+                    if (race != 5) {
+                        if (genderValue == 1) {
+                            result = @"chara/bibo/" + bodyIdentifiers[baseBody].RaceIdentifiers[race]
                                 + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
@@ -629,16 +688,16 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 2:
                     // Eve
-                    if (raceList.SelectedIndex != 5) {
-                        if (genderListBody.SelectedIndex == 1) {
+                    if (race != 5) {
+                        if (genderValue == 1) {
                             if (texture != 2) {
-                                result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex]
-                                    : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + "0001" + @"/texture/eve2" +
-                                    bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + GetTextureType(texture) + ".tex";
+                                result = @"chara/human/c" + (genderValue == 0 ? raceCodeBody.Masculine[race]
+                                    : raceCodeBody.Feminine[race]) + @"/obj/body/b" + "0001" + @"/texture/eve2" +
+                                    bodyIdentifiers[baseBody].RaceIdentifiers[race] + GetTextureType(texture) + ".tex";
                             } else {
-                                if (raceList.SelectedIndex == 6) {
+                                if (race == 6) {
                                     result = "chara/human/c1401/obj/body/b0001/texture/eve2lizard_m.tex";
-                                } else if (raceList.SelectedIndex == 7) {
+                                } else if (race == 7) {
                                     result = "chara/human/c1401/obj/body/b0001/texture/eve2lizard2_m.tex";
                                 } else {
                                     result = "chara/common/texture/skin_gen3.tex";
@@ -654,11 +713,11 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 3:
                     // Gen3 and T&F3
-                    if (raceList.SelectedIndex != 5) {
-                        if (genderListBody.SelectedIndex == 1) {
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex]
-                                : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + unique + @"/texture/tfgen3" +
-                                bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] + "f" + GetTextureType(texture) + ".tex";
+                    if (race != 5) {
+                        if (genderValue == 1) {
+                            result = @"chara/human/c" + (genderValue == 0 ? raceCodeBody.Masculine[race]
+                                : raceCodeBody.Feminine[race]) + @"/obj/body/b" + unique + @"/texture/tfgen3" +
+                                bodyIdentifiers[baseBody].RaceIdentifiers[race] + "f" + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters", VersionText);
@@ -669,10 +728,10 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 4:
                     // Scales+
-                    if (raceList.SelectedIndex != 5) {
-                        if (raceList.SelectedIndex == 6 || raceList.SelectedIndex == 7) {
-                            if (genderListBody.SelectedIndex == 1) {
-                                result = @"chara/bibo/" + bodyIdentifiers[baseBodyList.SelectedIndex].RaceIdentifiers[raceList.SelectedIndex] +
+                    if (race != 5) {
+                        if (race == 6 || race == 7) {
+                            if (genderValue == 1) {
+                                result = @"chara/bibo/" + bodyIdentifiers[baseBody].RaceIdentifiers[race] +
                                     GetTextureType(texture) + ".tex";
                             } else {
                                 result = "";
@@ -686,12 +745,12 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case 5:
-                    if (raceList.SelectedIndex != 5) {
-                        if (genderListBody.SelectedIndex == 0) {
+                    if (race != 5) {
+                        if (genderValue == 0) {
                             // TBSE and HRBODY
-                            result = @"chara/human/c" + (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex]
-                                : raceCodeBody.Feminine[raceList.SelectedIndex]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001")
-                                + @"/texture/--c" + raceCodeBody.Masculine[raceList.SelectedIndex] + "b0001_b" + GetTextureType(texture) + ".tex";
+                            result = @"chara/human/c" + (genderValue == 0 ? raceCodeBody.Masculine[race]
+                                : raceCodeBody.Feminine[race]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001")
+                                + @"/texture/--c" + raceCodeBody.Masculine[race] + "b0001_b" + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
@@ -701,9 +760,9 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case 6:
-                    string xaelaCheck = (raceList.SelectedIndex == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
-                    string gender = (genderListBody.SelectedIndex == 0 ? raceCodeBody.Masculine[raceList.SelectedIndex]
-                        : raceCodeBody.Feminine[raceList.SelectedIndex]);
+                    string xaelaCheck = (race == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
+                    string gender = (genderValue == 0 ? raceCodeBody.Masculine[race]
+                        : raceCodeBody.Feminine[race]);
                     result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "t" +
                         xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
                     break;
@@ -929,44 +988,44 @@ namespace FFXIVLooseTextureCompiler {
 
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            TextureSet materialSet = new TextureSet();
-            materialSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + genderListBody.Text + ", " + raceList.Text;
+            TextureSet textureSet = new TextureSet();
+            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + genderListBody.Text + ", " + raceList.Text;
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                materialSet.InternalDiffusePath = GetBodyTexturePath(0);
+                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
             }
-            materialSet.InternalNormalPath = GetBodyTexturePath(1);
-            materialSet.InternalMultiPath = GetBodyTexturePath(2);
-            textureList.Items.Add(materialSet);
+            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
+            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
+            textureList.Items.Add(textureSet);
             HasSaved = false;
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            TextureSet materialSet = new TextureSet();
-            materialSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
+            TextureSet textureSet = new TextureSet();
+            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
-                    materialSet.InternalDiffusePath = GetFaceTexturePath(0);
-                    materialSet.InternalNormalPath = GetFaceTexturePath(1);
-                    materialSet.InternalMultiPath = GetFaceTexturePath(2);
+                    textureSet.InternalDiffusePath = GetFaceTexturePath(0);
+                    textureSet.InternalNormalPath = GetFaceTexturePath(1);
+                    textureSet.InternalMultiPath = GetFaceTexturePath(2);
                     break;
                 case 2:
-                    materialSet.InternalDiffusePath = GetFaceTexturePath(1);
-                    materialSet.InternalNormalPath = GetFaceTexturePath(2);
-                    materialSet.InternalMultiPath = GetFaceTexturePath(3);
+                    textureSet.InternalDiffusePath = GetFaceTexturePath(1);
+                    textureSet.InternalNormalPath = GetFaceTexturePath(2);
+                    textureSet.InternalMultiPath = GetFaceTexturePath(3);
                     break;
                 case 4:
-                    materialSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
+                    textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
                     break;
                 case 5:
-                    materialSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text + ", " + subRaceList.Text;
-                    materialSet.InternalNormalPath = GetHairTexturePath(1);
-                    materialSet.InternalMultiPath = GetHairTexturePath(2);
+                    textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text + ", " + subRaceList.Text;
+                    textureSet.InternalNormalPath = GetHairTexturePath(1);
+                    textureSet.InternalMultiPath = GetHairTexturePath(2);
                     break;
 
             }
-            materialSet.IgnoreMultiGeneration = true;
-            textureList.Items.Add(materialSet);
+            textureSet.IgnoreMultiGeneration = true;
+            textureList.Items.Add(textureSet);
             HasSaved = false;
         }
 
@@ -1395,6 +1454,8 @@ namespace FFXIVLooseTextureCompiler {
                 e.Cancel = true;
                 materialListContextMenu.Close();
             }
+            omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
+
         }
 
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1442,7 +1503,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void generationCooldown_Tick(object sender, EventArgs e) {
             generationCooldown.Stop();
-            generateButton.Enabled = true;
+            finalizeButton.Enabled = generateButton.Enabled = true;
             generateButton.Text = "Generate";
         }
 
@@ -1475,6 +1536,7 @@ namespace FFXIVLooseTextureCompiler {
 
             findAndReplace.MaterialSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                textureList.SelectedIndex = -1;
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
         }
@@ -1532,6 +1594,144 @@ namespace FFXIVLooseTextureCompiler {
 
         private void normal_Load(object sender, EventArgs e) {
 
+        }
+
+        private void omniExportModeToolStripMenuItem_Click(object sender, EventArgs e) {
+            TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+            if (textureSet != null) {
+                if (!textureSet.OmniExportMode) {
+                    ConfigureOmniConfiguration(textureSet);
+                    MessageBox.Show("Enabling universal compatibility mode allows your currently selected body textures to be compatible with other bodies on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
+                } else {
+                    textureSet.OmniExportMode = false;
+                    textureSet.ChildSets.Clear();
+                }
+            }
+        }
+
+        public int ReverseRaceLookup(string path) {
+            for (int i = 0; i < raceList.Items.Count; i++) {
+                string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
+                string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
+                string eve = bodyIdentifiers[2].RaceIdentifiers[i];
+                string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
+                if (path.Contains(vanilla)
+                        || path.Contains(bibo)
+                        || path.Contains(eve)
+                        || path.Contains(tnf)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private void ConfigureOmniConfiguration(TextureSet textureSet) {
+            textureSet.OmniExportMode = true;
+            textureSet.ChildSets.Clear();
+
+            if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                TextureSet vanilla = new TextureSet();
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                TextureSet eve = new TextureSet();
+                eve.MaterialSetName = "Eve Compatibility";
+                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, ReverseRaceLookup(textureSet.InternalNormalPath));
+                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
+                eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
+                eve.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                TextureSet gen3 = new TextureSet();
+                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, ReverseRaceLookup(textureSet.InternalNormalPath));
+                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
+                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
+                gen3.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(eve);
+                textureSet.ChildSets.Add(gen3);
+            } else if (textureSet.InternalDiffusePath.Contains("eve")) {
+                TextureSet vanilla = new TextureSet();
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                TextureSet bibo = new TextureSet();
+                bibo.MaterialSetName = "Bibo+ Compatibility";
+                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
+                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                TextureSet gen3 = new TextureSet();
+                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, ReverseRaceLookup(textureSet.InternalNormalPath));
+                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
+                gen3.Diffuse = textureSet.Diffuse;
+                gen3.Normal = textureSet.Normal;
+                gen3.Multi = textureSet.Multi;
+                gen3.Glow = textureSet.Glow;
+                gen3.NormalMask = textureSet.NormalMask;
+
+
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(bibo);
+                textureSet.ChildSets.Add(gen3);
+            } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
+                TextureSet vanilla = new TextureSet();
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+
+                TextureSet bibo = new TextureSet();
+                bibo.MaterialSetName = "Bibo+ Compatibility";
+                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
+                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+
+                TextureSet eve = new TextureSet();
+                eve.MaterialSetName = "Eve Compatibility";
+                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, ReverseRaceLookup(textureSet.InternalDiffusePath));
+                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, ReverseRaceLookup(textureSet.InternalNormalPath));
+                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
+                eve.Diffuse = textureSet.Diffuse;
+                eve.Normal = textureSet.Normal;
+                eve.Multi = textureSet.Multi;
+                eve.Glow = textureSet.Glow;
+                eve.NormalMask = textureSet.NormalMask;
+
+
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(bibo);
+                textureSet.ChildSets.Add(eve);
+            }
+        }
+
+        private void finalizeButton_Click(object sender, EventArgs e) {
+            finalizeResults = true;
+            generateButton_Click(sender, e);
+        }
+
+        private void xNormalToolStripMenuItem_Click(object sender, EventArgs e) {
+            XNormal.OpenXNormal();
         }
     }
 }

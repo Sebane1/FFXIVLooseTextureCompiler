@@ -68,6 +68,7 @@
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.omniExportModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,6 +95,8 @@
             this.exportPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
+            this.finalizeButton = new System.Windows.Forms.Button();
+            this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -181,7 +184,7 @@
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateButton.Location = new System.Drawing.Point(404, 608);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(124, 24);
+            this.generateButton.Size = new System.Drawing.Size(64, 24);
             this.generateButton.TabIndex = 7;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -481,7 +484,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bulkTexViewerToolStripMenuItem,
-            this.diffuseMergerToolStripMenuItem});
+            this.diffuseMergerToolStripMenuItem,
+            this.xNormalToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -557,46 +561,54 @@
             // 
             this.materialListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editPathsToolStripMenuItem,
+            this.omniExportModeToolStripMenuItem,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
             this.bulkReplaceToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(234, 114);
+            this.materialListContextMenu.Size = new System.Drawing.Size(236, 136);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
             // 
             // editPathsToolStripMenuItem
             // 
             this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
-            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.editPathsToolStripMenuItem.Text = "Edit Internal Texture Set Values";
             this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
+            // 
+            // omniExportModeToolStripMenuItem
+            // 
+            this.omniExportModeToolStripMenuItem.Name = "omniExportModeToolStripMenuItem";
+            this.omniExportModeToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.omniExportModeToolStripMenuItem.Text = "Enable Universal Compatibility";
+            this.omniExportModeToolStripMenuItem.Click += new System.EventHandler(this.omniExportModeToolStripMenuItem_Click);
             // 
             // moveUpToolStripMenuItem
             // 
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.moveUpToolStripMenuItem.Text = "Move Up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpButton_Click);
             // 
             // moveDownToolStripMenuItem
             // 
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
             // bulkReplaceToolStripMenuItem
             // 
             this.bulkReplaceToolStripMenuItem.Name = "bulkReplaceToolStripMenuItem";
-            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
             this.bulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.bulkReplaceToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.removeSelectionButton_Click);
             // 
@@ -834,11 +846,30 @@
             this.glow.Enter += new System.EventHandler(this.multi_Enter);
             this.glow.Leave += new System.EventHandler(this.multi_Leave);
             // 
+            // finalizeButton
+            // 
+            this.finalizeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.finalizeButton.Location = new System.Drawing.Point(468, 608);
+            this.finalizeButton.Name = "finalizeButton";
+            this.finalizeButton.Size = new System.Drawing.Size(64, 24);
+            this.finalizeButton.TabIndex = 46;
+            this.finalizeButton.Text = "Finalize";
+            this.finalizeButton.UseVisualStyleBackColor = true;
+            this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
+            // 
+            // xNormalToolStripMenuItem
+            // 
+            this.xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
+            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.xNormalToolStripMenuItem.Text = "XNormal";
+            this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
+            this.Controls.Add(this.finalizeButton);
             this.Controls.Add(this.glow);
             this.Controls.Add(this.faceExtra);
             this.Controls.Add(this.discordButton);
@@ -973,5 +1004,8 @@
         private Label label7;
         private FFXIVVoicePackCreator.FilePicker glow;
         private ToolStripMenuItem deleteToolStripMenuItem;
+        private ToolStripMenuItem omniExportModeToolStripMenuItem;
+        private Button finalizeButton;
+        private ToolStripMenuItem xNormalToolStripMenuItem;
     }
 }
