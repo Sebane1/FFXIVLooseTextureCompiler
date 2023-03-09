@@ -1733,5 +1733,93 @@ namespace FFXIVLooseTextureCompiler {
         private void xNormalToolStripMenuItem_Click(object sender, EventArgs e) {
             XNormal.OpenXNormal();
         }
+
+        private void biboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.BiboToGen3(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void gen3ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.Gen3ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void gen3ToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.Gen3ToGen2(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void gen2ToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.Gen2ToGen3(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void gen2ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.Gen2ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void toolsToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+
+        private void biboToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.BiboToGen2(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
     }
 }
