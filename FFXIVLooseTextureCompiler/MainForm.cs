@@ -325,8 +325,8 @@ namespace FFXIVLooseTextureCompiler {
                                             foreach (TextureSet child in textureSet.ChildSets) {
                                                 if (!xnormalCache.ContainsKey(child.Diffuse)) {
                                                     if (finalizeResults || !File.Exists(child.Diffuse)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                        if (child.Diffuse.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Diffuse, child.Diffuse);
                                                             XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
                                                         }
                                                     }
@@ -617,8 +617,10 @@ namespace FFXIVLooseTextureCompiler {
                     TextureImporter.PngToTex(stream, out data);
                     stream.Position = 0;
                     if (!string.IsNullOrEmpty(rawDataExport)) {
-                        using (FileStream fileStream = new FileStream(rawDataExport, FileMode.Create, FileAccess.Write)) {
-                            stream.CopyTo(fileStream);
+                        if (!rawDataExport.Contains("baseTexBaked")) {
+                            using (FileStream fileStream = new FileStream(rawDataExport, FileMode.Create, FileAccess.Write)) {
+                                stream.CopyTo(fileStream);
+                            }
                         }
                     }
                 }
