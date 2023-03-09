@@ -194,9 +194,12 @@ namespace FFXIVLooseTextureCompiler {
                                                     textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
                                             }
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Diffuse)) {
-                                                    if (child.Diffuse.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                if (!xnormalCache.ContainsKey(child.Diffuse)) {
+                                                    if (finalizeResults || !File.Exists(child.Diffuse)) {
+                                                        if (child.Diffuse.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Diffuse, child.Diffuse);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -217,9 +220,12 @@ namespace FFXIVLooseTextureCompiler {
                                         if (bakeNormals.Checked && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
                                             ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.OmniExportMode ? textureSet.Normal.Replace(".", "_xnormal.") : "");
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Normal)) {
-                                                    if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -231,9 +237,12 @@ namespace FFXIVLooseTextureCompiler {
                                                 ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "",
                                                     "", textureSet.Diffuse.Replace(".", "_xnormal."));
                                                 foreach (TextureSet child in textureSet.ChildSets) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                                                    if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                        if (finalizeResults || !File.Exists(child.Normal)) {
+                                                            if (child.Normal.Contains("baseTexBaked")) {
+                                                                xnormalCache.Add(child.Normal, child.Normal);
+                                                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -251,9 +260,12 @@ namespace FFXIVLooseTextureCompiler {
                                             group.Options.Add(option);
                                             ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_normal_xnormal.") : "");
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Normal)) {
-                                                    if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -311,9 +323,12 @@ namespace FFXIVLooseTextureCompiler {
                                                     textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
                                             }
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Diffuse)) {
-                                                    if (child.Diffuse.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                if (!xnormalCache.ContainsKey(child.Diffuse)) {
+                                                    if (finalizeResults || !File.Exists(child.Diffuse)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -335,9 +350,12 @@ namespace FFXIVLooseTextureCompiler {
                                             } else {
                                                 ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", textureSet.Normal.Replace(".", "_xnormal."));
                                                 foreach (TextureSet child in textureSet.ChildSets) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                    if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                        if (finalizeResults || !File.Exists(child.Normal)) {
+                                                            if (child.Normal.Contains("baseTexBaked")) {
+                                                                xnormalCache.Add(child.Normal, child.Normal);
+                                                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -346,9 +364,12 @@ namespace FFXIVLooseTextureCompiler {
                                             ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal,
                                                 textureSet.Diffuse, textureSet.NormalMask, textureSet.Normal.Replace(".", "_xnormal."));
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Normal)) {
-                                                    if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -363,9 +384,12 @@ namespace FFXIVLooseTextureCompiler {
                                         if (!textureSet.IgnoreNormalGeneration) {
                                             ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount), ExportType.Normal, textureSet.Diffuse.Replace(".", "_normal_xnormal."));
                                             foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (finalizeResults || !File.Exists(child.Normal)) {
-                                                    if (child.Normal.Contains("baseTexBaked")) {
-                                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                if (!xnormalCache.ContainsKey(child.Normal)) {
+                                                    if (finalizeResults || !File.Exists(child.Normal)) {
+                                                        if (child.Normal.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Normal, child.Normal);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                                        }
                                                     }
                                                 }
                                             }
