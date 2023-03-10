@@ -54,13 +54,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     stopwatch.Start();
                     while (IsFileLocked(inputFile)) {
                         Application.DoEvents();
-                        //if (stopwatch.ElapsedMilliseconds > 15000 && stopwatch.IsRunning) {
-                        //    MessageBox.Show(inputFile + " is taking an abnormal amount of time to be released. The tool will now skip it.");
-                        //    stopwatch.Stop();
-                        //    stopwatch.Reset();
-                        //    failSafeTriggered = true;
-                        //    break;
-                        //}
+                        Thread.Sleep(10);
                     }
                     if (!failSafeTriggered) {
                         try {
