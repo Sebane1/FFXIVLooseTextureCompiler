@@ -493,6 +493,8 @@ namespace FFXIVLooseTextureCompiler {
                     finalizeResults = false;
                 } else {
                     exportPanel.Visible = false;
+                    lockDuplicateGeneration = false;
+                    finalizeResults = false;
                     MessageBox.Show("Please enter a mod name!");
                 }
             }
@@ -1502,9 +1504,9 @@ namespace FFXIVLooseTextureCompiler {
             if (textureList.Items.Count < 1 || textureList.SelectedIndex < 0) {
                 e.Cancel = true;
                 materialListContextMenu.Close();
+            } else {
+                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
             }
-            omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
-
         }
 
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
