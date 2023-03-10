@@ -40,38 +40,38 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public static void BiboToGen2(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), bibo),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen2), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bibo),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen2), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
         public static void BiboToGen3(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), bibo),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen3), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bibo),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen3), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
         public static void Gen3ToGen2(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen3),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen2), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen3),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen2), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
         public static void Gen3ToBibo(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen3),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), bibo), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen3),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bibo), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
         public static void Gen2ToBibo(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen2),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), bibo), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen2),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bibo), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
         public static void Gen2ToGen3(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen2),
-            Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), gen3), inputImage, outputImage.Replace("_baseTexBaked", null));
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen2),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen3), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
 
         public static void OpenXNormal() {
-            string executable = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), xNormal);
+            string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
             Process process = Process.Start(executable);
         }
 
         public static void CallXNormal(string inputFBX, string outputFBX, string inputImage, string outputImage) {
-            string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), template);
-            string executable = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), xNormal);
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, template);
+            string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
             using (StreamWriter writer = new StreamWriter(path)) {
                 writer.Write(string.Format(xmlFile, inputFBX, inputImage, outputFBX, outputImage));
             }
