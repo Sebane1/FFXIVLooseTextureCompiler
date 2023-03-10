@@ -72,7 +72,7 @@ namespace FFXIVLooseTextureCompiler {
         public static void CallXNormal(string inputFBX, string outputFBX, string inputImage, string outputImage) {
             string path = Path.Combine(Application.UserAppDataPath, template);
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
-            if(!Directory.Exists(Application.UserAppDataPath)) {
+            if (!Directory.Exists(Application.UserAppDataPath)) {
                 Directory.CreateDirectory(Application.UserAppDataPath);
             }
             using (StreamWriter writer = new StreamWriter(path)) {
@@ -80,7 +80,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             ProcessStartInfo processStartInfo = new ProcessStartInfo(executable);
             processStartInfo.UseShellExecute = true;
-            processStartInfo.Arguments = path;
+            processStartInfo.Arguments = @"""" + path + @"""";
             Process process = Process.Start(processStartInfo);
             while (!process.HasExited) ;
             Thread.Sleep(1000);
