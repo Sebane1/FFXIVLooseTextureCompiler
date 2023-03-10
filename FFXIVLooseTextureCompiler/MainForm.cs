@@ -290,7 +290,7 @@ namespace FFXIVLooseTextureCompiler {
                                         option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++));
+                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_normal_xnormal.") : "");
                                         foreach (TextureSet child in textureSet.ChildSets) {
                                             if (!string.IsNullOrEmpty(child.Multi)) {
                                                 if (!xnormalCache.ContainsKey(child.Multi)) {
@@ -433,7 +433,7 @@ namespace FFXIVLooseTextureCompiler {
                                         }
                                     }
                                     if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount));
+                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_xnormal.") : "");
                                         foreach (TextureSet child in textureSet.ChildSets) {
                                             if (!string.IsNullOrEmpty(child.Multi)) {
                                                 if (!xnormalCache.ContainsKey(child.Multi)) {
@@ -1764,7 +1764,6 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.Multi = textureSet.Multi;
                 gen3.Glow = textureSet.Glow;
                 gen3.NormalMask = textureSet.NormalMask;
-
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
