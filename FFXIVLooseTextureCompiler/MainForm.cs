@@ -208,7 +208,9 @@ namespace FFXIVLooseTextureCompiler {
                                         Refresh();
                                         Application.DoEvents();
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
 
                                     if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
@@ -273,10 +275,14 @@ namespace FFXIVLooseTextureCompiler {
                                             Refresh();
                                             Application.DoEvents();
                                         } else {
-                                            exportProgress.Maximum--;
+                                            if (exportProgress.Maximum > 0) {
+                                                exportProgress.Maximum--;
+                                            }
                                         }
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
                                     if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
@@ -301,10 +307,14 @@ namespace FFXIVLooseTextureCompiler {
                                             Refresh();
                                             Application.DoEvents();
                                         } else {
-                                            exportProgress.Maximum--;
+                                            if (exportProgress.Maximum > 0) {
+                                                exportProgress.Maximum--;
+                                            }
                                         }
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
                                     break;
                                 case 1:
@@ -339,7 +349,9 @@ namespace FFXIVLooseTextureCompiler {
                                         Refresh();
                                         Application.DoEvents();
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
 
                                     if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
@@ -399,10 +411,14 @@ namespace FFXIVLooseTextureCompiler {
                                             Refresh();
                                             Application.DoEvents();
                                         } else {
-                                            exportProgress.Maximum--;
+                                            if (exportProgress.Maximum > 0) {
+                                                exportProgress.Maximum--;
+                                            }
                                         }
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
                                     if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                         ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount));
@@ -421,10 +437,14 @@ namespace FFXIVLooseTextureCompiler {
                                             Refresh();
                                             Application.DoEvents();
                                         } else {
-                                            exportProgress.Maximum--;
+                                            if (exportProgress.Maximum > 0) {
+                                                exportProgress.Maximum--;
+                                            }
                                         }
                                     } else {
-                                        exportProgress.Maximum--;
+                                        if (exportProgress.Maximum > 0) {
+                                            exportProgress.Maximum--;
+                                        }
                                     }
                                     break;
                             }
@@ -880,14 +900,6 @@ namespace FFXIVLooseTextureCompiler {
                     return "_etc_b";
             }
             return null;
-        }
-
-        private void filePicker1_Load(object sender, EventArgs e) {
-
-        }
-
-        private void filePicker1_Load_1(object sender, EventArgs e) {
-
         }
 
         private void baseBodyList_SelectedIndexChanged(object sender, EventArgs e) {
