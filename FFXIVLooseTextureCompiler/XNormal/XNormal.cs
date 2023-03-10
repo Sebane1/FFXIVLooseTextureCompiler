@@ -13,7 +13,7 @@ namespace FFXIVLooseTextureCompiler {
         private const string bibo = "res\\model\\bplus.FBX";
         private const string gen2 = "res\\model\\gen2.FBX";
         private const string gen3 = "res\\model\\gen3.FBX";
-        private const string template = "res\\xnormal\\template.xml";
+        private const string template = "template.xml";
         public static void GenerateBasedOnSourceBody(string internalPath, string inputPath, string outputPath) {
             if (internalPath.Contains("bibo")) {
                 if (outputPath.Contains("gen2")) {
@@ -70,12 +70,18 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public static void CallXNormal(string inputFBX, string outputFBX, string inputImage, string outputImage) {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, template);
+            string path = Path.Combine(Application.UserAppDataPath, template);
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
+            if(!Directory.Exists(Application.UserAppDataPath)) {
+                Directory.CreateDirectory(Application.UserAppDataPath);
+            }
             using (StreamWriter writer = new StreamWriter(path)) {
                 writer.Write(string.Format(xmlFile, inputFBX, inputImage, outputFBX, outputImage));
             }
-            Process process = Process.Start(executable, path);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(executable);
+            processStartInfo.UseShellExecute = true;
+            processStartInfo.Arguments = path;
+            Process process = Process.Start(processStartInfo);
             while (!process.HasExited) ;
             Thread.Sleep(1000);
         }
