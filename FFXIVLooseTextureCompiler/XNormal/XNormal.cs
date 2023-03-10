@@ -82,8 +82,8 @@ namespace FFXIVLooseTextureCompiler {
             processStartInfo.UseShellExecute = true;
             processStartInfo.Arguments = @"""" + path + @"""";
             Process process = Process.Start(processStartInfo);
-            while (!process.HasExited) ;
-            Thread.Sleep(1000);
+            process.WaitForExit();
+            Thread.Sleep(100);
         }
     }
 }
