@@ -291,6 +291,18 @@ namespace FFXIVLooseTextureCompiler {
                                             fileCount));
                                         group.Options.Add(option);
                                         ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++));
+                                        foreach (TextureSet child in textureSet.ChildSets) {
+                                            if (!string.IsNullOrEmpty(child.Multi)) {
+                                                if (!xnormalCache.ContainsKey(child.Multi)) {
+                                                    if (finalizeResults || !File.Exists(child.Multi)) {
+                                                        if (child.Multi.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Multi, child.Multi);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                         exportProgress.Increment(1);
                                         Refresh();
                                         Application.DoEvents();
@@ -422,6 +434,18 @@ namespace FFXIVLooseTextureCompiler {
                                     }
                                     if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                         ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount));
+                                        foreach (TextureSet child in textureSet.ChildSets) {
+                                            if (!string.IsNullOrEmpty(child.Multi)) {
+                                                if (!xnormalCache.ContainsKey(child.Multi)) {
+                                                    if (finalizeResults || !File.Exists(child.Multi)) {
+                                                        if (child.Multi.Contains("baseTexBaked")) {
+                                                            xnormalCache.Add(child.Multi, child.Multi);
+                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                         option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                             fileCount++));
                                         exportProgress.Increment(1);
@@ -834,7 +858,7 @@ namespace FFXIVLooseTextureCompiler {
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || selectedText.ToLower() == "xaela" || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
+                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2) || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
                 }
@@ -1688,6 +1712,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
@@ -1696,6 +1721,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
                 eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
                 eve.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
+                eve.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
@@ -1704,6 +1730,7 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
                 gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
                 gen3.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
+                gen3.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(eve);
@@ -1716,14 +1743,16 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, ReverseRaceLookup(textureSet.InternalDiffusePath));
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
-                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
@@ -1748,7 +1777,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
-
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
@@ -1757,6 +1786,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
                 bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
@@ -1768,7 +1798,6 @@ namespace FFXIVLooseTextureCompiler {
                 eve.Multi = textureSet.Multi;
                 eve.Glow = textureSet.Glow;
                 eve.NormalMask = textureSet.NormalMask;
-
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
