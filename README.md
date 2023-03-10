@@ -32,6 +32,8 @@ https://docs.google.com/document/d/1UMmHVM2Iqvw7jPQ1Ff3MIy_-Cqwam1dcywBcOdyrp8E/
 Make sure you have .net desktop runtime 7.0 (not to be confused with .net runtime 7.0)
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.1-windows-x64-installer
 
+You may need to install XNormal if you run into any errors that say stuff is missing (using universal texture set feature).
+https://xnormal.net/
 
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
 
@@ -50,6 +52,7 @@ Core features:
 - Ability to add custom texture paths if this tool doesn't already autogenerate them
 - Automatic redraw on generation
 - Can automatically generate normals, if only a diffuse is provided, or alternatively merge the generated normal data with existing normals.
+- Can be used to convert one body texture to other body textures with automated use of XNormal
 - Low learning curve.
 
 
