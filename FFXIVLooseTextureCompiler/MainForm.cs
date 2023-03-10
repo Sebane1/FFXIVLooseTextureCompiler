@@ -236,7 +236,7 @@ namespace FFXIVLooseTextureCompiler {
                                                 ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
                                                     textureSet.Glow);
                                             } else {
-                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "",
+                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.None, "",
                                                     "", textureSet.Diffuse.Replace(".", "_xnormal."));
                                                 foreach (TextureSet child in textureSet.ChildSets) {
                                                     if (!xnormalCache.ContainsKey(child.Normal)) {
