@@ -78,7 +78,7 @@ namespace FFXIVLooseTextureCompiler {
             using (StreamWriter writer = new StreamWriter(path)) {
                 writer.Write(string.Format(xmlFile, inputFBX, inputImage, outputFBX, outputImage));
             }
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(executable);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");
             processStartInfo.UseShellExecute = true;
             processStartInfo.Arguments = @"""" + path + @"""";
             Process process = Process.Start(processStartInfo);
