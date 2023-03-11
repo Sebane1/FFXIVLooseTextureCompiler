@@ -1,7 +1,7 @@
 # FFXIVLooseTextureCompiler
 Official download and repository. Do not download from other sources unless you can verify the code on github.
 
-Make loose texture mods less of a pain to set up.
+Make loose texture mods less of a pain to set up. Automated cross conversion between body types
 
 Download: 
 
