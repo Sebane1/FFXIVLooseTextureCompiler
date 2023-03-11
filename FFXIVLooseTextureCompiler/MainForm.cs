@@ -2066,5 +2066,137 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
+        private void otopopToRedefinedLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.OtopopToRedefinedLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void otopopToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.OtopopToVanillaLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void redefinedLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.RedefinedLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void redefinedLalaToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.RedefinedLalaToVanillaLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void vanillaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.VanillaLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void vanillaToRedefinedLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.VanillaLalaToRedefinedLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void howDoIUseThisToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1AR53LNy0dQ6X7L6NSfQY4PkZoUFgqfEYPzHPCcnW_YY/edit?usp=share_link",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void howDoIMakeStuffBumpyToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1UMmHVM2Iqvw7jPQ1Ff3MIy_-Cqwam1dcywBcOdyrp8E/edit?usp=share_link",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void howDoIMakeStuffGlowToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1G5Qu6cywPPdsdc-LUyfVGg8pvTITTHL_U8peI8G8yvI/edit?usp=share_link",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1jXWL5cE9bQL5KPbIzAXKdM7_UgSz8zz2hO9fj5xysHg/edit?usp=share_link",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
     }
 }

@@ -30,6 +30,8 @@
             this.getTBSE = new System.Windows.Forms.Button();
             this.getHRBODY = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.getOtopop = new System.Windows.Forms.Button();
+            this.getRedefinedLala = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // getBibo
@@ -92,11 +94,33 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "These link to direct downloads";
             // 
+            // getOtopop
+            // 
+            this.getOtopop.Location = new System.Drawing.Point(0, 176);
+            this.getOtopop.Name = "getOtopop";
+            this.getOtopop.Size = new System.Drawing.Size(212, 24);
+            this.getOtopop.TabIndex = 6;
+            this.getOtopop.Text = "Get Otopop Textures";
+            this.getOtopop.UseVisualStyleBackColor = true;
+            this.getOtopop.Click += new System.EventHandler(this.getOtopop_Click);
+            // 
+            // getRedefinedLala
+            // 
+            this.getRedefinedLala.Location = new System.Drawing.Point(0, 204);
+            this.getRedefinedLala.Name = "getRedefinedLala";
+            this.getRedefinedLala.Size = new System.Drawing.Size(212, 24);
+            this.getRedefinedLala.TabIndex = 7;
+            this.getRedefinedLala.Text = "Get Redefined Lala Textures";
+            this.getRedefinedLala.UseVisualStyleBackColor = true;
+            this.getRedefinedLala.Click += new System.EventHandler(this.getRedefinedLala_Click);
+            // 
             // HelpWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(213, 178);
+            this.ClientSize = new System.Drawing.Size(213, 231);
+            this.Controls.Add(this.getRedefinedLala);
+            this.Controls.Add(this.getOtopop);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.getHRBODY);
             this.Controls.Add(this.getTBSE);
@@ -108,6 +132,7 @@
             this.MaximizeBox = false;
             this.Name = "HelpWindow";
             this.Text = "Help";
+            this.Load += new System.EventHandler(this.HelpWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,5 +146,7 @@
         private Button getTBSE;
         private Button getHRBODY;
         private Label label1;
+        private Button getOtopop;
+        private Button getRedefinedLala;
     }
 }

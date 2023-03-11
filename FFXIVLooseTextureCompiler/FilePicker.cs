@@ -167,7 +167,6 @@ namespace FFXIVVoicePackCreator {
                 }
             } else {
                 filePath.Text = CurrentPath;
-                MessageBox.Show("This is not a valid file this tool supports.", ParentForm.Text);
             }
         }
     }
