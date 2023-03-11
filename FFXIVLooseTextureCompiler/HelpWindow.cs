@@ -74,5 +74,33 @@ namespace FFXIVLooseTextureCompiler {
 
             }
         }
+
+        private void HelpWindow_Load(object sender, EventArgs e) {
+
+        }
+
+        private void getOtopop_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://drive.google.com/drive/u/1/folders/1glbwYcLHcYiO5HykCAHYRgkUM2K6ieOx",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void getRedefinedLala_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://mega.nz/folder/7QMSTQbB#n_9788MFTEYfOk4VPRusGQ/folder/3MkCGbxa",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
     }
 }
