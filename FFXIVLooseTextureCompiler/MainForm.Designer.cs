@@ -178,7 +178,10 @@
             "Gen3 and T&F3",
             "SCALES+",
             "TBSE/HRBODY",
-            "TAIL"});
+            "TAIL",
+            "Otopop",
+            "Redefined Lala A",
+            "Redefined Lala B"});
             this.baseBodyList.Location = new System.Drawing.Point(12, 112);
             this.baseBodyList.Name = "baseBodyList";
             this.baseBodyList.Size = new System.Drawing.Size(104, 23);
@@ -521,42 +524,42 @@
             // biboToGen3ToolStripMenuItem
             // 
             this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
             // 
             // biboToGen2ToolStripMenuItem
             // 
             this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(150, 22);
             this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
             // 
