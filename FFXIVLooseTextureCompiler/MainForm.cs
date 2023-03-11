@@ -843,11 +843,40 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case 6:
+                    // Tails
                     string xaelaCheck = (race == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
                     string gender = (genderValue == 0 ? raceCodeBody.Masculine[race]
                         : raceCodeBody.Feminine[race]);
                     result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "t" +
                         xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
+                    break;
+                case 7:
+                    // Otopop
+                    if (race == 5) {
+                        if (texture == 0) {
+                            return "chara/common/texture/skin_otopop.tex";
+                        } else {
+                            result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture) + ".tex";
+                        }
+                    } else {
+                        MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
+                    }
+                    break;
+                case 8:
+                    // Redefined Lala A
+                    if (race == 5) {
+                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001" + GetTextureType(texture) + ".tex";
+                    } else {
+                        MessageBox.Show("Redefined Lala A is only compatible with lalafells", VersionText);
+                    }
+                    break;
+                case 9:
+                    // Redefined Lala B
+                    if (race == 5) {
+                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_b" + GetTextureType(texture) + ".tex";
+                    } else {
+                        MessageBox.Show("Redefined Lala B is only compatible with lalafells", VersionText);
+                    }
                     break;
             }
             return result;
@@ -1001,6 +1030,14 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     uniqueAuRa.Enabled = false;
                     break;
+                case 7:
+                case 8:
+                case 9:
+                    genderListBody.Enabled = false;
+                    if (raceList.SelectedIndex != 5) {
+                        raceList.SelectedIndex = 5;
+                    }
+                    break;
             }
         }
 
@@ -1016,10 +1053,16 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show("Scales+ is only compatible with Xaela, and Raen", VersionText);
                 }
             }
-            if (baseBodyList.SelectedIndex > 0) {
+            if (baseBodyList.SelectedIndex > 0 && baseBodyList.SelectedIndex < 7) {
                 if (raceList.SelectedIndex == 5) {
                     raceList.SelectedIndex = lastRaceIndex;
-                    MessageBox.Show("Lalafels are not compatible with the selected body", VersionText);
+                    MessageBox.Show("Lalafells are not compatible with the selected body", VersionText);
+                }
+            }
+            if(baseBodyList.SelectedIndex > 6) {
+                if (raceList.SelectedIndex != 5) {
+                    raceList.SelectedIndex = 5;
+                    MessageBox.Show("Only Lalafells are compatible with the selected body", VersionText);
                 }
             }
             lastRaceIndex = raceList.SelectedIndex;
@@ -1064,7 +1107,7 @@ namespace FFXIVLooseTextureCompiler {
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + genderListBody.Text + ", " + raceList.Text;
+            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text) + ", " + raceList.Text;
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
                 textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
             }
@@ -1697,37 +1740,40 @@ namespace FFXIVLooseTextureCompiler {
                     return i;
                 }
             }
+            if (path.Contains("1101") || path.Contains("otopop")) {
+                return 5;
+            }
             return -1;
         }
 
         private void ConfigureOmniConfiguration(TextureSet textureSet) {
             textureSet.OmniExportMode = true;
             textureSet.ChildSets.Clear();
-
+            int race = ReverseRaceLookup(textureSet.InternalDiffusePath);
             if (textureSet.InternalDiffusePath.Contains("bibo")) {
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
-                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, ReverseRaceLookup(textureSet.InternalNormalPath));
-                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
+                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
+                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
+                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
                 eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
                 eve.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
                 eve.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
-                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, ReverseRaceLookup(textureSet.InternalNormalPath));
-                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
+                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
+                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
+                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
                 gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
                 gen3.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
                 gen3.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
@@ -1738,27 +1784,27 @@ namespace FFXIVLooseTextureCompiler {
             } else if (textureSet.InternalDiffusePath.Contains("eve")) {
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
-                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
-                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
+                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
+                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
+                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
                 bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_baseTexBaked.");
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
-                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, ReverseRaceLookup(textureSet.InternalNormalPath));
-                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, ReverseRaceLookup(textureSet.InternalMultiPath));
+                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
+                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
+                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
                 gen3.Diffuse = textureSet.Diffuse;
                 gen3.Normal = textureSet.Normal;
                 gen3.Multi = textureSet.Multi;
@@ -1771,27 +1817,27 @@ namespace FFXIVLooseTextureCompiler {
             } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, ReverseRaceLookup(textureSet.InternalNormalPath));
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, ReverseRaceLookup(textureSet.InternalMultiPath));
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
                 vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_baseTexBaked.");
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
-                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, ReverseRaceLookup(textureSet.InternalNormalPath));
-                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, ReverseRaceLookup(textureSet.InternalMultiPath));
+                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
+                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
+                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
                 bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
-                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, ReverseRaceLookup(textureSet.InternalDiffusePath));
-                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, ReverseRaceLookup(textureSet.InternalNormalPath));
-                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, ReverseRaceLookup(textureSet.InternalMultiPath));
+                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
+                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
+                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
                 eve.Diffuse = textureSet.Diffuse;
                 eve.Normal = textureSet.Normal;
                 eve.Multi = textureSet.Multi;
@@ -1801,6 +1847,126 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
                 textureSet.ChildSets.Add(eve);
+            } else if (textureSet.InternalDiffusePath.Contains("skin_otopop")) {
+                TextureSet vanilla = new TextureSet();
+                TextureSet redefinedLalaA = new TextureSet();
+                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
+                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
+                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
+                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
+                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_baseTexBaked.");
+                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_baseTexBaked.");
+                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_baseTexBaked.");
+
+                TextureSet redefinedLalaB = new TextureSet();
+                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
+                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 0, 9, race);
+                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 0, 9, race);
+                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 0, 9, race);
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "redefined_lala_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "redefined_lala_baseTexBaked.");
+
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(redefinedLalaA);
+                textureSet.ChildSets.Add(redefinedLalaB);
+            }else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_b_")) {
+                TextureSet vanilla = new TextureSet();
+                TextureSet redefinedLalaA = new TextureSet();
+                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
+                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
+                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
+                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
+                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_baseTexBaked.");
+                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_baseTexBaked.");
+                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_baseTexBaked.");
+
+                TextureSet otopop = new TextureSet();
+                otopop.MaterialSetName = "Otopop Compatibility";
+                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
+                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
+                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "otopop_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "otopop_baseTexBaked.");
+
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(redefinedLalaA);
+                textureSet.ChildSets.Add(otopop);
+            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
+                TextureSet redefinedLalaA = new TextureSet();
+                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
+                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
+                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
+                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
+                redefinedLalaA.Diffuse = textureSet.Diffuse;
+                redefinedLalaA.Normal = textureSet.Normal;
+                redefinedLalaA.Multi = textureSet.Multi;
+                redefinedLalaA.Glow = textureSet.Glow;
+                redefinedLalaA.NormalMask = textureSet.NormalMask;
+
+                TextureSet otopop = new TextureSet();
+                otopop.MaterialSetName = "Otopop Compatibility";
+                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
+                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
+                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "otopop_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "otopop_baseTexBaked.");
+
+                TextureSet redefinedLalaB = new TextureSet();
+                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
+                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 9, race);
+                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 9, race);
+                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 9, race);
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "redefined_lala_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "redefined_lala_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "redefined_lala_baseTexBaked.");
+
+                textureSet.ChildSets.Add(otopop);
+                textureSet.ChildSets.Add(redefinedLalaA);
+                textureSet.ChildSets.Add(redefinedLalaB);
+            } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_")) {
+                TextureSet vanilla = new TextureSet();
+                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
+                vanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
+                vanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
+                vanilla.Diffuse = textureSet.Diffuse;
+                vanilla.Normal = textureSet.Normal;
+                vanilla.Multi = textureSet.Multi;
+                vanilla.Glow = textureSet.Glow;
+                vanilla.NormalMask = textureSet.NormalMask;
+
+                TextureSet otopop = new TextureSet();
+                otopop.MaterialSetName = "Otopop Compatibility";
+                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
+                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
+                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "otopop_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "otopop_baseTexBaked.");
+
+                TextureSet redefinedLalaB = new TextureSet();
+                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
+                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 8, race);
+                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 8, race);
+                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 8, race);
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "redefined_lala_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "redefined_lala_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "redefined_lala_baseTexBaked.");
+
+                textureSet.ChildSets.Add(otopop);
+                textureSet.ChildSets.Add(vanilla);
+                textureSet.ChildSets.Add(redefinedLalaB);
             }
         }
 
