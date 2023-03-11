@@ -13,6 +13,10 @@ namespace FFXIVLooseTextureCompiler {
         private const string bibo = "res\\model\\bplus.FBX";
         private const string gen2 = "res\\model\\gen2.FBX";
         private const string gen3 = "res\\model\\gen3.FBX";
+        private const string vanillaP = "res\\model\\vanillap.FBX";
+        private const string otopop = "res\\model\\genp.FBX";
+        private const string redefinedLala = "res\\model\\redefinedLala.FBX";
+
         private const string template = "template.xml";
         public static void GenerateBasedOnSourceBody(string internalPath, string inputPath, string outputPath) {
             if (internalPath.Contains("bibo")) {
@@ -35,6 +39,20 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 if (outputPath.Contains($"gen3")) {
                     Gen2ToGen3(inputPath, outputPath);
+                }
+            }else if (internalPath.Contains("skin_otopop") || internalPath.Contains("v01_c1101b0001_g")) {
+                if (outputPath.Contains("redefined_lala")) {
+                    OtopopToRedefinedLala(inputPath, outputPath);
+                }
+                if (outputPath.Contains("vanilla_lala")) {
+                    OtopopToVanillaLala(inputPath, outputPath);
+                }
+            } else if (internalPath.Contains("skin_otopop")) {
+                if (outputPath.Contains("redefined_lala")) {
+                    OtopopToRedefinedLala(inputPath, outputPath);
+                }
+                if (outputPath.Contains("vanilla_lala")) {
+                    OtopopToVanillaLala(inputPath, outputPath);
                 }
             }
         }
@@ -62,6 +80,30 @@ namespace FFXIVLooseTextureCompiler {
         public static void Gen2ToGen3(string inputImage, string outputImage) {
             CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen2),
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, gen3), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+
+        public static void OtopopToVanillaLala(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaP), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+
+        public static void OtopopToRedefinedLala(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaP), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+        public static void RedefinedLalaToOtopop(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+
+        public static void VanillaPToOtopop(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaP),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+
+        public static void VanillaPToRedefinedLala(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaP),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
 
         public static void OpenXNormal() {
