@@ -23,6 +23,12 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         private bool ignoreMultiGeneration;
         private bool omniExportMode;
 
+        public bool IsChildSet {
+            get {
+               return diffuse.Contains("baseTexBaked");
+            }
+        }
+
         List<TextureSet> childSets = new List<TextureSet>();
         public string MaterialSetName { get => materialSetName; set => materialSetName = value; }
         public string Diffuse { get { if (diffuse == null) { diffuse = ""; } return diffuse; } set => diffuse = value; }

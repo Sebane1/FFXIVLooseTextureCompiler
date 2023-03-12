@@ -111,7 +111,7 @@
             this.discordButton = new System.Windows.Forms.Button();
             this.faceExtra = new System.Windows.Forms.ComboBox();
             this.exportPanel = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
+            this.exportLabel = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
@@ -974,24 +974,25 @@
             // exportPanel
             // 
             this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportPanel.Controls.Add(this.label7);
+            this.exportPanel.Controls.Add(this.exportLabel);
             this.exportPanel.Location = new System.Drawing.Point(0, 0);
             this.exportPanel.Name = "exportPanel";
             this.exportPanel.Size = new System.Drawing.Size(536, 608);
             this.exportPanel.TabIndex = 44;
             this.exportPanel.Visible = false;
             // 
-            // label7
+            // exportLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.SystemColors.GrayText;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label7.ForeColor = System.Drawing.Color.Snow;
-            this.label7.Location = new System.Drawing.Point(140, 264);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(252, 65);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Exporting";
+            this.exportLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.exportLabel.BackColor = System.Drawing.SystemColors.GrayText;
+            this.exportLabel.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.exportLabel.ForeColor = System.Drawing.Color.Snow;
+            this.exportLabel.Location = new System.Drawing.Point(0, 264);
+            this.exportLabel.Name = "exportLabel";
+            this.exportLabel.Size = new System.Drawing.Size(536, 65);
+            this.exportLabel.TabIndex = 0;
+            this.exportLabel.Text = "Exporting";
+            this.exportLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // glow
             // 
@@ -1084,7 +1085,6 @@
             this.menuStrip1.PerformLayout();
             this.materialListContextMenu.ResumeLayout(false);
             this.exportPanel.ResumeLayout(false);
-            this.exportPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1180,5 +1180,6 @@
         private ToolStripMenuItem howDoIMakeStuffBumpyToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeStuffGlowToolStripMenuItem;
         private ToolStripMenuItem canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem;
+        private Label exportLabel;
     }
 }
