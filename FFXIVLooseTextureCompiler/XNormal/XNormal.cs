@@ -231,10 +231,11 @@ namespace FFXIVLooseTextureCompiler {
                     xNormalExportJob.InputTexturePath, xNormalExportJob.OutputModel, xNormalExportJob.OutputTexturePath.Replace("_baseTexBaked", null)));
                 }
             }
-            processStartInfo.Arguments = processStartInfo.Arguments.Trim();
-            Process process = Process.Start(processStartInfo);
-            process.WaitForExit();
-            Thread.Sleep(100);
+            if (exportJobs.Count > 0) {
+                processStartInfo.Arguments = processStartInfo.Arguments.Trim();
+                Process process = Process.Start(processStartInfo);
+                process.WaitForExit();
+            }
         }
     }
 }
