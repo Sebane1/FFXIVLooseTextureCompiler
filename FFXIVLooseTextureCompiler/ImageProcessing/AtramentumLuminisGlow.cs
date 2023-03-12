@@ -43,7 +43,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     }
                 }
             } else {
-                MessageBox.Show("Glow merging failed. Images are not the same size.");
+                MessageBox.Show("Glow merging failed with diffuse. Images are not the same size.");
             }
             destination.UnlockBits();
             source.UnlockBits();
@@ -69,7 +69,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     }
                 }
             } else {
-                MessageBox.Show("Glow merging failed. Images are not the same size.");
+                MessageBox.Show("Glow merging failed with multi. Images are not the same size.");
             }
             destination.UnlockBits();
             source.UnlockBits();

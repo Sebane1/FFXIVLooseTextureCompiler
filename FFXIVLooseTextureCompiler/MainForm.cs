@@ -44,6 +44,7 @@ namespace FFXIVLooseTextureCompiler {
         Dictionary<string, FileSystemWatcher> watchers = new Dictionary<string, FileSystemWatcher>();
         private bool lockDuplicateGeneration;
         private bool finalizeResults;
+        private TextureProcessor textureProcessor;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -65,6 +66,21 @@ namespace FFXIVLooseTextureCompiler {
             GetPenumbraPath();
             Text += " " + Application.ProductVersion;
             Control.CheckForIllegalCrossThreadCalls = false;
+            textureProcessor = new TextureProcessor();
+            textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
+            textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
+        }
+
+        private void TextureProcessor_OnLaunchedXnormal(object? sender, EventArgs e) {
+            exportLabel.Text = "Wait For xNormal";
+            Refresh();
+            Application.DoEvents();
+        }
+
+        private void TextureProcessor_OnProgressChange(object? sender, EventArgs e) {
+            exportProgress.Increment(1);
+            Refresh();
+            Application.DoEvents();
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -118,6 +134,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void generateButton_Click(object sender, EventArgs e) {
+            exportLabel.Text = "Exporting";
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
                 lockDuplicateGeneration = true;
                 exportPanel.Visible = true;
@@ -139,118 +156,15 @@ namespace FFXIVLooseTextureCompiler {
                         hasDoneReload = false;
                     }
                     Directory.CreateDirectory(modPath);
-                    int i = 0;
-                    fileCount = 0;
                     exportProgress.BringToFront();
                     exportProgress.Maximum = textureList.Items.Count * 3;
                     exportProgress.Visible = true;
                     Refresh();
-                    Dictionary<string, List<TextureSet>> groups = new Dictionary<string, List<TextureSet>>();
-                    normalCache = new Dictionary<string, Bitmap>();
-                    multiCache = new Dictionary<string, Bitmap>();
-                    xnormalCache = new Dictionary<string, string>();
-                    foreach (TextureSet textureSet in textureList.Items) {
-                        if (!groups.ContainsKey(textureSet.MaterialGroupName)) {
-                            groups.Add(textureSet.MaterialGroupName, new List<TextureSet>() { textureSet });
-                            foreach (TextureSet childSet in textureSet.ChildSets) {
-                                childSet.MaterialGroupName = textureSet.MaterialGroupName;
-                                groups[textureSet.MaterialGroupName].Add(childSet);
-                            }
-                        } else {
-                            groups[textureSet.MaterialGroupName].Add(textureSet);
-                            foreach (TextureSet childSet in textureSet.ChildSets) {
-                                childSet.MaterialGroupName = textureSet.MaterialGroupName;
-                                groups[textureSet.MaterialGroupName].Add(childSet);
-                            }
-                        }
+                    List<TextureSet> textureSets = new List<TextureSet>();
+                    foreach (TextureSet item in textureList.Items) {
+                        textureSets.Add(item);
                     }
-                    foreach (List<TextureSet> textureSets in groups.Values) {
-                        Group group = new Group(textureSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0, "Multi", 0);
-                        Option option = null;
-                        foreach (TextureSet textureSet in textureSets) {
-                            string diffuseDiskPath = !string.IsNullOrEmpty(textureSet.InternalDiffusePath) ?
-                                Path.Combine(modPath, textureSet.InternalDiffusePath.Replace("/", @"\")) : "";
-                            string normalDiskPath = !string.IsNullOrEmpty(textureSet.InternalNormalPath) ?
-                                Path.Combine(modPath, textureSet.InternalNormalPath.Replace("/", @"\")) : "";
-                            string multiDiskPath = !string.IsNullOrEmpty(textureSet.InternalMultiPath) ?
-                                Path.Combine(modPath, textureSet.InternalMultiPath.Replace("/", @"\")) : "";
-                            switch (generationType.SelectedIndex) {
-                                case 0:
-                                    if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
-                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                            + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse"), 0);
-                                        option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
-                                            fileCount));
-                                        group.Options.Add(option);
-                                        DiffuseLogic(textureSet, diffuseDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                    if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
-                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                            + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
-                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
-                                            fileCount));
-                                        group.Options.Add(option);
-                                        NormalLogic(textureSet, normalDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                    if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                        (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
-                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
-                                            fileCount));
-                                        group.Options.Add(option);
-                                        MultiLogic(textureSet, multiDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                    break;
-                                case 1:
-                                    option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
-                                        : textureSet.MaterialSetName, 0);
-                                    group.Options.Add(option);
-                                    if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
-                                        option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
-                                        fileCount));
-                                        DiffuseLogic(textureSet, diffuseDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-
-                                    if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
-                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"), fileCount)); 
-                                        NormalLogic(textureSet, normalDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                    if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
-                                        MultiLogic(textureSet, multiDiskPath);
-                                    }
-                                    exportProgress.Increment(1);
-                                    Refresh();
-                                    Application.DoEvents();
-                                    break;
-                            }
-                        }
-                        if (group.Options.Count > 0) {
-                            string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
-                            ExportGroup(groupPath, group);
-                        }
-                    }
-                    foreach (Bitmap value in normalCache.Values) {
-                        value.Dispose();
-                    }
-                    foreach (Bitmap value in multiCache.Values) {
-                        value.Dispose();
-                    }
+                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex, bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
@@ -290,106 +204,6 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-
-        private void MultiLogic(TextureSet textureSet, string multiDiskPath) {
-            if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_normal_xnormal.") : "");
-                foreach (TextureSet child in textureSet.ChildSets) {
-                    if (!string.IsNullOrEmpty(child.Multi)) {
-                        if (!xnormalCache.ContainsKey(child.Multi)) {
-                            if (finalizeResults || !File.Exists(child.Multi)) {
-                                if (child.Multi.Contains("baseTexBaked")) {
-                                    xnormalCache.Add(child.Multi, child.Multi);
-                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
-                && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                if (!textureSet.IgnoreMultiGeneration) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
-                }
-            }
-        }
-
-        private void NormalLogic(TextureSet textureSet, string normalDiskPath) {
-            if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
-                if (bakeNormals.Checked && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.OmniExportMode ? textureSet.Normal.Replace(".", "_xnormal.") : "");
-                    foreach (TextureSet child in textureSet.ChildSets) {
-                        if (!xnormalCache.ContainsKey(child.Normal)) {
-                            if (finalizeResults || !File.Exists(child.Normal)) {
-                                if (child.Normal.Contains("baseTexBaked")) {
-                                    xnormalCache.Add(child.Normal, child.Normal);
-                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
-                            textureSet.Glow);
-                    } else {
-                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.None, "",
-                            "", textureSet.Diffuse.Replace(".", "_xnormal."));
-                        foreach (TextureSet child in textureSet.ChildSets) {
-                            if (!xnormalCache.ContainsKey(child.Normal)) {
-                                if (finalizeResults || !File.Exists(child.Normal)) {
-                                    if (child.Normal.Contains("baseTexBaked")) {
-                                        xnormalCache.Add(child.Normal, child.Normal);
-                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
-            && bakeNormals.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                if (!textureSet.IgnoreNormalGeneration) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_normal_xnormal.") : "");
-                    foreach (TextureSet child in textureSet.ChildSets) {
-                        if (!xnormalCache.ContainsKey(child.Normal)) {
-                            if (finalizeResults || !File.Exists(child.Normal)) {
-                                if (child.Normal.Contains("baseTexBaked")) {
-                                    xnormalCache.Add(child.Normal, child.Normal);
-                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DiffuseLogic(TextureSet textureSet, string diffuseDiskPath) {
-            if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
-                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal,
-                    textureSet.Diffuse);
-            } else {
-                if (string.IsNullOrEmpty(textureSet.Glow)) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.None,
-                        "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                } else {
-                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "",
-                        textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                }
-                foreach (TextureSet child in textureSet.ChildSets) {
-                    if (!xnormalCache.ContainsKey(child.Diffuse)) {
-                        if (finalizeResults || !File.Exists(child.Diffuse)) {
-                            if (child.Diffuse.Contains("baseTexBaked")) {
-                                xnormalCache.Add(child.Diffuse, child.Diffuse);
-                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
             if (e.Control && e.KeyCode == Keys.S) {
                 Save();
@@ -406,171 +220,7 @@ namespace FFXIVLooseTextureCompiler {
             // run base implementation
             return base.ProcessCmdKey(ref message, keys);
         }
-        public enum ExportType {
-            None,
-            Normal,
-            MultiFace,
-            MergeNormal,
-            Glow,
-            GlowMulti
-        }
-        public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None, string diffuseNormal = "", string mask = "", string rawDataExport = "") {
-            byte[] data = new byte[0];
-            int contrast = 500;
-            int contrastFace = 100;
-            using (MemoryStream stream = new MemoryStream()) {
-                switch (exportType) {
-                    case ExportType.None:
-                        using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                            if (bitmap != null) {
-                                bitmap.Save(stream, ImageFormat.Png);
-                            }
-                        }
-                        break;
-                    case ExportType.Glow:
-                        using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                            if (bitmap != null) {
-                                Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(bitmap, TexLoader.ResolveBitmap(mask));
-                                glowBitmap.Save(stream, ImageFormat.Png);
-                            }
-                        }
-                        break;
-                    case ExportType.GlowMulti:
-                        using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                            if (bitmap != null) {
-                                Bitmap glowBitmap = AtramentumLuminisGlow.CalculateMulti(bitmap, TexLoader.ResolveBitmap(mask));
-                                glowBitmap.Save(stream, ImageFormat.Png);
-                            }
-                        }
-                        break;
-                    case ExportType.Normal:
-                        if (!normalCache.ContainsKey(inputFile)) {
-                            using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                                if (bitmap != null) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.White);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap output = null;
-                                        if (File.Exists(mask)) {
-                                            using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                                output = Normal.Calculate(target, normalMaskBitmap);
-                                            }
-                                        } else {
-                                            output = Normal.Calculate(target);
-                                        }
-                                        if (outputFile.Contains("fac_b_n")) {
-                                            Bitmap resize = new Bitmap(output, new Size(1024, 1024));
-                                            resize.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(inputFile, resize);
-                                        } else {
-                                            output.Save(stream, ImageFormat.Png);
-                                            normalCache.Add(inputFile, output);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            normalCache[inputFile].Save(stream, ImageFormat.Png);
-                        }
-                        break;
-                    case ExportType.MultiFace:
-                        if (!multiCache.ContainsKey(inputFile)) {
-                            using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                                if (bitmap != null) {
-                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(bitmap)), 255, 126, 0);
-                                    multi.Save(stream, ImageFormat.Png);
-                                    multiCache.Add(inputFile, multi);
-                                }
-                            }
-                        } else {
-                            multiCache[inputFile].Save(stream, ImageFormat.Png);
-                        }
-                        break;
-                    case ExportType.MergeNormal:
-                        if (string.IsNullOrEmpty(diffuseNormal)) {
 
-                        } else {
-                            if (!normalCache.ContainsKey(diffuseNormal)) {
-                                using (Bitmap bitmap = TexLoader.ResolveBitmap(diffuseNormal)) {
-                                    if (bitmap != null) {
-                                        using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
-                                            Bitmap output = null;
-                                            if (File.Exists(mask)) {
-                                                using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                                    if (outputFile.Contains("fac_b_n")) {
-                                                        Bitmap resize = new Bitmap(bitmap, new Size(1024, 1024));
-                                                        output = ImageManipulation.MergeNormals(inputFile, resize, target, normalMaskBitmap, diffuseNormal);
-                                                        output.Save(stream, ImageFormat.Png);
-                                                        normalCache.Add(inputFile, resize);
-                                                    } else {
-                                                        output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
-                                                        normalCache.Add(inputFile, output);
-                                                    }
-                                                }
-                                            } else {
-                                                output = ImageManipulation.MergeNormals(inputFile, bitmap, target, null, diffuseNormal);
-                                            }
-                                            output.Save(stream, ImageFormat.Png);
-                                            if (!normalCache.ContainsKey(diffuseNormal)) {
-                                                normalCache.Add(diffuseNormal, output);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
-                            }
-                        }
-                        break;
-                }
-                stream.Flush();
-                stream.Position = 0;
-                if (stream.Length > 0) {
-                    TextureImporter.PngToTex(stream, out data);
-                    stream.Position = 0;
-                    if (!string.IsNullOrEmpty(rawDataExport)) {
-                        if (!rawDataExport.Contains("baseTexBaked")) {
-                            using (FileStream fileStream = new FileStream(rawDataExport, FileMode.Create, FileAccess.Write)) {
-                                stream.CopyTo(fileStream);
-                            }
-                        }
-                    }
-                }
-            }
-            if (data.Length > 0) {
-                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-                File.WriteAllBytes(outputFile, data);
-            }
-        }
-        private void ExportJson() {
-            string jsonText = @"{
-  ""Name"": """",
-  ""Priority"": 0,
-  ""Files"": { },
-  ""FileSwaps"": { },
-  ""Manipulations"": []
-}";
-            if (jsonFilepath != null) {
-                using (StreamWriter writer = new StreamWriter(jsonFilepath)) {
-                    writer.WriteLine(jsonText);
-                }
-            }
-        }
-        private void ExportGroup(string path, Group group) {
-            if (path != null) {
-                if (group.Options.Count > 0) {
-                    using (StreamWriter file = File.CreateText(path)) {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Formatting = Formatting.Indented;
-                        serializer.Serialize(file, group);
-                    }
-                }
-            }
-        }
-        public string AppendNumber(string value, int number) {
-            return value.Replace(".tex", number + ".tex");
-        }
         private void CleanDirectory() {
             foreach (string file in Directory.GetFiles(Application.StartupPath)) {
                 if (file.Contains("WebView2") || file.Contains(".zip") || file.Contains(".pdb") || file.Contains(".config")
@@ -583,22 +233,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-        private void ExportMeta() {
-            string metaText = @"{
-  ""FileVersion"": 3,
-  ""Name"": """ + (!string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "") + @""",
-  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : "FFXIV Loose Texture Compiler") + @""",
-  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : "Exported by FFXIV Loose Texture Compiler") + @""",
-  ""Version"": """ + modVersionTextBox.Text + @""",
-  ""Website"": """ + modWebsiteTextBox.Text + @""",
-  ""ModTags"": []
-}";
-            if (metaFilePath != null) {
-                using (StreamWriter writer = new StreamWriter(metaFilePath)) {
-                    writer.WriteLine(metaText);
-                }
-            }
-        }
+
         private void ConfigurePenumbraModFolder() {
             MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
             FolderBrowserDialog folderSelect = new FolderBrowserDialog();
@@ -1533,7 +1168,36 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
         }
-
+        private void ExportJson() {
+            string jsonText = @"{
+  ""Name"": """",
+  ""Priority"": 0,
+  ""Files"": { },
+  ""FileSwaps"": { },
+  ""Manipulations"": []
+}";
+            if (jsonFilepath != null) {
+                using (StreamWriter writer = new StreamWriter(jsonFilepath)) {
+                    writer.WriteLine(jsonText);
+                }
+            }
+        }
+        private void ExportMeta() {
+            string metaText = @"{
+  ""FileVersion"": 3,
+  ""Name"": """ + (!string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "") + @""",
+  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : "FFXIV Loose Texture Compiler") + @""",
+  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : "Exported by FFXIV Loose Texture Compiler") + @""",
+  ""Version"": """ + modVersionTextBox.Text + @""",
+  ""Website"": """ + modWebsiteTextBox.Text + @""",
+  ""ModTags"": []
+}";
+            if (metaFilePath != null) {
+                using (StreamWriter writer = new StreamWriter(metaFilePath)) {
+                    writer.WriteLine(metaText);
+                }
+            }
+        }
         private void exportProgress_Click(object sender, EventArgs e) {
 
         }
