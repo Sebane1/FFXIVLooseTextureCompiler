@@ -182,294 +182,61 @@ namespace FFXIVLooseTextureCompiler {
                                         option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
-                                            ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal,
-                                                textureSet.Diffuse);
-                                        } else {
-                                            if (string.IsNullOrEmpty(textureSet.Glow)) {
-                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.None,
-                                                    "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                                            } else {
-                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "",
-                                                    textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                                            }
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Diffuse)) {
-                                                    if (finalizeResults || !File.Exists(child.Diffuse)) {
-                                                        if (child.Diffuse.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Diffuse, child.Diffuse);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                        Application.DoEvents();
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                        DiffuseLogic(textureSet, diffuseDiskPath);
                                     }
-
-                                    if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
+                                    if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
                                             + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
                                         option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        if (bakeNormals.Checked && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                                            ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.OmniExportMode ? textureSet.Normal.Replace(".", "_xnormal.") : "");
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Normal, child.Normal);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
-                                                    textureSet.Glow);
-                                            } else {
-                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.None, "",
-                                                    "", textureSet.Diffuse.Replace(".", "_xnormal."));
-                                                foreach (TextureSet child in textureSet.ChildSets) {
-                                                    if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                        if (finalizeResults || !File.Exists(child.Normal)) {
-                                                            if (child.Normal.Contains("baseTexBaked")) {
-                                                                xnormalCache.Add(child.Normal, child.Normal);
-                                                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
-                                        && bakeNormals.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!textureSet.IgnoreNormalGeneration) {
-                                            option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                                (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
-                                            option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
-                                                fileCount));
-                                            group.Options.Add(option);
-                                            ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_normal_xnormal.") : "");
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Normal, child.Normal);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            exportProgress.Increment(1);
-                                            Refresh();
-                                            Application.DoEvents();
-                                        } else {
-                                            if (exportProgress.Maximum > 0) {
-                                                exportProgress.Maximum--;
-                                            }
-                                        }
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                        NormalLogic(textureSet, normalDiskPath);
                                     }
-                                    if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
+                                    if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                            (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
+                                        (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
                                         option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                             fileCount));
                                         group.Options.Add(option);
-                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_normal_xnormal.") : "");
-                                        foreach (TextureSet child in textureSet.ChildSets) {
-                                            if (!string.IsNullOrEmpty(child.Multi)) {
-                                                if (!xnormalCache.ContainsKey(child.Multi)) {
-                                                    if (finalizeResults || !File.Exists(child.Multi)) {
-                                                        if (child.Multi.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Multi, child.Multi);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                        Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
-                                        && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!textureSet.IgnoreMultiGeneration) {
-                                            option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                                (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
-                                            option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
-                                                fileCount));
-                                            group.Options.Add(option);
-                                            ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
-                                            exportProgress.Increment(1);
-                                            Refresh();
-                                            Application.DoEvents();
-                                        } else {
-                                            if (exportProgress.Maximum > 0) {
-                                                exportProgress.Maximum--;
-                                            }
-                                        }
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                        MultiLogic(textureSet, multiDiskPath);
                                     }
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
                                     break;
                                 case 1:
                                     option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
                                         : textureSet.MaterialSetName, 0);
                                     group.Options.Add(option);
                                     if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
-                                        if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
-                                            ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Normal, textureSet.Diffuse);
-                                        } else {
-                                            if (string.IsNullOrEmpty(textureSet.Glow)) {
-                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.None,
-                                                    "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                                            } else {
-                                                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "",
-                                                    textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
-                                            }
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Diffuse)) {
-                                                    if (finalizeResults || !File.Exists(child.Diffuse)) {
-                                                        if (child.Diffuse.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Diffuse, child.Diffuse);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
                                         option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
-                                            fileCount++));
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                        Application.DoEvents();
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                        fileCount));
+                                        DiffuseLogic(textureSet, diffuseDiskPath);
                                     }
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
 
-                                    if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
-                                        if (!bakeNormals.Checked || textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                                            if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowMulti, "",
-                                                    textureSet.Glow);
-                                            } else {
-                                                ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", textureSet.Normal.Replace(".", "_xnormal."));
-                                                foreach (TextureSet child in textureSet.ChildSets) {
-                                                    if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                        if (finalizeResults || !File.Exists(child.Normal)) {
-                                                            if (child.Normal.Contains("baseTexBaked")) {
-                                                                xnormalCache.Add(child.Normal, child.Normal);
-                                                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal,
-                                                textureSet.Diffuse, textureSet.NormalMask, textureSet.Normal.Replace(".", "_xnormal."));
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Normal, child.Normal);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
-                                            fileCount++));
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                        Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
-                                        && bakeNormals.Checked) {
-                                        if (!textureSet.IgnoreNormalGeneration) {
-                                            ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount), ExportType.Normal, textureSet.Diffuse.Replace(".", "_normal_xnormal."));
-                                            foreach (TextureSet child in textureSet.ChildSets) {
-                                                if (!xnormalCache.ContainsKey(child.Normal)) {
-                                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                                        if (child.Normal.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Normal, child.Normal);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
-                                                fileCount++));
-                                            exportProgress.Increment(1);
-                                            Refresh();
-                                            Application.DoEvents();
-                                        } else {
-                                            if (exportProgress.Maximum > 0) {
-                                                exportProgress.Maximum--;
-                                            }
-                                        }
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                    if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
+                                        option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"), fileCount)); 
+                                        NormalLogic(textureSet, normalDiskPath);
                                     }
-                                    if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_xnormal.") : "");
-                                        foreach (TextureSet child in textureSet.ChildSets) {
-                                            if (!string.IsNullOrEmpty(child.Multi)) {
-                                                if (!xnormalCache.ContainsKey(child.Multi)) {
-                                                    if (finalizeResults || !File.Exists(child.Multi)) {
-                                                        if (child.Multi.Contains("baseTexBaked")) {
-                                                            xnormalCache.Add(child.Multi, child.Multi);
-                                                            XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
-                                            fileCount++));
-                                        exportProgress.Increment(1);
-                                        Refresh();
-                                        Application.DoEvents();
-                                    } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
-                                        && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                                        if (!textureSet.IgnoreMultiGeneration) {
-                                            ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
-                                            option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
-                                                fileCount++));
-                                            exportProgress.Increment(1);
-                                            Refresh();
-                                            Application.DoEvents();
-                                        } else {
-                                            if (exportProgress.Maximum > 0) {
-                                                exportProgress.Maximum--;
-                                            }
-                                        }
-                                    } else {
-                                        if (exportProgress.Maximum > 0) {
-                                            exportProgress.Maximum--;
-                                        }
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
+                                    if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
+                                        option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"), fileCount++));
+                                        MultiLogic(textureSet, multiDiskPath);
                                     }
+                                    exportProgress.Increment(1);
+                                    Refresh();
+                                    Application.DoEvents();
                                     break;
                             }
                         }
@@ -523,6 +290,106 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
+        private void MultiLogic(TextureSet textureSet, string multiDiskPath) {
+            if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
+                ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount++), ExportType.None, "", "", textureSet.OmniExportMode ? textureSet.Multi.Replace(".", "_normal_xnormal.") : "");
+                foreach (TextureSet child in textureSet.ChildSets) {
+                    if (!string.IsNullOrEmpty(child.Multi)) {
+                        if (!xnormalCache.ContainsKey(child.Multi)) {
+                            if (finalizeResults || !File.Exists(child.Multi)) {
+                                if (child.Multi.Contains("baseTexBaked")) {
+                                    xnormalCache.Add(child.Multi, child.Multi);
+                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalMultiPath, textureSet.Multi.Replace(".", "_xnormal."), child.Multi);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
+                && generateMultiCheckBox.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                if (!textureSet.IgnoreMultiGeneration) {
+                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace);
+                }
+            }
+        }
+
+        private void NormalLogic(TextureSet textureSet, string normalDiskPath) {
+            if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
+                if (bakeNormals.Checked && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
+                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.OmniExportMode ? textureSet.Normal.Replace(".", "_xnormal.") : "");
+                    foreach (TextureSet child in textureSet.ChildSets) {
+                        if (!xnormalCache.ContainsKey(child.Normal)) {
+                            if (finalizeResults || !File.Exists(child.Normal)) {
+                                if (child.Normal.Contains("baseTexBaked")) {
+                                    xnormalCache.Add(child.Normal, child.Normal);
+                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Normal.Replace(".", "_xnormal."), child.Normal);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.GlowMulti, "",
+                            textureSet.Glow);
+                    } else {
+                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount++), ExportType.None, "",
+                            "", textureSet.Diffuse.Replace(".", "_xnormal."));
+                        foreach (TextureSet child in textureSet.ChildSets) {
+                            if (!xnormalCache.ContainsKey(child.Normal)) {
+                                if (finalizeResults || !File.Exists(child.Normal)) {
+                                    if (child.Normal.Contains("baseTexBaked")) {
+                                        xnormalCache.Add(child.Normal, child.Normal);
+                                        XNormal.GenerateBasedOnSourceBody(textureSet.InternalNormalPath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
+            && bakeNormals.Checked && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                if (!textureSet.IgnoreNormalGeneration) {
+                    ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount++), ExportType.Normal, "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_normal_xnormal.") : "");
+                    foreach (TextureSet child in textureSet.ChildSets) {
+                        if (!xnormalCache.ContainsKey(child.Normal)) {
+                            if (finalizeResults || !File.Exists(child.Normal)) {
+                                if (child.Normal.Contains("baseTexBaked")) {
+                                    xnormalCache.Add(child.Normal, child.Normal);
+                                    XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_normal_xnormal."), child.Normal);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DiffuseLogic(TextureSet textureSet, string diffuseDiskPath) {
+            if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && bakeNormals.Checked)) {
+                ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Normal,
+                    textureSet.Diffuse);
+            } else {
+                if (string.IsNullOrEmpty(textureSet.Glow)) {
+                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.None,
+                        "", "", textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
+                } else {
+                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount++), ExportType.Glow, "",
+                        textureSet.Glow, textureSet.OmniExportMode ? textureSet.Diffuse.Replace(".", "_xnormal.") : "");
+                }
+                foreach (TextureSet child in textureSet.ChildSets) {
+                    if (!xnormalCache.ContainsKey(child.Diffuse)) {
+                        if (finalizeResults || !File.Exists(child.Diffuse)) {
+                            if (child.Diffuse.Contains("baseTexBaked")) {
+                                xnormalCache.Add(child.Diffuse, child.Diffuse);
+                                XNormal.GenerateBasedOnSourceBody(textureSet.InternalDiffusePath, textureSet.Diffuse.Replace(".", "_xnormal."), child.Diffuse);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
             if (e.Control && e.KeyCode == Keys.S) {
                 Save();
@@ -1059,7 +926,7 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show("Lalafells are not compatible with the selected body", VersionText);
                 }
             }
-            if(baseBodyList.SelectedIndex > 6) {
+            if (baseBodyList.SelectedIndex > 6) {
                 if (raceList.SelectedIndex != 5) {
                     raceList.SelectedIndex = 5;
                     MessageBox.Show("Only Lalafells are compatible with the selected body", VersionText);
@@ -1874,7 +1741,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(redefinedLalaA);
                 textureSet.ChildSets.Add(redefinedLalaB);
-            }else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_b_")) {
+            } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_b_")) {
                 TextureSet vanilla = new TextureSet();
                 TextureSet redefinedLalaA = new TextureSet();
                 redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
