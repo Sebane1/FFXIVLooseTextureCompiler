@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FFXIVLooseTextureCompiler.Export {
+namespace FFXIVLooseTextureCompiler {
     public class XNormalExportJob {
         private string internalPath;
         private string inputTexturePath;
