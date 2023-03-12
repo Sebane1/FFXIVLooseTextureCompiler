@@ -1,5 +1,4 @@
-﻿using FFXIVLooseTextureCompiler.Export;
-using FFXIVLooseTextureCompiler.PathOrganization;
+﻿using FFXIVLooseTextureCompiler.PathOrganization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
