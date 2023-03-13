@@ -881,8 +881,8 @@
             this.generationType.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generationType.FormattingEnabled = true;
             this.generationType.Items.AddRange(new object[] {
-            "Verbose",
-            "Compact"});
+            "Detailed",
+            "Simple"});
             this.generationType.Location = new System.Drawing.Point(90, 607);
             this.generationType.Name = "generationType";
             this.generationType.Size = new System.Drawing.Size(70, 23);
