@@ -191,8 +191,8 @@ namespace FFXIVLooseTextureCompiler {
                 Directory.CreateDirectory(Application.UserAppDataPath);
             }
             using (StreamWriter writer = new StreamWriter(path)) {
-                writer.Write(string.Format(xmlFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX),
-                    inputImage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX), outputImage));
+                writer.Write(string.Format(xmlFile, CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX)),
+                    CleanXmlEscapeSequences(inputImage), CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX)), outputImage));
             }
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");
             processStartInfo.UseShellExecute = true;
@@ -249,7 +249,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-        public string CleanXmlEscapeSequences(string input) {
+        public static string CleanXmlEscapeSequences(string input) {
             return input.Replace("&", @"&#38;").Replace("'", @"&#39;").Replace("'", @"&#39;")
                 .Replace("<", @"&#60;").Replace(">", @"&#62;").Replace(@"""", @"&#34");
         }
