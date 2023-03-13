@@ -191,7 +191,8 @@ namespace FFXIVLooseTextureCompiler {
                 Directory.CreateDirectory(Application.UserAppDataPath);
             }
             using (StreamWriter writer = new StreamWriter(path)) {
-                writer.Write(string.Format(xmlFile, inputFBX, inputImage, outputFBX, outputImage));
+                writer.Write(string.Format(xmlFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX),
+                    inputImage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX), outputImage));
             }
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");
             processStartInfo.UseShellExecute = true;
@@ -227,15 +228,30 @@ namespace FFXIVLooseTextureCompiler {
                 string path = Path.Combine(Application.UserAppDataPath, xNormalExportJob.OutputXMLPath);
                 processStartInfo.Arguments += @"""" + path + @""" ";
                 using (StreamWriter writer = new StreamWriter(path)) {
-                    writer.Write(string.Format(xmlFile, xNormalExportJob.InputModel,
-                    xNormalExportJob.InputTexturePath, xNormalExportJob.OutputModel, xNormalExportJob.OutputTexturePath.Replace("_baseTexBaked", null)));
+                    writer.Write(string.Format(xmlFile,
+                    CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormalExportJob.InputModel)),
+                    CleanXmlEscapeSequences(xNormalExportJob.InputTexturePath),
+                    CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormalExportJob.OutputModel)),
+                    CleanXmlEscapeSequences(xNormalExportJob.OutputTexturePath.Replace("_baseTexBaked", null))));
                 }
             }
             if (exportJobs.Count > 0) {
                 processStartInfo.Arguments = processStartInfo.Arguments.Trim();
                 Process process = Process.Start(processStartInfo);
                 process.WaitForExit();
+
+                foreach (XNormalExportJob xNormalExportJob in exportJobs) {
+                    string path = Path.Combine(Application.UserAppDataPath, xNormalExportJob.OutputXMLPath);
+                    if (!File.Exists(xNormalExportJob.OutputTexturePath)) {
+                        CallXNormal(xNormalExportJob.InputModel, xNormalExportJob.OutputModel,
+                            xNormalExportJob.InputTexturePath, xNormalExportJob.OutputTexturePath);
+                    }
+                }
             }
+        }
+        public string CleanXmlEscapeSequences(string input) {
+            return input.Replace("&", @"&#38;").Replace("'", @"&#39;").Replace("'", @"&#39;")
+                .Replace("<", @"&#60;").Replace(">", @"&#62;").Replace(@"""", @"&#34");
         }
     }
 }

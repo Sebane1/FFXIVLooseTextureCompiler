@@ -162,6 +162,9 @@ namespace FFXIVLooseTextureCompiler {
                     Refresh();
                     List<TextureSet> textureSets = new List<TextureSet>();
                     foreach (TextureSet item in textureList.Items) {
+                        if (item.OmniExportMode) {
+                            ConfigureOmniConfiguration(item);
+                        }
                         textureSets.Add(item);
                     }
                     textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex, bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
