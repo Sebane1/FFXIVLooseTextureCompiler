@@ -1262,16 +1262,24 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public int ReverseRaceLookup(string path) {
-            for (int i = 1; i < raceList.Items.Count; i++) {
-                string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
+            for (int i = 0; i < raceList.Items.Count; i++) {
                 string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
                 string eve = bodyIdentifiers[2].RaceIdentifiers[i];
                 string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
-                if (path.Contains("c" + vanilla)
-                        || path.Contains(bibo)
-                        || path.Contains(eve)
-                        || path.Contains(tnf)) {
+                if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf)) {
                     return i;
+                }
+            }
+            for (int i = 1; i < raceList.Items.Count; i++) {
+                string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
+                if (path.Contains("c" + vanilla)) {
+                    if (path.Contains("c1401b0001")) {
+                        return 6;
+                    } else if (path.Contains("c1401b0101")) {
+                        return 7;
+                    } else {
+                        return i;
+                    }
                 }
             }
             if (path.Contains("1101") || path.Contains("otopop")) {
@@ -1284,7 +1292,38 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.OmniExportMode = true;
             textureSet.ChildSets.Clear();
             int race = ReverseRaceLookup(textureSet.InternalDiffusePath);
-            if (textureSet.InternalDiffusePath.Contains("bibo")) {
+            if (textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex")) {
+                TextureSet bibo = new TextureSet();
+                bibo.MaterialSetName = "Bibo Compatibility";
+                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
+                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
+                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_baseTexBaked.");
+
+                TextureSet eve = new TextureSet();
+                eve.MaterialSetName = "Eve Compatibility";
+                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
+                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
+                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
+                eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
+                eve.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
+                eve.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
+
+                TextureSet gen3 = new TextureSet();
+                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
+                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
+                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
+                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_baseTexBaked.");
+                gen3.Normal = textureSet.Normal.Replace(".", "_gen3_baseTexBaked.");
+                gen3.Multi = textureSet.Multi.Replace(".", "_gen3_baseTexBaked.");
+
+                textureSet.ChildSets.Add(bibo);
+                textureSet.ChildSets.Add(eve);
+                textureSet.ChildSets.Add(gen3);
+            } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
