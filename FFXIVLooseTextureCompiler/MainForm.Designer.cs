@@ -82,6 +82,8 @@
             this.howDoIMakeStuffBumpyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howDoIMakeStuffGlowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -657,7 +659,9 @@
             this.howDoIUseThisToolStripMenuItem,
             this.howDoIMakeStuffBumpyToolStripMenuItem,
             this.howDoIMakeStuffGlowToolStripMenuItem,
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem});
+            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem,
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem,
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -696,6 +700,20 @@
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Text = "Can I make my Bibo+ or Gen3 body texture work on another body?";
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Click += new System.EventHandler(this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem_Click);
+            // 
+            // canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem
+            // 
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Name = "canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem";
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Text = "Can I customize the groups this tool exporrts";
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Click += new System.EventHandler(this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem_Click);
+            // 
+            // canIReplaceABunchOfStuffAtOnceToolStripMenuItem
+            // 
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Name = "canIReplaceABunchOfStuffAtOnceToolStripMenuItem";
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
             // 
             // donateButton
             // 
@@ -1181,5 +1199,7 @@
         private ToolStripMenuItem howDoIMakeStuffGlowToolStripMenuItem;
         private ToolStripMenuItem canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem;
         private Label exportLabel;
+        private ToolStripMenuItem canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem;
+        private ToolStripMenuItem canIReplaceABunchOfStuffAtOnceToolStripMenuItem;
     }
 }
