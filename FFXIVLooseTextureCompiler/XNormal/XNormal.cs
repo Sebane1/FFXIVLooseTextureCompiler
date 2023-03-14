@@ -191,8 +191,11 @@ namespace FFXIVLooseTextureCompiler {
                 Directory.CreateDirectory(Application.UserAppDataPath);
             }
             using (StreamWriter writer = new StreamWriter(path)) {
-                writer.Write(string.Format(xmlFile, CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX)),
-                    CleanXmlEscapeSequences(inputImage), CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX)), outputImage));
+                writer.Write(string.Format(xmlFile,
+                    CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX)),
+                    CleanXmlEscapeSequences(inputImage),
+                    CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX)),
+                    CleanXmlEscapeSequences(outputImage)));
             }
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");
             processStartInfo.UseShellExecute = true;

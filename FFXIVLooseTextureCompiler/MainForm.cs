@@ -1262,12 +1262,12 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public int ReverseRaceLookup(string path) {
-            for (int i = 0; i < raceList.Items.Count; i++) {
+            for (int i = 1; i < raceList.Items.Count; i++) {
                 string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
                 string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
                 string eve = bodyIdentifiers[2].RaceIdentifiers[i];
                 string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
-                if (path.Contains(vanilla)
+                if (path.Contains("c" + vanilla)
                         || path.Contains(bibo)
                         || path.Contains(eve)
                         || path.Contains(tnf)) {
@@ -1725,6 +1725,30 @@ namespace FFXIVLooseTextureCompiler {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
                     FileName = "https://docs.google.com/document/d/1jXWL5cE9bQL5KPbIzAXKdM7_UgSz8zz2hO9fj5xysHg/edit?usp=share_link",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1Va4rhnhemJirHVHj4-ZZbvNbeQnCHJHEF_uoc3kb1jA/edit?usp=sharing",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1ISKq1k7ebK7x8XkTvCUWWERaHCjFWodJb1kQncOPLwc/edit?usp=sharing",
                     UseShellExecute = true,
                     Verb = "OPEN"
                 });

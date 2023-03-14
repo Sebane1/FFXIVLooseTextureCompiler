@@ -152,7 +152,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             xnormal.ProcessBatches();
             foreach (KeyValuePair<string, string> keyValuePair in childTextureSetQueue) {
-                ExportTex(keyValuePair.Key, keyValuePair.Value);
+                ExportTex(keyValuePair.Key, keyValuePair.Value, ExportType.XNormalImport);
             }
             foreach (Bitmap value in normalCache.Values) {
                 value.Dispose();
@@ -316,7 +316,8 @@ namespace FFXIVLooseTextureCompiler {
             MultiFace,
             MergeNormal,
             Glow,
-            GlowMulti
+            GlowMulti,
+            XNormalImport
         }
         public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None,
             string diffuseNormal = "", string mask = "", string rawDataExport = "") {
@@ -383,7 +384,8 @@ namespace FFXIVLooseTextureCompiler {
                         if (!multiCache.ContainsKey(inputFile)) {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                                 if (bitmap != null) {
-                                    Bitmap multi = MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale3(bitmap)), 255, 126, 0);
+                                    Bitmap multi = MultiplyFilter.MultiplyImage(
+                                    Brightness.BrightenImage(Grayscale.MakeGrayscale3(bitmap)), 255, 126, 0);
                                     multi.Save(stream, ImageFormat.Png);
                                     multiCache.Add(inputFile, multi);
                                 }
@@ -393,9 +395,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         break;
                     case ExportType.MergeNormal:
-                        if (string.IsNullOrEmpty(diffuseNormal)) {
-
-                        } else {
+                        if (!string.IsNullOrEmpty(diffuseNormal)) {
                             if (!normalCache.ContainsKey(diffuseNormal)) {
                                 using (Bitmap bitmap = TexLoader.ResolveBitmap(diffuseNormal)) {
                                     if (bitmap != null) {
@@ -405,11 +405,15 @@ namespace FFXIVLooseTextureCompiler {
                                                 using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
                                                     if (outputFile.Contains("fac_b_n")) {
                                                         Bitmap resize = new Bitmap(bitmap, new Size(1024, 1024));
-                                                        output = ImageManipulation.MergeNormals(inputFile, resize, target, normalMaskBitmap, diffuseNormal);
+                                                        output = ImageManipulation.MergeNormals(
+                                                            inputFile, resize, target,
+                                                            normalMaskBitmap, diffuseNormal);
                                                         output.Save(stream, ImageFormat.Png);
                                                         normalCache.Add(inputFile, resize);
                                                     } else {
-                                                        output = ImageManipulation.MergeNormals(inputFile, bitmap, target, normalMaskBitmap, diffuseNormal);
+                                                        output = ImageManipulation.MergeNormals(
+                                                            inputFile, bitmap, target,
+                                                            normalMaskBitmap, diffuseNormal);
                                                         normalCache.Add(inputFile, output);
                                                     }
                                                 }
@@ -425,6 +429,16 @@ namespace FFXIVLooseTextureCompiler {
                                 }
                             } else {
                                 normalCache[diffuseNormal].Save(stream, ImageFormat.Png);
+                            }
+                        }
+                        break;
+                    case ExportType.XNormalImport:
+                        using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
+                            if (bitmap != null) {
+                                Bitmap underlay = new Bitmap(bitmap.Width, bitmap.Height);
+                                Graphics g = Graphics.FromImage(underlay);
+                                g.Clear(Color.FromArgb(255, 160, 113, 94));
+                                AtramentumLuminisGlow.TransplantData(underlay, bitmap).Save(stream, ImageFormat.Png);
                             }
                         }
                         break;
