@@ -165,6 +165,7 @@ namespace FFXIVLooseTextureCompiler {
                     foreach (TextureSet item in textureList.Items) {
                         if (item.OmniExportMode) {
                             ConfigureOmniConfiguration(item);
+                            exportProgress.Maximum += item.ChildSets.Count;
                         }
                         textureSets.Add(item);
                     }
