@@ -123,7 +123,7 @@ namespace FFXIVVoicePackCreator {
                 MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
             }
         }
-        private bool CheckExtentions(string file) {
+        public static bool CheckExtentions(string file) {
             string[] extentions = new string[] { ".png", ".dds", ".bmp", ".tex" };
             foreach (string extention in extentions) {
                 if (file.EndsWith(extention)) {
