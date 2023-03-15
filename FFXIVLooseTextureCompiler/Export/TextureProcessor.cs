@@ -185,6 +185,9 @@ namespace FFXIVLooseTextureCompiler {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, gen3Gen2Path);
                     }
                 }
+                if (OnProgressChange != null) {
+                    OnProgressChange.Invoke(this, EventArgs.Empty);
+                }
             }
             foreach (Bitmap value in normalCache.Values) {
                 value.Dispose();
@@ -275,17 +278,22 @@ namespace FFXIVLooseTextureCompiler {
                             textureSet.Glow);
                         outputGenerated = true;
                     } else {
-                        textureSetQueue.Add(new KeyValuePair<string, string>(generateNormals ? textureSet.Diffuse : textureSet.Normal,
-                            AppendNumber(normalDiskPath, fileCount)));
-                        outputGenerated = true;
-                        if (!generateNormals) {
-                            foreach (TextureSet child in textureSet.ChildSets) {
-                                if (!xnormalCache.ContainsKey(child.Normal)) {
-                                    if (finalizeResults || !File.Exists(child.Normal)) {
-                                        if (child.Normal.Contains("baseTexBaked")) {
-                                            xnormalCache.Add(child.Normal, child.Normal);
-                                            xnormal.AddToBatch(textureSet.InternalNormalPath,
-                                                textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                        if (!generateNormals && !textureSet.IsChildSet) {
+                            ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None);
+                            outputGenerated = true;
+                        } else {
+                            textureSetQueue.Add(new KeyValuePair<string, string>(generateNormals ? textureSet.Diffuse : textureSet.Normal,
+                                AppendNumber(normalDiskPath, fileCount)));
+                            outputGenerated = true;
+                            if (!generateNormals) {
+                                foreach (TextureSet child in textureSet.ChildSets) {
+                                    if (!xnormalCache.ContainsKey(child.Normal)) {
+                                        if (finalizeResults || !File.Exists(child.Normal)) {
+                                            if (child.Normal.Contains("baseTexBaked")) {
+                                                xnormalCache.Add(child.Normal, child.Normal);
+                                                xnormal.AddToBatch(textureSet.InternalNormalPath,
+                                                    textureSet.Diffuse.Replace(".", "_xnormal."), child.Normal);
+                                            }
                                         }
                                     }
                                 }
