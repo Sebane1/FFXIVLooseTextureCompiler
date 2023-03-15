@@ -51,9 +51,11 @@ namespace FFXIVLooseTextureCompiler {
             get => hasSaved; set {
                 hasSaved = value;
                 if (!hasSaved) {
-                    Text = Application.ProductName + " " + Application.ProductVersion + (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})*" : "*");
+                    Text = Application.ProductName + " " + Application.ProductVersion + 
+                        (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})*" : "*");
                 } else {
-                    Text = Application.ProductName + " " + Application.ProductVersion + (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})" : "");
+                    Text = Application.ProductName + " " + Application.ProductVersion + 
+                        (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})" : "");
                 }
             }
         }
@@ -111,15 +113,23 @@ namespace FFXIVLooseTextureCompiler {
                 "0801", "1001", "1001", "1201", "1201",
                 "1401", "1401", "0000", "0000", "1801", "1801" };
 
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA", new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+", new List<string>() { "midlander", "highlander", "midlander", "midlander", "highlander", "Invalid", "raen", "xaela", "Invalid", "viera" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE", new List<string>() { "middie", "buffie", "middie", "middie", "buffie", "Invalid", "lizard", "lizard2", "Invalid", "bunny" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("GEN3", new List<string>() { "mid", "high", "mid", "mid", "high", "Invalid", "raen", "xaela", "Invalid", "viera" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+", new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "raen", "xaela", "Invalid", "Invalid" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY", new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL", new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA", 
+                new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+", 
+                new List<string>() { "midlander", "highlander", "midlander", "midlander", "highlander", "Invalid", "raen", "xaela", "Invalid", "viera" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE", 
+                new List<string>() { "middie", "buffie", "middie", "middie", "buffie", "Invalid", "lizard", "lizard2", "Invalid", "bunny" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("GEN3",
+                new List<string>() { "mid", "high", "mid", "mid", "high", "Invalid", "raen", "xaela", "Invalid", "viera" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+",
+                new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "raen", "xaela", "Invalid", "Invalid" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY",
+                new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL",
+                new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
-                subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
+                subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = 
+                faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
             if (IntegrityChecker.IntegrityCheck()) {
@@ -169,7 +179,8 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         textureSets.Add(item);
                     }
-                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex, bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
+                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex, 
+                        bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
@@ -394,7 +405,8 @@ namespace FFXIVLooseTextureCompiler {
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2) || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
+                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2) 
+                    || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
                 }
@@ -614,12 +626,17 @@ namespace FFXIVLooseTextureCompiler {
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text) + ", " + raceList.Text;
+            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + 
+                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text) 
+                + ", " + raceList.Text;
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
+                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex, 
+                    baseBodyList.SelectedIndex, raceList.SelectedIndex);
             }
-            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
-            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex);
+            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex, 
+                baseBodyList.SelectedIndex, raceList.SelectedIndex);
+            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex, 
+                baseBodyList.SelectedIndex, raceList.SelectedIndex);
             textureList.Items.Add(textureSet);
             HasSaved = false;
         }
@@ -627,7 +644,10 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
+            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " 
+                + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") 
+                + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " 
+                + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
                     textureSet.InternalDiffusePath = GetFaceTexturePath(0);
@@ -643,7 +663,8 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
                     break;
                 case 5:
-                    textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text + ", " + subRaceList.Text;
+                    textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text 
+                        + ", " + subRaceList.Text;
                     textureSet.InternalNormalPath = GetHairTexturePath(1);
                     textureSet.InternalMultiPath = GetHairTexturePath(2);
                     break;
@@ -675,7 +696,8 @@ namespace FFXIVLooseTextureCompiler {
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
-                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") && !materialSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
+                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") 
+                    && !materialSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eyes")) {
                     diffuse.LabelName.Text = "normal";
@@ -873,7 +895,8 @@ namespace FFXIVLooseTextureCompiler {
 
         private void clearList_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", 
+                VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 {
                     textureList.Items.Clear();
                 }
@@ -1079,7 +1102,8 @@ namespace FFXIVLooseTextureCompiler {
                 e.Cancel = true;
                 materialListContextMenu.Close();
             } else {
-                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
+                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode 
+                    ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
             }
         }
 
