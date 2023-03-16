@@ -15,7 +15,11 @@ namespace FFXIVLooseTextureCompiler {
             AutoUpdater.Synchronous = true;
             AutoUpdater.Mandatory = true;
             AutoUpdater.UpdateMode = Mode.ForcedDownload;
-            AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/update.xml");
+            if(Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"\res\textures"))) {
+                AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/update_lite.xml");
+            } else {
+                AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/update.xml");
+            }
             AutoUpdater.ApplicationExitEvent += delegate () {
                 launchForm = false;
             };
