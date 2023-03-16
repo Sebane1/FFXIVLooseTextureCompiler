@@ -173,7 +173,10 @@ namespace FFXIVLooseTextureCompiler {
                     if (keyValuePair.Key.Contains("_gen2_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, biboGen2Path);
                     }
-                }else if (keyValuePair.Key.Contains("_g3_") || keyValuePair.Key.Contains("_g2_")) {
+                    if (OnProgressChange != null) {
+                        OnProgressChange.Invoke(this, EventArgs.Empty);
+                    }
+                } else if (keyValuePair.Key.Contains("_g3_") || keyValuePair.Key.Contains("_g2_")) {
                     if (keyValuePair.Key.Contains("_bibo_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, gen3BiboPath);
                     }
@@ -183,11 +186,14 @@ namespace FFXIVLooseTextureCompiler {
                     if (keyValuePair.Key.Contains("_gen2_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, gen3Gen2Path);
                     }
+                    if (OnProgressChange != null) {
+                        OnProgressChange.Invoke(this, EventArgs.Empty);
+                    }
                 } else {
                     ExportTex(keyValuePair.Key, keyValuePair.Value);
-                }
-                if (OnProgressChange != null) {
-                    OnProgressChange.Invoke(this, EventArgs.Empty);
+                    if (OnProgressChange != null) {
+                        OnProgressChange.Invoke(this, EventArgs.Empty);
+                    }
                 }
             }
             foreach (Bitmap value in normalCache.Values) {
@@ -207,6 +213,9 @@ namespace FFXIVLooseTextureCompiler {
                 if (File.Exists(input)) {
                     ExportTex(input.Contains("_6_") || input.Contains("_7_") ? backupTexturePaths.NormalAuRa : backupTexturePaths.Normal, output,
                         ExportType.MergeNormal, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, input), "");
+                } else {
+                    ExportTex(input.Contains("_6_") || input.Contains("_7_") ? backupTexturePaths.NormalAuRa : backupTexturePaths.Normal, output,
+                        ExportType.None, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, input), "");
                 }
             } else if (output.Contains("_m") || output.Contains("_s")) {
                 if (File.Exists(input)) {
