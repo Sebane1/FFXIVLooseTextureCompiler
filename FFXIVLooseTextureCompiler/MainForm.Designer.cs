@@ -59,6 +59,7 @@
             this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertStandaloneTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biboToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biboToGen2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,7 +117,6 @@
             this.exportLabel = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
-            this.bulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -310,7 +310,10 @@
             "Face 3",
             "Face 4",
             "Face 5",
-            "Face 6"});
+            "Face 6",
+            "Face 7",
+            "Face 8",
+            "Face 9"});
             this.faceType.Location = new System.Drawing.Point(120, 140);
             this.faceType.Name = "faceType";
             this.faceType.Size = new System.Drawing.Size(76, 23);
@@ -521,6 +524,13 @@
             this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
             this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
+            // 
+            // bulkImageToTexToolStripMenuItem
+            // 
+            this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
+            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
+            this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
             // 
             // convertStandaloneTextureToolStripMenuItem
             // 
@@ -1040,13 +1050,6 @@
             this.finalizeButton.Text = "Finalize";
             this.finalizeButton.UseVisualStyleBackColor = true;
             this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
-            // 
-            // bulkImageToTexToolStripMenuItem
-            // 
-            this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
-            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
-            this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
