@@ -173,8 +173,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (keyValuePair.Key.Contains("_gen2_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, biboGen2Path);
                     }
-                }
-                if (keyValuePair.Key.Contains("_g3_") || keyValuePair.Key.Contains("_g2_")) {
+                }else if (keyValuePair.Key.Contains("_g3_") || keyValuePair.Key.Contains("_g2_")) {
                     if (keyValuePair.Key.Contains("_bibo_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, gen3BiboPath);
                     }
@@ -184,6 +183,8 @@ namespace FFXIVLooseTextureCompiler {
                     if (keyValuePair.Key.Contains("_gen2_")) {
                         ExportPaths(keyValuePair.Key, keyValuePair.Value, gen3Gen2Path);
                     }
+                } else {
+                    ExportTex(keyValuePair.Key, keyValuePair.Value);
                 }
                 if (OnProgressChange != null) {
                     OnProgressChange.Invoke(this, EventArgs.Empty);
