@@ -113,6 +113,27 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             mergedImagePixels.UnlockBits();
             return diffuse;
         }
+
+        public static Bitmap ExtractGlowMapFormLegacyDiffuse(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    if (sourcePixel.A > 254) {
+                        Color col = Color.FromArgb(0, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                        source.SetPixel(x, y, col);
+                    } else {
+                        Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                        source.SetPixel(x, y, col);
+                    }
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
         byte Calc(byte c1, byte c2) {
             var cr = c1 / 255d * c2 / 255d * 255d;
             return (byte)(cr > 255 ? 255 : cr);

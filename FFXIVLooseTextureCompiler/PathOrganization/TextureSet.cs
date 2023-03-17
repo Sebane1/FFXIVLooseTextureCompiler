@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FFXIVLooseTextureCompiler.Export;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,10 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         private bool ignoreNormalGeneration;
         private bool ignoreMultiGeneration;
         private bool omniExportMode;
-
+        BackupTexturePaths backupTexturePaths;
         public bool IsChildSet {
             get {
-               return diffuse.Contains("baseTexBaked");
+               return Diffuse.Contains("baseTexBaked");
             }
         }
 
@@ -35,7 +36,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public string Normal { get { if (normal == null) { normal = ""; } return normal; } set => normal = value; }
         public string Multi { get { if (multi == null) { multi = ""; } return multi; } set => multi = value; }
         public string NormalMask { get => normalMask; set => normalMask = value; }
-        public string Glow { get => glow; set => glow = value; }
+        public string Glow { get { if (glow == null) { glow = ""; } return glow; } set => glow = value; }
         public string InternalDiffusePath { get => internalDiffusePath; set => internalDiffusePath = value; }
         public string InternalNormalPath { get => internalNormalPath; set => internalNormalPath = value; }
         public string InternalMultiPath { get => internalMultiPath; set => internalMultiPath = value; }
@@ -53,6 +54,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public bool IgnoreNormalGeneration { get => ignoreNormalGeneration; set => ignoreNormalGeneration = value; }
         public bool OmniExportMode { get => omniExportMode; set => omniExportMode = value; }
         public List<TextureSet> ChildSets { get => childSets; set => childSets = value; }
+        public BackupTexturePaths BackupTexturePaths { get => backupTexturePaths; set => backupTexturePaths = value; }
 
         public override string ToString() {
             return materialSetName + (MaterialGroupName != materialSetName ? $"| Group({materialGroupName})" : "");

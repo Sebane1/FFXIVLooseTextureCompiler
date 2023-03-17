@@ -7,6 +7,23 @@ using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class ImageManipulation {
+        public static Bitmap SaniitizeArtifacts(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    if (sourcePixel.A < 255) {
+                        Color col = Color.FromArgb(0, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                        source.SetPixel(x, y, col);
+                    }
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+ 
         public static Bitmap MergeNormals(string inputFile, Bitmap diffuse, Bitmap canvasImage, Bitmap normalMask, string diffuseNormal) {
             Graphics g = Graphics.FromImage(canvasImage);
             g.Clear(Color.White);

@@ -75,6 +75,7 @@
             this.vanillaToRedefinedLalaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -513,7 +514,8 @@
             this.bulkImageToTexToolStripMenuItem,
             this.convertStandaloneTextureToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
-            this.xNormalToolStripMenuItem});
+            this.xNormalToolStripMenuItem,
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -521,14 +523,14 @@
             // bulkTexViewerToolStripMenuItem
             // 
             this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
-            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
             this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
             // 
             // bulkImageToTexToolStripMenuItem
             // 
             this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
-            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
             this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
             // 
@@ -548,7 +550,7 @@
             this.vanillaToOtopopToolStripMenuItem,
             this.vanillaToRedefinedLalaToolStripMenuItem});
             this.convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
-            this.convertStandaloneTextureToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.convertStandaloneTextureToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
             // 
             // biboToGen3ToolStripMenuItem
@@ -638,16 +640,23 @@
             // diffuseMergerToolStripMenuItem
             // 
             this.diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
-            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
             this.diffuseMergerToolStripMenuItem.Click += new System.EventHandler(this.diffuseMergerToolStripMenuItem_Click);
             // 
             // xNormalToolStripMenuItem
             // 
             this.xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
-            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.xNormalToolStripMenuItem.Text = "XNormal";
             this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
+            // 
+            // extractAtramentumLuminisGlowMapToolStripMenuItem
+            // 
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Text = "Atramentum Luminis Diffuse To Glow Map";
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Click += new System.EventHandler(this.extractAtramentumLuminisGlowMapToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -1214,5 +1223,6 @@
         private ToolStripMenuItem canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem;
         private ToolStripMenuItem canIReplaceABunchOfStuffAtOnceToolStripMenuItem;
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
+        private ToolStripMenuItem extractAtramentumLuminisGlowMapToolStripMenuItem;
     }
 }
