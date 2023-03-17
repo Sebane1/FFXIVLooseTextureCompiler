@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static FFXIVLooseTextureCompiler.MainWindow;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace FFXIVLooseTextureCompiler {
     public class TextureProcessor {
@@ -46,13 +47,30 @@ namespace FFXIVLooseTextureCompiler {
         public event EventHandler OnStartedProcessing;
         public event EventHandler OnLaunchedXnormal;
 
+        Bitmap GetMergedBitmap(string file) {
+            if (file.Contains("baseTexBaked")) {
+                Bitmap alpha = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "alpha_baseTexBaked"));
+                Bitmap rgb = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "rgb_baseTexBaked"));
+                return ImageManipulation.MergeAlphaToRRGB(alpha, rgb);
+            } else {
+                return TexLoader.ResolveBitmap(file);
+            }
+        }
+
         public void BatchTextureSet(TextureSet parent, TextureSet child) {
             if (!string.IsNullOrEmpty(child.Diffuse)) {
                 if (!xnormalCache.ContainsKey(child.Diffuse)) {
-                    if (finalizeResults || !File.Exists(child.Diffuse)) {
+                    string diffuseAlpha = parent.Diffuse.Replace(".", "_alpha.");
+                    string diffuseRGB = parent.Diffuse.Replace(".", "_rgb.");
+                    if (finalizeResults || !File.Exists(child.Diffuse.Replace("baseTexBaked", "rgb"))
+                        || !File.Exists(child.Diffuse.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.Diffuse.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Diffuse, child.Diffuse);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, parent.Diffuse, child.Diffuse);
+                            Bitmap diffuse = TexLoader.ResolveBitmap(parent.Diffuse);
+                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Diffuse.Replace("baseTexBaked", "alpha"));
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Diffuse.Replace("baseTexBaked", "rgb"));
                         }
                     }
                 }
@@ -78,10 +96,17 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (!string.IsNullOrEmpty(child.Glow)) {
                 if (!xnormalCache.ContainsKey(child.Glow)) {
-                    if (finalizeResults || !File.Exists(child.Glow)) {
+                    string diffuseAlpha = parent.Glow.Replace(".", "_alpha.");
+                    string diffuseRGB = parent.Glow.Replace(".", "_rgb.");
+                    if (finalizeResults || !File.Exists(child.Glow.Replace("baseTexBaked", "rgb_baseTexBaked"))
+                        || !File.Exists(child.Glow.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.Glow.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Glow, child.Glow);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, parent.Glow, child.Glow);
+                            Bitmap diffuse = TexLoader.ResolveBitmap(parent.Glow);
+                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Glow.Replace("baseTexBaked", "alpha"));
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Glow.Replace("baseTexBaked", "rgb"));
                         }
                     }
                 }
@@ -278,7 +303,7 @@ namespace FFXIVLooseTextureCompiler {
             && generateNormals && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreNormalGeneration) {
                     ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount),
-                        ExportType.Normal, "","", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                        ExportType.Normal, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
                     outputGenerated = true;
                 }
             }
@@ -339,8 +364,8 @@ namespace FFXIVLooseTextureCompiler {
                                     Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                     Graphics g = Graphics.FromImage(image);
                                     g.Clear(Color.White);
-                                    g.DrawImage(ImageManipulation.SaniitizeArtifacts(layer), 0, 0, bitmap.Width, bitmap.Height);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
+                                    g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
                                     image.Save(stream, ImageFormat.Png);
                                 } else {
                                     bitmap.Save(stream, ImageFormat.Png);
@@ -356,9 +381,10 @@ namespace FFXIVLooseTextureCompiler {
                                     Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                     Graphics g = Graphics.FromImage(image);
                                     g.Clear(Color.White);
-                                    g.DrawImage(ImageManipulation.SaniitizeArtifacts(layer), 0, 0, bitmap.Width, bitmap.Height);
-                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                    Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(image, TexLoader.ResolveBitmap(mask));
+                                    g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
+                                    g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
+                                    Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(image,
+                                        ImageManipulation.Resize(GetMergedBitmap(mask), bitmap.Width, bitmap.Height));
                                     glowBitmap.Save(stream, ImageFormat.Png);
                                 } else {
                                     Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(bitmap, TexLoader.ResolveBitmap(mask));
@@ -415,8 +441,8 @@ namespace FFXIVLooseTextureCompiler {
                                         Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                         Graphics g = Graphics.FromImage(image);
                                         g.Clear(Color.White);
-                                        g.DrawImage(ImageManipulation.SaniitizeArtifacts(layer), 0, 0, bitmap.Width, bitmap.Height);
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                        g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
+                                        g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
                                         Bitmap multi = MultiplyFilter.MultiplyImage(
                                             Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, 126, 0);
                                         multi.Save(stream, ImageFormat.Png);
@@ -455,8 +481,8 @@ namespace FFXIVLooseTextureCompiler {
                                                             Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                                             Graphics g = Graphics.FromImage(image);
                                                             g.Clear(Color.White);
-                                                            g.DrawImage(ImageManipulation.SaniitizeArtifacts(layer), 0, 0, diffuse.Width, diffuse.Height);
-                                                            g.DrawImage(diffuse, 0, 0, diffuse.Width, diffuse.Height);
+                                                            g.DrawImage(layer, 0, 0, diffuse.Width, diffuse.Height);
+                                                            g.DrawImage(GetMergedBitmap(inputFile), 0, 0, diffuse.Width, diffuse.Height);
                                                             output = ImageManipulation.MergeNormals(
                                                       inputFile, image, canvasImage,
                                                       normalMaskBitmap, diffuseNormal);
@@ -470,7 +496,19 @@ namespace FFXIVLooseTextureCompiler {
                                                     }
                                                 }
                                             } else {
-                                                output = ImageManipulation.MergeNormals(inputFile, diffuse, canvasImage, null, diffuseNormal);
+                                                if (layeringImage != null) {
+                                                    Bitmap image = new Bitmap(diffuse.Width, diffuse.Height, PixelFormat.Format32bppArgb);
+                                                    Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
+                                                    Graphics g = Graphics.FromImage(image);
+                                                    g.Clear(Color.White);
+                                                    g.DrawImage(layer, 0, 0, diffuse.Width, diffuse.Height);
+                                                    g.DrawImage(GetMergedBitmap(inputFile), 0, 0, diffuse.Width, diffuse.Height);
+                                                    output = ImageManipulation.MergeNormals(
+                                              inputFile, image, canvasImage,
+                                              null, diffuseNormal);
+                                                } else {
+                                                    output = ImageManipulation.MergeNormals(inputFile, diffuse, canvasImage, null, diffuseNormal);
+                                                }
                                             }
                                             output.Save(stream, ImageFormat.Png);
                                             if (!normalCache.ContainsKey(diffuseNormal)) {

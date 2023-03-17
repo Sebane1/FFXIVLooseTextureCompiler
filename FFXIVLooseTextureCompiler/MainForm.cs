@@ -72,6 +72,13 @@ namespace FFXIVLooseTextureCompiler {
             textureProcessor = new TextureProcessor();
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
+            textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
+        }
+
+        private void TextureProcessor_OnStartedProcessing(object? sender, EventArgs e) {
+            exportLabel.Text = "Exporting";
+            Refresh();
+            Application.DoEvents();
         }
 
         private void TextureProcessor_OnLaunchedXnormal(object? sender, EventArgs e) {
