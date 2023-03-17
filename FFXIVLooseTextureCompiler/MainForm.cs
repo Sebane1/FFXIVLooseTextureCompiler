@@ -51,10 +51,10 @@ namespace FFXIVLooseTextureCompiler {
             get => hasSaved; set {
                 hasSaved = value;
                 if (!hasSaved) {
-                    Text = Application.ProductName + " " + Application.ProductVersion + 
+                    Text = Application.ProductName + " " + Application.ProductVersion +
                         (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})*" : "*");
                 } else {
-                    Text = Application.ProductName + " " + Application.ProductVersion + 
+                    Text = Application.ProductName + " " + Application.ProductVersion +
                         (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})" : "");
                 }
             }
@@ -113,11 +113,11 @@ namespace FFXIVLooseTextureCompiler {
                 "0801", "1001", "1001", "1201", "1201",
                 "1401", "1401", "0000", "0000", "1801", "1801" };
 
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA", 
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA",
                 new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+", 
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+",
                 new List<string>() { "midlander", "highlander", "midlander", "midlander", "highlander", "Invalid", "raen", "xaela", "Invalid", "viera" }));
-            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE", 
+            bodyIdentifiers.Add(new RacialBodyIdentifiers("EVE",
                 new List<string>() { "middie", "buffie", "middie", "middie", "buffie", "Invalid", "lizard", "lizard2", "Invalid", "bunny" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("GEN3",
                 new List<string>() { "mid", "high", "mid", "mid", "high", "Invalid", "raen", "xaela", "Invalid", "viera" }));
@@ -128,7 +128,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL",
                 new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
-                subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex = 
+                subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex =
                 faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
@@ -179,7 +179,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         textureSets.Add(item);
                     }
-                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex, 
+                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex,
                         bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
                     ExportJson();
                     ExportMeta();
@@ -405,7 +405,7 @@ namespace FFXIVLooseTextureCompiler {
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2) 
+                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
@@ -626,16 +626,16 @@ namespace FFXIVLooseTextureCompiler {
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " + 
-                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text) 
+            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
+                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text)
                 + ", " + raceList.Text;
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex, 
+                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex);
             }
-            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex, 
+            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex,
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
-            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex, 
+            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex,
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
             textureList.Items.Add(textureSet);
             HasSaved = false;
@@ -644,9 +644,9 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " " 
-                + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex") 
-                + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", " 
+            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
+                + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex")
+                + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
                 + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
@@ -663,7 +663,7 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
                     break;
                 case 5:
-                    textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text 
+                    textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
                         + ", " + subRaceList.Text;
                     textureSet.InternalNormalPath = GetHairTexturePath(1);
                     textureSet.InternalMultiPath = GetHairTexturePath(2);
@@ -696,7 +696,7 @@ namespace FFXIVLooseTextureCompiler {
                 normal.Enabled = !string.IsNullOrEmpty(materialSet.InternalNormalPath);
                 multi.Enabled = !string.IsNullOrEmpty(materialSet.InternalMultiPath);
                 mask.Enabled = bakeNormals.Checked;
-                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint") 
+                glow.Enabled = !materialSet.MaterialSetName.ToLower().Contains("face paint")
                     && !materialSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eyes")) {
@@ -895,7 +895,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void clearList_Click(object sender, EventArgs e) {
             hasDoneReload = false;
-            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?", 
+            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?",
                 VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 {
                     textureList.Items.Clear();
@@ -1102,7 +1102,7 @@ namespace FFXIVLooseTextureCompiler {
                 e.Cancel = true;
                 materialListContextMenu.Close();
             } else {
-                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode 
+                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode
                     ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
             }
         }
@@ -1319,85 +1319,107 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.ChildSets.Clear();
             int race = ReverseRaceLookup(textureSet.InternalDiffusePath);
             if (textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex")) {
+                textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo Compatibility";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_van_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_" + race + "_van_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi.Replace(".", "_" + race + "_van_bibo_m_baseTexBaked.");
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_d_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
+                bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
                 eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
-                eve.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_van_gen3_d_baseTexBaked.");
-                eve.Normal = textureSet.Normal.Replace(".", "_" + race + "_van_gen3_n_baseTexBaked.");
-                eve.Multi = textureSet.Multi.Replace(".", "_" + race + "_van_gen3_m_baseTexBaked.");
+                eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_d_baseTexBaked.");
+                eve.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
+                eve.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
+                eve.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                eve.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
                 gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
-                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_van_gen3_d_baseTexBaked.");
-                gen3.Normal = textureSet.Normal.Replace(".", "_" + race + "_van_gen3_n_baseTexBaked.");
-                gen3.Multi = textureSet.Multi.Replace(".", "_" + race + "_van_gen3_m_baseTexBaked.");
+                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_d_baseTexBaked.");
+                gen3.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
+                gen3.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
+                gen3.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                gen3.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 textureSet.ChildSets.Add(bibo);
                 textureSet.ChildSets.Add(eve);
                 textureSet.ChildSets.Add(gen3);
             } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_bplus_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal.Replace(".", "_" + race + "_bplus_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi.Replace(".", "_" + race + "_bplus_gen2_m_baseTexBaked.");
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_d_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
+                vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_m_baseTexBaked.");
+                vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
                 eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
-                eve.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_bplus_gen3_d_baseTexBaked.");
-                eve.Normal = textureSet.Normal.Replace(".", "_" + race + "_bplus_gen3_n_baseTexBaked.");
-                eve.Multi = textureSet.Multi.Replace(".", "_" + race + "_bplus_gen3_m_baseTexBaked.");
+                eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_d_baseTexBaked.");
+                eve.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
+                eve.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
+                eve.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
                 gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
-                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_bplus_gen3_d_baseTexBaked.");
-                gen3.Normal = textureSet.Normal.Replace(".", "_" + race + "_bplus_gen3_n_baseTexBaked.");
-                gen3.Multi = textureSet.Multi.Replace(".", "_" + race + "_bplus_gen3_m_baseTexBaked.");
+                gen3.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_d_baseTexBaked.");
+                gen3.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
+                gen3.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
+                gen3.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                gen3.BackupTexturePaths = textureProcessor.BiboGen3Path;
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(eve);
                 textureSet.ChildSets.Add(gen3);
             } else if (textureSet.InternalDiffusePath.Contains("eve")) {
+                textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_g3_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal.Replace(".", "_" + race + "_g3_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi.Replace(".", "_" + race + "_g3_gen2_m_baseTexBaked.");
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_d_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
+                vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_g_baseTexBaked.");
+                vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_g3_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_" + race + "_g3_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi.Replace(".", "_" + race + "_g3_bibo_m_baseTexBaked.");
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_d_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
+                bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet gen3 = new TextureSet();
                 gen3.MaterialSetName = "Tight & Firm Compatibility";
@@ -1409,28 +1431,33 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.Multi = textureSet.Multi;
                 gen3.Glow = textureSet.Glow;
                 gen3.NormalMask = textureSet.NormalMask;
+                gen3.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
                 textureSet.ChildSets.Add(gen3);
             } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
+                textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+
                 TextureSet vanilla = new TextureSet();
                 vanilla.MaterialSetName = "Vanilla Compatibility";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_g3_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal.Replace(".", "_" + race + "_g3_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi.Replace(".", "_" + race + "_g3_gen2_m_baseTexBaked.");
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_gen2_d_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
+                vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_mg_baseTexBaked.");
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_g3_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal.Replace(".", "_" + race + "_g3_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi.Replace(".", "_" + race + "_g3_bibo_m_baseTexBaked.");
+                bibo.Diffuse = textureSet.Diffuse.Replace(".", "_bibo_d_baseTexBaked.");
+                bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
+                bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
+                bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
@@ -1457,18 +1484,20 @@ namespace FFXIVLooseTextureCompiler {
                 redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
                 redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
                 redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
-                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_o_vanilla_lala_d_baseTexBaked.");
-                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_o_vanilla_lala_n_baseTexBaked.");
-                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_o_vanilla_lala_m_baseTexBaked.");
+                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_d_baseTexBaked.");
+                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
+                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
+                redefinedLalaA.Glow = vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
 
                 TextureSet redefinedLalaB = new TextureSet();
                 redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
                 redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 0, 9, race);
                 redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 0, 9, race);
                 redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 0, 9, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_o_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_" + race + "_o_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_" + race + "_o_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(redefinedLalaA);
@@ -1484,18 +1513,20 @@ namespace FFXIVLooseTextureCompiler {
                 redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
                 redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
                 redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
-                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_rl_vanilla_lala_d_baseTexBaked.");
-                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_" + race + "_rl_vanilla_lala_n_baseTexBaked.");
-                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_" + race + "_rl_vanilla_lala_m_baseTexBaked.");
+                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_d_baseTexBaked.");
+                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
+                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
+                redefinedLalaA.Glow = vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
 
                 TextureSet otopop = new TextureSet();
                 otopop.MaterialSetName = "Otopop Compatibility";
                 otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
                 otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
                 otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_rl_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal.Replace(".", "_" + race + "_rl_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi.Replace(".", "_" + race + "_rl_otopop_m_baseTexBaked.");
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_d_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
+                otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(redefinedLalaA);
@@ -1517,18 +1548,20 @@ namespace FFXIVLooseTextureCompiler {
                 otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
                 otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
                 otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_vl_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal.Replace(".", "_" + race + "_vl_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi.Replace(".", "_" + race + "_vl_otopop_m_baseTexBaked.");
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_d_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
+                otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
 
                 TextureSet redefinedLalaB = new TextureSet();
                 redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
                 redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 9, race);
                 redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 9, race);
                 redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 9, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_vl_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_" + race + "_vl_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_" + race + "_vl_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
 
                 textureSet.ChildSets.Add(otopop);
                 textureSet.ChildSets.Add(redefinedLalaA);
@@ -1550,18 +1583,20 @@ namespace FFXIVLooseTextureCompiler {
                 otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
                 otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
                 otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_vl_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal.Replace(".", "_" + race + "_vl_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi.Replace(".", "_" + race + "_vl_otopop_m_baseTexBaked.");
+                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_d_baseTexBaked.");
+                otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
+                otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
+                otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
 
                 TextureSet redefinedLalaB = new TextureSet();
                 redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
                 redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 8, race);
                 redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 8, race);
                 redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 8, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_" + race + "_vl_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_" + race + "_vl_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_" + race + "_vl_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
+                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
+                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
+                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
 
                 textureSet.ChildSets.Add(otopop);
                 textureSet.ChildSets.Add(vanilla);
@@ -1582,7 +1617,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1596,7 +1631,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1610,7 +1645,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1624,7 +1659,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1638,7 +1673,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1656,7 +1691,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1670,7 +1705,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1684,7 +1719,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1698,7 +1733,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1712,7 +1747,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1726,7 +1761,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1740,7 +1775,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
@@ -1830,6 +1865,20 @@ namespace FFXIVLooseTextureCompiler {
                     if (FilePicker.CheckExtentions(file)) {
                         textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
                     }
+                }
+            }
+        }
+
+        private void extractAtramentumLuminisGlowMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
             }
         }
