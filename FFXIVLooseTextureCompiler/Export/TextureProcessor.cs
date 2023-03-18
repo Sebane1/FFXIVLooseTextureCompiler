@@ -82,7 +82,9 @@ namespace FFXIVLooseTextureCompiler {
                 if (!xnormalCache.ContainsKey(child.Normal)) {
                     if (finalizeResults || !File.Exists(child.Normal)) {
                         if (child.Normal.Contains("baseTexBaked")) {
-                            child.Normal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, child.BackupTexturePaths.Normal);
+                            if (child.BackupTexturePaths != null) {
+                                child.Normal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, child.BackupTexturePaths.Normal);
+                            }
                         }
                     }
                 }
@@ -310,8 +312,14 @@ namespace FFXIVLooseTextureCompiler {
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
             && generateNormals && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreNormalGeneration) {
-                    ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)), AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
-                    outputGenerated = true;
+                    if (textureSet.BackupTexturePaths != null) {
+                        ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)), AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                        outputGenerated = true;
+                    } else {
+                        ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount),
+                            ExportType.Normal, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                        outputGenerated = true;
+                    }
                 }
             }
             return outputGenerated;
