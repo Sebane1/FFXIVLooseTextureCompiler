@@ -644,6 +644,16 @@ namespace FFXIVLooseTextureCompiler {
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
             textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex,
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
+
+            if (genderListBody.SelectedIndex != 0 && raceList.SelectedIndex != 5) {
+                if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                    textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+                } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
+                    textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+                } else {
+                    textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+                }
+            }
             textureList.Items.Add(textureSet);
             HasSaved = false;
         }
