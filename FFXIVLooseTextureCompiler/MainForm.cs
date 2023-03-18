@@ -1455,6 +1455,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_g_baseTexBaked.");
+                vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
                 bibo.MaterialSetName = "Bibo+ Compatibility";
@@ -1465,6 +1466,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
                 bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
                 eve.MaterialSetName = "Eve Compatibility";
@@ -1476,6 +1478,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.Multi = textureSet.Multi;
                 eve.Glow = textureSet.Glow;
                 eve.NormalMask = textureSet.NormalMask;
+                eve.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
