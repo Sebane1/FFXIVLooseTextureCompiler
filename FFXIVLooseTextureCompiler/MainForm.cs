@@ -139,6 +139,7 @@ namespace FFXIVLooseTextureCompiler {
                 faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
+            GetLastUsedOptions();
             if (IntegrityChecker.IntegrityCheck()) {
                 IntegrityChecker.ShowRules();
             }
@@ -412,7 +413,7 @@ namespace FFXIVLooseTextureCompiler {
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2)
+                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2 && material == 0)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
@@ -613,6 +614,27 @@ namespace FFXIVLooseTextureCompiler {
                 writer.WriteLine(path);
             }
         }
+        public void GetLastUsedOptions() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"UsedOptions.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    genderListBody.SelectedIndex = int.Parse(reader.ReadLine());
+                    raceList.SelectedIndex = int.Parse(reader.ReadLine());
+                    subRaceList.SelectedIndex = int.Parse(reader.ReadLine());
+                    baseBodyList.SelectedIndex = int.Parse(reader.ReadLine());
+                }
+            }
+        }
+        public void WriteLastUsedOptions() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
+                writer.WriteLine(genderListBody.SelectedIndex);
+                writer.WriteLine(raceList.SelectedIndex);
+                writer.WriteLine(subRaceList.SelectedIndex);
+                writer.WriteLine(baseBodyList.SelectedIndex);
+            }
+        }
 
         private void changePenumbraPathToolStripMenuItem_Click(object sender, EventArgs e) {
             ConfigurePenumbraModFolder();
@@ -670,6 +692,19 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.InternalDiffusePath = GetFaceTexturePath(0);
                     textureSet.InternalNormalPath = GetFaceTexturePath(1);
                     textureSet.InternalMultiPath = GetFaceTexturePath(2);
+                    if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                        if (noScales.Checked) {
+                            if (faceType.SelectedIndex < 4) {
+                                if (asymCheckbox.Checked) {
+                                    textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                          @"res\textures\s" +(genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
+                                } else {
+                                    textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                        @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 2:
                     textureSet.InternalDiffusePath = GetFaceTexturePath(1);
@@ -1165,6 +1200,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
             RefreshFFXIVInstance();
+            WriteLastUsedOptions();
         }
 
         private void generationCooldown_Tick(object sender, EventArgs e) {
@@ -1900,6 +1936,14 @@ namespace FFXIVLooseTextureCompiler {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
+            }
+        }
+
+        private void subRaceList_SelectedIndexChanged(object sender, EventArgs e) {
+            if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                noScales.Enabled = true;
+            } else {
+                noScales.Enabled = false;
             }
         }
     }

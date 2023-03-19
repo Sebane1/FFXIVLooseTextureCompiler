@@ -15,53 +15,60 @@ namespace FFXIVLooseTextureCompiler {
         public CustomPathDialog() {
             InitializeComponent();
         }
-        TextureSet materialSet = new TextureSet();
+        TextureSet textureSet = new TextureSet();
 
         public TextureSet MaterialSet {
-            get => materialSet;
+            get => textureSet;
             set {
-                materialSet = value;
-                if (materialSet != null) {
-                    groupNameTextBox.Text = materialSet.MaterialGroupName;
-                    materialSetNameTextBox.Text = materialSet.MaterialSetName;
-                    internalDiffusePathTextBox.Text = materialSet.InternalDiffusePath;
-                    internalNormalPathTextBox.Text = materialSet.InternalNormalPath;
-                    internalMultiPathTextbox.Text = materialSet.InternalMultiPath;
-                    ignoreNormalsCheckbox.Checked = materialSet.IgnoreNormalGeneration;
-                    ignoreMultiCheckbox.Checked = materialSet.IgnoreMultiGeneration;
+                textureSet = value;
+                if (textureSet != null) {
+                    groupNameTextBox.Text = textureSet.MaterialGroupName;
+                    materialSetNameTextBox.Text = textureSet.MaterialSetName;
+                    internalDiffusePathTextBox.Text = textureSet.InternalDiffusePath;
+                    internalNormalPathTextBox.Text = textureSet.InternalNormalPath;
+                    internalMultiPathTextbox.Text = textureSet.InternalMultiPath;
+                    ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
+                    ignoreMultiCheckbox.Checked = textureSet.IgnoreMultiGeneration;
+                    normalCorrection.Text = textureSet.NormalCorrection;
                 }
             }
         }
 
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrWhiteSpace(materialSetNameTextBox.Text)) {
-                materialSet.MaterialGroupName = groupNameTextBox.Text;
-                materialSet.MaterialSetName = materialSetNameTextBox.Text;
+                textureSet.MaterialGroupName = groupNameTextBox.Text;
+                textureSet.MaterialSetName = materialSetNameTextBox.Text;
                 int validationCount = 0;
                 if (IsValidGamePathFormat(internalDiffusePathTextBox.Text)) {
-                    materialSet.InternalDiffusePath = internalDiffusePathTextBox.Text;
+                    textureSet.InternalDiffusePath = internalDiffusePathTextBox.Text;
                     validationCount++;
                 } else {
                     MessageBox.Show("Internal diffuse path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
                 if (IsValidGamePathFormat(internalNormalPathTextBox.Text)) {
-                    materialSet.InternalNormalPath = internalNormalPathTextBox.Text;
+                    textureSet.InternalNormalPath = internalNormalPathTextBox.Text;
                     validationCount++;
                 } else {
                     MessageBox.Show("Internal normal path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
                 if (IsValidGamePathFormat(internalMultiPathTextbox.Text)) {
-                    materialSet.InternalMultiPath = internalMultiPathTextbox.Text;
+                    textureSet.InternalMultiPath = internalMultiPathTextbox.Text;
                     validationCount++;
                 } else {
                     MessageBox.Show("Internal multi path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
-                if (validationCount == 3) {
+                if (File.Exists(normalCorrection.Text) || string.IsNullOrEmpty(normalCorrection.Text)) {
+                    textureSet.NormalCorrection = normalCorrection.Text;
+                    validationCount++;
+                } else {
+                    MessageBox.Show("Normal correction path is invalid.", Text);
+                }
+                if (validationCount == 4) {
                     DialogResult = DialogResult.OK;
                     Close();
                 }
-                materialSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
-                materialSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
+                textureSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
+                textureSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
             }

@@ -118,6 +118,7 @@
             this.exportLabel = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
+            this.noScales = new System.Windows.Forms.CheckBox();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -276,11 +277,11 @@
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(336, 144);
+            this.asymCheckbox.Location = new System.Drawing.Point(304, 144);
             this.asymCheckbox.Name = "asymCheckbox";
-            this.asymCheckbox.Size = new System.Drawing.Size(83, 19);
+            this.asymCheckbox.Size = new System.Drawing.Size(56, 19);
             this.asymCheckbox.TabIndex = 23;
-            this.asymCheckbox.Text = "Asym Face";
+            this.asymCheckbox.Text = "Asym";
             this.asymCheckbox.UseVisualStyleBackColor = true;
             // 
             // facePart
@@ -295,7 +296,7 @@
             "Hair",
             "Face B",
             "Etc B"});
-            this.facePart.Location = new System.Drawing.Point(200, 140);
+            this.facePart.Location = new System.Drawing.Point(172, 140);
             this.facePart.Name = "facePart";
             this.facePart.Size = new System.Drawing.Size(84, 23);
             this.facePart.TabIndex = 4;
@@ -315,7 +316,7 @@
             "Face 7",
             "Face 8",
             "Face 9"});
-            this.faceType.Location = new System.Drawing.Point(120, 140);
+            this.faceType.Location = new System.Drawing.Point(96, 140);
             this.faceType.Name = "faceType";
             this.faceType.Size = new System.Drawing.Size(76, 23);
             this.faceType.TabIndex = 3;
@@ -343,9 +344,10 @@
             "Veena"});
             this.subRaceList.Location = new System.Drawing.Point(12, 140);
             this.subRaceList.Name = "subRaceList";
-            this.subRaceList.Size = new System.Drawing.Size(104, 23);
+            this.subRaceList.Size = new System.Drawing.Size(84, 23);
             this.subRaceList.TabIndex = 2;
-            this.subRaceList.Text = "Highlander";
+            this.subRaceList.Text = "Sea Wolves";
+            this.subRaceList.SelectedIndexChanged += new System.EventHandler(this.subRaceList_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -816,9 +818,9 @@
             // 
             // addBodyButton
             // 
-            this.addBodyButton.Location = new System.Drawing.Point(420, 112);
+            this.addBodyButton.Location = new System.Drawing.Point(448, 112);
             this.addBodyButton.Name = "addBodyButton";
-            this.addBodyButton.Size = new System.Drawing.Size(112, 23);
+            this.addBodyButton.Size = new System.Drawing.Size(84, 23);
             this.addBodyButton.TabIndex = 27;
             this.addBodyButton.Text = "Add Body";
             this.addBodyButton.UseVisualStyleBackColor = true;
@@ -826,9 +828,9 @@
             // 
             // addFaceButton
             // 
-            this.addFaceButton.Location = new System.Drawing.Point(420, 140);
+            this.addFaceButton.Location = new System.Drawing.Point(448, 140);
             this.addFaceButton.Name = "addFaceButton";
-            this.addFaceButton.Size = new System.Drawing.Size(112, 23);
+            this.addFaceButton.Size = new System.Drawing.Size(84, 23);
             this.addFaceButton.TabIndex = 28;
             this.addFaceButton.Text = "Add Face";
             this.addFaceButton.UseVisualStyleBackColor = true;
@@ -876,11 +878,11 @@
             // 
             // addCustomPathButton
             // 
-            this.addCustomPathButton.Location = new System.Drawing.Point(416, 168);
+            this.addCustomPathButton.Location = new System.Drawing.Point(448, 168);
             this.addCustomPathButton.Name = "addCustomPathButton";
-            this.addCustomPathButton.Size = new System.Drawing.Size(116, 23);
+            this.addCustomPathButton.Size = new System.Drawing.Size(84, 23);
             this.addCustomPathButton.TabIndex = 33;
-            this.addCustomPathButton.Text = "Add Custom Paths";
+            this.addCustomPathButton.Text = "Custom Path";
             this.addCustomPathButton.UseVisualStyleBackColor = true;
             this.addCustomPathButton.Click += new System.EventHandler(this.addCustomPathButton_Click);
             // 
@@ -1004,7 +1006,7 @@
             // 
             this.faceExtra.Enabled = false;
             this.faceExtra.FormattingEnabled = true;
-            this.faceExtra.Location = new System.Drawing.Point(288, 140);
+            this.faceExtra.Location = new System.Drawing.Point(256, 140);
             this.faceExtra.Name = "faceExtra";
             this.faceExtra.Size = new System.Drawing.Size(48, 23);
             this.faceExtra.TabIndex = 43;
@@ -1060,11 +1062,22 @@
             this.finalizeButton.UseVisualStyleBackColor = true;
             this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
             // 
+            // noScales
+            // 
+            this.noScales.AutoSize = true;
+            this.noScales.Location = new System.Drawing.Point(364, 144);
+            this.noScales.Name = "noScales";
+            this.noScales.Size = new System.Drawing.Size(77, 19);
+            this.noScales.TabIndex = 47;
+            this.noScales.Text = "No Scales";
+            this.noScales.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
+            this.Controls.Add(this.noScales);
             this.Controls.Add(this.finalizeButton);
             this.Controls.Add(this.glow);
             this.Controls.Add(this.faceExtra);
@@ -1224,5 +1237,6 @@
         private ToolStripMenuItem canIReplaceABunchOfStuffAtOnceToolStripMenuItem;
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem extractAtramentumLuminisGlowMapToolStripMenuItem;
+        private CheckBox noScales;
     }
 }

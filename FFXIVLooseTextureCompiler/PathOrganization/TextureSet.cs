@@ -31,6 +31,8 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         }
 
         List<TextureSet> childSets = new List<TextureSet>();
+        private string normalCorrection;
+
         public string MaterialSetName { get => materialSetName; set => materialSetName = value; }
         public string Diffuse { get { if (diffuse == null) { diffuse = ""; } return diffuse; } set => diffuse = value; }
         public string Normal { get { if (normal == null) { normal = ""; } return normal; } set => normal = value; }
@@ -55,6 +57,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public bool OmniExportMode { get => omniExportMode; set => omniExportMode = value; }
         public List<TextureSet> ChildSets { get => childSets; set => childSets = value; }
         public BackupTexturePaths BackupTexturePaths { get => backupTexturePaths; set => backupTexturePaths = value; }
+        public string NormalCorrection { get => normalCorrection; set => normalCorrection = value; }
 
         public override string ToString() {
             return materialSetName + (MaterialGroupName != materialSetName ? $"| Group({materialGroupName})" : "");

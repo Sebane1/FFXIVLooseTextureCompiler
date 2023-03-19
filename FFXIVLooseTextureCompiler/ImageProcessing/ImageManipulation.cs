@@ -33,6 +33,13 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             return image;
         }
 
+        public static Bitmap ResizeAndMerge(Bitmap target, Bitmap source) {
+            Bitmap image = new Bitmap(target);
+            Graphics g = Graphics.FromImage(image);
+            g.DrawImage(source, 0, 0, target.Width, target.Height);
+            return image;
+        }
+
         public static Bitmap ExtractTransparency(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
