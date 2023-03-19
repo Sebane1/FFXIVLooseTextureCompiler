@@ -134,9 +134,9 @@ namespace FFXIVLooseTextureCompiler {
                 new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL",
                 new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
-                subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex =
-                faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
+            auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
+                 subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex =
+                 faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             CheckForCommandArguments();
             GetLastUsedOptions();
@@ -413,7 +413,8 @@ namespace FFXIVLooseTextureCompiler {
                 string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2 && material == 0)
+                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2 && (material == 0
+                    || auraFaceScalesDropdown.SelectedIndex == 2))
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
@@ -693,11 +694,11 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.InternalNormalPath = GetFaceTexturePath(1);
                     textureSet.InternalMultiPath = GetFaceTexturePath(2);
                     if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                        if (noScales.Checked) {
+                        if (auraFaceScalesDropdown.SelectedIndex > 0) {
                             if (faceType.SelectedIndex < 4) {
                                 if (asymCheckbox.Checked) {
                                     textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                          @"res\textures\s" +(genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
+                                          @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
                                 } else {
                                     textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                                         @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + ".png");
@@ -1306,10 +1307,13 @@ namespace FFXIVLooseTextureCompiler {
 
         private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
             if (facePart.SelectedIndex == 4 || facePart.SelectedIndex == 5) {
-                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
+                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
                 faceExtra.Enabled = true;
             } else {
                 asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
+                if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                    auraFaceScalesDropdown.Enabled = true;
+                }
                 faceExtra.Enabled = false;
             }
         }
@@ -1941,9 +1945,9 @@ namespace FFXIVLooseTextureCompiler {
 
         private void subRaceList_SelectedIndexChanged(object sender, EventArgs e) {
             if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                noScales.Enabled = true;
+                auraFaceScalesDropdown.Enabled = true;
             } else {
-                noScales.Enabled = false;
+                auraFaceScalesDropdown.Enabled = false;
             }
         }
     }
