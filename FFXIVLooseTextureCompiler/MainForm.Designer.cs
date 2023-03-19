@@ -118,7 +118,7 @@
             this.exportLabel = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
-            this.noScales = new System.Windows.Forms.CheckBox();
+            this.auraFaceScalesDropdown = new System.Windows.Forms.ComboBox();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -277,7 +277,7 @@
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(304, 144);
+            this.asymCheckbox.Location = new System.Drawing.Point(396, 144);
             this.asymCheckbox.Name = "asymCheckbox";
             this.asymCheckbox.Size = new System.Drawing.Size(56, 19);
             this.asymCheckbox.TabIndex = 23;
@@ -296,7 +296,7 @@
             "Hair",
             "Face B",
             "Etc B"});
-            this.facePart.Location = new System.Drawing.Point(172, 140);
+            this.facePart.Location = new System.Drawing.Point(156, 140);
             this.facePart.Name = "facePart";
             this.facePart.Size = new System.Drawing.Size(84, 23);
             this.facePart.TabIndex = 4;
@@ -318,7 +318,7 @@
             "Face 9"});
             this.faceType.Location = new System.Drawing.Point(96, 140);
             this.faceType.Name = "faceType";
-            this.faceType.Size = new System.Drawing.Size(76, 23);
+            this.faceType.Size = new System.Drawing.Size(60, 23);
             this.faceType.TabIndex = 3;
             this.faceType.Text = "Face 4";
             // 
@@ -1006,7 +1006,7 @@
             // 
             this.faceExtra.Enabled = false;
             this.faceExtra.FormattingEnabled = true;
-            this.faceExtra.Location = new System.Drawing.Point(256, 140);
+            this.faceExtra.Location = new System.Drawing.Point(240, 140);
             this.faceExtra.Name = "faceExtra";
             this.faceExtra.Size = new System.Drawing.Size(48, 23);
             this.faceExtra.TabIndex = 43;
@@ -1062,22 +1062,26 @@
             this.finalizeButton.UseVisualStyleBackColor = true;
             this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
             // 
-            // noScales
+            // auraFaceScalesDropdown
             // 
-            this.noScales.AutoSize = true;
-            this.noScales.Location = new System.Drawing.Point(364, 144);
-            this.noScales.Name = "noScales";
-            this.noScales.Size = new System.Drawing.Size(77, 19);
-            this.noScales.TabIndex = 47;
-            this.noScales.Text = "No Scales";
-            this.noScales.UseVisualStyleBackColor = true;
+            this.auraFaceScalesDropdown.FormattingEnabled = true;
+            this.auraFaceScalesDropdown.Items.AddRange(new object[] {
+            "Vanilla Scales",
+            "Scaleless Vanilla",
+            "Scaleless Varied"});
+            this.auraFaceScalesDropdown.Location = new System.Drawing.Point(288, 140);
+            this.auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
+            this.auraFaceScalesDropdown.Size = new System.Drawing.Size(108, 23);
+            this.auraFaceScalesDropdown.TabIndex = 48;
+            this.auraFaceScalesDropdown.Text = "Vanilla Scales";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
-            this.Controls.Add(this.noScales);
+            this.Controls.Add(this.addFaceButton);
+            this.Controls.Add(this.auraFaceScalesDropdown);
             this.Controls.Add(this.finalizeButton);
             this.Controls.Add(this.glow);
             this.Controls.Add(this.faceExtra);
@@ -1094,7 +1098,6 @@
             this.Controls.Add(this.removeSelection);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.currentEditLabel);
-            this.Controls.Add(this.addFaceButton);
             this.Controls.Add(this.addBodyButton);
             this.Controls.Add(this.multi);
             this.Controls.Add(this.asymCheckbox);
@@ -1237,6 +1240,6 @@
         private ToolStripMenuItem canIReplaceABunchOfStuffAtOnceToolStripMenuItem;
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem extractAtramentumLuminisGlowMapToolStripMenuItem;
-        private CheckBox noScales;
+        private ComboBox auraFaceScalesDropdown;
     }
 }
