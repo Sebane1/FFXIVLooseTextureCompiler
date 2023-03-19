@@ -38,6 +38,8 @@
             this.groupNameTextBox = new System.Windows.Forms.TextBox();
             this.ignoreNormalsCheckbox = new System.Windows.Forms.CheckBox();
             this.ignoreMultiCheckbox = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.normalCorrection = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // materialSetNameTextBox
@@ -107,7 +109,7 @@
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(280, 176);
+            this.acceptChangesButton.Location = new System.Drawing.Point(280, 204);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(111, 23);
             this.acceptChangesButton.TabIndex = 8;
@@ -117,7 +119,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(392, 176);
+            this.button1.Location = new System.Drawing.Point(392, 204);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 23);
             this.button1.TabIndex = 9;
@@ -144,7 +146,7 @@
             // ignoreNormalsCheckbox
             // 
             this.ignoreNormalsCheckbox.AutoSize = true;
-            this.ignoreNormalsCheckbox.Location = new System.Drawing.Point(128, 148);
+            this.ignoreNormalsCheckbox.Location = new System.Drawing.Point(128, 180);
             this.ignoreNormalsCheckbox.Name = "ignoreNormalsCheckbox";
             this.ignoreNormalsCheckbox.Size = new System.Drawing.Size(150, 19);
             this.ignoreNormalsCheckbox.TabIndex = 12;
@@ -154,18 +156,36 @@
             // ignoreMultiCheckbox
             // 
             this.ignoreMultiCheckbox.AutoSize = true;
-            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(316, 148);
+            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(316, 180);
             this.ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
             this.ignoreMultiCheckbox.Size = new System.Drawing.Size(133, 19);
             this.ignoreMultiCheckbox.TabIndex = 13;
             this.ignoreMultiCheckbox.Text = "Dont Generate Multi";
             this.ignoreMultiCheckbox.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 152);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 15);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Normal Correction";
+            // 
+            // normalCorrection
+            // 
+            this.normalCorrection.Location = new System.Drawing.Point(127, 148);
+            this.normalCorrection.Name = "normalCorrection";
+            this.normalCorrection.Size = new System.Drawing.Size(324, 23);
+            this.normalCorrection.TabIndex = 14;
+            // 
             // CustomPathDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(455, 204);
+            this.ClientSize = new System.Drawing.Size(455, 231);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.normalCorrection);
             this.Controls.Add(this.ignoreMultiCheckbox);
             this.Controls.Add(this.ignoreNormalsCheckbox);
             this.Controls.Add(this.label5);
@@ -208,5 +228,7 @@
         private TextBox groupNameTextBox;
         private CheckBox ignoreNormalsCheckbox;
         private CheckBox ignoreMultiCheckbox;
+        private Label label2;
+        private TextBox normalCorrection;
     }
 }
