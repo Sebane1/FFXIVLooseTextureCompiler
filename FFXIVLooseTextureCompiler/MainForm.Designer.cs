@@ -115,6 +115,7 @@
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
             this.auraFaceScalesDropdown = new System.Windows.Forms.ComboBox();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -441,7 +442,8 @@
             this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.configToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.creditsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(537, 24);
@@ -1037,6 +1039,13 @@
             this.auraFaceScalesDropdown.TabIndex = 48;
             this.auraFaceScalesDropdown.Text = "Vanilla Scales";
             // 
+            // creditsToolStripMenuItem
+            // 
+            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.creditsToolStripMenuItem.Text = "Credits";
+            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1199,5 +1208,6 @@
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem extractAtramentumLuminisGlowMapToolStripMenuItem;
         private ComboBox auraFaceScalesDropdown;
+        private ToolStripMenuItem creditsToolStripMenuItem;
     }
 }

@@ -90,17 +90,5 @@ namespace FFXIVLooseTextureCompiler {
 
             }
         }
-
-        private void getRedefinedLala_Click(object sender, EventArgs e) {
-            try {
-                Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://mega.nz/folder/7QMSTQbB#n_9788MFTEYfOk4VPRusGQ/folder/3MkCGbxa",
-                    UseShellExecute = true,
-                    Verb = "OPEN"
-                });
-            } catch {
-
-            }
-        }
     }
 }
