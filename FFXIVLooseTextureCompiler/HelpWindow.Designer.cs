@@ -31,7 +31,6 @@
             this.getHRBODY = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.getOtopop = new System.Windows.Forms.Button();
-            this.getRedefinedLala = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // getBibo
@@ -104,22 +103,11 @@
             this.getOtopop.UseVisualStyleBackColor = true;
             this.getOtopop.Click += new System.EventHandler(this.getOtopop_Click);
             // 
-            // getRedefinedLala
-            // 
-            this.getRedefinedLala.Location = new System.Drawing.Point(0, 204);
-            this.getRedefinedLala.Name = "getRedefinedLala";
-            this.getRedefinedLala.Size = new System.Drawing.Size(212, 24);
-            this.getRedefinedLala.TabIndex = 7;
-            this.getRedefinedLala.Text = "Get Redefined Lala Textures";
-            this.getRedefinedLala.UseVisualStyleBackColor = true;
-            this.getRedefinedLala.Click += new System.EventHandler(this.getRedefinedLala_Click);
-            // 
             // HelpWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(213, 231);
-            this.Controls.Add(this.getRedefinedLala);
+            this.ClientSize = new System.Drawing.Size(213, 202);
             this.Controls.Add(this.getOtopop);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.getHRBODY);
@@ -147,6 +135,5 @@
         private Button getHRBODY;
         private Label label1;
         private Button getOtopop;
-        private Button getRedefinedLala;
     }
 }

@@ -381,6 +381,7 @@ namespace FFXIVLooseTextureCompiler {
                     // Otopop
                     if (race == 5) {
                         if (texture == 0) {
+                            MessageBox.Show("By using Otopop you agree to the following:\r\n\r\nYou are not making a NSFW mod. \r\n\r\nCommercial mod releases require a commercial license from the Otopop creator.");
                             return "chara/common/texture/skin_otopop.tex";
                         } else {
                             result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture) + ".tex";
@@ -1819,6 +1820,10 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 auraFaceScalesDropdown.Enabled = false;
             }
+        }
+
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.");
         }
     }
 }
