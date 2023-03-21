@@ -46,6 +46,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool lockDuplicateGeneration;
         private bool finalizeResults;
         private TextureProcessor textureProcessor;
+        private bool otopopNotice;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -381,11 +382,13 @@ namespace FFXIVLooseTextureCompiler {
                     // Otopop
                     if (race == 5) {
                         if (texture == 0) {
-                            MessageBox.Show("By using Otopop you agree to the following:\r\n\r\nYou are not making a NSFW mod. \r\n\r\nCommercial mod releases require a commercial license from the Otopop creator.");
-                            return "chara/common/texture/skin_otopop.tex";
-                        } else {
-                            result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture) + ".tex";
+                            if (!otopopNotice) {
+                                MessageBox.Show("By using Otopop you agree to the following:\r\n\r\nYou are not making a NSFW mod. \r\n\r\nCommercial mod releases require a commercial license from the Otopop creator.");
+                                otopopNotice = true;
+                            }
                         }
+                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture) + ".tex";
+
                     } else {
                         MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
                     }
@@ -1543,7 +1546,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.ChildSets.Add(vanilla);
                 textureSet.ChildSets.Add(bibo);
                 textureSet.ChildSets.Add(eve);
-            } else if (textureSet.InternalDiffusePath.Contains("skin_otopop")) {
+            } else if (textureSet.InternalDiffusePath.Contains("chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g_d")) {
                 textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
 
                 TextureSet vanilla = new TextureSet();

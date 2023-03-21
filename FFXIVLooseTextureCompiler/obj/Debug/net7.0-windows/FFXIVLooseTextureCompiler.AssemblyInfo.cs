@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Lawener Industries")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.7.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.7.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.7.1")]
 [assembly: System.Reflection.AssemblyProductAttribute("FFXIVLooseTextureCompiler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FFXIVLooseTextureCompiler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.7.1")]

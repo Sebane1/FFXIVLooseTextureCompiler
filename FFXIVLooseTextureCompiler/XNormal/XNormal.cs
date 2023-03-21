@@ -91,12 +91,12 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     if (outputPath.Contains($"gen3")) {
                         gen2ToGen3Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen2, gen3Legacy, count++ + ".xml"));
-                    } else if (internalPath.Contains("v01_c1101b0001") || internalPath.Contains("--c1101b0001")) {
+                    } else if (internalPath.Contains("--c1101b0001")) {
                         if (outputPath.Contains("otopop")) {
                             vanillaLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, otopop, count++ + ".xml"));
                         }
                     }
-                } else if (internalPath.Contains("skin_otopop") || internalPath.Contains("v01_c1101b0001_g")) {
+                } else if (internalPath.Contains("v01_c1101b0001_g")) {
                     if (outputPath.Contains("vanilla_lala")) {
                         otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
                     }
