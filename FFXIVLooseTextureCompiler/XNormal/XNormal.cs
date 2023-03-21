@@ -95,12 +95,12 @@ namespace FFXIVLooseTextureCompiler {
                         if (outputPath.Contains("otopop")) {
                             vanillaLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, otopop, count++ + ".xml"));
                         }
+                    } else if (internalPath.Contains("v01_c1101b0001_g")) {
+                        if (outputPath.Contains("vanilla_lala")) {
+                            otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
+                        }
                     }
-                } else if (internalPath.Contains("v01_c1101b0001_g")) {
-                    if (outputPath.Contains("vanilla_lala")) {
-                        otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
-                    }
-                }
+                } 
             } else {
                 MessageBox.Show(inputPath + " does not exist!");
             }
