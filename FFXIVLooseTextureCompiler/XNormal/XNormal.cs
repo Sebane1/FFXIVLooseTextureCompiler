@@ -29,8 +29,6 @@ namespace FFXIVLooseTextureCompiler {
 
         List<XNormalExportJob> otopopToVanillaLalaBatch = new List<XNormalExportJob>();
         List<XNormalExportJob> otopopToRedefinedLalaBatch = new List<XNormalExportJob>();
-        List<XNormalExportJob> redefinedLalaToVanillaBatch = new List<XNormalExportJob>();
-        List<XNormalExportJob> redefinedLalaToOtopopBatch = new List<XNormalExportJob>();
         List<XNormalExportJob> vanillaLalaToOtopopBatch = new List<XNormalExportJob>();
         List<XNormalExportJob> vanillaLalaToRedefinedLalaBatch = new List<XNormalExportJob>();
 
@@ -62,23 +60,10 @@ namespace FFXIVLooseTextureCompiler {
                     Gen2ToGen3(inputPath, outputPath);
                 }
             } else if (internalPath.Contains("skin_otopop") || internalPath.Contains("v01_c1101b0001_g")) {
-                if (outputPath.Contains("redefined_lala")) {
-                    OtopopToRedefinedLala(inputPath, outputPath);
-                }
                 if (outputPath.Contains("vanilla_lala")) {
                     OtopopToVanillaLala(inputPath, outputPath);
                 }
-            } else if (internalPath.Contains("v01_c1101b0001_b")) {
-                if (outputPath.Contains("otopop")) {
-                    RedefinedLalaToOtopop(inputPath, outputPath);
-                }
-                if (outputPath.Contains("vanilla_lala")) {
-                    RedefinedLalaToVanillaLala(inputPath, outputPath);
-                }
-            } else if (internalPath.Contains("v01_c1101b0001") || internalPath.Contains("--c1101b0001")) {
-                if (outputPath.Contains("redefined_lala")) {
-                    VanillaLalaToRedefinedLala(inputPath, outputPath);
-                }
+            } else if (internalPath.Contains("--c1101b0001")) {
                 if (outputPath.Contains("otopop")) {
                     VanillaLalaToOtopop(inputPath, outputPath);
                 }
@@ -106,27 +91,14 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     if (outputPath.Contains($"gen3")) {
                         gen2ToGen3Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen2, gen3Legacy, count++ + ".xml"));
+                    } else if (internalPath.Contains("v01_c1101b0001") || internalPath.Contains("--c1101b0001")) {
+                        if (outputPath.Contains("otopop")) {
+                            vanillaLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, otopop, count++ + ".xml"));
+                        }
                     }
                 } else if (internalPath.Contains("skin_otopop") || internalPath.Contains("v01_c1101b0001_g")) {
-                    if (outputPath.Contains("redefined_lala")) {
-                        otopopToRedefinedLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, redefinedLala, count++ + ".xml"));
-                    }
                     if (outputPath.Contains("vanilla_lala")) {
                         otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
-                    }
-                } else if (internalPath.Contains("v01_c1101b0001_b")) {
-                    if (outputPath.Contains("otopop")) {
-                        redefinedLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, redefinedLala, otopop, count++ + ".xml"));
-                    }
-                    if (outputPath.Contains("vanilla_lala")) {
-                        redefinedLalaToVanillaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, redefinedLala, vanillaLala, count++ + ".xml"));
-                    }
-                } else if (internalPath.Contains("v01_c1101b0001") || internalPath.Contains("--c1101b0001")) {
-                    if (outputPath.Contains("redefined_lala")) {
-                        vanillaLalaToRedefinedLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, redefinedLala, count++ + ".xml"));
-                    }
-                    if (outputPath.Contains("otopop")) {
-                        vanillaLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, otopop, count++ + ".xml"));
                     }
                 }
             } else {
@@ -163,18 +135,6 @@ namespace FFXIVLooseTextureCompiler {
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaLala), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
 
-        public static void OtopopToRedefinedLala(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop),
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala), inputImage, outputImage.Replace("_baseTexBaked", null));
-        }
-        public static void RedefinedLalaToOtopop(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala),
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
-        }
-        public static void RedefinedLalaToVanillaLala(string inputImage, string outputImage) {
-            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala),
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaLala), inputImage, outputImage.Replace("_baseTexBaked", null));
-        }
         public static void VanillaLalaToOtopop(string inputImage, string outputImage) {
             CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaLala),
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
@@ -219,12 +179,8 @@ namespace FFXIVLooseTextureCompiler {
             exportJobs.AddRange(gen2ToGen3Batch);
             exportJobs.AddRange(gen2ToGen3Batch);
 
-            exportJobs.AddRange(otopopToRedefinedLalaBatch);
             exportJobs.AddRange(otopopToVanillaLalaBatch);
-            exportJobs.AddRange(redefinedLalaToOtopopBatch);
-            exportJobs.AddRange(redefinedLalaToOtopopBatch);
             exportJobs.AddRange(vanillaLalaToOtopopBatch);
-            exportJobs.AddRange(vanillaLalaToRedefinedLalaBatch);
             Dictionary<string, string> generationCache = new Dictionary<string, string>();
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");

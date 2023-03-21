@@ -67,12 +67,8 @@
             this.gen3ToGen2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.gen2ToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gen2ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.otopopToRedefinedLalaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otopopToVanillaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redefinedLalaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redefinedLalaToVanillaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vanillaToRedefinedLalaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -194,9 +190,7 @@
             "SCALES+",
             "TBSE/HRBODY",
             "TAIL",
-            "Otopop",
-            "Redefined Lala A",
-            "Redefined Lala B"});
+            "Otopop"});
             this.baseBodyList.Location = new System.Drawing.Point(12, 112);
             this.baseBodyList.Name = "baseBodyList";
             this.baseBodyList.Size = new System.Drawing.Size(104, 23);
@@ -545,12 +539,8 @@
             this.gen3ToGen2ToolStripMenuItem1,
             this.gen2ToGen3ToolStripMenuItem,
             this.gen2ToBiboToolStripMenuItem,
-            this.otopopToRedefinedLalaToolStripMenuItem,
             this.otopopToVanillaToolStripMenuItem,
-            this.redefinedLalaToOtopopToolStripMenuItem,
-            this.redefinedLalaToVanillaToolStripMenuItem,
-            this.vanillaToOtopopToolStripMenuItem,
-            this.vanillaToRedefinedLalaToolStripMenuItem});
+            this.vanillaToOtopopToolStripMenuItem});
             this.convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
             this.convertStandaloneTextureToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
@@ -558,86 +548,58 @@
             // biboToGen3ToolStripMenuItem
             // 
             this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
             // 
             // biboToGen2ToolStripMenuItem
             // 
             this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(209, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
             this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
-            // 
-            // otopopToRedefinedLalaToolStripMenuItem
-            // 
-            this.otopopToRedefinedLalaToolStripMenuItem.Name = "otopopToRedefinedLalaToolStripMenuItem";
-            this.otopopToRedefinedLalaToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.otopopToRedefinedLalaToolStripMenuItem.Text = "Otopop to Redefined Lala";
-            this.otopopToRedefinedLalaToolStripMenuItem.Click += new System.EventHandler(this.otopopToRedefinedLalaToolStripMenuItem_Click);
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             this.otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             this.otopopToVanillaToolStripMenuItem.Click += new System.EventHandler(this.otopopToVanillaToolStripMenuItem_Click);
-            // 
-            // redefinedLalaToOtopopToolStripMenuItem
-            // 
-            this.redefinedLalaToOtopopToolStripMenuItem.Name = "redefinedLalaToOtopopToolStripMenuItem";
-            this.redefinedLalaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.redefinedLalaToOtopopToolStripMenuItem.Text = "Redefined Lala to Otopop";
-            this.redefinedLalaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.redefinedLalaToOtopopToolStripMenuItem_Click);
-            // 
-            // redefinedLalaToVanillaToolStripMenuItem
-            // 
-            this.redefinedLalaToVanillaToolStripMenuItem.Name = "redefinedLalaToVanillaToolStripMenuItem";
-            this.redefinedLalaToVanillaToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.redefinedLalaToVanillaToolStripMenuItem.Text = "Redefined Lala to Vanilla";
-            this.redefinedLalaToVanillaToolStripMenuItem.Click += new System.EventHandler(this.redefinedLalaToVanillaToolStripMenuItem_Click);
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             this.vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
-            // 
-            // vanillaToRedefinedLalaToolStripMenuItem
-            // 
-            this.vanillaToRedefinedLalaToolStripMenuItem.Name = "vanillaToRedefinedLalaToolStripMenuItem";
-            this.vanillaToRedefinedLalaToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.vanillaToRedefinedLalaToolStripMenuItem.Text = "Vanilla to Redefined Lala";
-            this.vanillaToRedefinedLalaToolStripMenuItem.Click += new System.EventHandler(this.vanillaToRedefinedLalaToolStripMenuItem_Click);
             // 
             // diffuseMergerToolStripMenuItem
             // 
@@ -909,7 +871,7 @@
             // ffxivRefreshTimer
             // 
             this.ffxivRefreshTimer.Enabled = true;
-            this.ffxivRefreshTimer.Interval = 5000;
+            this.ffxivRefreshTimer.Interval = 10000;
             this.ffxivRefreshTimer.Tick += new System.EventHandler(this.ffxivRefreshTimer_Tick);
             // 
             // generationCooldown
@@ -1225,12 +1187,8 @@
         private ToolStripMenuItem gen3ToGen2ToolStripMenuItem1;
         private ToolStripMenuItem gen2ToGen3ToolStripMenuItem;
         private ToolStripMenuItem gen2ToBiboToolStripMenuItem;
-        private ToolStripMenuItem otopopToRedefinedLalaToolStripMenuItem;
         private ToolStripMenuItem otopopToVanillaToolStripMenuItem;
-        private ToolStripMenuItem redefinedLalaToOtopopToolStripMenuItem;
-        private ToolStripMenuItem redefinedLalaToVanillaToolStripMenuItem;
         private ToolStripMenuItem vanillaToOtopopToolStripMenuItem;
-        private ToolStripMenuItem vanillaToRedefinedLalaToolStripMenuItem;
         private ToolStripMenuItem howDoIUseThisToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeStuffBumpyToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeStuffGlowToolStripMenuItem;

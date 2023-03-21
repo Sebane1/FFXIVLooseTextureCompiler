@@ -134,7 +134,8 @@ namespace FFXIVLooseTextureCompiler {
                 new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL",
                 new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
-            auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderListBody.SelectedIndex = raceList.SelectedIndex = tailList.SelectedIndex =
+            auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderListBody.SelectedIndex =
+                 raceList.SelectedIndex = tailList.SelectedIndex =
                  subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex =
                  faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
@@ -388,22 +389,6 @@ namespace FFXIVLooseTextureCompiler {
                         MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
                     }
                     break;
-                case 8:
-                    // Redefined Lala A
-                    if (race == 5) {
-                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001" + GetTextureType(texture) + ".tex";
-                    } else {
-                        MessageBox.Show("Redefined Lala A is only compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 9:
-                    // Redefined Lala B
-                    if (race == 5) {
-                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_b" + GetTextureType(texture) + ".tex";
-                    } else {
-                        MessageBox.Show("Redefined Lala B is only compatible with lalafells", VersionText);
-                    }
-                    break;
             }
             return result;
         }
@@ -623,17 +608,26 @@ namespace FFXIVLooseTextureCompiler {
                     genderListBody.SelectedIndex = int.Parse(reader.ReadLine());
                     raceList.SelectedIndex = int.Parse(reader.ReadLine());
                     subRaceList.SelectedIndex = int.Parse(reader.ReadLine());
-                    baseBodyList.SelectedIndex = int.Parse(reader.ReadLine());
+                    int value = int.Parse(reader.ReadLine());
+                    if (value < 8) {
+                        baseBodyList.SelectedIndex = value;
+                    } else {
+                        MessageBox.Show("Previously selected body type is not valid");
+                    }
                 }
             }
         }
         public void WriteLastUsedOptions() {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
-                writer.WriteLine(genderListBody.SelectedIndex);
-                writer.WriteLine(raceList.SelectedIndex);
-                writer.WriteLine(subRaceList.SelectedIndex);
-                writer.WriteLine(baseBodyList.SelectedIndex);
+            try {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
+                    writer.WriteLine(genderListBody.SelectedIndex);
+                    writer.WriteLine(raceList.SelectedIndex);
+                    writer.WriteLine(subRaceList.SelectedIndex);
+                    writer.WriteLine(baseBodyList.SelectedIndex);
+                }
+            } catch {
+
             }
         }
 
@@ -668,13 +662,23 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex,
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
 
-            if (genderListBody.SelectedIndex != 0 && raceList.SelectedIndex != 5) {
+            if (genderListBody.SelectedIndex != 0) {
                 if (textureSet.InternalDiffusePath.Contains("bibo")) {
                     textureSet.BackupTexturePaths = textureProcessor.BiboPath;
                 } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
                     textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+                } else if (textureSet.InternalDiffusePath.Contains("otopop")) {
+                    textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
                 } else {
-                    textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+                    if (raceList.SelectedIndex == 5) {
+                        textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                    } else {
+                        textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+                    }
+                }
+            } else {
+                if (raceList.SelectedIndex == 5) {
+                    textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
                 }
             }
             textureList.Items.Add(textureSet);
@@ -690,18 +694,22 @@ namespace FFXIVLooseTextureCompiler {
                 + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
-                    textureSet.InternalDiffusePath = GetFaceTexturePath(0);
+                    if (facePart.SelectedIndex != 1) {
+                        textureSet.InternalDiffusePath = GetFaceTexturePath(0);
+                    }
                     textureSet.InternalNormalPath = GetFaceTexturePath(1);
                     textureSet.InternalMultiPath = GetFaceTexturePath(2);
-                    if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                        if (auraFaceScalesDropdown.SelectedIndex > 0) {
-                            if (faceType.SelectedIndex < 4) {
-                                if (asymCheckbox.Checked) {
-                                    textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                          @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
-                                } else {
-                                    textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                        @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + ".png");
+                    if (facePart.SelectedIndex == 0) {
+                        if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                            if (auraFaceScalesDropdown.SelectedIndex > 0) {
+                                if (faceType.SelectedIndex < 4) {
+                                    if (asymCheckbox.Checked) {
+                                        textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                              @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
+                                    } else {
+                                        textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                            @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + ".png");
+                                    }
                                 }
                             }
                         }
@@ -1375,7 +1383,8 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.OmniExportMode = true;
             textureSet.ChildSets.Clear();
             int race = ReverseRaceLookup(textureSet.InternalDiffusePath);
-            if (textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex")) {
+            if ((textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex"))
+                && !textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
                 textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
@@ -1534,75 +1543,22 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.ChildSets.Add(bibo);
                 textureSet.ChildSets.Add(eve);
             } else if (textureSet.InternalDiffusePath.Contains("skin_otopop")) {
+                textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+
                 TextureSet vanilla = new TextureSet();
-                TextureSet redefinedLalaA = new TextureSet();
-                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
                 vanilla.MaterialSetName = "Vanilla Compatibility";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
-                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
-                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
-                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_d_baseTexBaked.");
-                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
-                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
-                redefinedLalaA.Glow = vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
-
-                TextureSet redefinedLalaB = new TextureSet();
-                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
-                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 0, 9, race);
-                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 0, 9, race);
-                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 0, 9, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
-                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
+                vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_d_baseTexBaked.");
+                vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
+                vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
+                vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
+                vanilla.BackupTexturePaths = textureProcessor.VanillaLalaPath;
 
                 textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(redefinedLalaA);
-                textureSet.ChildSets.Add(redefinedLalaB);
-            } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_b_")) {
-                TextureSet vanilla = new TextureSet();
-                TextureSet redefinedLalaA = new TextureSet();
-                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
-                vanilla.MaterialSetName = "Vanilla Compatibility";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
-                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
-                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
-                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
-                redefinedLalaA.Diffuse = vanilla.Diffuse = textureSet.Diffuse.Replace(".", "_vanilla_lala_d_baseTexBaked.");
-                redefinedLalaA.Normal = vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
-                redefinedLalaA.Multi = vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
-                redefinedLalaA.Glow = vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
-
-                TextureSet otopop = new TextureSet();
-                otopop.MaterialSetName = "Otopop Compatibility";
-                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
-                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
-                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
-                otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
-
-                textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(redefinedLalaA);
-                textureSet.ChildSets.Add(otopop);
             } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
-                TextureSet redefinedLalaA = new TextureSet();
-                redefinedLalaA.MaterialSetName = "Redefined Lala A Compatibility";
-                redefinedLalaA.InternalDiffusePath = GetBodyTexturePath(0, 0, 8, race);
-                redefinedLalaA.InternalNormalPath = GetBodyTexturePath(1, 0, 8, race);
-                redefinedLalaA.InternalMultiPath = GetBodyTexturePath(2, 0, 8, race);
-                redefinedLalaA.Diffuse = textureSet.Diffuse;
-                redefinedLalaA.Normal = textureSet.Normal;
-                redefinedLalaA.Multi = textureSet.Multi;
-                redefinedLalaA.Glow = textureSet.Glow;
-                redefinedLalaA.NormalMask = textureSet.NormalMask;
-
+                textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
                 TextureSet otopop = new TextureSet();
                 otopop.MaterialSetName = "Otopop Compatibility";
                 otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
@@ -1612,55 +1568,9 @@ namespace FFXIVLooseTextureCompiler {
                 otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
                 otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
                 otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
-
-                TextureSet redefinedLalaB = new TextureSet();
-                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
-                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 9, race);
-                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 9, race);
-                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 9, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
-                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
+                otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
 
                 textureSet.ChildSets.Add(otopop);
-                textureSet.ChildSets.Add(redefinedLalaA);
-                textureSet.ChildSets.Add(redefinedLalaB);
-            } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_")) {
-                TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla Compatibility";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse;
-                vanilla.Normal = textureSet.Normal;
-                vanilla.Multi = textureSet.Multi;
-                vanilla.Glow = textureSet.Glow;
-                vanilla.NormalMask = textureSet.NormalMask;
-
-                TextureSet otopop = new TextureSet();
-                otopop.MaterialSetName = "Otopop Compatibility";
-                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
-                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
-                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse.Replace(".", "_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
-                otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
-
-                TextureSet redefinedLalaB = new TextureSet();
-                redefinedLalaB.MaterialSetName = "Redefined Lala B Compatibility";
-                redefinedLalaB.InternalDiffusePath = GetBodyTexturePath(0, 1, 8, race);
-                redefinedLalaB.InternalNormalPath = GetBodyTexturePath(1, 1, 8, race);
-                redefinedLalaB.InternalMultiPath = GetBodyTexturePath(2, 1, 8, race);
-                redefinedLalaB.Diffuse = textureSet.Diffuse.Replace(".", "_redefined_lala_d_baseTexBaked.");
-                redefinedLalaB.Normal = textureSet.Normal.Replace(".", "_redefined_lala_n_baseTexBaked.");
-                redefinedLalaB.Multi = textureSet.Multi.Replace(".", "_redefined_lala_m_baseTexBaked.");
-                redefinedLalaB.Glow = textureSet.Glow.Replace(".", "_redefined_lala_g_baseTexBaked.");
-
-                textureSet.ChildSets.Add(otopop);
-                textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(redefinedLalaB);
             }
         }
 
@@ -1761,19 +1671,6 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void otopopToRedefinedLalaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.OtopopToRedefinedLala(openFileDialog.FileName, saveFileDialog.FileName);
-                }
-            }
-        }
 
         private void otopopToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -1789,33 +1686,6 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void redefinedLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.RedefinedLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
-                }
-            }
-        }
-
-        private void redefinedLalaToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.RedefinedLalaToVanillaLala(openFileDialog.FileName, saveFileDialog.FileName);
-                }
-            }
-        }
 
         private void vanillaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
