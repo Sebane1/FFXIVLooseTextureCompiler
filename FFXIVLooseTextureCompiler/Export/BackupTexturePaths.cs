@@ -10,14 +10,14 @@ namespace FFXIVLooseTextureCompiler.Export {
             _path = path;
         }
         const string _diffuse = "diffuse.tex";
-        const string _diffuseRaen = "diffuseRaen.tex";
+       // const string _diffuseRaen = "diffuseRaen.tex";
         const string _normal = "normal.tex";
-        const string _normalAuRa = "normalAuRa.tex";
+       // const string _normalAuRa = "normalAuRa.tex";
         string _path;
 
         public string Diffuse { get => _path + _diffuse; }
-        public string DiffuseRaen { get => _path + _diffuseRaen; }
+        // public string DiffuseRaen { get => _path + _diffuseRaen; }
         public string Normal { get => _path + _normal; }
-        public string NormalAuRa { get => _path + _normalAuRa; }
+        // public string NormalAuRa { get => _path + _normalAuRa; }
     }
 }
