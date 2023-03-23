@@ -82,6 +82,7 @@
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -110,15 +111,18 @@
             this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.discordButton = new System.Windows.Forms.Button();
             this.faceExtra = new System.Windows.Forms.ComboBox();
-            this.exportPanel = new System.Windows.Forms.Panel();
-            this.exportLabel = new System.Windows.Forms.Label();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
             this.auraFaceScalesDropdown = new System.Windows.Forms.ComboBox();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.exportLabel = new System.Windows.Forms.Label();
+            this.exportPanel = new System.Windows.Forms.Panel();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.exportPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,9 +137,9 @@
             this.genderListBody.Items.AddRange(new object[] {
             "Masculine",
             "Feminine"});
-            this.genderListBody.Location = new System.Drawing.Point(120, 112);
+            this.genderListBody.Location = new System.Drawing.Point(148, 112);
             this.genderListBody.Name = "genderListBody";
-            this.genderListBody.Size = new System.Drawing.Size(76, 23);
+            this.genderListBody.Size = new System.Drawing.Size(80, 23);
             this.genderListBody.TabIndex = 1;
             this.genderListBody.Text = "Masculine";
             this.genderListBody.SelectedIndexChanged += new System.EventHandler(this.genderList_SelectedIndexChanged);
@@ -154,7 +158,7 @@
             "Xaela",
             "Hrothgar",
             "Viera"});
-            this.raceList.Location = new System.Drawing.Point(200, 112);
+            this.raceList.Location = new System.Drawing.Point(228, 112);
             this.raceList.Name = "raceList";
             this.raceList.Size = new System.Drawing.Size(84, 23);
             this.raceList.TabIndex = 2;
@@ -174,7 +178,7 @@
             "6",
             "7",
             "8"});
-            this.tailList.Location = new System.Drawing.Point(288, 112);
+            this.tailList.Location = new System.Drawing.Point(312, 112);
             this.tailList.Name = "tailList";
             this.tailList.Size = new System.Drawing.Size(32, 23);
             this.tailList.TabIndex = 3;
@@ -184,17 +188,17 @@
             // 
             this.baseBodyList.FormattingEnabled = true;
             this.baseBodyList.Items.AddRange(new object[] {
-            "Vanilla",
+            "Vanilla and Gen2",
             "BIBO+",
             "EVE",
             "Gen3 and T&F3",
             "SCALES+",
-            "TBSE/HRBODY",
+            "TBSE and HRBODY",
             "TAIL",
             "Otopop"});
-            this.baseBodyList.Location = new System.Drawing.Point(12, 112);
+            this.baseBodyList.Location = new System.Drawing.Point(4, 112);
             this.baseBodyList.Name = "baseBodyList";
-            this.baseBodyList.Size = new System.Drawing.Size(104, 23);
+            this.baseBodyList.Size = new System.Drawing.Size(144, 23);
             this.baseBodyList.TabIndex = 4;
             this.baseBodyList.Text = "Gen3 and T&F3";
             this.baseBodyList.SelectedIndexChanged += new System.EventHandler(this.baseBodyList_SelectedIndexChanged);
@@ -213,7 +217,7 @@
             // uniqueAuRa
             // 
             this.uniqueAuRa.AutoSize = true;
-            this.uniqueAuRa.Location = new System.Drawing.Point(324, 116);
+            this.uniqueAuRa.Location = new System.Drawing.Point(348, 8);
             this.uniqueAuRa.Name = "uniqueAuRa";
             this.uniqueAuRa.Size = new System.Drawing.Size(98, 19);
             this.uniqueAuRa.TabIndex = 20;
@@ -222,15 +226,16 @@
             // 
             // multi
             // 
+            this.multi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.multi.CurrentPath = null;
             this.multi.Enabled = false;
             this.multi.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.multi.Index = -1;
-            this.multi.Location = new System.Drawing.Point(12, 512);
+            this.multi.Location = new System.Drawing.Point(4, 512);
             this.multi.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.multi.MinimumSize = new System.Drawing.Size(300, 28);
             this.multi.Name = "multi";
-            this.multi.Size = new System.Drawing.Size(520, 28);
+            this.multi.Size = new System.Drawing.Size(528, 28);
             this.multi.TabIndex = 19;
             this.multi.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.multi.Enter += new System.EventHandler(this.multi_Enter);
@@ -238,15 +243,16 @@
             // 
             // normal
             // 
+            this.normal.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.normal.CurrentPath = null;
             this.normal.Enabled = false;
             this.normal.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.normal.Index = -1;
-            this.normal.Location = new System.Drawing.Point(12, 480);
+            this.normal.Location = new System.Drawing.Point(4, 480);
             this.normal.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.normal.MinimumSize = new System.Drawing.Size(300, 28);
             this.normal.Name = "normal";
-            this.normal.Size = new System.Drawing.Size(520, 28);
+            this.normal.Size = new System.Drawing.Size(528, 28);
             this.normal.TabIndex = 18;
             this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.normal.Load += new System.EventHandler(this.normal_Load);
@@ -255,15 +261,16 @@
             // 
             // diffuse
             // 
+            this.diffuse.BackColor = System.Drawing.Color.LavenderBlush;
             this.diffuse.CurrentPath = null;
             this.diffuse.Enabled = false;
             this.diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.diffuse.Index = -1;
-            this.diffuse.Location = new System.Drawing.Point(12, 448);
+            this.diffuse.Location = new System.Drawing.Point(4, 448);
             this.diffuse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.diffuse.MinimumSize = new System.Drawing.Size(300, 28);
             this.diffuse.Name = "diffuse";
-            this.diffuse.Size = new System.Drawing.Size(520, 28);
+            this.diffuse.Size = new System.Drawing.Size(528, 28);
             this.diffuse.TabIndex = 17;
             this.diffuse.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.diffuse.Enter += new System.EventHandler(this.multi_Enter);
@@ -272,7 +279,7 @@
             // asymCheckbox
             // 
             this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(396, 144);
+            this.asymCheckbox.Location = new System.Drawing.Point(392, 8);
             this.asymCheckbox.Name = "asymCheckbox";
             this.asymCheckbox.Size = new System.Drawing.Size(56, 19);
             this.asymCheckbox.TabIndex = 23;
@@ -291,9 +298,9 @@
             "Hair",
             "Face B",
             "Etc B"});
-            this.facePart.Location = new System.Drawing.Point(156, 140);
+            this.facePart.Location = new System.Drawing.Point(148, 140);
             this.facePart.Name = "facePart";
-            this.facePart.Size = new System.Drawing.Size(84, 23);
+            this.facePart.Size = new System.Drawing.Size(80, 23);
             this.facePart.TabIndex = 4;
             this.facePart.Text = "Eyebrows";
             this.facePart.SelectedIndexChanged += new System.EventHandler(this.facePart_SelectedIndexChanged);
@@ -311,7 +318,7 @@
             "Face 7",
             "Face 8",
             "Face 9"});
-            this.faceType.Location = new System.Drawing.Point(96, 140);
+            this.faceType.Location = new System.Drawing.Point(88, 140);
             this.faceType.Name = "faceType";
             this.faceType.Size = new System.Drawing.Size(60, 23);
             this.faceType.TabIndex = 3;
@@ -337,7 +344,7 @@
             "The Lost",
             "Rava",
             "Veena"});
-            this.subRaceList.Location = new System.Drawing.Point(12, 140);
+            this.subRaceList.Location = new System.Drawing.Point(4, 140);
             this.subRaceList.Name = "subRaceList";
             this.subRaceList.Size = new System.Drawing.Size(84, 23);
             this.subRaceList.TabIndex = 2;
@@ -702,6 +709,13 @@
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
             // 
+            // creditsToolStripMenuItem
+            // 
+            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.creditsToolStripMenuItem.Text = "Credits";
+            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
+            // 
             // donateButton
             // 
             this.donateButton.BackColor = System.Drawing.Color.IndianRed;
@@ -719,9 +733,9 @@
             this.textureList.ContextMenuStrip = this.materialListContextMenu;
             this.textureList.FormattingEnabled = true;
             this.textureList.ItemHeight = 15;
-            this.textureList.Location = new System.Drawing.Point(12, 204);
+            this.textureList.Location = new System.Drawing.Point(4, 204);
             this.textureList.Name = "textureList";
-            this.textureList.Size = new System.Drawing.Size(520, 184);
+            this.textureList.Size = new System.Drawing.Size(528, 184);
             this.textureList.TabIndex = 26;
             this.textureList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
             // 
@@ -804,7 +818,7 @@
             // 
             this.currentEditLabel.AutoSize = true;
             this.currentEditLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.currentEditLabel.Location = new System.Drawing.Point(12, 412);
+            this.currentEditLabel.Location = new System.Drawing.Point(4, 412);
             this.currentEditLabel.Name = "currentEditLabel";
             this.currentEditLabel.Size = new System.Drawing.Size(447, 30);
             this.currentEditLabel.TabIndex = 29;
@@ -814,7 +828,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(12, 172);
+            this.label6.Location = new System.Drawing.Point(4, 172);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(155, 30);
             this.label6.TabIndex = 30;
@@ -822,7 +836,7 @@
             // 
             // removeSelection
             // 
-            this.removeSelection.Location = new System.Drawing.Point(12, 388);
+            this.removeSelection.Location = new System.Drawing.Point(4, 388);
             this.removeSelection.Name = "removeSelection";
             this.removeSelection.Size = new System.Drawing.Size(112, 23);
             this.removeSelection.TabIndex = 31;
@@ -832,7 +846,7 @@
             // 
             // clearList
             // 
-            this.clearList.Location = new System.Drawing.Point(124, 388);
+            this.clearList.Location = new System.Drawing.Point(116, 388);
             this.clearList.Name = "clearList";
             this.clearList.Size = new System.Drawing.Size(72, 23);
             this.clearList.TabIndex = 32;
@@ -852,7 +866,7 @@
             // 
             // moveUpButton
             // 
-            this.moveUpButton.Location = new System.Drawing.Point(196, 388);
+            this.moveUpButton.Location = new System.Drawing.Point(188, 388);
             this.moveUpButton.Name = "moveUpButton";
             this.moveUpButton.Size = new System.Drawing.Size(68, 23);
             this.moveUpButton.TabIndex = 34;
@@ -862,7 +876,7 @@
             // 
             // moveDownButton
             // 
-            this.moveDownButton.Location = new System.Drawing.Point(264, 388);
+            this.moveDownButton.Location = new System.Drawing.Point(256, 388);
             this.moveDownButton.Name = "moveDownButton";
             this.moveDownButton.Size = new System.Drawing.Size(80, 23);
             this.moveDownButton.TabIndex = 35;
@@ -944,11 +958,11 @@
             this.mask.Enabled = false;
             this.mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.mask.Index = -1;
-            this.mask.Location = new System.Drawing.Point(12, 576);
+            this.mask.Location = new System.Drawing.Point(4, 576);
             this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.mask.MinimumSize = new System.Drawing.Size(300, 28);
             this.mask.Name = "mask";
-            this.mask.Size = new System.Drawing.Size(520, 28);
+            this.mask.Size = new System.Drawing.Size(528, 28);
             this.mask.TabIndex = 41;
             this.mask.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.mask.Enter += new System.EventHandler(this.multi_Enter);
@@ -970,34 +984,11 @@
             // 
             this.faceExtra.Enabled = false;
             this.faceExtra.FormattingEnabled = true;
-            this.faceExtra.Location = new System.Drawing.Point(240, 140);
+            this.faceExtra.Location = new System.Drawing.Point(228, 140);
             this.faceExtra.Name = "faceExtra";
             this.faceExtra.Size = new System.Drawing.Size(48, 23);
             this.faceExtra.TabIndex = 43;
             this.faceExtra.Text = "999";
-            // 
-            // exportPanel
-            // 
-            this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportPanel.Controls.Add(this.exportLabel);
-            this.exportPanel.Location = new System.Drawing.Point(0, 0);
-            this.exportPanel.Name = "exportPanel";
-            this.exportPanel.Size = new System.Drawing.Size(536, 608);
-            this.exportPanel.TabIndex = 44;
-            this.exportPanel.Visible = false;
-            // 
-            // exportLabel
-            // 
-            this.exportLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.exportLabel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportLabel.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.exportLabel.ForeColor = System.Drawing.Color.Snow;
-            this.exportLabel.Location = new System.Drawing.Point(0, 264);
-            this.exportLabel.Name = "exportLabel";
-            this.exportLabel.Size = new System.Drawing.Size(536, 65);
-            this.exportLabel.TabIndex = 0;
-            this.exportLabel.Text = "Exporting";
-            this.exportLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // glow
             // 
@@ -1005,11 +996,11 @@
             this.glow.Enabled = false;
             this.glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             this.glow.Index = -1;
-            this.glow.Location = new System.Drawing.Point(12, 544);
+            this.glow.Location = new System.Drawing.Point(4, 544);
             this.glow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.glow.MinimumSize = new System.Drawing.Size(300, 28);
             this.glow.Name = "glow";
-            this.glow.Size = new System.Drawing.Size(520, 28);
+            this.glow.Size = new System.Drawing.Size(528, 28);
             this.glow.TabIndex = 45;
             this.glow.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.glow.Enter += new System.EventHandler(this.multi_Enter);
@@ -1033,18 +1024,52 @@
             "Vanilla Scales",
             "Scaleless Vanilla",
             "Scaleless Varied"});
-            this.auraFaceScalesDropdown.Location = new System.Drawing.Point(288, 140);
+            this.auraFaceScalesDropdown.Location = new System.Drawing.Point(276, 140);
             this.auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
             this.auraFaceScalesDropdown.Size = new System.Drawing.Size(108, 23);
             this.auraFaceScalesDropdown.TabIndex = 48;
             this.auraFaceScalesDropdown.Text = "Vanilla Scales";
             // 
-            // creditsToolStripMenuItem
+            // panel1
             // 
-            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.creditsToolStripMenuItem.Text = "Credits";
-            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
+            this.panel1.BackColor = System.Drawing.Color.Lavender;
+            this.panel1.Controls.Add(this.uniqueAuRa);
+            this.panel1.Location = new System.Drawing.Point(0, 108);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(540, 30);
+            this.panel1.TabIndex = 49;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Honeydew;
+            this.panel2.Controls.Add(this.asymCheckbox);
+            this.panel2.Location = new System.Drawing.Point(-4, 136);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(540, 30);
+            this.panel2.TabIndex = 50;
+            // 
+            // exportLabel
+            // 
+            this.exportLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.exportLabel.BackColor = System.Drawing.SystemColors.GrayText;
+            this.exportLabel.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.exportLabel.ForeColor = System.Drawing.Color.Snow;
+            this.exportLabel.Location = new System.Drawing.Point(0, 264);
+            this.exportLabel.Name = "exportLabel";
+            this.exportLabel.Size = new System.Drawing.Size(536, 65);
+            this.exportLabel.TabIndex = 0;
+            this.exportLabel.Text = "Exporting";
+            this.exportLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // exportPanel
+            // 
+            this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
+            this.exportPanel.Controls.Add(this.exportLabel);
+            this.exportPanel.Location = new System.Drawing.Point(0, 0);
+            this.exportPanel.Name = "exportPanel";
+            this.exportPanel.Size = new System.Drawing.Size(536, 608);
+            this.exportPanel.TabIndex = 44;
+            this.exportPanel.Visible = false;
             // 
             // MainWindow
             // 
@@ -1071,9 +1096,7 @@
             this.Controls.Add(this.currentEditLabel);
             this.Controls.Add(this.addBodyButton);
             this.Controls.Add(this.multi);
-            this.Controls.Add(this.asymCheckbox);
             this.Controls.Add(this.normal);
-            this.Controls.Add(this.uniqueAuRa);
             this.Controls.Add(this.diffuse);
             this.Controls.Add(this.textureList);
             this.Controls.Add(this.facePart);
@@ -1097,6 +1120,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.exportProgress);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.exportPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1110,6 +1135,10 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.materialListContextMenu.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.exportPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1182,7 +1211,6 @@
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem howToGetTexturesToolStripMenuItem;
         private System.Windows.Forms.Timer autoGenerateTImer;
-        private Panel exportPanel;
         private Label label7;
         private FFXIVVoicePackCreator.FilePicker glow;
         private ToolStripMenuItem deleteToolStripMenuItem;
@@ -1202,12 +1230,15 @@
         private ToolStripMenuItem howDoIMakeStuffBumpyToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeStuffGlowToolStripMenuItem;
         private ToolStripMenuItem canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem;
-        private Label exportLabel;
         private ToolStripMenuItem canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem;
         private ToolStripMenuItem canIReplaceABunchOfStuffAtOnceToolStripMenuItem;
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem extractAtramentumLuminisGlowMapToolStripMenuItem;
         private ComboBox auraFaceScalesDropdown;
         private ToolStripMenuItem creditsToolStripMenuItem;
+        private Panel panel1;
+        private Panel panel2;
+        private Label exportLabel;
+        private Panel exportPanel;
     }
 }

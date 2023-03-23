@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -384,6 +385,9 @@ namespace FFXIVLooseTextureCompiler {
                                     Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                     Graphics g = Graphics.FromImage(image);
                                     g.Clear(Color.Transparent);
+                                    g.CompositingQuality = CompositingQuality.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
                                     g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
                                     g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
                                     image.Save(stream, ImageFormat.Png);
@@ -401,6 +405,9 @@ namespace FFXIVLooseTextureCompiler {
                                     Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                     Graphics g = Graphics.FromImage(image);
                                     g.Clear(Color.Transparent);
+                                    g.CompositingQuality = CompositingQuality.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
                                     g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
                                     g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
                                     Bitmap glowBitmap = AtramentumLuminisGlow.CalculateDiffuse(image,
@@ -428,6 +435,9 @@ namespace FFXIVLooseTextureCompiler {
                                     using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.Transparent);
+                                        g.CompositingQuality = CompositingQuality.HighQuality;
+                                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                        g.SmoothingMode = SmoothingMode.HighQuality;
                                         g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
                                         Bitmap output = null;
                                         if (File.Exists(mask)) {
@@ -471,6 +481,9 @@ namespace FFXIVLooseTextureCompiler {
                                         Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                         Graphics g = Graphics.FromImage(image);
                                         g.Clear(Color.Transparent);
+                                        g.CompositingQuality = CompositingQuality.HighQuality;
+                                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                        g.SmoothingMode = SmoothingMode.HighQuality;
                                         g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
                                         g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
                                         Bitmap multi = MultiplyFilter.MultiplyImage(
@@ -539,6 +552,9 @@ namespace FFXIVLooseTextureCompiler {
                                 Graphics g = Graphics.FromImage(underlay);
                                 g.Clear(Color.FromArgb(255, 160, 113, 94));
                                 if (!string.IsNullOrEmpty(diffuseNormal)) {
+                                    g.CompositingQuality = CompositingQuality.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
                                     g.DrawImage(TexLoader.ResolveBitmap(diffuseNormal), 0, 0, bitmap.Width, bitmap.Height);
                                 }
                                 AtramentumLuminisGlow.TransplantData(underlay, bitmap).Save(stream, ImageFormat.Png);
