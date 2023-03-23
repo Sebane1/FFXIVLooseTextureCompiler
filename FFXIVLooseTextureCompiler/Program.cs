@@ -15,7 +15,7 @@ namespace FFXIVLooseTextureCompiler {
             AutoUpdater.Synchronous = true;
             AutoUpdater.Mandatory = true;
             AutoUpdater.UpdateMode = Mode.ForcedDownload;
-            AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/update_lite.xml");
+            AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/update_air.xml");
             AutoUpdater.ApplicationExitEvent += delegate () {
                 launchForm = false;
             };

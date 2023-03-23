@@ -47,6 +47,9 @@ namespace FFXIVLooseTextureCompiler {
         private bool finalizeResults;
         private TextureProcessor textureProcessor;
         private bool otopopNotice;
+        private Color originalDiffuseBoxColour;
+        private Color originalNormalBoxColour;
+        private Color originalMultiBoxColour;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -145,6 +148,9 @@ namespace FFXIVLooseTextureCompiler {
             if (IntegrityChecker.IntegrityCheck()) {
                 IntegrityChecker.ShowRules();
             }
+            originalDiffuseBoxColour = diffuse.BackColor;
+            originalNormalBoxColour = normal.BackColor;
+            originalMultiBoxColour = multi.BackColor;
         }
         private void RefreshFFXIVInstance() {
             var processes = new List<Process>(Process.GetProcessesByName("ffxiv_dx11"));
@@ -768,10 +774,16 @@ namespace FFXIVLooseTextureCompiler {
                     diffuse.LabelName.Text = "normal";
                     normal.LabelName.Text = "multi";
                     multi.LabelName.Text = "catchlight";
+                    diffuse.BackColor = originalNormalBoxColour;
+                    normal.BackColor = Color.Lavender;
+                    multi.BackColor = Color.LightGray;
                 } else {
                     diffuse.LabelName.Text = "diffuse";
                     normal.LabelName.Text = "normal";
                     multi.LabelName.Text = "multi";
+                    diffuse.BackColor = originalDiffuseBoxColour;
+                    normal.BackColor = originalNormalBoxColour;
+                    multi.BackColor = originalMultiBoxColour;
                 }
             }
         }
@@ -955,6 +967,7 @@ namespace FFXIVLooseTextureCompiler {
                 normal.CurrentPath = "";
                 multi.CurrentPath = "";
                 glow.CurrentPath = "";
+                currentEditLabel.Text = "Please select a texture set to start importing";
             }
         }
 
@@ -977,6 +990,7 @@ namespace FFXIVLooseTextureCompiler {
             multi.Enabled = false;
             mask.Enabled = false;
             glow.Enabled = false;
+
         }
 
         private void multi_OnFileSelected(object sender, EventArgs e) {
@@ -1365,9 +1379,9 @@ namespace FFXIVLooseTextureCompiler {
                     return i;
                 }
             }
-            for (int i = 1; i < raceList.Items.Count; i++) {
+            for (int i = 0; i < raceList.Items.Count; i++) {
                 string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
-                if (path.Contains("c" + vanilla)) {
+                if (path.Contains("c" + NumberPadder(int.Parse(vanilla)))) {
                     if (path.Contains("c1401b0001")) {
                         return 6;
                     } else if (path.Contains("c1401b0101")) {
