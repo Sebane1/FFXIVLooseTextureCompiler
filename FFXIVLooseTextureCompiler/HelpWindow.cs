@@ -54,7 +54,7 @@ namespace FFXIVLooseTextureCompiler {
         private void getTBSE_Click(object sender, EventArgs e) {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://www.nexusmods.com/finalfantasy14/mods/1255?tab=files",
+                    FileName = "https://drive.google.com/drive/folders/1pQoDREYQsvHFwoiEOggkSyjbQSjKcnpU",
                     UseShellExecute = true,
                     Verb = "OPEN"
                 });
@@ -66,7 +66,7 @@ namespace FFXIVLooseTextureCompiler {
         private void getHRBODY_Click(object sender, EventArgs e) {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://www.nexusmods.com/finalfantasy14/mods/1052?tab=files",
+                    FileName = "https://drive.google.com/drive/folders/1FfJm42VTncIOJWNWAH2L_JbGih9ZAae6",
                     UseShellExecute = true,
                     Verb = "OPEN"
                 });

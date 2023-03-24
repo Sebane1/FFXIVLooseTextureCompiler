@@ -1114,12 +1114,35 @@ namespace FFXIVLooseTextureCompiler {
                 generateMultiCheckBox.Checked = projectFile.GenerateMulti;
                 textureList.Items.AddRange(projectFile.MaterialSets?.ToArray());
 
-                foreach (TextureSet materialSet in projectFile.MaterialSets) {
-                    AddWatcher(materialSet.Diffuse);
-                    AddWatcher(materialSet.Normal);
-                    AddWatcher(materialSet.Multi);
-                    AddWatcher(materialSet.NormalMask);
-                    AddWatcher(materialSet.Glow);
+                foreach (TextureSet textureSet in projectFile.MaterialSets) {
+                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Normal);
+                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.NormalMask);
+                    AddWatcher(textureSet.Glow);
+                    if (genderListBody.SelectedIndex != 0) {
+                        if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                            textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+                        } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
+                            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+                        } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
+                            textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+                        } else {
+                            if (raceList.SelectedIndex == 5) {
+                                textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                            } else {
+                                textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+                            }
+                        }
+                    } else {
+                        if (raceList.SelectedIndex == 5) {
+                            textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                        } else {
+                            if (textureSet.InternalDiffusePath.Contains("_b_d")) {
+                                textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                            }
+                        }
+                    }
                 }
             }
             HasSaved = true;
