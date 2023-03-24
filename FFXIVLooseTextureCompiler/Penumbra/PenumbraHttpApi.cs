@@ -3,22 +3,21 @@
 
 namespace Anamnesis.Penumbra;
 
-using FFBardMusicPlayer.FFXIV;
 using System.Threading.Tasks;
 
 public static partial class PenumbraHttpApi {
-    public static async Task Redraw(int targetIndex, FFXIVHook hook) {
+    public static async Task Redraw(int targetIndex) {
         RedrawData data = new();
         data.ObjectTableIndex = targetIndex;
         data.Type = RedrawData.RedrawType.Redraw;
 
-        await PenumbraApi.Post("/redraw", data, hook);
+        await PenumbraApi.Post("/redraw", data);
 
         await Task.Delay(500);
     }
-    public static async Task Reload(string modPath, string modName, FFXIVHook hook) {
+    public static async Task Reload(string modPath, string modName) {
         ModReloadData data = new ModReloadData(modPath, modName);
-        await PenumbraApi.Post("/reloadmod", data, hook);
+        await PenumbraApi.Post("/reloadmod", data);
 
         await Task.Delay(500);
     }

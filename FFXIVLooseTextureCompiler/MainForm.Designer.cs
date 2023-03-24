@@ -42,7 +42,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.modDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.modVersionTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.modWebsiteTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -74,6 +73,10 @@
             this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendCurrentModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listenForFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howDoIUseThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +85,6 @@
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -118,6 +120,10 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.exportLabel = new System.Windows.Forms.Label();
             this.exportPanel = new System.Windows.Forms.Panel();
+            this.listenForFiles = new System.ComponentModel.BackgroundWorker();
+            this.modVersionTextBox = new System.Windows.Forms.TextBox();
+            this.ipBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -206,7 +212,7 @@
             // generateButton
             // 
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateButton.Location = new System.Drawing.Point(404, 608);
+            this.generateButton.Location = new System.Drawing.Point(400, 608);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(64, 24);
             this.generateButton.TabIndex = 7;
@@ -372,25 +378,16 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(256, 60);
+            this.label3.Location = new System.Drawing.Point(256, 32);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 15);
             this.label3.TabIndex = 21;
             this.label3.Text = "Version";
             // 
-            // modVersionTextBox
-            // 
-            this.modVersionTextBox.Location = new System.Drawing.Point(328, 56);
-            this.modVersionTextBox.Name = "modVersionTextBox";
-            this.modVersionTextBox.Size = new System.Drawing.Size(204, 23);
-            this.modVersionTextBox.TabIndex = 20;
-            this.modVersionTextBox.Text = "1.0.0";
-            this.modVersionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(256, 32);
+            this.label2.Location = new System.Drawing.Point(256, 60);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 15);
             this.label2.TabIndex = 16;
@@ -398,7 +395,7 @@
             // 
             // modWebsiteTextBox
             // 
-            this.modWebsiteTextBox.Location = new System.Drawing.Point(328, 28);
+            this.modWebsiteTextBox.Location = new System.Drawing.Point(328, 56);
             this.modWebsiteTextBox.Name = "modWebsiteTextBox";
             this.modWebsiteTextBox.Size = new System.Drawing.Size(204, 23);
             this.modWebsiteTextBox.TabIndex = 15;
@@ -449,8 +446,9 @@
             this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.configToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.creditsToolStripMenuItem});
+            this.modShareToolStripMenuItem,
+            this.creditsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(537, 24);
@@ -646,6 +644,36 @@
             this.changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
             this.changePenumbraPathToolStripMenuItem.Click += new System.EventHandler(this.changePenumbraPathToolStripMenuItem_Click);
             // 
+            // modShareToolStripMenuItem
+            // 
+            this.modShareToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendCurrentModToolStripMenuItem,
+            this.listenForFilesToolStripMenuItem});
+            this.modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
+            this.modShareToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.modShareToolStripMenuItem.Text = "Mod Share";
+            // 
+            // sendCurrentModToolStripMenuItem
+            // 
+            this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
+            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
+            this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
+            // 
+            // listenForFilesToolStripMenuItem
+            // 
+            this.listenForFilesToolStripMenuItem.Name = "listenForFilesToolStripMenuItem";
+            this.listenForFilesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.listenForFilesToolStripMenuItem.Text = "Listen For Files";
+            this.listenForFilesToolStripMenuItem.Click += new System.EventHandler(this.listenForFilesToolStripMenuItem_Click);
+            // 
+            // creditsToolStripMenuItem
+            // 
+            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.creditsToolStripMenuItem.Text = "Credits";
+            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -708,13 +736,6 @@
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
-            // 
-            // creditsToolStripMenuItem
-            // 
-            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.creditsToolStripMenuItem.Text = "Credits";
-            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
             // donateButton
             // 
@@ -902,7 +923,7 @@
             this.generationType.Items.AddRange(new object[] {
             "Detailed",
             "Simple"});
-            this.generationType.Location = new System.Drawing.Point(90, 607);
+            this.generationType.Location = new System.Drawing.Point(80, 607);
             this.generationType.Name = "generationType";
             this.generationType.Size = new System.Drawing.Size(70, 23);
             this.generationType.TabIndex = 36;
@@ -913,7 +934,7 @@
             // 
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 611);
+            this.label5.Location = new System.Drawing.Point(4, 611);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 15);
             this.label5.TabIndex = 37;
@@ -932,7 +953,7 @@
             // 
             this.bakeNormals.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bakeNormals.AutoSize = true;
-            this.bakeNormals.Location = new System.Drawing.Point(164, 611);
+            this.bakeNormals.Location = new System.Drawing.Point(156, 611);
             this.bakeNormals.Name = "bakeNormals";
             this.bakeNormals.Size = new System.Drawing.Size(116, 19);
             this.bakeNormals.TabIndex = 39;
@@ -944,7 +965,7 @@
             // 
             this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(296, 611);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(276, 611);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -1071,11 +1092,45 @@
             this.exportPanel.TabIndex = 44;
             this.exportPanel.Visible = false;
             // 
+            // listenForFiles
+            // 
+            this.listenForFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.listenForFiles_DoWork);
+            // 
+            // modVersionTextBox
+            // 
+            this.modVersionTextBox.Location = new System.Drawing.Point(328, 28);
+            this.modVersionTextBox.Name = "modVersionTextBox";
+            this.modVersionTextBox.Size = new System.Drawing.Size(40, 23);
+            this.modVersionTextBox.TabIndex = 20;
+            this.modVersionTextBox.Text = "1.0.0";
+            this.modVersionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            // 
+            // ipBox
+            // 
+            this.ipBox.Location = new System.Drawing.Point(444, 28);
+            this.ipBox.Name = "ipBox";
+            this.ipBox.Size = new System.Drawing.Size(88, 23);
+            this.ipBox.TabIndex = 51;
+            this.ipBox.Text = "0.0.0.0";
+            this.ipBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ipBox_KeyUp);
+            this.ipBox.Leave += new System.EventHandler(this.ipBox_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(376, 32);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 15);
+            this.label8.TabIndex = 52;
+            this.label8.Text = "Remote IP";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.ipBox);
             this.Controls.Add(this.addFaceButton);
             this.Controls.Add(this.auraFaceScalesDropdown);
             this.Controls.Add(this.finalizeButton);
@@ -1163,7 +1218,6 @@
         private Label label4;
         private TextBox modDescriptionTextBox;
         private Label label3;
-        private TextBox modVersionTextBox;
         private ComboBox facePart;
         private ComboBox faceType;
         private ComboBox subRaceList;
@@ -1240,5 +1294,12 @@
         private Panel panel2;
         private Label exportLabel;
         private Panel exportPanel;
+        private ToolStripMenuItem modShareToolStripMenuItem;
+        private ToolStripMenuItem sendCurrentModToolStripMenuItem;
+        private ToolStripMenuItem listenForFilesToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker listenForFiles;
+        private TextBox modVersionTextBox;
+        private TextBox ipBox;
+        private Label label8;
     }
 }
