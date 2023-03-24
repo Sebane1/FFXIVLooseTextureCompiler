@@ -43,20 +43,20 @@ namespace FFXIVLooseTextureCompiler.Networking {
                     }
                     MessageBox.Show("Mod files synced");
                 } catch {
-                    if (connectionAttempts < 10) {
+                    if (connectionAttempts < 2) {
                         if (client != null) {
                             client.Close();
                         }
                         client = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
                         try {
                             client.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                            SendModFolder(ipAddress, modName, penumbraFolder);
                         } catch {
-                            MessageBox.Show("Failed to send.");
                         }
-                        SendModFolder(ipAddress, modName, penumbraFolder);
                         connectionAttempts++;
                     } else {
                         MessageBox.Show("Failed to send.");
+                        return;
                     }
                 }
             }
