@@ -23,7 +23,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         private bool ignoreNormalGeneration;
         private bool ignoreMultiGeneration;
         private bool omniExportMode;
-        BackupTexturePaths backupTexturePaths;
+        private BackupTexturePaths backupTexturePaths;
         public bool IsChildSet {
             get {
                return Diffuse.Contains("baseTexBaked");
