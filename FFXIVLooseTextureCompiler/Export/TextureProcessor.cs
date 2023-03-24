@@ -34,6 +34,8 @@ namespace FFXIVLooseTextureCompiler {
         BackupTexturePaths gen3Path = new BackupTexturePaths(@"res\textures\gen3\gen3\");
         BackupTexturePaths gen3Gen2Path = new BackupTexturePaths(@"res\textures\gen3\gen2\");
 
+        BackupTexturePaths tbsePath = new BackupTexturePaths(@"res\textures\tbse\tbse\");
+
         BackupTexturePaths otopopLalaPath = new BackupTexturePaths(@"res\textures\otopop\otopop\");
         BackupTexturePaths vanillaLalaPath = new BackupTexturePaths(@"res\textures\otopop\vanilla\");
 
@@ -48,6 +50,8 @@ namespace FFXIVLooseTextureCompiler {
         public BackupTexturePaths Gen3Path { get => gen3Path; set => gen3Path = value; }
         public BackupTexturePaths Gen3Gen2Path { get => gen3Gen2Path; set => gen3Gen2Path = value; }
         public BackupTexturePaths OtopopLalaPath { get => otopopLalaPath; set => otopopLalaPath = value; }
+
+        public BackupTexturePaths TbsePath { get => tbsePath; set => tbsePath = value; }
         public BackupTexturePaths VanillaLalaPath { get => vanillaLalaPath; set => vanillaLalaPath = value; }
 
         public event EventHandler OnProgressChange;

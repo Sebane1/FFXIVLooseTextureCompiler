@@ -9,20 +9,19 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using FFBardMusicPlayer.FFXIV;
 using Newtonsoft.Json;
 
 internal static class PenumbraApi {
     private const string Url = "http://localhost:42069/api";
     private const int TimeoutMs = 500;
     private static bool calledWarningOnce = false;
-    public static async Task Post(string route, object content, FFXIVHook hook) {
-        await PostRequest(route, content, hook);
+    public static async Task Post(string route, object content) {
+        await PostRequest(route, content);
     }
 
-    public static async Task<T> Post<T>(string route, object content, FFXIVHook hook)
+    public static async Task<T> Post<T>(string route, object content)
         where T : notnull {
-        HttpResponseMessage response = await PostRequest(route, content, hook);
+        HttpResponseMessage response = await PostRequest(route, content);
 
         using StreamReader? sr = new StreamReader(await response.Content.ReadAsStreamAsync());
         string json = sr.ReadToEnd();
@@ -30,7 +29,7 @@ internal static class PenumbraApi {
         return JsonConvert.DeserializeObject<T>(json);
     }
 
-    private static async Task<HttpResponseMessage> PostRequest(string route, object content, FFXIVHook hook) {
+    private static async Task<HttpResponseMessage> PostRequest(string route, object content) {
         if (!route.StartsWith('/'))
             route = '/' + route;
 
@@ -48,7 +47,7 @@ internal static class PenumbraApi {
             return response;
         } catch (Exception ex) {
             if (!calledWarningOnce) {
-                MessageBox.Show(@"Select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"" for automatic refresh.");
+                MessageBox.Show(@"Error communicating with Penumbra. Try to select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"".");
                 calledWarningOnce = true;
             }
             return null;

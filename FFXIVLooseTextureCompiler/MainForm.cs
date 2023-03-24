@@ -1,7 +1,7 @@
 using Anamnesis.Penumbra;
-using FFBardMusicPlayer.FFXIV;
 using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVLooseTextureCompiler.ImageProcessing;
+using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVVoicePackCreator;
 using FFXIVVoicePackCreator.Json;
@@ -20,7 +20,6 @@ using TypingConnector;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
-        FFXIVHook Hook = new FFXIVHook();
         private RaceCode raceCodeBody;
         private RaceCode raceCodeFace;
         private List<RacialBodyIdentifiers> bodyIdentifiers = new List<RacialBodyIdentifiers>();
@@ -50,6 +49,8 @@ namespace FFXIVLooseTextureCompiler {
         private Color originalDiffuseBoxColour;
         private Color originalNormalBoxColour;
         private Color originalMultiBoxColour;
+        private bool isNetworkSync;
+        private NetworkedClient networkedClient;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -151,14 +152,7 @@ namespace FFXIVLooseTextureCompiler {
             originalDiffuseBoxColour = diffuse.BackColor;
             originalNormalBoxColour = normal.BackColor;
             originalMultiBoxColour = multi.BackColor;
-        }
-        private void RefreshFFXIVInstance() {
-            var processes = new List<Process>(Process.GetProcessesByName("ffxiv_dx11"));
-            foundInstance = false;
-            if (processes.Count > 0) {
-                foundInstance = true;
-                Hook.Hook(processes[0], false);
-            }
+            GetLastIP();
         }
         private void generateButton_Click(object sender, EventArgs e) {
             exportLabel.Text = "Exporting";
@@ -200,7 +194,9 @@ namespace FFXIVLooseTextureCompiler {
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
-                        PenumbraHttpApi.Redraw(0, Hook);
+                        if (!isNetworkSync) {
+                            PenumbraHttpApi.Redraw(0);
+                        }
                     } else {
                         modNameTextBox.Enabled = modAuthorTextBox.Enabled
                         = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
@@ -210,8 +206,10 @@ namespace FFXIVLooseTextureCompiler {
                         multi.FilePath.Enabled = false;
                         mask.FilePath.Enabled = false;
                         glow.FilePath.Enabled = false;
-                        PenumbraHttpApi.Reload(modPath, modNameTextBox.Text, Hook);
-                        PenumbraHttpApi.Redraw(0, Hook);
+                        if (!isNetworkSync) {
+                            PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+                            PenumbraHttpApi.Redraw(0);
+                        }
                         if (IntegrityChecker.IntegrityCheck()) {
                             IntegrityChecker.ShowConsolation();
                         }
@@ -610,6 +608,23 @@ namespace FFXIVLooseTextureCompiler {
                 writer.WriteLine(path);
             }
         }
+
+        public void GetLastIP() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"IPConfig.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    ipBox.Text = reader.ReadLine();
+                }
+            }
+        }
+        public void WriteLastIP(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"IPConfig.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+
         public void GetLastUsedOptions() {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
             string path = Path.Combine(dataPath, @"UsedOptions.config");
@@ -677,7 +692,7 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.BackupTexturePaths = textureProcessor.BiboPath;
                 } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
                     textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-                } else if (textureSet.InternalDiffusePath.Contains("otopop")) {
+                } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
                     textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
                 } else {
                     if (raceList.SelectedIndex == 5) {
@@ -689,6 +704,10 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 if (raceList.SelectedIndex == 5) {
                     textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                } else {
+                    if (textureSet.InternalDiffusePath.Contains("_b_d")) {
+                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                    }
                 }
             }
             textureList.Items.Add(textureSet);
@@ -1226,7 +1245,6 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
-            RefreshFFXIVInstance();
             WriteLastUsedOptions();
         }
 
@@ -1840,7 +1858,50 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.");
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.");
+        }
+
+        private void sendCurrentModToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
+                isNetworkSync = true;
+                generateButton_Click(this, EventArgs.Empty);
+                exportPanel.Visible = true;
+                exportLabel.Text = "Sending over network";
+                exportProgress.Visible = true;
+                if (networkedClient == null) {
+                    networkedClient = new NetworkedClient(ipBox.Text);
+                }
+                networkedClient.SendModFolder(ipBox.Text, modNameTextBox.Text, penumbraModPath);
+                exportProgress.Value = exportProgress.Maximum;
+                exportPanel.Visible = false;
+                exportProgress.Visible = false;
+                exportLabel.Text = "Exporting";
+                isNetworkSync = false;
+            }
+        }
+
+        private void listenForFilesToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (!listenForFiles.IsBusy) {
+                listenForFiles.RunWorkerAsync();
+                listenForFilesToolStripMenuItem.Enabled = false;
+                listenForFilesToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void listenForFiles_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            try {
+                new NetworkedClient().StartServer(penumbraModPath);
+            } catch {
+                listenForFiles.CancelAsync();
+            }
+        }
+
+        private void ipBox_TextChanged(object sender, EventArgs e) {
+            WriteLastIP(ipBox.Text);
+        }
+
+        private void ipBox_KeyUp(object sender, KeyEventArgs e) {
+            WriteLastIP(ipBox.Text);
         }
     }
 }
