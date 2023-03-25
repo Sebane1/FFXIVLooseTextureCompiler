@@ -100,7 +100,7 @@ namespace FFXIVLooseTextureCompiler {
                             otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
                         }
                     }
-                } 
+                }
             } else {
                 MessageBox.Show(inputPath + " does not exist!");
             }
@@ -169,6 +169,7 @@ namespace FFXIVLooseTextureCompiler {
             Process process = Process.Start(processStartInfo);
             process.WaitForExit();
             Thread.Sleep(100);
+            File.Move(outputImage.Replace("_baseTexBaked", null).Replace(".", "_baseTexBaked."), outputImage.Replace("_baseTexBaked", null));
         }
         public void ProcessBatches() {
             List<XNormalExportJob> exportJobs = new List<XNormalExportJob>();
