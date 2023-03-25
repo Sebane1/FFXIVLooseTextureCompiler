@@ -224,8 +224,10 @@ namespace FFXIVLooseTextureCompiler {
                     modNameTextBox.Enabled = modAuthorTextBox.Enabled
                     = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
                     = modVersionTextBox.Enabled = modDescriptionTextBox.Enabled = true;
-                    exportPanel.Visible = false;
-                    finalizeResults = false;
+                    if (!isNetworkSync) {
+                        exportPanel.Visible = false;
+                        finalizeResults = false;
+                    }
                 } else {
                     exportPanel.Visible = false;
                     lockDuplicateGeneration = false;
@@ -686,30 +688,7 @@ namespace FFXIVLooseTextureCompiler {
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
             textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex,
                 baseBodyList.SelectedIndex, raceList.SelectedIndex);
-
-            if (genderListBody.SelectedIndex != 0) {
-                if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                    textureSet.BackupTexturePaths = textureProcessor.BiboPath;
-                } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
-                    textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-                } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
-                    textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-                } else {
-                    if (raceList.SelectedIndex == 5) {
-                        textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-                    } else {
-                        textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-                    }
-                }
-            } else {
-                if (raceList.SelectedIndex == 5) {
-                    textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-                } else {
-                    if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
-                    }
-                }
-            }
+            AddBackupPaths(textureSet);
             textureList.Items.Add(textureSet);
             HasSaved = false;
         }
@@ -1120,33 +1099,49 @@ namespace FFXIVLooseTextureCompiler {
                     AddWatcher(textureSet.Multi);
                     AddWatcher(textureSet.NormalMask);
                     AddWatcher(textureSet.Glow);
-                    if (genderListBody.SelectedIndex != 0) {
-                        if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                            textureSet.BackupTexturePaths = textureProcessor.BiboPath;
-                        } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
-                            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-                        } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
-                            textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-                        } else {
-                            if (raceList.SelectedIndex == 5) {
-                                textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-                            } else {
-                                textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-                            }
-                        }
-                    } else {
-                        if (raceList.SelectedIndex == 5) {
-                            textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-                        } else {
-                            if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                                textureSet.BackupTexturePaths = textureProcessor.TbsePath;
-                            }
-                        }
-                    }
+                    AddBackupPaths(textureSet);
                 }
             }
             HasSaved = true;
         }
+
+        private void AddBackupPaths(TextureSet textureSet) {
+            if (genderListBody.SelectedIndex != 0) {
+                if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                    textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+                } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
+                    textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+                } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
+                    textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+                } else {
+                    if (raceList.SelectedIndex == 5) {
+                        textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                    } else {
+                        textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+                    }
+                }
+            } else {
+                if (raceList.SelectedIndex == 5) {
+                    textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                } else {
+                    // Midlander, Elezen, Miqo'te
+                    if (textureSet.InternalDiffusePath.Contains("--c0101b0001_b_d")) {
+                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                    } else
+                    // Highlander
+                    if (textureSet.InternalDiffusePath.Contains("--c0301b0001_b_d")) {
+                        textureSet.BackupTexturePaths = textureProcessor.TbsePathHighlander;
+                    } else
+                    // Viera
+                    if (textureSet.InternalDiffusePath.Contains("--c1701b0001_b_d")) {
+                        textureSet.BackupTexturePaths = textureProcessor.TbsePathViera;
+                    } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
+                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                    }
+                }
+            }
+        }
+
         public void SaveProject(string path) {
             using (StreamWriter writer = new StreamWriter(path)) {
                 JsonSerializer serializer = new JsonSerializer();
@@ -1865,7 +1860,7 @@ namespace FFXIVLooseTextureCompiler {
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select where you want to save the conversion");
+                MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
@@ -1881,17 +1876,19 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.");
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.", VersionText);
         }
 
         private void sendCurrentModToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
+            if (!string.IsNullOrEmpty(modNameTextBox.Text) && !listenForFiles.IsBusy) {
                 isNetworkSync = true;
                 generateButton_Click(this, EventArgs.Empty);
                 exportPanel.Visible = true;
                 exportLabel.Text = "Sending over network";
                 exportProgress.Visible = true;
                 if (networkedClient == null) {
+                    Application.DoEvents();
+                    Refresh();
                     networkedClient = new NetworkedClient(ipBox.Text);
                 }
                 networkedClient.SendModFolder(ipBox.Text, modNameTextBox.Text, penumbraModPath);
@@ -1900,6 +1897,8 @@ namespace FFXIVLooseTextureCompiler {
                 exportProgress.Visible = false;
                 exportLabel.Text = "Exporting";
                 isNetworkSync = false;
+            } else {
+                MessageBox.Show("Cant send files while listening for files", VersionText);
             }
         }
 
