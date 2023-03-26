@@ -74,8 +74,8 @@
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableModshareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendCurrentModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listenForFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -647,25 +647,27 @@
             // modShareToolStripMenuItem
             // 
             this.modShareToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sendCurrentModToolStripMenuItem,
-            this.listenForFilesToolStripMenuItem});
+            this.enableModshareToolStripMenuItem,
+            this.sendCurrentModToolStripMenuItem});
             this.modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
             this.modShareToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.modShareToolStripMenuItem.Text = "Mod Share";
+            this.modShareToolStripMenuItem.Click += new System.EventHandler(this.modShareToolStripMenuItem_Click);
+            // 
+            // enableModshareToolStripMenuItem
+            // 
+            this.enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
+            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableModshareToolStripMenuItem.Text = "Enable Modshare";
+            this.enableModshareToolStripMenuItem.Click += new System.EventHandler(this.enableModshareToolStripMenuItem_Click);
             // 
             // sendCurrentModToolStripMenuItem
             // 
+            this.sendCurrentModToolStripMenuItem.Enabled = false;
             this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
-            // 
-            // listenForFilesToolStripMenuItem
-            // 
-            this.listenForFilesToolStripMenuItem.Name = "listenForFilesToolStripMenuItem";
-            this.listenForFilesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.listenForFilesToolStripMenuItem.Text = "Listen For Files";
-            this.listenForFilesToolStripMenuItem.Click += new System.EventHandler(this.listenForFilesToolStripMenuItem_Click);
             // 
             // creditsToolStripMenuItem
             // 
@@ -1094,6 +1096,7 @@
             // 
             // listenForFiles
             // 
+            this.listenForFiles.WorkerSupportsCancellation = true;
             this.listenForFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.listenForFiles_DoWork);
             // 
             // modVersionTextBox
@@ -1296,10 +1299,10 @@
         private Panel exportPanel;
         private ToolStripMenuItem modShareToolStripMenuItem;
         private ToolStripMenuItem sendCurrentModToolStripMenuItem;
-        private ToolStripMenuItem listenForFilesToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker listenForFiles;
         private TextBox modVersionTextBox;
         private TextBox ipBox;
         private Label label8;
+        private ToolStripMenuItem enableModshareToolStripMenuItem;
     }
 }

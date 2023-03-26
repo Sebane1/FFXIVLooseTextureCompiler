@@ -7,76 +7,74 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using Anamnesis.Penumbra;
+using System.IO;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace FFXIVLooseTextureCompiler.Networking {
     public class NetworkedClient : IDisposable {
         private bool disposedValue;
-        private TcpListener listener;
-        TcpClient client;
+        private bool connected;
+        private TcpClient listeningClient;
+        private TcpClient sendingClient;
         int connectionAttempts = 0;
+        private string id;
+
+        public string Id { get => id; set => id = value; }
+        public bool Connected { get => connected; set => connected = value; }
+
         public NetworkedClient(string ipAddress) {
             try {
-                client = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
-                client.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                sendingClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5900));
+                listeningClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
+                try {
+                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5900));
+                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                } catch {
+                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5900));
+                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                }
+                connected = true;
             } catch {
-                MessageBox.Show("Failed to send.");
+                connected = false;
+                MessageBox.Show("Failed to connect.");
             }
         }
-        public NetworkedClient() {
-        }
 
-        //TcpListener listener = new TcpListener(new IPEndPoint(IPAddress.Any, 5800));
-        public void SendModFolder(string ipAddress, string modName, string penumbraFolder) {
+        public void SendModFolder(string sendID, string modName, string penumbraFolder) {
             //  try {
             if (!string.IsNullOrEmpty(modName)) {
                 try {
-                    BinaryWriter writer = new BinaryWriter(client.GetStream());
+                    BinaryWriter writer = new BinaryWriter(sendingClient.GetStream());
                     string path = Path.Combine(penumbraFolder, modName + ".zip");
                     if (File.Exists(path)) {
                         File.Delete(path);
                     }
                     ZipFile.CreateFromDirectory(Path.Combine(penumbraFolder, modName), path);
+                    writer.Write(sendID);
                     using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read)) {
                         writer.Write(modName);
                         writer.Write(fileStream.Length);
-                        fileStream.CopyTo(writer.BaseStream);
+                        CopyStream(fileStream, writer.BaseStream, (int)fileStream.Length);
+                        writer.Flush();
                     }
-                    MessageBox.Show("Mod files synced");
+                    MessageBox.Show("Mod files sent!");
                 } catch {
-                    if (connectionAttempts < 2) {
-                        if (client != null) {
-                            client.Close();
-                        }
-                        client = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
-                        try {
-                            client.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
-                            SendModFolder(ipAddress, modName, penumbraFolder);
-                        } catch {
-                        }
-                        connectionAttempts++;
-                    } else {
-                        MessageBox.Show("Failed to send.");
-                        return;
-                    }
+                    connected = false;
+                    sendingClient.Close();
+                    MessageBox.Show("Sending Mod failed!");
                 }
             }
         }
 
-        public void StartServer(string penumbraFolder) {
-            listener = new TcpListener(new IPEndPoint(IPAddress.Any, 5800));
-            listener.Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
-            listener.Start();
-            while (true) {
-                //try {
-                using (TcpClient client = listener.AcceptTcpClient()) {
-                    using (BinaryReader reader = new BinaryReader(client.GetStream())) {
-                        while (true) {
+        public void ListenForFiles(string penumbraFolder, ConnectionDisplay display) {
+            using (TcpClient client = listeningClient) {
+                using (BinaryReader reader = new BinaryReader(client.GetStream())) {
+                    display.Id = id = reader.ReadString();
+                    while (true) {
+                        try {
                             string modName = reader.ReadString();
                             long length = reader.ReadInt64();
                             string path = Path.Combine(penumbraFolder, modName + ".zip");
-                            if (File.Exists(path)) {
-                                File.Delete(path);
-                            }
                             using (FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write)) {
                                 CopyStream(reader.BaseStream, fileStream, (int)length);
                             }
@@ -84,18 +82,20 @@ namespace FFXIVLooseTextureCompiler.Networking {
                                 Directory.Delete(Path.Combine(penumbraFolder, modName), true);
                             }
                             ZipFile.ExtractToDirectory(path, Path.Combine(penumbraFolder, modName), true);
-                            Thread.Sleep(500);
                             PenumbraHttpApi.Reload(Path.Combine(penumbraFolder, modName), modName);
-                            Thread.Sleep(500);
                             PenumbraHttpApi.Redraw(0);
+                            if (File.Exists(path)) {
+                                File.Delete(path);
+                            }
+                        } catch {
+                            connected = false;
+                            listeningClient.Close();
+                            break;
                         }
+                        MessageBox.Show("Mod transfer received");
                     }
                 }
-                //} catch {
-                //    MessageBox.Show("Lost connection to client");
-                //}
             }
-            listener.Stop();
         }
         public static void CopyStream(Stream input, Stream output, int bytes) {
             byte[] buffer = new byte[32768];
@@ -109,7 +109,9 @@ namespace FFXIVLooseTextureCompiler.Networking {
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
-                    // TODO: dispose managed state (managed objects)
+                    sendingClient.Close();
+                    listeningClient.Close();
+                    listeningClient.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
