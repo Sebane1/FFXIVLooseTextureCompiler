@@ -56,3 +56,4 @@ C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.DiffuseMerger.resources
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.HelpWindow.resources
 C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.MultiCreator.resources
+C:\Users\stel9\source\repos\FFXIVLooseTextureCompiler\FFXIVLooseTextureCompiler\obj\Debug\net7.0-windows\FFXIVLooseTextureCompiler.ConnectionDisplay.resources

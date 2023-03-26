@@ -51,6 +51,7 @@ namespace FFXIVLooseTextureCompiler {
         private Color originalMultiBoxColour;
         private bool isNetworkSync;
         private NetworkedClient networkedClient;
+        private ConnectionDisplay connectionDisplay;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -410,7 +411,7 @@ namespace FFXIVLooseTextureCompiler {
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
                     || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2 && (material == 0
                     || auraFaceScalesDropdown.SelectedIndex == 2))
-                    || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1)
+                    || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1 && material != 2)
                     || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
                     faceIdCheck = "010";
                 }
@@ -1198,11 +1199,14 @@ namespace FFXIVLooseTextureCompiler {
                         if (savePath != null) {
                             SaveProject(savePath);
                         }
+                        networkedClient?.Dispose();
                         break;
                     case DialogResult.Cancel:
                         e.Cancel = true;
                         break;
                 }
+            } else {
+                networkedClient?.Dispose();
             }
         }
 
@@ -1417,13 +1421,15 @@ namespace FFXIVLooseTextureCompiler {
             }
             for (int i = 0; i < raceList.Items.Count; i++) {
                 string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
-                if (path.Contains("c" + NumberPadder(int.Parse(vanilla)))) {
-                    if (path.Contains("c1401b0001")) {
-                        return 6;
-                    } else if (path.Contains("c1401b0101")) {
-                        return 7;
-                    } else {
-                        return i;
+                if (!vanilla.Contains("Invalid")) {
+                    if (path.Contains("c" + NumberPadder(int.Parse(vanilla)))) {
+                        if (path.Contains("c1401b0001")) {
+                            return 6;
+                        } else if (path.Contains("c1401b0101")) {
+                            return 7;
+                        } else {
+                            return i;
+                        }
                     }
                 }
             }
@@ -1880,40 +1886,37 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void sendCurrentModToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (!string.IsNullOrEmpty(modNameTextBox.Text) && !listenForFiles.IsBusy) {
+            if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
                 isNetworkSync = true;
                 generateButton_Click(this, EventArgs.Empty);
                 exportPanel.Visible = true;
                 exportLabel.Text = "Sending over network";
                 exportProgress.Visible = true;
-                if (networkedClient == null) {
-                    Application.DoEvents();
-                    Refresh();
-                    networkedClient = new NetworkedClient(ipBox.Text);
-                }
-                networkedClient.SendModFolder(ipBox.Text, modNameTextBox.Text, penumbraModPath);
+                Application.DoEvents();
+                Refresh();
+                networkedClient.SendModFolder(connectionDisplay.SendId, modNameTextBox.Text, penumbraModPath);
                 exportProgress.Value = exportProgress.Maximum;
                 exportPanel.Visible = false;
                 exportProgress.Visible = false;
                 exportLabel.Text = "Exporting";
                 isNetworkSync = false;
+                if (!networkedClient.Connected) {
+                    enableModshareToolStripMenuItem.Enabled = true;
+                    sendCurrentModToolStripMenuItem.Enabled = false;
+                }
             } else {
-                MessageBox.Show("Cant send files while listening for files", VersionText);
+                MessageBox.Show("No mod is loaded to send", VersionText);
             }
         }
 
         private void listenForFilesToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (!listenForFiles.IsBusy) {
-                listenForFiles.RunWorkerAsync();
-                listenForFilesToolStripMenuItem.Enabled = false;
-                listenForFilesToolStripMenuItem.Enabled = false;
-            }
         }
 
         private void listenForFiles_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            try {
-                new NetworkedClient().StartServer(penumbraModPath);
-            } catch {
+            networkedClient.ListenForFiles(penumbraModPath, connectionDisplay);
+            if (!networkedClient.Connected) {
+                enableModshareToolStripMenuItem.Enabled = true;
+                sendCurrentModToolStripMenuItem.Enabled = false;
                 listenForFiles.CancelAsync();
             }
         }
@@ -1924,6 +1927,33 @@ namespace FFXIVLooseTextureCompiler {
 
         private void ipBox_KeyUp(object sender, KeyEventArgs e) {
             WriteLastIP(ipBox.Text);
+        }
+
+        private void enableModshareToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("By enabling this feature you understand that we hold no responsibility for what data may be sent to you by other users. Only use this feature with people you trust.",
+                VersionText, MessageBoxButtons.OKCancel) == DialogResult.OK) {
+                networkedClient = new NetworkedClient((ipBox.Text.Contains("0.0.0.0")
+                    || string.IsNullOrEmpty(ipBox.Text)) ? "50.70.229.19" : ipBox.Text);
+                if (networkedClient.Connected) {
+                    enableModshareToolStripMenuItem.Enabled = false;
+                    sendCurrentModToolStripMenuItem.Enabled = true;
+
+                    if (!listenForFiles.IsBusy) {
+                        if (connectionDisplay == null) {
+                            connectionDisplay = new ConnectionDisplay(networkedClient.Id);
+                            connectionDisplay.RequestedToSendCurrentMod += delegate {
+                                sendCurrentModToolStripMenuItem_Click(sender, e);
+                            };
+                        }
+                        listenForFiles.RunWorkerAsync();
+                        connectionDisplay.Show();
+                    }
+                }
+            }
+        }
+
+        private void modShareToolStripMenuItem_Click(object sender, EventArgs e) {
+
         }
     }
 }
