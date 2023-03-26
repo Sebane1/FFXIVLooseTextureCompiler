@@ -33,9 +33,9 @@ namespace LooseTextureCompilerFileRelay {
                 }
             }));
             thread.Start();
-
+            Console.WriteLine("Server started");
             while (true) {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
             }
         }
     }

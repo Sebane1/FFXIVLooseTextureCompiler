@@ -195,9 +195,7 @@ namespace FFXIVLooseTextureCompiler {
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
-                        if (!isNetworkSync) {
                             PenumbraHttpApi.Redraw(0);
-                        }
                     } else {
                         modNameTextBox.Enabled = modAuthorTextBox.Enabled
                         = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
@@ -207,10 +205,8 @@ namespace FFXIVLooseTextureCompiler {
                         multi.FilePath.Enabled = false;
                         mask.FilePath.Enabled = false;
                         glow.FilePath.Enabled = false;
-                        if (!isNetworkSync) {
                             PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
                             PenumbraHttpApi.Redraw(0);
-                        }
                         if (IntegrityChecker.IntegrityCheck()) {
                             IntegrityChecker.ShowConsolation();
                         }
@@ -1890,7 +1886,7 @@ namespace FFXIVLooseTextureCompiler {
                 isNetworkSync = true;
                 generateButton_Click(this, EventArgs.Empty);
                 exportPanel.Visible = true;
-                exportLabel.Text = "Sending over network";
+                exportLabel.Text = "Sending Over Network";
                 exportProgress.Visible = true;
                 Application.DoEvents();
                 Refresh();
@@ -1898,11 +1894,14 @@ namespace FFXIVLooseTextureCompiler {
                 exportProgress.Value = exportProgress.Maximum;
                 exportPanel.Visible = false;
                 exportProgress.Visible = false;
-                exportLabel.Text = "Exporting";
+                exportLabel.Text = "Send Attempt Finished";
                 isNetworkSync = false;
                 if (!networkedClient.Connected) {
                     enableModshareToolStripMenuItem.Enabled = true;
                     sendCurrentModToolStripMenuItem.Enabled = false;
+                    MessageBox.Show("Sending Mod failed!", VersionText);
+                } else {
+                    MessageBox.Show("Mod files sent!", VersionText);
                 }
             } else {
                 MessageBox.Show("No mod is loaded to send", VersionText);
@@ -1932,8 +1931,11 @@ namespace FFXIVLooseTextureCompiler {
         private void enableModshareToolStripMenuItem_Click(object sender, EventArgs e) {
             if (MessageBox.Show("By enabling this feature you understand that we hold no responsibility for what data may be sent to you by other users. Only use this feature with people you trust.",
                 VersionText, MessageBoxButtons.OKCancel) == DialogResult.OK) {
-                networkedClient = new NetworkedClient((ipBox.Text.Contains("0.0.0.0")
-                    || string.IsNullOrEmpty(ipBox.Text)) ? "50.70.229.19" : ipBox.Text);
+                if (networkedClient == null) {
+                    networkedClient = new NetworkedClient((ipBox.Text.Contains("0.0.0.0")
+                        || string.IsNullOrEmpty(ipBox.Text)) ? "50.70.229.19" : ipBox.Text);
+                }
+                networkedClient.Start();
                 if (networkedClient.Connected) {
                     enableModshareToolStripMenuItem.Enabled = false;
                     sendCurrentModToolStripMenuItem.Enabled = true;
