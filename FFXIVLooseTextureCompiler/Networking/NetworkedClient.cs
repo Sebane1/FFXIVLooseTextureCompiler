@@ -18,20 +18,25 @@ namespace FFXIVLooseTextureCompiler.Networking {
         private TcpClient sendingClient;
         int connectionAttempts = 0;
         private string id;
+        private string _ipAddress;
 
         public string Id { get => id; set => id = value; }
         public bool Connected { get => connected; set => connected = value; }
 
         public NetworkedClient(string ipAddress) {
+            sendingClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5900));
+            listeningClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
+            _ipAddress = ipAddress;
+        }
+        public void Start() {
             try {
-                sendingClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5900));
-                listeningClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5800));
                 try {
-                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5900));
-                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(_ipAddress), 5900));
+                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(_ipAddress), 5800));
                 } catch {
-                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5900));
-                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(ipAddress), 5800));
+                    Thread.Sleep(10000);
+                    sendingClient.Connect(new IPEndPoint(IPAddress.Parse(_ipAddress), 5900));
+                    listeningClient.Connect(new IPEndPoint(IPAddress.Parse(_ipAddress), 5800));
                 }
                 connected = true;
             } catch {
@@ -39,7 +44,6 @@ namespace FFXIVLooseTextureCompiler.Networking {
                 MessageBox.Show("Failed to connect.");
             }
         }
-
         public void SendModFolder(string sendID, string modName, string penumbraFolder) {
             //  try {
             if (!string.IsNullOrEmpty(modName)) {
@@ -57,11 +61,8 @@ namespace FFXIVLooseTextureCompiler.Networking {
                         CopyStream(fileStream, writer.BaseStream, (int)fileStream.Length);
                         writer.Flush();
                     }
-                    MessageBox.Show("Mod files sent!");
                 } catch {
                     connected = false;
-                    sendingClient.Close();
-                    MessageBox.Show("Sending Mod failed!");
                 }
             }
         }
@@ -69,30 +70,33 @@ namespace FFXIVLooseTextureCompiler.Networking {
         public void ListenForFiles(string penumbraFolder, ConnectionDisplay display) {
             using (TcpClient client = listeningClient) {
                 using (BinaryReader reader = new BinaryReader(client.GetStream())) {
-                    display.Id = id = reader.ReadString();
-                    while (true) {
-                        try {
-                            string modName = reader.ReadString();
-                            long length = reader.ReadInt64();
-                            string path = Path.Combine(penumbraFolder, modName + ".zip");
-                            using (FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write)) {
-                                CopyStream(reader.BaseStream, fileStream, (int)length);
+                    using (BinaryWriter writer = new BinaryWriter(client.GetStream())) {
+                        display.Id = id = reader.ReadString();
+                        while (true) {
+                            try {
+                                while (reader.ReadByte() == 0) {
+                                    writer.Write(0);
+                                }
+                                string modName = reader.ReadString();
+                                long length = reader.ReadInt64();
+                                string path = Path.Combine(penumbraFolder, modName + ".zip");
+                                using (FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write)) {
+                                    CopyStream(reader.BaseStream, fileStream, (int)length);
+                                }
+                                if (Directory.Exists(Path.Combine(penumbraFolder, modName))) {
+                                    Directory.Delete(Path.Combine(penumbraFolder, modName), true);
+                                }
+                                ZipFile.ExtractToDirectory(path, Path.Combine(penumbraFolder, modName), true);
+                                PenumbraHttpApi.Reload(Path.Combine(penumbraFolder, modName), modName);
+                                PenumbraHttpApi.Redraw(0);
+                                if (File.Exists(path)) {
+                                    File.Delete(path);
+                                }
+                            } catch {
+                                connected = false;
+                                break;
                             }
-                            if (Directory.Exists(Path.Combine(penumbraFolder, modName))) {
-                                Directory.Delete(Path.Combine(penumbraFolder, modName), true);
-                            }
-                            ZipFile.ExtractToDirectory(path, Path.Combine(penumbraFolder, modName), true);
-                            PenumbraHttpApi.Reload(Path.Combine(penumbraFolder, modName), modName);
-                            PenumbraHttpApi.Redraw(0);
-                            if (File.Exists(path)) {
-                                File.Delete(path);
-                            }
-                        } catch {
-                            connected = false;
-                            listeningClient.Close();
-                            break;
                         }
-                        MessageBox.Show("Mod transfer received");
                     }
                 }
             }
@@ -109,9 +113,13 @@ namespace FFXIVLooseTextureCompiler.Networking {
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
-                    sendingClient.Close();
-                    listeningClient.Close();
-                    listeningClient.Dispose();
+                    try {
+                        sendingClient.Close();
+                        listeningClient.Close();
+                        listeningClient.Dispose();
+                    } catch {
+
+                    }
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
