@@ -1644,35 +1644,34 @@ namespace FFXIVLooseTextureCompiler {
                 tbseVanilla.Glow = textureSet.Glow.Replace(".", "_tbse_vanilla_g.");
                 tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
 
+                MemoryStream stream = new MemoryStream();
+                byte[] data = new byte[0];
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+                TextureImporter.PngToTex(stream, out data);
+                stream.Flush();
+                stream.Position = 0;
+                if (data.Length > 0) {
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse)));
+                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
+                    File.WriteAllBytes(path, data);
+                }
                 if (File.Exists(textureSet.Diffuse)) {
-                    MemoryStream stream = new MemoryStream();
-                    byte[] data = new byte[0];
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
-                    stream.Position = 0;
-                    TextureImporter.PngToTex(stream, out data);
-                    stream.Flush();
-                    stream.Position = 0;
-                    if (data.Length > 0) {
-                        Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse)));
-                        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
-                        MessageBox.Show(path);
-                        File.WriteAllBytes(path, data);
-                    }
                     ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
                 }
+                stream = new MemoryStream();
+                data = new byte[0];
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+                TextureImporter.PngToTex(stream, out data);
+                stream.Flush();
+                stream.Position = 0;
+                if (data.Length > 0) {
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal)));
+                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal);
+                    File.WriteAllBytes(path, data);
+                }
                 if (File.Exists(textureSet.Normal)) {
-                    MemoryStream stream = new MemoryStream();
-                    byte[] data = new byte[0];
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
-                    stream.Position = 0;
-                    TextureImporter.PngToTex(stream, out data);
-                    stream.Flush();
-                    stream.Position = 0;
-                    if (data.Length > 0) {
-                        Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal)));
-                        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal);
-                        File.WriteAllBytes(path, data);
-                    }
                     ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
                 }
                 if (File.Exists(textureSet.Multi)) {
