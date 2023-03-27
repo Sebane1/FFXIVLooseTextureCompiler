@@ -18,7 +18,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             }
         }
         public static Bitmap RGBAToBitmap(byte[] RGBAPixels, int width, int height) {
-            Bitmap output = new Bitmap(width, height);
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
             BitmapData bmpData = output.LockBits(rect, ImageLockMode.ReadWrite, output.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
@@ -38,6 +38,24 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             output.UnlockBits(bmpData);
             return output;
         }
+
+        public static byte[] BitmapToRGBA(Bitmap bitmap) {
+            byte[] RGBAPixels = (byte[])new ImageConverter().ConvertTo(new ImageConverter(), typeof(byte[]));
+            for (int i = 0; i < RGBAPixels.Length; i += 4) {
+                byte B = RGBAPixels[i];
+                byte G = RGBAPixels[i + 1];
+                byte R = RGBAPixels[i + 2];
+                byte A = RGBAPixels[i + 3];
+
+                RGBAPixels[i] = R;
+                RGBAPixels[i + 1] = G;
+                RGBAPixels[i + 2] = B;
+                RGBAPixels[i + 3] = A;
+
+            }
+            return RGBAPixels;
+        }
+
         public static Bitmap TexToBitmap(string path) {
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read)) {
                 var scratch = TexFileParser.Parse(stream);

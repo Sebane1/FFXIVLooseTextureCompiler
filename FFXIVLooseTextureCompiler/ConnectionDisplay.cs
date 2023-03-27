@@ -33,5 +33,9 @@ namespace FFXIVLooseTextureCompiler {
                 RequestedToSendCurrentMod.Invoke(this, EventArgs.Empty);
             }
         }
+
+        private void ConnectionDisplay_FormClosing(object sender, FormClosingEventArgs e) {
+           // e.Cancel = true;
+        }
     }
 }

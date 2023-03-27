@@ -440,7 +440,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (!normalCache.ContainsKey(inputFile)) {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                                 if (bitmap != null) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height)) {
+                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height, PixelFormat.Format32bppArgb)) {
                                         Graphics g = Graphics.FromImage(target);
                                         g.Clear(Color.Transparent);
                                         g.CompositingQuality = CompositingQuality.HighQuality;
@@ -515,7 +515,7 @@ namespace FFXIVLooseTextureCompiler {
                             if (!normalCache.ContainsKey(diffuseNormal)) {
                                 using (Bitmap diffuse = TexLoader.ResolveBitmap(diffuseNormal)) {
                                     if (diffuse != null) {
-                                        using (Bitmap canvasImage = new Bitmap(diffuse.Size.Width, diffuse.Size.Height)) {
+                                        using (Bitmap canvasImage = new Bitmap(diffuse.Size.Width, diffuse.Size.Height, PixelFormat.Format32bppArgb)) {
                                             Bitmap output = null;
                                             if (File.Exists(mask)) {
                                                 using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
@@ -556,7 +556,7 @@ namespace FFXIVLooseTextureCompiler {
                     case ExportType.XNormalImport:
                         using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                             if (bitmap != null) {
-                                Bitmap underlay = new Bitmap(bitmap.Width, bitmap.Height);
+                                Bitmap underlay = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb));
                                 Graphics g = Graphics.FromImage(underlay);
                                 g.Clear(Color.FromArgb(255, 160, 113, 94));
                                 if (!string.IsNullOrEmpty(diffuseNormal)) {

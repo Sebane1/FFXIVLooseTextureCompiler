@@ -94,6 +94,7 @@
             this.Name = "ConnectionDisplay";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FFXIV Loose Texture Compiler";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionDisplay_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
