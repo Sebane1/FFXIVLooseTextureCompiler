@@ -1,5 +1,6 @@
 using Anamnesis.Penumbra;
 using FFXIVLooseTextureCompiler.DataTypes;
+using FFXIVLooseTextureCompiler.Export;
 using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
@@ -52,7 +53,6 @@ namespace FFXIVLooseTextureCompiler {
         private bool isNetworkSync;
         private NetworkedClient networkedClient;
         private ConnectionDisplay connectionDisplay;
-
         public bool HasSaved {
             get => hasSaved; set {
                 hasSaved = value;
@@ -137,7 +137,7 @@ namespace FFXIVLooseTextureCompiler {
             bodyIdentifiers.Add(new RacialBodyIdentifiers("SCALE+",
                 new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "raen", "xaela", "Invalid", "Invalid" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TBSE/HRBODY",
-                new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid" }));
+                new List<string>() { "0101", "0301", "0101", "0101", "0301", "Invalid", "1301", "1301", "1501", "1701" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("TAIL",
                 new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }));
             auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderListBody.SelectedIndex =
@@ -195,7 +195,7 @@ namespace FFXIVLooseTextureCompiler {
                     ExportJson();
                     ExportMeta();
                     if (hasDoneReload) {
-                            PenumbraHttpApi.Redraw(0);
+                        PenumbraHttpApi.Redraw(0);
                     } else {
                         modNameTextBox.Enabled = modAuthorTextBox.Enabled
                         = modWebsiteTextBox.Enabled = modVersionTextBox.Enabled
@@ -205,8 +205,8 @@ namespace FFXIVLooseTextureCompiler {
                         multi.FilePath.Enabled = false;
                         mask.FilePath.Enabled = false;
                         glow.FilePath.Enabled = false;
-                            PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-                            PenumbraHttpApi.Redraw(0);
+                        PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+                        PenumbraHttpApi.Redraw(0);
                         if (IntegrityChecker.IntegrityCheck()) {
                             IntegrityChecker.ShowConsolation();
                         }
@@ -847,20 +847,24 @@ namespace FFXIVLooseTextureCompiler {
         public void AddWatcher(string path) {
             string directory = Path.GetDirectoryName(path);
             if (Directory.Exists(directory)) {
-                if (!string.IsNullOrWhiteSpace(directory)) {
-                    if (!watchers.ContainsKey(directory)) {
+                if (!string.IsNullOrWhiteSpace(path)) {
+                    if (!watchers.ContainsKey(path)) {
                         FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
                         fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                        fileSystemWatcher.Changed += delegate {
-                            StartGeneration();
+                        fileSystemWatcher.Changed += delegate (object sender, FileSystemEventArgs e) {
+                            if (e.Name.Contains(Path.GetFileName(path))) {
+                                if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
+                                    StartGeneration();
+                                }
+                            }
                             return;
                         };
                         fileSystemWatcher.Path = directory;
                         fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(path);
-                        watchers.Add(directory, fileSystemWatcher);
+                        watchers.Add(path, fileSystemWatcher);
                     } else {
-                        watchers[directory].Path = directory;
-                        watchers[directory].EnableRaisingEvents = !string.IsNullOrEmpty(path);
+                        watchers[path].Path = directory;
+                        watchers[path].EnableRaisingEvents = !string.IsNullOrEmpty(path);
                     }
                 }
             }
@@ -1411,7 +1415,8 @@ namespace FFXIVLooseTextureCompiler {
                 string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
                 string eve = bodyIdentifiers[2].RaceIdentifiers[i];
                 string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
-                if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf)) {
+                string tbse = bodyIdentifiers[5].RaceIdentifiers[i];
+                if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf) || path.Contains(tbse)) {
                     return i;
                 }
             }
@@ -1627,6 +1632,57 @@ namespace FFXIVLooseTextureCompiler {
                 otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
 
                 textureSet.ChildSets.Add(otopop);
+            } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
+                TextureSet tbseVanilla = new TextureSet();
+                tbseVanilla.MaterialSetName = "Vanilla Compatibility";
+                tbseVanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
+                tbseVanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
+                tbseVanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
+                tbseVanilla.Diffuse = textureSet.Diffuse.Replace(".", "_tbse_vanilla_d.");
+                tbseVanilla.Normal = textureSet.Normal.Replace(".", "_tbse_vanilla_n.");
+                tbseVanilla.Multi = textureSet.Multi.Replace(".", "_tbse_vanilla_m.");
+                tbseVanilla.Glow = textureSet.Glow.Replace(".", "_tbse_vanilla_g.");
+                tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
+
+                if (File.Exists(textureSet.Diffuse)) {
+                    MemoryStream stream = new MemoryStream();
+                    byte[] data = new byte[0];
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    TextureImporter.PngToTex(stream, out data);
+                    stream.Flush();
+                    stream.Position = 0;
+                    if (data.Length > 0) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse)));
+                        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
+                        MessageBox.Show(path);
+                        File.WriteAllBytes(path, data);
+                    }
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
+                }
+                if (File.Exists(textureSet.Normal)) {
+                    MemoryStream stream = new MemoryStream();
+                    byte[] data = new byte[0];
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    TextureImporter.PngToTex(stream, out data);
+                    stream.Flush();
+                    stream.Position = 0;
+                    if (data.Length > 0) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal)));
+                        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal);
+                        File.WriteAllBytes(path, data);
+                    }
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
+                }
+                if (File.Exists(textureSet.Multi)) {
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Multi)).Save(tbseVanilla.Multi);
+                }
+                if (File.Exists(textureSet.Glow)) {
+                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Glow)).Save(tbseVanilla.Glow);
+                }
+
+                textureSet.ChildSets.Add(tbseVanilla);
             }
         }
 

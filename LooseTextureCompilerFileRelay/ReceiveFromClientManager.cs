@@ -33,6 +33,9 @@ namespace LooseTextureCompilerFileRelay {
                         }
                         Console.WriteLine("Receiving file for " + fileManager.Files[id].ModName + " to send to " + fileManager.Files[id].Identifier);
                     } catch {
+                        Console.WriteLine("Dropped receiver!");
+                        client.Client.Shutdown(SocketShutdown.Both);
+                        client.Client.Disconnect(true);
                         client.Close();
                         client.Dispose();
                         break;

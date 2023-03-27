@@ -32,6 +32,9 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             g.DrawImage(file, 0, 0, width, height);
             return image;
         }
+        public static Bitmap CutInHalf(Bitmap file) {
+            return file.Clone(new Rectangle(file.Width / 2, 0, file.Width / 2, file.Height), PixelFormat.Format32bppArgb);
+        }
 
         public static Bitmap ResizeAndMerge(Bitmap target, Bitmap source) {
             Bitmap image = new Bitmap(target);

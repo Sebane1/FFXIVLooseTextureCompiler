@@ -44,8 +44,10 @@ namespace FFXIVLooseTextureCompiler.Networking {
                 MessageBox.Show("Failed to connect.");
             }
         }
+
         public void SendModFolder(string sendID, string modName, string penumbraFolder) {
-            //  try {
+        //  try {
+        sendMod:
             if (!string.IsNullOrEmpty(modName)) {
                 try {
                     BinaryWriter writer = new BinaryWriter(sendingClient.GetStream());
@@ -62,7 +64,16 @@ namespace FFXIVLooseTextureCompiler.Networking {
                         writer.Flush();
                     }
                 } catch {
-                    connected = false;
+                    sendingClient.Client.Shutdown(SocketShutdown.Both);
+                    sendingClient.Client.Disconnect(true);
+                    sendingClient.Close();
+                    try {
+                        sendingClient = new TcpClient(new IPEndPoint(IPAddress.Any, 5900));
+                        sendingClient.Connect(new IPEndPoint(IPAddress.Parse(_ipAddress), 5900));
+                        goto sendMod;
+                    } catch {
+                        connected = false;
+                    }
                 }
             }
         }
@@ -93,6 +104,9 @@ namespace FFXIVLooseTextureCompiler.Networking {
                                     File.Delete(path);
                                 }
                             } catch {
+                                client.Client.Shutdown(SocketShutdown.Both);
+                                client.Client.Disconnect(true);
+                                client.Close();
                                 connected = false;
                                 break;
                             }

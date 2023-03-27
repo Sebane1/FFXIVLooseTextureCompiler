@@ -16,6 +16,7 @@ namespace FFXIVLooseTextureCompiler {
             InitializeComponent();
             Id = id;
             AutoScaleDimensions = new SizeF(96, 96);
+            TopMost = true;
         }
         public event EventHandler RequestedToSendCurrentMod;
         public string Id { get => id; set { ignoreEvent = true; sharingTextbox.Text = id = value; ignoreEvent = false; } }
