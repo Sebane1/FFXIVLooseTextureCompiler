@@ -556,7 +556,7 @@ namespace FFXIVLooseTextureCompiler {
                     case ExportType.XNormalImport:
                         using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                             if (bitmap != null) {
-                                Bitmap underlay = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb));
+                                Bitmap underlay = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
                                 Graphics g = Graphics.FromImage(underlay);
                                 g.Clear(Color.FromArgb(255, 160, 113, 94));
                                 if (!string.IsNullOrEmpty(diffuseNormal)) {
