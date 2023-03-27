@@ -46,7 +46,6 @@ namespace FFXIVLooseTextureCompiler.Networking {
         }
 
         public void SendModFolder(string sendID, string modName, string penumbraFolder) {
-        //  try {
         sendMod:
             if (!string.IsNullOrEmpty(modName)) {
                 try {
