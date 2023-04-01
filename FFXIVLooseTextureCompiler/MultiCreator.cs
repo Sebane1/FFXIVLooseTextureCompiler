@@ -16,8 +16,10 @@ namespace FFXIVLooseTextureCompiler {
         public MultiCreator() {
             InitializeComponent();
             AutoScaleDimensions = new SizeF(96, 96);
-            ((Control)image1).AllowDrop = true;
-            ((Control)image2).AllowDrop = true;
+            ((Control)redImage).AllowDrop = true;
+            ((Control)greenImage).AllowDrop = true;
+            ((Control)blueImage).AllowDrop = true;
+            ((Control)alphaImage).AllowDrop = true;
         }
 
         public void ImportImage(string path, PictureBox output) {
@@ -42,11 +44,11 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
             }
-            if (image1.BackgroundImage != null && image2.BackgroundImage != null) {
-                Bitmap bitmap = new Bitmap(image1.BackgroundImage);
-                KVImage.ImageBlender blender = new ImageBlender();
-                blender.BlendImages(bitmap, image2.BackgroundImage, ImageBlender.BlendOperation.Blend_Darken);
-                result.BackgroundImage = bitmap;
+            if (redImage.BackgroundImage != null && greenImage.BackgroundImage != null
+                && blueImage.BackgroundImage != null && alphaImage.BackgroundImage != null) {
+                result.BackgroundImage = ImageManipulation.MergeGrayscalesToARGB(
+                   (Bitmap)redImage.BackgroundImage, (Bitmap)greenImage.BackgroundImage,
+                   (Bitmap)blueImage.BackgroundImage, (Bitmap)alphaImage.BackgroundImage);
             }
         }
 
@@ -54,7 +56,7 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture Files|*.png;*.dds;*.bmp";
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImportImage(openFileDialog.FileName, image1);
+                ImportImage(openFileDialog.FileName, redImage);
             }
         }
 
@@ -62,7 +64,23 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture Files|*.png;*.dds;*.bmp";
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImportImage(openFileDialog.FileName, image2);
+                ImportImage(openFileDialog.FileName, greenImage);
+            }
+        }
+
+        private void importButton3_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture Files|*.png;*.dds;*.bmp";
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImportImage(openFileDialog.FileName, blueImage);
+            }
+        }
+
+        private void importButton4_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture Files|*.png;*.dds;*.bmp";
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImportImage(openFileDialog.FileName, alphaImage);
             }
         }
         private void import1_DragEnter(object sender, DragEventArgs e) {
@@ -75,7 +93,7 @@ namespace FFXIVLooseTextureCompiler {
         private void import1_DragDrop(object sender, DragEventArgs e) {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
             if (CheckExtentions(file)) {
-                ImportImage(file, image1);
+                ImportImage(file, redImage);
             } else {
                 MessageBox.Show("This is not a media file this window supports.", Text);
             }
@@ -90,7 +108,37 @@ namespace FFXIVLooseTextureCompiler {
         private void import2_DragDrop(object sender, DragEventArgs e) {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
             if (CheckExtentions(file)) {
-                ImportImage(file, image2);
+                ImportImage(file, greenImage);
+            } else {
+                MessageBox.Show("This is not a media file this window supports.", Text);
+            }
+        }
+        private void import3_DragEnter(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void import3_DragDrop(object sender, DragEventArgs e) {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
+            if (CheckExtentions(file)) {
+                ImportImage(file, blueImage);
+            } else {
+                MessageBox.Show("This is not a media file this window supports.", Text);
+            }
+        }
+        private void import4_DragEnter(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void import4_DragDrop(object sender, DragEventArgs e) {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
+            if (CheckExtentions(file)) {
+                ImportImage(file, alphaImage);
             } else {
                 MessageBox.Show("This is not a media file this window supports.", Text);
             }

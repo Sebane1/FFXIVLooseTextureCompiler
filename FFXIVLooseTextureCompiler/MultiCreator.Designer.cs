@@ -23,71 +23,55 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.image1 = new System.Windows.Forms.PictureBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MultiCreator));
+            this.redImage = new System.Windows.Forms.PictureBox();
             this.result = new System.Windows.Forms.PictureBox();
-            this.image2 = new System.Windows.Forms.PictureBox();
             this.importButton1 = new System.Windows.Forms.Button();
-            this.importButton2 = new System.Windows.Forms.Button();
             this.exportButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.greenImage = new System.Windows.Forms.PictureBox();
+            this.blueImage = new System.Windows.Forms.PictureBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.trackBar3 = new System.Windows.Forms.TrackBar();
-            this.label = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.image1)).BeginInit();
+            this.button3 = new System.Windows.Forms.Button();
+            this.alphaImage = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.redImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.result)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.image2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.greenImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blueImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alphaImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // image1
+            // redImage
             // 
-            this.image1.BackColor = System.Drawing.Color.DarkRed;
-            this.image1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.image1.Location = new System.Drawing.Point(8, 32);
-            this.image1.Name = "image1";
-            this.image1.Size = new System.Drawing.Size(125, 125);
-            this.image1.TabIndex = 0;
-            this.image1.TabStop = false;
-            this.image1.DragDrop += new System.Windows.Forms.DragEventHandler(this.import1_DragDrop);
-            this.image1.DragEnter += new System.Windows.Forms.DragEventHandler(this.import1_DragEnter);
+            this.redImage.BackColor = System.Drawing.Color.DarkRed;
+            this.redImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.redImage.Location = new System.Drawing.Point(8, 32);
+            this.redImage.Name = "redImage";
+            this.redImage.Size = new System.Drawing.Size(92, 84);
+            this.redImage.TabIndex = 0;
+            this.redImage.TabStop = false;
+            this.redImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.import1_DragDrop);
+            this.redImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.import1_DragEnter);
             // 
             // result
             // 
             this.result.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.result.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.result.Location = new System.Drawing.Point(264, 12);
+            this.result.Location = new System.Drawing.Point(108, 12);
             this.result.Name = "result";
-            this.result.Size = new System.Drawing.Size(536, 528);
+            this.result.Size = new System.Drawing.Size(504, 504);
             this.result.TabIndex = 1;
             this.result.TabStop = false;
             // 
-            // image2
-            // 
-            this.image2.BackColor = System.Drawing.Color.Green;
-            this.image2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.image2.Location = new System.Drawing.Point(8, 224);
-            this.image2.Name = "image2";
-            this.image2.Size = new System.Drawing.Size(125, 125);
-            this.image2.TabIndex = 2;
-            this.image2.TabStop = false;
-            this.image2.DragDrop += new System.Windows.Forms.DragEventHandler(this.import2_DragDrop);
-            this.image2.DragEnter += new System.Windows.Forms.DragEventHandler(this.import2_DragEnter);
-            // 
             // importButton1
             // 
-            this.importButton1.Location = new System.Drawing.Point(8, 160);
+            this.importButton1.Location = new System.Drawing.Point(8, 116);
             this.importButton1.Name = "importButton1";
-            this.importButton1.Size = new System.Drawing.Size(124, 23);
+            this.importButton1.Size = new System.Drawing.Size(92, 23);
             this.importButton1.TabIndex = 3;
             this.importButton1.Text = "Import";
             this.importButton1.UseVisualStyleBackColor = true;
@@ -95,51 +79,20 @@
             this.importButton1.DragDrop += new System.Windows.Forms.DragEventHandler(this.import1_DragDrop);
             this.importButton1.DragEnter += new System.Windows.Forms.DragEventHandler(this.import1_DragEnter);
             // 
-            // importButton2
-            // 
-            this.importButton2.Location = new System.Drawing.Point(8, 352);
-            this.importButton2.Name = "importButton2";
-            this.importButton2.Size = new System.Drawing.Size(124, 23);
-            this.importButton2.TabIndex = 4;
-            this.importButton2.Text = "Import";
-            this.importButton2.UseVisualStyleBackColor = true;
-            this.importButton2.Click += new System.EventHandler(this.importButton2_Click);
-            this.importButton2.DragDrop += new System.Windows.Forms.DragEventHandler(this.import2_DragDrop);
-            this.importButton2.DragEnter += new System.Windows.Forms.DragEventHandler(this.import2_DragEnter);
-            // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(264, 543);
+            this.exportButton.Location = new System.Drawing.Point(108, 520);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(536, 23);
+            this.exportButton.Size = new System.Drawing.Size(504, 23);
             this.exportButton.TabIndex = 5;
             this.exportButton.Text = "Export";
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(8, 544);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Import";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Navy;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 416);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(125, 125);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(32, 12);
+            this.label1.Location = new System.Drawing.Point(16, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 15);
             this.label1.TabIndex = 8;
@@ -148,103 +101,133 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 200);
+            this.label2.Location = new System.Drawing.Point(12, 148);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(85, 15);
-            this.label2.TabIndex = 9;
+            this.label2.TabIndex = 11;
             this.label2.Text = "Green Channel";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(8, 252);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(92, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Import";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.importButton2_Click);
+            this.button1.DragDrop += new System.Windows.Forms.DragEventHandler(this.import2_DragEnter);
+            this.button1.DragEnter += new System.Windows.Forms.DragEventHandler(this.import2_DragDrop);
+            // 
+            // greenImage
+            // 
+            this.greenImage.BackColor = System.Drawing.Color.ForestGreen;
+            this.greenImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.greenImage.Location = new System.Drawing.Point(8, 168);
+            this.greenImage.Name = "greenImage";
+            this.greenImage.Size = new System.Drawing.Size(92, 84);
+            this.greenImage.TabIndex = 9;
+            this.greenImage.TabStop = false;
+            this.greenImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.import2_DragEnter);
+            this.greenImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.import2_DragDrop);
+            // 
+            // blueImage
+            // 
+            this.blueImage.BackColor = System.Drawing.Color.MidnightBlue;
+            this.blueImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.blueImage.Location = new System.Drawing.Point(8, 304);
+            this.blueImage.Name = "blueImage";
+            this.blueImage.Size = new System.Drawing.Size(92, 84);
+            this.blueImage.TabIndex = 9;
+            this.blueImage.TabStop = false;
+            this.blueImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.import3_DragEnter);
+            this.blueImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.import3_DragDrop);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(8, 388);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(92, 23);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Import";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.importButton3_Click);
+            this.button2.DragDrop += new System.Windows.Forms.DragEventHandler(this.import3_DragEnter);
+            this.button2.DragEnter += new System.Windows.Forms.DragEventHandler(this.import3_DragDrop);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 392);
+            this.label3.Location = new System.Drawing.Point(16, 284);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 15);
-            this.label3.TabIndex = 10;
+            this.label3.TabIndex = 11;
             this.label3.Text = "Blue Channel";
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Location = new System.Drawing.Point(136, 136);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(120, 45);
-            this.trackBar1.TabIndex = 11;
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.Location = new System.Drawing.Point(136, 328);
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(120, 45);
-            this.trackBar2.TabIndex = 12;
-            // 
-            // trackBar3
-            // 
-            this.trackBar3.Location = new System.Drawing.Point(136, 520);
-            this.trackBar3.Name = "trackBar3";
-            this.trackBar3.Size = new System.Drawing.Size(120, 45);
-            this.trackBar3.TabIndex = 13;
-            // 
-            // label
-            // 
-            this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(168, 496);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(48, 15);
-            this.label.TabIndex = 14;
-            this.label.Text = "Opacity";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(168, 300);
+            this.label4.Location = new System.Drawing.Point(12, 416);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 15);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Opacity";
+            this.label4.Size = new System.Drawing.Size(85, 15);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Alpha Channel";
             // 
-            // label5
+            // button3
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(168, 112);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(48, 15);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Opacity";
+            this.button3.Location = new System.Drawing.Point(8, 520);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(92, 23);
+            this.button3.TabIndex = 13;
+            this.button3.Text = "Import";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.importButton4_Click);
+            this.button3.DragDrop += new System.Windows.Forms.DragEventHandler(this.import4_DragEnter);
+            this.button3.DragEnter += new System.Windows.Forms.DragEventHandler(this.import4_DragDrop);
+            // 
+            // alphaImage
+            // 
+            this.alphaImage.BackColor = System.Drawing.Color.Black;
+            this.alphaImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.alphaImage.Location = new System.Drawing.Point(8, 436);
+            this.alphaImage.Name = "alphaImage";
+            this.alphaImage.Size = new System.Drawing.Size(92, 84);
+            this.alphaImage.TabIndex = 12;
+            this.alphaImage.TabStop = false;
+            this.alphaImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.import4_DragEnter);
+            this.alphaImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.import4_DragDrop);
             // 
             // MultiCreator
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(806, 570);
-            this.Controls.Add(this.label5);
+            this.ClientSize = new System.Drawing.Size(622, 551);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label);
-            this.Controls.Add(this.trackBar3);
-            this.Controls.Add(this.trackBar2);
-            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.alphaImage);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.blueImage);
+            this.Controls.Add(this.greenImage);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.exportButton);
-            this.Controls.Add(this.importButton2);
             this.Controls.Add(this.importButton1);
-            this.Controls.Add(this.image2);
             this.Controls.Add(this.result);
-            this.Controls.Add(this.image1);
+            this.Controls.Add(this.redImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MultiCreator";
-            this.Text = "Multi Creator (Experimental)";
-            ((System.ComponentModel.ISupportInitialize)(this.image1)).EndInit();
+            this.Text = "RGBA Merger (Experimental)";
+            ((System.ComponentModel.ISupportInitialize)(this.redImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.result)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.image2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.greenImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blueImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alphaImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,22 +235,19 @@
 
         #endregion
 
-        private PictureBox image1;
+        private PictureBox redImage;
         private PictureBox result;
-        private PictureBox image2;
         private Button importButton1;
-        private Button importButton2;
         private Button exportButton;
-        private Button button1;
-        private PictureBox pictureBox1;
         private Label label1;
         private Label label2;
+        private Button button1;
+        private PictureBox greenImage;
+        private PictureBox blueImage;
+        private Button button2;
         private Label label3;
-        private TrackBar trackBar1;
-        private TrackBar trackBar2;
-        private TrackBar trackBar3;
-        private Label label;
         private Label label4;
-        private Label label5;
+        private Button button3;
+        private PictureBox alphaImage;
     }
 }

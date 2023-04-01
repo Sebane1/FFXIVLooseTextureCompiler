@@ -70,6 +70,10 @@
             this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -124,6 +128,7 @@
             this.modVersionTextBox = new System.Windows.Forms.TextBox();
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -518,6 +523,10 @@
             this.convertStandaloneTextureToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
             this.xNormalToolStripMenuItem,
+            this.imageToRGBChannelsToolStripMenuItem,
+            this.splitImageToRGBAndAlphaToolStripMenuItem,
+            this.mergeRGBAndAlphaImagesToolStripMenuItem,
+            this.multiCreatorToolStripMenuItem,
             this.extractAtramentumLuminisGlowMapToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -622,6 +631,34 @@
             this.xNormalToolStripMenuItem.Text = "XNormal";
             this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
             // 
+            // imageToRGBChannelsToolStripMenuItem
+            // 
+            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
+            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
+            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
+            // 
+            // splitImageToRGBAndAlphaToolStripMenuItem
+            // 
+            this.splitImageToRGBAndAlphaToolStripMenuItem.Name = "splitImageToRGBAndAlphaToolStripMenuItem";
+            this.splitImageToRGBAndAlphaToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.splitImageToRGBAndAlphaToolStripMenuItem.Text = "Split Image to RGB and Alpha";
+            this.splitImageToRGBAndAlphaToolStripMenuItem.Click += new System.EventHandler(this.splitImageToRGBAndAlphaToolStripMenuItem_Click);
+            // 
+            // mergeRGBAndAlphaImagesToolStripMenuItem
+            // 
+            this.mergeRGBAndAlphaImagesToolStripMenuItem.Name = "mergeRGBAndAlphaImagesToolStripMenuItem";
+            this.mergeRGBAndAlphaImagesToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.mergeRGBAndAlphaImagesToolStripMenuItem.Text = "Merge RGB and Alpha Images";
+            this.mergeRGBAndAlphaImagesToolStripMenuItem.Click += new System.EventHandler(this.mergeRGBAndAlphaImagesToolStripMenuItem_Click);
+            // 
+            // multiCreatorToolStripMenuItem
+            // 
+            this.multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
+            this.multiCreatorToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.multiCreatorToolStripMenuItem.Text = "RGBA Merger";
+            this.multiCreatorToolStripMenuItem.Click += new System.EventHandler(this.multiCreatorToolStripMenuItem_Click);
+            // 
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
             this.extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
@@ -657,7 +694,7 @@
             // enableModshareToolStripMenuItem
             // 
             this.enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.enableModshareToolStripMenuItem.Text = "Enable Modshare";
             this.enableModshareToolStripMenuItem.Click += new System.EventHandler(this.enableModshareToolStripMenuItem_Click);
             // 
@@ -665,7 +702,7 @@
             // 
             this.sendCurrentModToolStripMenuItem.Enabled = false;
             this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
             // 
@@ -685,7 +722,8 @@
             this.howDoIMakeStuffGlowToolStripMenuItem,
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem,
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem,
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem});
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem,
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -693,49 +731,49 @@
             // howToGetTexturesToolStripMenuItem
             // 
             this.howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
-            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.howToGetTexturesToolStripMenuItem.Text = "How do I get textures?";
             this.howToGetTexturesToolStripMenuItem.Click += new System.EventHandler(this.howToGetTexturesToolStripMenuItem_Click);
             // 
             // howDoIUseThisToolStripMenuItem
             // 
             this.howDoIUseThisToolStripMenuItem.Name = "howDoIUseThisToolStripMenuItem";
-            this.howDoIUseThisToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.howDoIUseThisToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.howDoIUseThisToolStripMenuItem.Text = "How do I use this?";
             this.howDoIUseThisToolStripMenuItem.Click += new System.EventHandler(this.howDoIUseThisToolStripMenuItem_Click);
             // 
             // howDoIMakeStuffBumpyToolStripMenuItem
             // 
             this.howDoIMakeStuffBumpyToolStripMenuItem.Name = "howDoIMakeStuffBumpyToolStripMenuItem";
-            this.howDoIMakeStuffBumpyToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.howDoIMakeStuffBumpyToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.howDoIMakeStuffBumpyToolStripMenuItem.Text = "How do I make stuff bumpy?";
             this.howDoIMakeStuffBumpyToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeStuffBumpyToolStripMenuItem_Click);
             // 
             // howDoIMakeStuffGlowToolStripMenuItem
             // 
             this.howDoIMakeStuffGlowToolStripMenuItem.Name = "howDoIMakeStuffGlowToolStripMenuItem";
-            this.howDoIMakeStuffGlowToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.howDoIMakeStuffGlowToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.howDoIMakeStuffGlowToolStripMenuItem.Text = "How do I make stuff glow?";
             this.howDoIMakeStuffGlowToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeStuffGlowToolStripMenuItem_Click);
             // 
             // canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem
             // 
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Name = "canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem";
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Text = "Can I make my Bibo+ or Gen3 body texture work on another body?";
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Click += new System.EventHandler(this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem_Click);
             // 
             // canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem
             // 
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Name = "canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem";
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Text = "Can I customize the groups this tool exporrts";
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Click += new System.EventHandler(this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem_Click);
             // 
             // canIReplaceABunchOfStuffAtOnceToolStripMenuItem
             // 
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Name = "canIReplaceABunchOfStuffAtOnceToolStripMenuItem";
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(427, 22);
+            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
             // 
@@ -1127,6 +1165,13 @@
             this.label8.TabIndex = 52;
             this.label8.Text = "Remote IP";
             // 
+            // whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem
+            // 
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Name = "whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem";
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += new System.EventHandler(this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1304,5 +1349,10 @@
         private TextBox ipBox;
         private Label label8;
         private ToolStripMenuItem enableModshareToolStripMenuItem;
+        private ToolStripMenuItem imageToRGBChannelsToolStripMenuItem;
+        private ToolStripMenuItem multiCreatorToolStripMenuItem;
+        private ToolStripMenuItem splitImageToRGBAndAlphaToolStripMenuItem;
+        private ToolStripMenuItem mergeRGBAndAlphaImagesToolStripMenuItem;
+        private ToolStripMenuItem whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem;
     }
 }

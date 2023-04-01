@@ -29,7 +29,14 @@ namespace FFXIVLooseTextureCompiler {
             "XXXXXXXXXXXXXxxxwwwwdjnAJDHWIAOUHIFGIAUWxxxxxxxxxxXXXXXXXXXXXXXXsassss",
             "Your specimen has been processed!",
             "This tool is NOT sentient.",
-            "You ever wonder why we're here?"};
+            "You ever wonder why we're here?",
+            "Beware the cat that breaks this tool!",
+            "Zaaaaaaaaatoooooooooriiiiiiii!!!!!!!!",
+            "Fatal error: you chocobo insurance has expired, please renew it! This has no impact on your export",
+            "Fatal error: The operation completed successfully! Your changes are safe and sound!",
+            "I hope your March 32nd has been going well!",
+            "You have great taste!", 
+            "Wonderfull work!"};
 
         static string[] fileOpenCheck = new string[] {
             "That was a yummy file!",
@@ -37,7 +44,8 @@ namespace FFXIVLooseTextureCompiler {
             "Its nice to see you again " + Environment.UserName + "!",
             "Its time to get back to work!",
             "This is probably your best work!",
-            "You're STILL working on this? I appreciate the hustle, its coming along GREAT!" };
+            "You're STILL working on this? I appreciate the hustle, its coming along GREAT!",
+            "Another day, another texture mod."};
 
         static string[] fileSaveCheck = new string[] {
             "I've made sure to keep your changes extra safe!",
@@ -45,7 +53,10 @@ namespace FFXIVLooseTextureCompiler {
             "Your changes are secure!",
             "I dont like gluten. I made sure your save doesnt have any.",
             "Your save file is looking very healthy :3",
-            "You're doing great work!" };
+            "You're doing great work!",
+            "I love bees! And I love your save!",
+            "I'll be back"};
+
         #endregion 
         public static bool IntegrityCheck() {
             return DateTime.Now.Month == 4 && DateTime.Now.Day == 1 || System.Diagnostics.Debugger.IsAttached;
@@ -61,7 +72,7 @@ namespace FFXIVLooseTextureCompiler {
                 "\r\n" + rule6);
         }
         public static void ShowConsolation() {
-            MessageBox.Show(consolations[new Random().Next(0,consolations.Length)]);
+            MessageBox.Show(consolations[new Random().Next(0, consolations.Length)]);
         }
         public static void ShowOpen() {
             MessageBox.Show(fileOpenCheck[new Random().Next(0, fileOpenCheck.Length)]);

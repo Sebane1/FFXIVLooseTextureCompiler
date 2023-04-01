@@ -124,8 +124,7 @@ namespace FFXIVLooseTextureCompiler {
             raceCodeFace.Feminine = new string[] {
                 "0201", "0401", "0601", "0601", "0801",
                 "0801", "1001", "1001", "1201", "1201",
-                "1401", "1401", "0000", "0000", "1801", "1801" };
-
+                "1401", "1401", "1601", "1601", "1801", "1801" };
             bodyIdentifiers.Add(new RacialBodyIdentifiers("VANILLA",
                 new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }));
             bodyIdentifiers.Add(new RacialBodyIdentifiers("BIBO+",
@@ -362,9 +361,12 @@ namespace FFXIVLooseTextureCompiler {
                     if (race != 5) {
                         if (genderValue == 0) {
                             // TBSE and HRBODY
+                            if (texture == 1 || texture == 2) {
+                                unique = uniqueAuRa.Checked ? "0101" : "0001";
+                            }
                             result = @"chara/human/c" + (genderValue == 0 ? raceCodeBody.Masculine[race]
-                                : raceCodeBody.Feminine[race]) + @"/obj/body/b" + (uniqueAuRa.Checked ? "0101" : "0001")
-                                + @"/texture/--c" + raceCodeBody.Masculine[race] + "b0001_b" + GetTextureType(texture) + ".tex";
+                                : raceCodeBody.Feminine[race]) + @"/obj/body/b" + unique
+                                + @"/texture/--c" + raceCodeBody.Masculine[race] + "b" + unique + "_b" + GetTextureType(texture) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
@@ -629,10 +631,10 @@ namespace FFXIVLooseTextureCompiler {
             string path = Path.Combine(dataPath, @"UsedOptions.config");
             if (File.Exists(path)) {
                 using (StreamReader reader = new StreamReader(path)) {
-                    genderListBody.SelectedIndex = int.Parse(reader.ReadLine());
-                    raceList.SelectedIndex = int.Parse(reader.ReadLine());
-                    subRaceList.SelectedIndex = int.Parse(reader.ReadLine());
-                    int value = int.Parse(reader.ReadLine());
+                    genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
+                    raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                    subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                    int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
                     if (value < 8) {
                         baseBodyList.SelectedIndex = value;
                     } else {
@@ -730,7 +732,7 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 5:
                     textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
-                        + ", " + subRaceList.Text;
+                        + ", " + raceList.Text;
                     textureSet.InternalNormalPath = GetHairTexturePath(1);
                     textureSet.InternalMultiPath = GetHairTexturePath(2);
                     break;
@@ -1372,8 +1374,11 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
-            if (facePart.SelectedIndex == 4 || facePart.SelectedIndex == 5) {
+            if (facePart.SelectedIndex == 4) {
                 auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
+                faceExtra.Enabled = true;
+            } else if (facePart.SelectedIndex == 5) {
+                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled;
                 faceExtra.Enabled = true;
             } else {
                 asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
@@ -1411,31 +1416,33 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public int ReverseRaceLookup(string path) {
-            for (int i = 0; i < raceList.Items.Count; i++) {
-                string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
-                string eve = bodyIdentifiers[2].RaceIdentifiers[i];
-                string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
-                string tbse = bodyIdentifiers[5].RaceIdentifiers[i];
-                if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf) || path.Contains(tbse)) {
-                    return i;
+            if (!string.IsNullOrEmpty(path)) {
+                for (int i = 0; i < raceList.Items.Count; i++) {
+                    string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
+                    string eve = bodyIdentifiers[2].RaceIdentifiers[i];
+                    string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
+                    string tbse = bodyIdentifiers[5].RaceIdentifiers[i];
+                    if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf) || path.Contains(tbse)) {
+                        return i;
+                    }
                 }
-            }
-            for (int i = 0; i < raceList.Items.Count; i++) {
-                string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
-                if (!vanilla.Contains("Invalid")) {
-                    if (path.Contains("c" + NumberPadder(int.Parse(vanilla)))) {
-                        if (path.Contains("c1401b0001")) {
-                            return 6;
-                        } else if (path.Contains("c1401b0101")) {
-                            return 7;
-                        } else {
-                            return i;
+                for (int i = 0; i < raceList.Items.Count; i++) {
+                    string vanilla = bodyIdentifiers[0].RaceIdentifiers[i];
+                    if (!vanilla.Contains("Invalid")) {
+                        if (path.Contains("c" + NumberPadder(int.Parse(vanilla)))) {
+                            if (path.Contains("c1401b0001")) {
+                                return 6;
+                            } else if (path.Contains("c1401b0101")) {
+                                return 7;
+                            } else {
+                                return i;
+                            }
                         }
                     }
                 }
-            }
-            if (path.Contains("1101") || path.Contains("otopop")) {
-                return 5;
+                if (path.Contains("1101") || path.Contains("otopop")) {
+                    return 5;
+                }
             }
             return -1;
         }
@@ -1930,6 +1937,45 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 auraFaceScalesDropdown.Enabled = false;
             }
+            switch (subRaceList.SelectedIndex) {
+                case 0:
+                    raceList.SelectedIndex = 0;
+                    break;
+                case 1:
+                    raceList.SelectedIndex = 1;
+                    break;
+                case 2:
+                case 3:
+                    raceList.SelectedIndex = 2;
+                    break;
+                case 4:
+                case 5:
+                    raceList.SelectedIndex = 3;
+                    break;
+                case 6:
+                case 7:
+                    raceList.SelectedIndex = 4;
+                    break;
+                case 8:
+                case 9:
+                    raceList.SelectedIndex = 5;
+                    break;
+                case 10:
+                    raceList.SelectedIndex = 6;
+                    break;
+                case 11:
+                    raceList.SelectedIndex = 7;
+                    break;
+                case 12:
+                case 13:
+                    raceList.SelectedIndex = 8;
+                    break;
+                case 14:
+                case 15:
+                    raceList.SelectedIndex = 9;
+                    break;
+
+            }
         }
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -2011,6 +2057,70 @@ namespace FFXIVLooseTextureCompiler {
 
         private void modShareToolStripMenuItem_Click(object sender, EventArgs e) {
 
+        }
+
+        private void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_R."));
+                ImageManipulation.ExtractGreen(image).Save(openFileDialog.FileName.Replace(".", "_G."));
+                ImageManipulation.ExtractBlue(image).Save(openFileDialog.FileName.Replace(".", "_B."));
+                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_A."));
+                MessageBox.Show("Image successfully split into seperate channels", VersionText);
+            }
+        }
+
+        private void multiCreatorToolStripMenuItem_Click(object sender, EventArgs e) {
+            new MultiCreator().Show();
+        }
+
+        private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractTransparency(image).Save(openFileDialog.FileName.Replace(".", "_RGB."));
+                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_Alpha."));
+                MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
+            }
+        }
+
+        private void mergeRGBAndAlphaImagesToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialogRGB = new OpenFileDialog();
+            OpenFileDialog openFileDialogAlpha = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialogRGB.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialogAlpha.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select RGB texture");
+            if (openFileDialogRGB.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select alpha texture");
+                if (openFileDialogAlpha.ShowDialog() == DialogResult.OK) {
+                    MessageBox.Show("Please select where you want to save the conversion", VersionText);
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName), 
+                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName);
+                    }
+                }
+            }
+        }
+
+        private void whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1Mwg_qe9UvY5J4FwsQ8eP-Q1GuuoFfzgFMlXpwk0N_Bg/edit?usp=sharing",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
         }
     }
 }

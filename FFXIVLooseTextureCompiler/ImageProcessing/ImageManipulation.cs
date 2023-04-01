@@ -72,7 +72,100 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             return image;
         }
 
-        public static Bitmap MergeAlphaToRRGB(Bitmap alpha, Bitmap rgb) {
+        public static Bitmap ExtractRed(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color col = Color.FromArgb(255, sourcePixel.R, sourcePixel.R, sourcePixel.R);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
+        public static Bitmap ExtractGreen(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color col = Color.FromArgb(255, sourcePixel.G, sourcePixel.G, sourcePixel.G);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
+        public static Bitmap ExtractBlue(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color col = Color.FromArgb(255, sourcePixel.B, sourcePixel.B, sourcePixel.B);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
+        public static Bitmap ExtractAlpha(Bitmap file) {
+            Bitmap image = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color col = Color.FromArgb(255, sourcePixel.A, sourcePixel.A, sourcePixel.A);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
+        public static Bitmap MergeGrayscalesToARGB(Bitmap red, Bitmap green, Bitmap blue, Bitmap alpha) {
+            Bitmap image = new Bitmap(red);
+            LockBitmap destination = new LockBitmap(image);
+            LockBitmap redBits = new LockBitmap(red);
+            LockBitmap greenBits = new LockBitmap(green);
+            LockBitmap blueBits = new LockBitmap(blue);
+            LockBitmap alphaBits = new LockBitmap(alpha);
+            redBits.LockBits();
+            greenBits.LockBits();
+            blueBits.LockBits();
+            alphaBits.LockBits();
+            destination.LockBits();
+            try {
+                for (int y = 0; y < image.Height; y++) {
+                    for (int x = 0; x < image.Width; x++) {
+                        Color redPixel = redBits.GetPixel(x, y);
+                        Color greenPixel = greenBits.GetPixel(x, y);
+                        Color bluePixel = blueBits.GetPixel(x, y);
+                        Color alphaPixel = alphaBits.GetPixel(x, y);
+                        Color col = Color.FromArgb(alphaPixel.R, redPixel.R, greenPixel.G, bluePixel.B);
+                        destination.SetPixel(x, y, col);
+                    }
+                };
+            } catch {
+                MessageBox.Show("Merging failed, please make sure images are the same size.");
+            }
+            redBits.UnlockBits();
+            greenBits.UnlockBits();
+            blueBits.UnlockBits();
+            alphaBits.UnlockBits();
+            destination.UnlockBits();
+            return image;
+        }
+        public static Bitmap MergeAlphaToRGB(Bitmap alpha, Bitmap rgb) {
             Bitmap image = new Bitmap(rgb.Width, rgb.Height, PixelFormat.Format32bppArgb);
             LockBitmap destination = new LockBitmap(image);
             LockBitmap alphaBits = new LockBitmap(alpha);
