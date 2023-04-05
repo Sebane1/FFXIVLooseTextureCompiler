@@ -768,16 +768,16 @@ namespace FFXIVLooseTextureCompiler {
                     && !materialSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
 
                 if (materialSet.MaterialSetName.ToLower().Contains("eyes")) {
-                    diffuse.LabelName.Text = "normal";
-                    normal.LabelName.Text = "multi";
-                    multi.LabelName.Text = "catchlight";
+                    diffuse.LabelName.Text = "Normal";
+                    normal.LabelName.Text = "Multi";
+                    multi.LabelName.Text = "Catchlight";
                     diffuse.BackColor = originalNormalBoxColour;
                     normal.BackColor = Color.Lavender;
                     multi.BackColor = Color.LightGray;
                 } else {
-                    diffuse.LabelName.Text = "diffuse";
-                    normal.LabelName.Text = "normal";
-                    multi.LabelName.Text = "multi";
+                    diffuse.LabelName.Text = "Diffuse";
+                    normal.LabelName.Text = "Normal";
+                    multi.LabelName.Text = "Multi";
                     diffuse.BackColor = originalDiffuseBoxColour;
                     normal.BackColor = originalNormalBoxColour;
                     multi.BackColor = originalMultiBoxColour;
@@ -1337,8 +1337,10 @@ namespace FFXIVLooseTextureCompiler {
             string metaText = @"{
   ""FileVersion"": 3,
   ""Name"": """ + (!string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "") + @""",
-  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : "FFXIV Loose Texture Compiler") + @""",
-  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : "Exported by FFXIV Loose Texture Compiler") + @""",
+  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : 
+  "FFXIV Loose Texture Compiler") + @""",
+  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : 
+  "Exported by FFXIV Loose Texture Compiler") + @""",
   ""Version"": """ + modVersionTextBox.Text + @""",
   ""Website"": """ + modWebsiteTextBox.Text + @""",
   ""ModTags"": []
@@ -1653,13 +1655,15 @@ namespace FFXIVLooseTextureCompiler {
 
                 MemoryStream stream = new MemoryStream();
                 byte[] data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                    textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
                 stream.Position = 0;
                 TextureImporter.PngToTex(stream, out data);
                 stream.Flush();
                 stream.Position = 0;
                 if (data.Length > 0) {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse)));
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                        tbseVanilla.BackupTexturePaths.Diffuse)));
                     string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
                     File.WriteAllBytes(path, data);
                 }
@@ -1668,13 +1672,15 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 stream = new MemoryStream();
                 data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                    textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
                 stream.Position = 0;
                 TextureImporter.PngToTex(stream, out data);
                 stream.Flush();
                 stream.Position = 0;
                 if (data.Length > 0) {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal)));
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        tbseVanilla.BackupTexturePaths.Normal)));
                     string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal);
                     File.WriteAllBytes(path, data);
                 }

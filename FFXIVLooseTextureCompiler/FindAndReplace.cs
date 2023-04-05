@@ -61,13 +61,13 @@ namespace FFXIVLooseTextureCompiler {
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
             if (replacementString.Text.ToLower().Contains("eyes")) {
-                diffuse.LabelName.Text = "normal";
-                normal.LabelName.Text = "multi";
-                multi.LabelName.Text = "catchlight";
+                diffuse.LabelName.Text = "Normal";
+                normal.LabelName.Text = "Multi";
+                multi.LabelName.Text = "Catchlight";
             } else {
-                diffuse.LabelName.Text = "diffuse";
-                normal.LabelName.Text = "normal";
-                multi.LabelName.Text = "multi";
+                diffuse.LabelName.Text = "Diffuse";
+                normal.LabelName.Text = "Normal";
+                multi.LabelName.Text = "Multi";
             }
         }
 
@@ -77,13 +77,13 @@ namespace FFXIVLooseTextureCompiler {
 
         private void replacementString_TextChanged(object sender, EventArgs e) {
             if (replacementString.Text.ToLower().Contains("eyes")) {
-                diffuse.LabelName.Text = "normal";
-                normal.LabelName.Text = "multi";
-                multi.LabelName.Text = "catchlight";
+                diffuse.LabelName.Text = "Normal";
+                normal.LabelName.Text = "Multi";
+                multi.LabelName.Text = "Catchlight";
             } else {
-                diffuse.LabelName.Text = "diffuse";
-                normal.LabelName.Text = "normal";
-                multi.LabelName.Text = "multi";
+                diffuse.LabelName.Text = "Diffuse";
+                normal.LabelName.Text = "Normal";
+                multi.LabelName.Text = "Multi";
             }
         }
     }

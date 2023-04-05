@@ -200,7 +200,8 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                         g.Clear(Color.White);
                         g.DrawImage(normal, 0, 0, originalNormal.Width, originalNormal.Height);
                         KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
-                        return imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height, resize, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                        return imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height,
+                            resize, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
                     } catch {
                         return normal;
                     }

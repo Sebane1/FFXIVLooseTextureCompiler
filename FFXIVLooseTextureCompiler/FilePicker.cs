@@ -51,8 +51,15 @@ namespace FFXIVVoicePackCreator {
         private void filePicker_Load(object sender, EventArgs e) {
             color = BackColor;
             AutoScaleDimensions = new SizeF(96, 96);
-            labelName.Text = (index == -1 ? Name : ($"({index})  " + Name));
+            labelName.Text = (index == -1 ? FirstCharToUpper(Name) : ($"({index})  " + FirstCharToUpper(Name)));
             filePath.AllowDrop = true;
+        }
+        public string FirstCharToUpper(string input) {
+            switch (input) {
+                case null: return "";
+                case "": return "";
+                default: return input[0].ToString().ToUpper() + input.Substring(1);
+            }
         }
         private void filePicker_MouseDown(object sender, MouseEventArgs e) {
             startPos = e.Location;
