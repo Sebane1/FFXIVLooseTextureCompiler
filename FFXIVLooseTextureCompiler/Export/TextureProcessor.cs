@@ -512,7 +512,9 @@ namespace FFXIVLooseTextureCompiler {
                                                         output = ImageManipulation.MergeNormals(
                                                             inputFile, resize, canvasImage,
                                                             normalMaskBitmap, diffuseNormal);
-                                                        normalCache.Add(inputFile, resize);
+                                                        if (!normalCache.ContainsKey(diffuseNormal)) {
+                                                            normalCache.Add(diffuseNormal, output);
+                                                        }
                                                         if (!string.IsNullOrEmpty(normalCorrection)) {
                                                             output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
                                                         }
@@ -520,7 +522,9 @@ namespace FFXIVLooseTextureCompiler {
                                                         output = ImageManipulation.MergeNormals(
                                                             inputFile, diffuse, canvasImage,
                                                             normalMaskBitmap, diffuseNormal);
-                                                        normalCache.Add(inputFile, output);
+                                                        if (!normalCache.ContainsKey(diffuseNormal)) {
+                                                            normalCache.Add(diffuseNormal, output);
+                                                        }
                                                         if (!string.IsNullOrEmpty(normalCorrection)) {
                                                             output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
                                                         }

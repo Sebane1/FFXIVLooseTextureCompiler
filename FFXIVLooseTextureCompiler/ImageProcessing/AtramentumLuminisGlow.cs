@@ -121,15 +121,10 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             for (int y = 0; y < image.Height; y++) {
                 for (int x = 0; x < image.Width; x++) {
                     Color sourcePixel = source.GetPixel(x, y);
-                    if (sourcePixel.A > 254) {
-                        Color col = Color.FromArgb(0, sourcePixel.R, sourcePixel.G, sourcePixel.B);
-                        source.SetPixel(x, y, col);
-                    } else {
-                        Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
-                        source.SetPixel(x, y, col);
-                    }
+                    Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                    source.SetPixel(x, y, col);
                 }
-            };
+            }
             source.UnlockBits();
             return image;
         }
