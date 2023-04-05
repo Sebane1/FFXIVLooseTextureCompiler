@@ -130,6 +130,23 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
+            if (!string.IsNullOrEmpty(child.NormalMask)) {
+                if (!xnormalCache.ContainsKey(child.NormalMask)) {
+                    string diffuseAlpha = parent.NormalMask.Replace(".", "_alpha.");
+                    string diffuseRGB = parent.NormalMask.Replace(".", "_rgb.");
+                    if (finalizeResults || !File.Exists(child.NormalMask.Replace("baseTexBaked", "rgb_baseTexBaked"))
+                        || !File.Exists(child.NormalMask.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
+                        if (child.NormalMask.Contains("baseTexBaked")) {
+                            xnormalCache.Add(child.NormalMask, child.NormalMask);
+                            Bitmap diffuse = TexLoader.ResolveBitmap(parent.NormalMask);
+                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.NormalMask.Replace("baseTexBaked", "alpha"));
+                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.NormalMask.Replace("baseTexBaked", "rgb"));
+                        }
+                    }
+                }
+            }
         }
         public void Export(List<TextureSet> textureSetList, string modPath, int generationType,
             bool generateNormals, bool generateMulti, bool useXNormal) {

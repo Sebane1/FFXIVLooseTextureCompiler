@@ -1337,9 +1337,9 @@ namespace FFXIVLooseTextureCompiler {
             string metaText = @"{
   ""FileVersion"": 3,
   ""Name"": """ + (!string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "") + @""",
-  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : 
+  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text :
   "FFXIV Loose Texture Compiler") + @""",
-  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : 
+  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text :
   "Exported by FFXIV Loose Texture Compiler") + @""",
   ""Version"": """ + modVersionTextBox.Text + @""",
   ""Website"": """ + modWebsiteTextBox.Text + @""",
@@ -1466,6 +1466,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
                 bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.NormalMask = textureSet.NormalMask.Replace(".", "_bibo_nm_baseTexBaked.");
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
@@ -1477,6 +1478,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
                 eve.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
                 eve.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                eve.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
                 eve.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 TextureSet gen3 = new TextureSet();
@@ -1488,6 +1490,7 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
                 gen3.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
                 gen3.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                gen3.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
                 gen3.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 textureSet.ChildSets.Add(bibo);
@@ -1505,6 +1508,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_g_baseTexBaked.");
+                vanilla.NormalMask = textureSet.NormalMask.Replace(".", "_gen2_nm_baseTexBaked.");
                 vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
 
                 TextureSet eve = new TextureSet();
@@ -1516,6 +1520,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
                 eve.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
                 eve.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                eve.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
                 eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
 
                 TextureSet gen3 = new TextureSet();
@@ -1527,6 +1532,7 @@ namespace FFXIVLooseTextureCompiler {
                 gen3.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
                 gen3.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
                 gen3.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
+                gen3.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
                 gen3.BackupTexturePaths = textureProcessor.BiboGen3Path;
 
                 textureSet.ChildSets.Add(vanilla);
@@ -1544,6 +1550,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_g_baseTexBaked.");
+                vanilla.NormalMask = textureSet.NormalMask.Replace(".", "_gen2_nm_baseTexBaked.");
                 vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
@@ -1555,6 +1562,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
                 bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.NormalMask = textureSet.NormalMask.Replace(".", "_bibo_nm_baseTexBaked.");
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet gen3 = new TextureSet();
@@ -1584,6 +1592,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal.Replace(".", "_gen2_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_gen2_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow.Replace(".", "_gen2_g_baseTexBaked.");
+                vanilla.NormalMask = textureSet.Glow.Replace(".", "_gen2_nm_baseTexBaked.");
                 vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
@@ -1595,6 +1604,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.Normal = textureSet.Normal.Replace(".", "_bibo_n_baseTexBaked.");
                 bibo.Multi = textureSet.Multi.Replace(".", "_bibo_m_baseTexBaked.");
                 bibo.Glow = textureSet.Glow.Replace(".", "_bibo_g_baseTexBaked.");
+                bibo.NormalMask = textureSet.NormalMask.Replace(".", "_bibo_nm_baseTexBaked.");
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
@@ -1624,6 +1634,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal.Replace(".", "_vanilla_lala_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi.Replace(".", "_vanilla_lala_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow.Replace(".", "_vanilla_lala_g_baseTexBaked.");
+                vanilla.NormalMask = textureSet.NormalMask.Replace(".", "_vanilla_lala_nm_baseTexBaked.");
                 vanilla.BackupTexturePaths = textureProcessor.VanillaLalaPath;
 
                 textureSet.ChildSets.Add(vanilla);
@@ -1638,6 +1649,7 @@ namespace FFXIVLooseTextureCompiler {
                 otopop.Normal = textureSet.Normal.Replace(".", "_otopop_n_baseTexBaked.");
                 otopop.Multi = textureSet.Multi.Replace(".", "_otopop_m_baseTexBaked.");
                 otopop.Glow = textureSet.Glow.Replace(".", "_otopop_g_baseTexBaked.");
+                otopop.NormalMask = textureSet.NormalMask.Replace(".", "_otopop_nm_baseTexBaked.");
                 otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
 
                 textureSet.ChildSets.Add(otopop);
@@ -1651,18 +1663,19 @@ namespace FFXIVLooseTextureCompiler {
                 tbseVanilla.Normal = textureSet.Normal.Replace(".", "_tbse_vanilla_n.");
                 tbseVanilla.Multi = textureSet.Multi.Replace(".", "_tbse_vanilla_m.");
                 tbseVanilla.Glow = textureSet.Glow.Replace(".", "_tbse_vanilla_g.");
+                tbseVanilla.NormalMask = textureSet.NormalMask.Replace(".", "_tbse_vanilla_nm.");
                 tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
 
                 MemoryStream stream = new MemoryStream();
                 byte[] data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
                 stream.Position = 0;
                 TextureImporter.PngToTex(stream, out data);
                 stream.Flush();
                 stream.Position = 0;
                 if (data.Length > 0) {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                         tbseVanilla.BackupTexturePaths.Diffuse)));
                     string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
                     File.WriteAllBytes(path, data);
@@ -1672,7 +1685,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 stream = new MemoryStream();
                 data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
                 stream.Position = 0;
                 TextureImporter.PngToTex(stream, out data);
@@ -2110,7 +2123,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (openFileDialogAlpha.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Please select where you want to save the conversion", VersionText);
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName), 
+                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
                             TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName);
                     }
                 }

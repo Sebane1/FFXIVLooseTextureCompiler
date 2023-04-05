@@ -72,14 +72,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             //    Graphics g = Graphics.FromImage(image);
             //    g.DrawImage(normalMask, 0, 0, normalMask.Width, normalMask.Height);
             //}
-            normalMask.RotateFlip(RotateFlipType.RotateNoneFlipX);
             image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Bitmap normal = new Bitmap(image.Width, image.Height);
             LockBitmap source = new LockBitmap(image);
             LockBitmap destination = new LockBitmap(normal);
             LockBitmap maskReference = null;
             if (normalMask != null) {
+                normalMask.RotateFlip(RotateFlipType.RotateNoneFlipX);
                 maskReference = new LockBitmap(normalMask);
+                maskReference.LockBits();
             }
             source.LockBits();
             destination.LockBits();
@@ -102,6 +103,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             }
             destination.UnlockBits();
             source.UnlockBits();
+            maskReference?.UnlockBits();
             normal.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Bitmap normal2 = new Bitmap(normal);
             KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
