@@ -200,11 +200,14 @@ namespace FFXIVLooseTextureCompiler {
                         case 0:
                             if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
-                                    option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse"), 0);
+                                    if (!textureSet.IsChildSet) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
+                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse") 
+                                        + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
+                                        group.Options.Add(option);
+                                    }
                                     option.Files.Add(textureSet.InternalDiffusePath, AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"),
                                         fileCount++));
-                                    group.Options.Add(option);
                                 }
                             }
                             if (OnProgressChange != null) {
@@ -212,11 +215,14 @@ namespace FFXIVLooseTextureCompiler {
                             }
                             if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                 if (NormalLogic(textureSet, normalDiskPath)) {
-                                    option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal"), 0);
+                                    if (!textureSet.IsChildSet) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
+                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal") 
+                                        + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
+                                        group.Options.Add(option);
+                                    }
                                     option.Files.Add(textureSet.InternalNormalPath, AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"),
                                         fileCount++));
-                                    group.Options.Add(option);
                                 }
                             }
                             if (OnProgressChange != null) {
@@ -225,11 +231,14 @@ namespace FFXIVLooseTextureCompiler {
                             Application.DoEvents();
                             if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                 if (MultiLogic(textureSet, multiDiskPath)) {
-                                    option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                    (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi"), 0);
+                                    if (!textureSet.IsChildSet) {
+                                        option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
+                                    (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi") 
+                                    + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
+                                        group.Options.Add(option);
+                                    }
                                     option.Files.Add(textureSet.InternalMultiPath, AppendNumber(textureSet.InternalMultiPath.Replace("/", @"\"),
                                         fileCount++));
-                                    group.Options.Add(option);
                                 }
                             }
                             if (OnProgressChange != null) {
@@ -238,9 +247,11 @@ namespace FFXIVLooseTextureCompiler {
                             Application.DoEvents();
                             break;
                         case 1:
-                            option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
-                                : textureSet.MaterialSetName, 0);
-                            group.Options.Add(option);
+                            if (!textureSet.IsChildSet) {
+                                option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
+                                    : textureSet.MaterialSetName + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
+                                group.Options.Add(option);
+                            }
                             if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
                                     option.Files.Add(textureSet.InternalDiffusePath,

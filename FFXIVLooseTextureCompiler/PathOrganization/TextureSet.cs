@@ -26,7 +26,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         private BackupTexturePaths backupTexturePaths;
         public bool IsChildSet {
             get {
-               return Diffuse.Contains("baseTexBaked");
+                return MaterialSetName.Contains("[IsChild]");
             }
         }
 
@@ -60,7 +60,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public string NormalCorrection { get => normalCorrection; set => normalCorrection = value; }
 
         public override string ToString() {
-            return materialSetName + (MaterialGroupName != materialSetName ? $"| Group({materialGroupName})" : "");
+            return materialSetName + (MaterialGroupName != materialSetName ? $" | Group({materialGroupName})" : "");
         }
     }
 }

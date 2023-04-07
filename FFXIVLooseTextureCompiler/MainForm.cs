@@ -1447,7 +1447,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo Compatibility";
+                bibo.MaterialSetName = "Bibo [IsChild]";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
@@ -1459,7 +1459,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve Compatibility";
+                eve.MaterialSetName = "Eve [IsChild]";
                 eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
@@ -1471,7 +1471,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.MaterialSetName = "Tight & Firm [IsChild]";
                 gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
@@ -1489,7 +1489,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.BackupTexturePaths = textureProcessor.BiboPath;
 
                 TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.MaterialSetName = "Vanilla [IsChild]";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
@@ -1501,7 +1501,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
 
                 TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve Compatibility";
+                eve.MaterialSetName = "Eve [IsChild]";
                 eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
@@ -1513,7 +1513,7 @@ namespace FFXIVLooseTextureCompiler {
                 eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
 
                 TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.MaterialSetName = "Tight & Firm [IsChild]";
                 gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
@@ -1531,7 +1531,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.MaterialSetName = "Vanilla [IsChild]";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
@@ -1543,7 +1543,7 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo+ Compatibility";
+                bibo.MaterialSetName = "Bibo+ [IsChild]";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
@@ -1555,7 +1555,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm Compatibility";
+                gen3.MaterialSetName = "Tight & Firm [IsChild]";
                 gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
                 gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
                 gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
@@ -1573,7 +1573,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
 
                 TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.MaterialSetName = "Vanilla [IsChild]";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
@@ -1581,11 +1581,11 @@ namespace FFXIVLooseTextureCompiler {
                 vanilla.Normal = textureSet.Normal?.Replace(".", "_gen2_n_baseTexBaked.");
                 vanilla.Multi = textureSet.Multi?.Replace(".", "_gen2_m_baseTexBaked.");
                 vanilla.Glow = textureSet.Glow?.Replace(".", "_gen2_g_baseTexBaked.");
-                vanilla.NormalMask = textureSet.Glow?.Replace(".", "_gen2_nm_baseTexBaked.");
+                vanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_gen2_nm_baseTexBaked.");
                 vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
 
                 TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo+ Compatibility";
+                bibo.MaterialSetName = "Bibo+ [IsChild]";
                 bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
                 bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
                 bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
@@ -1597,7 +1597,7 @@ namespace FFXIVLooseTextureCompiler {
                 bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
 
                 TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve Compatibility";
+                eve.MaterialSetName = "Eve [IsChild]";
                 eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
                 eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
                 eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
@@ -1615,7 +1615,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
 
                 TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla Compatibility";
+                vanilla.MaterialSetName = "Vanilla [IsChild]";
                 vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
                 vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
                 vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
@@ -1630,7 +1630,7 @@ namespace FFXIVLooseTextureCompiler {
             } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
                 textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
                 TextureSet otopop = new TextureSet();
-                otopop.MaterialSetName = "Otopop Compatibility";
+                otopop.MaterialSetName = "Otopop [IsChild]";
                 otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
                 otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
                 otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
@@ -1644,7 +1644,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.ChildSets.Add(otopop);
             } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
                 TextureSet tbseVanilla = new TextureSet();
-                tbseVanilla.MaterialSetName = "Vanilla Compatibility";
+                tbseVanilla.MaterialSetName = "Vanilla [IsChild]";
                 tbseVanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
                 tbseVanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
                 tbseVanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);

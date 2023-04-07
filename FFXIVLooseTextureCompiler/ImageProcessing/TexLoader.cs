@@ -146,7 +146,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     return new Bitmap(1024, 1024);
                 }
             } else {
-                return null;
+                return new Bitmap(1024, 1024);
             }
         }
 
