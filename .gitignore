@@ -3,3 +3,6 @@ FFXIVLooseTextureCompiler/bin/Debug/net7.0-windows
 .vs/FFXIVLooseTextureCompiler/FileContentIndex
 FFXIVLooseTextureCompiler/obj/Release/net7.0-windows
 FFXIVLooseTextureCompiler/obj
+LooseTextureCompilerFileRelay/bin
+LooseTextureCompilerFileRelay/obj
+.vs
