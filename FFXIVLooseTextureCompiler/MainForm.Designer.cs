@@ -57,8 +57,6 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertStandaloneTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biboToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biboToGen2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,11 +66,19 @@
             this.gen2ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otopopToVanillaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pNGToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optimizePNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertLTCTToPNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -128,7 +134,6 @@
             this.modVersionTextBox = new System.Windows.Forms.TextBox();
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -519,6 +524,7 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.convertStandaloneTextureToolStripMenuItem,
+            this.devToolsToolStripMenuItem,
             this.bulkTexViewerToolStripMenuItem,
             this.bulkImageToTexToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
@@ -531,20 +537,6 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // bulkTexViewerToolStripMenuItem
-            // 
-            this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
-            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
-            this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
-            // 
-            // bulkImageToTexToolStripMenuItem
-            // 
-            this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
-            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
-            this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
             // 
             // convertStandaloneTextureToolStripMenuItem
             // 
@@ -564,58 +556,112 @@
             // biboToGen3ToolStripMenuItem
             // 
             this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
             // 
             // biboToGen2ToolStripMenuItem
             // 
             this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
             this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             this.otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             this.otopopToVanillaToolStripMenuItem.Click += new System.EventHandler(this.otopopToVanillaToolStripMenuItem_Click);
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             this.vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
+            // 
+            // devToolsToolStripMenuItem
+            // 
+            this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.textureToLTCTToolStripMenuItem,
+            this.pNGToLTCTToolStripMenuItem,
+            this.optimizePNGToolStripMenuItem,
+            this.convertLTCTToPNGToolStripMenuItem});
+            this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
+            this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.devToolsToolStripMenuItem.Text = "Dev Tools";
+            this.devToolsToolStripMenuItem.Visible = false;
+            // 
+            // textureToLTCTToolStripMenuItem
+            // 
+            this.textureToLTCTToolStripMenuItem.Name = "textureToLTCTToolStripMenuItem";
+            this.textureToLTCTToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.textureToLTCTToolStripMenuItem.Text = "Texture To LTCT";
+            this.textureToLTCTToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertImagesToLTCTToolStripMenuItem_Click);
+            // 
+            // pNGToLTCTToolStripMenuItem
+            // 
+            this.pNGToLTCTToolStripMenuItem.Name = "pNGToLTCTToolStripMenuItem";
+            this.pNGToLTCTToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.pNGToLTCTToolStripMenuItem.Text = "PNG To LTCT";
+            this.pNGToLTCTToolStripMenuItem.Click += new System.EventHandler(this.convertPNGToLTCTToolStripMenuItem_Click);
+            // 
+            // optimizePNGToolStripMenuItem
+            // 
+            this.optimizePNGToolStripMenuItem.Name = "optimizePNGToolStripMenuItem";
+            this.optimizePNGToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.optimizePNGToolStripMenuItem.Text = "Optimize PNG";
+            this.optimizePNGToolStripMenuItem.Click += new System.EventHandler(this.optimizePNGToolStripMenuItem_Click);
+            // 
+            // convertLTCTToPNGToolStripMenuItem
+            // 
+            this.convertLTCTToPNGToolStripMenuItem.Name = "convertLTCTToPNGToolStripMenuItem";
+            this.convertLTCTToPNGToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
+            this.convertLTCTToPNGToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertLTCTToPNGToolStripMenuItem_Click);
+            // 
+            // bulkTexViewerToolStripMenuItem
+            // 
+            this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
+            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
+            this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
+            // 
+            // bulkImageToTexToolStripMenuItem
+            // 
+            this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
+            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
+            this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
             // 
             // diffuseMergerToolStripMenuItem
             // 
@@ -623,6 +669,20 @@
             this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
             this.diffuseMergerToolStripMenuItem.Click += new System.EventHandler(this.diffuseMergerToolStripMenuItem_Click);
+            // 
+            // multiCreatorToolStripMenuItem
+            // 
+            this.multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
+            this.multiCreatorToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.multiCreatorToolStripMenuItem.Text = "RGBA Merger";
+            this.multiCreatorToolStripMenuItem.Click += new System.EventHandler(this.multiCreatorToolStripMenuItem_Click);
+            // 
+            // imageToRGBChannelsToolStripMenuItem
+            // 
+            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
+            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
+            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
             // 
             // xNormalToolStripMenuItem
             // 
@@ -644,13 +704,6 @@
             this.mergeRGBAndAlphaImagesToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.mergeRGBAndAlphaImagesToolStripMenuItem.Text = "Merge RGB and Alpha Images";
             this.mergeRGBAndAlphaImagesToolStripMenuItem.Click += new System.EventHandler(this.mergeRGBAndAlphaImagesToolStripMenuItem_Click);
-            // 
-            // multiCreatorToolStripMenuItem
-            // 
-            this.multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
-            this.multiCreatorToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.multiCreatorToolStripMenuItem.Text = "RGBA Merger";
-            this.multiCreatorToolStripMenuItem.Click += new System.EventHandler(this.multiCreatorToolStripMenuItem_Click);
             // 
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
@@ -687,7 +740,7 @@
             // enableModshareToolStripMenuItem
             // 
             this.enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.enableModshareToolStripMenuItem.Text = "Enable Modshare";
             this.enableModshareToolStripMenuItem.Click += new System.EventHandler(this.enableModshareToolStripMenuItem_Click);
             // 
@@ -695,7 +748,7 @@
             // 
             this.sendCurrentModToolStripMenuItem.Enabled = false;
             this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
             // 
@@ -1165,13 +1218,6 @@
             this.label8.TabIndex = 52;
             this.label8.Text = "Remote IP";
             // 
-            // imageToRGBChannelsToolStripMenuItem
-            // 
-            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
-            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
-            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1354,5 +1400,10 @@
         private ToolStripMenuItem mergeRGBAndAlphaImagesToolStripMenuItem;
         private ToolStripMenuItem whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem;
         private ToolStripMenuItem imageToRGBChannelsToolStripMenuItem;
+        private ToolStripMenuItem devToolsToolStripMenuItem;
+        private ToolStripMenuItem textureToLTCTToolStripMenuItem;
+        private ToolStripMenuItem pNGToLTCTToolStripMenuItem;
+        private ToolStripMenuItem optimizePNGToolStripMenuItem;
+        private ToolStripMenuItem convertLTCTToPNGToolStripMenuItem;
     }
 }
