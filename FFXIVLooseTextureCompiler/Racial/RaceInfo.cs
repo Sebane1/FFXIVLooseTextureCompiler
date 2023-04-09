@@ -42,7 +42,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
 
         public static int ReverseRaceLookup(string path) {
             if (!string.IsNullOrEmpty(path)) {
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < 10; i++) {
                     string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
                     string eve = bodyIdentifiers[2].RaceIdentifiers[i];
                     string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
