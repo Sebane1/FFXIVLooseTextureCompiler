@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
-    public class LockBitmap {
+    public class LockBitmap : IDisposable {
         Bitmap source = null;
         IntPtr Iptr = IntPtr.Zero;
         BitmapData bitmapData = null;
+        private bool alreadyLocked;
 
         public byte[] Pixels { get; set; }
         public int Depth { get; private set; }
@@ -19,6 +20,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
 
         public LockBitmap(Bitmap source) {
             this.source = source;
+            LockBits();
         }
 
         /// <summary>
@@ -26,35 +28,38 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         /// </summary>
         public void LockBits() {
             try {
-                // Get width and height of bitmap
-                Width = source.Width;
-                Height = source.Height;
+                if (!alreadyLocked) {
+                    // Get width and height of bitmap
+                    Width = source.Width;
+                    Height = source.Height;
 
-                // get total locked pixels count
-                int PixelCount = Width * Height;
+                    // get total locked pixels count
+                    int PixelCount = Width * Height;
 
-                // Create rectangle to lock
-                Rectangle rect = new Rectangle(0, 0, Width, Height);
+                    // Create rectangle to lock
+                    Rectangle rect = new Rectangle(0, 0, Width, Height);
 
-                // get source bitmap pixel format size
-                Depth = System.Drawing.Bitmap.GetPixelFormatSize(source.PixelFormat);
+                    // get source bitmap pixel format size
+                    Depth = System.Drawing.Bitmap.GetPixelFormatSize(source.PixelFormat);
 
-                // Check if bpp (Bits Per Pixel) is 8, 24, or 32
-                if (Depth != 8 && Depth != 24 && Depth != 32) {
-                    throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
+                    // Check if bpp (Bits Per Pixel) is 8, 24, or 32
+                    if (Depth != 8 && Depth != 24 && Depth != 32) {
+                        throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
+                    }
+
+                    // Lock bitmap and return bitmap data
+                    bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite,
+                                                 source.PixelFormat);
+
+                    // create byte array to copy pixel values
+                    int step = Depth / 8;
+                    Pixels = new byte[PixelCount * step];
+                    Iptr = bitmapData.Scan0;
+
+                    // Copy data from pointer to array
+                    Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
+                    alreadyLocked = true;
                 }
-
-                // Lock bitmap and return bitmap data
-                bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite,
-                                             source.PixelFormat);
-
-                // create byte array to copy pixel values
-                int step = Depth / 8;
-                Pixels = new byte[PixelCount * step];
-                Iptr = bitmapData.Scan0;
-
-                // Copy data from pointer to array
-                Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
             } catch (Exception ex) {
                 throw ex;
             }
@@ -65,11 +70,14 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         /// </summary>
         public void UnlockBits() {
             try {
-                // Copy data from byte array to pointer
-                Marshal.Copy(Pixels, 0, Iptr, Pixels.Length);
+                if (alreadyLocked) {
+                    // Copy data from byte array to pointer
+                    Marshal.Copy(Pixels, 0, Iptr, Pixels.Length);
 
-                // Unlock bitmap data
-                source.UnlockBits(bitmapData);
+                    // Unlock bitmap data
+                    source.UnlockBits(bitmapData);
+                    alreadyLocked = false;
+                }
             } catch (Exception ex) {
                 throw ex;
             }
@@ -148,6 +156,10 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             {
                 Pixels[i] = color.B;
             }
+        }
+
+        public void Dispose() {
+            UnlockBits();
         }
     }
 }
