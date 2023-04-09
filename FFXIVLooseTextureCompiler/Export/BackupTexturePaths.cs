@@ -9,14 +9,31 @@ namespace FFXIVLooseTextureCompiler.Export {
         public BackupTexturePaths(string path) {
             _path = path;
         }
-        const string _diffuse = "diffuse.tex";
-        const string _normal = "normal.tex";
+        const string _diffuse = "diffuse.ltct";
+        const string _diffuseRaen = "diffuseRaen.ltct";
+        const string _normal = "normal.ltct";
         string _path;
 
         public string Diffuse { get => _path + _diffuse; }
-        // public string DiffuseRaen { get => _path + _diffuseRaen; }
+        public string DiffuseRaen { get => _path + _diffuseRaen; }
         public string Normal { get => _path + _normal; }
-        public string Path { get => _path; set => _path = value; }
-        // public string NormalAuRa { get => _path + _normalAuRa; }
+        public string Path {
+            get => _path; set {
+                _path = value;
+                string cleanup = Diffuse.Replace(".ltct", ".tex");
+                if (File.Exists(cleanup)) {
+                    File.Delete(cleanup);
+                }
+                cleanup = DiffuseRaen.Replace(".ltct", ".tex");
+                if (File.Exists(cleanup)) {
+                    File.Delete(cleanup);
+                }
+                cleanup = Normal.Replace(".ltct", ".tex");
+                if (File.Exists(cleanup)) {
+                    File.Delete(cleanup);
+                }
+            }
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.Export;
 using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.PathOrganization;
+using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
 using Penumbra.Import.Dds;
@@ -202,7 +203,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse") 
+                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse")
                                         + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(option);
                                     }
@@ -217,7 +218,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (NormalLogic(textureSet, normalDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal") 
+                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal")
                                         + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(option);
                                     }
@@ -233,7 +234,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (MultiLogic(textureSet, multiDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         option = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                    (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi") 
+                                    (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi")
                                     + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(option);
                                     }
@@ -286,7 +287,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
                 if (group.Options.Count > 0) {
-                    string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower()}.json");
+                    string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower().Replace(" ", "_")}.json");
                     ExportGroup(groupPath, group);
                 }
             }
@@ -309,7 +310,8 @@ namespace FFXIVLooseTextureCompiler {
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
                 && generateMulti && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreMultiGeneration) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", "", 
+                        textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
                     outputGenerated = true;
                 }
             }
@@ -320,7 +322,8 @@ namespace FFXIVLooseTextureCompiler {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                 if (generateNormals && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
+                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask,
+                        textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
                     outputGenerated = true;
                 } else {
                     if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
@@ -336,11 +339,14 @@ namespace FFXIVLooseTextureCompiler {
             && generateNormals && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreNormalGeneration) {
                     if (textureSet.BackupTexturePaths != null) {
-                        ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)), AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                        ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)),
+                            AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask,
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
                         outputGenerated = true;
                     } else {
                         ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount),
-                            ExportType.Normal, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
+                            ExportType.Normal, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "",
+                            textureSet.NormalCorrection);
                         outputGenerated = true;
                     }
                 }
@@ -361,7 +367,9 @@ namespace FFXIVLooseTextureCompiler {
                     outputGenerated = true;
                 } else {
                     ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "",
-                        textureSet.Glow, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                        textureSet.Glow, textureSet.BackupTexturePaths != null ?
+                        (RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath) == 6 ?
+                        textureSet.BackupTexturePaths.DiffuseRaen : textureSet.BackupTexturePaths.Diffuse) : "");
                     outputGenerated = true;
                 }
             }

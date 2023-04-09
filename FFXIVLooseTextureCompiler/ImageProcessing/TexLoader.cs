@@ -3,6 +3,7 @@ using Penumbra.Import.Dds;
 using Penumbra.Import.Textures;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public static class TexLoader {
@@ -129,9 +130,11 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                     }
                     if (!failSafeTriggered) {
                         try {
-                            using (Bitmap bitmap = inputFile.EndsWith(".tex") ?
-                                TexLoader.TexToBitmap(inputFile) : (inputFile.EndsWith(".dds") ?
-                                TexLoader.DDSToBitmap(inputFile) : new Bitmap(inputFile))) {
+                            using (Bitmap bitmap =
+                                inputFile.EndsWith(".tex") ? TexToBitmap(inputFile) :
+                                inputFile.EndsWith(".dds") ? DDSToBitmap(inputFile) :
+                                inputFile.EndsWith(".ltct") ? OpenImageFromXOR(inputFile) :
+                                new Bitmap(inputFile)) {
                                 return new Bitmap(bitmap);
                             }
                         } catch {
@@ -155,6 +158,91 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             KeyValuePair<Size, byte[]> keyValuePair = ResolveImageBytes(inputFile);
             TextureImporter.RgbaBytesToTex(keyValuePair.Value, keyValuePair.Key.Width, keyValuePair.Key.Height, out data);
             return data;
+        }
+        public static void ObfuscateOrDeobfuscate(byte[] blob) {
+            for (int i = 0; i < blob.Length; ++i) {
+                blob[i] ^= 0x2A;
+            }
+        }
+
+        public static void WriteImageToXOR(Bitmap data, string filename) {
+            MemoryStream memoryStream = new MemoryStream();
+            data.Save(memoryStream, ImageFormat.Png);
+            byte[] bytes = memoryStream.ToArray();
+            ObfuscateOrDeobfuscate(bytes);
+            File.WriteAllBytes(filename, bytes);
+        }
+        public static void WriteImageToXOR(string input, string filename) {
+            byte[] bytes = File.ReadAllBytes(input);
+            ObfuscateOrDeobfuscate(bytes);
+            File.WriteAllBytes(filename, bytes);
+        }
+
+        public static Bitmap OpenImageFromXOR(string filename) {
+            byte[] file = File.ReadAllBytes(filename);
+            ObfuscateOrDeobfuscate(file);
+            MemoryStream memoryStream = new MemoryStream(file);
+            return new Bitmap(memoryStream);
+        }
+
+        public static void ConvertToLtct(string rootDirectory) {
+            foreach (string file in Directory.GetFiles(rootDirectory)) {
+                if (file.EndsWith(".tex") || file.EndsWith(".png") || file.EndsWith(".bmp") || file.EndsWith(".dds")) {
+                    WriteImageToXOR(ResolveBitmap(file), file
+                        .Replace(".tex", ".ltct")
+                        .Replace(".png", ".ltct")
+                        .Replace(".bmp", ".ltct")
+                        .Replace(".dds", ".ltct"));
+                }
+            }
+            foreach (string directory in Directory.GetDirectories(rootDirectory)) {
+                ConvertToLtct(directory);
+            }
+        }
+        public static void ConvertPngToLtct(string rootDirectory) {
+            foreach (string file in Directory.GetFiles(rootDirectory)) {
+                if (file.EndsWith(".png")) {
+                    WriteImageToXOR(file, file.Replace(".png", ".ltct"));
+                }
+            }
+            foreach (string directory in Directory.GetDirectories(rootDirectory)) {
+                ConvertPngToLtct(directory);
+            }
+        }
+        public static void ConvertLtctToPng(string rootDirectory) {
+            foreach (string file in Directory.GetFiles(rootDirectory)) {
+                if (file.EndsWith(".ltct")) {
+                    OpenImageFromXOR(file).Save(file.Replace(".ltct", ".png"));
+                }
+            }
+            foreach (string directory in Directory.GetDirectories(rootDirectory)) {
+                ConvertLtctToPng(directory);
+            }
+        }
+
+        public static void RunOptiPNG(string rootDirectory) {
+            foreach (string file in Directory.GetFiles(rootDirectory)) {
+                if (file.EndsWith(".png")) {
+                    ProcessStartInfo info = new ProcessStartInfo {
+                        FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "optipng.exe"),
+                        Arguments = "-clobber " + @"""" + file + @"""",
+                        WorkingDirectory = rootDirectory,
+                        UseShellExecute = false
+                    };
+                    info.RedirectStandardOutput = true;
+                    Process process = new Process();
+                    process.StartInfo = info;
+                    process.OutputDataReceived += Process_OutputDataReceived;
+                    process.Start();
+                }
+            }
+            foreach (string directory in Directory.GetDirectories(rootDirectory)) {
+                RunOptiPNG(directory);
+            }
+        }
+
+        private static void Process_OutputDataReceived(object sender, DataReceivedEventArgs e) {
+            MessageBox.Show(e.Data);
         }
 
         public static KeyValuePair<Size, byte[]> ResolveImageBytes(string inputFile) {

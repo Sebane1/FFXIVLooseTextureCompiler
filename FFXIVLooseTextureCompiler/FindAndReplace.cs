@@ -14,33 +14,33 @@ namespace FFXIVLooseTextureCompiler {
         public FindAndReplace() {
             InitializeComponent();
         }
-        List<TextureSet> materialSets = new List<TextureSet>();
+        List<TextureSet> textureSet = new List<TextureSet>();
 
-        public List<TextureSet> MaterialSets {
-            get => materialSets;
+        public List<TextureSet> TextureSets {
+            get => textureSet;
             set {
-                materialSets = value;
+                textureSet = value;
             }
         }
 
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(replacementString.Text)) {
-                foreach (TextureSet materialSet in materialSets) {
-                    if (materialSet.MaterialSetName.ToLower().Contains(replacementString.Text.ToLower())) {
+                foreach (TextureSet textureSet in textureSet) {
+                    if (textureSet.MaterialSetName.ToLower().Contains(replacementString.Text.ToLower())) {
                         if (!string.IsNullOrEmpty(diffuse.FilePath.Text)) {
-                            materialSet.Diffuse = diffuse.FilePath.Text;
+                            textureSet.Diffuse = diffuse.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
-                            materialSet.Normal = normal.FilePath.Text;
+                            textureSet.Normal = normal.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(multi.FilePath.Text)) {
-                            materialSet.Multi = multi.FilePath.Text;
+                            textureSet.Multi = multi.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
-                            materialSet.NormalMask = mask.FilePath.Text;
+                            textureSet.NormalMask = mask.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(glow.FilePath.Text)) {
-                            materialSet.Glow = glow.FilePath.Text;
+                            textureSet.Glow = glow.FilePath.Text;
                         }
                     }
                 }

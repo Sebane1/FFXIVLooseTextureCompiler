@@ -70,7 +70,6 @@
             this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +88,7 @@
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -128,7 +128,7 @@
             this.modVersionTextBox = new System.Windows.Forms.TextBox();
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -518,15 +518,15 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertStandaloneTextureToolStripMenuItem,
             this.bulkTexViewerToolStripMenuItem,
             this.bulkImageToTexToolStripMenuItem,
-            this.convertStandaloneTextureToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
-            this.xNormalToolStripMenuItem,
+            this.multiCreatorToolStripMenuItem,
             this.imageToRGBChannelsToolStripMenuItem,
+            this.xNormalToolStripMenuItem,
             this.splitImageToRGBAndAlphaToolStripMenuItem,
             this.mergeRGBAndAlphaImagesToolStripMenuItem,
-            this.multiCreatorToolStripMenuItem,
             this.extractAtramentumLuminisGlowMapToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -564,56 +564,56 @@
             // biboToGen3ToolStripMenuItem
             // 
             this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
             // 
             // biboToGen2ToolStripMenuItem
             // 
             this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             this.otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             this.otopopToVanillaToolStripMenuItem.Click += new System.EventHandler(this.otopopToVanillaToolStripMenuItem_Click);
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             this.vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
             // 
@@ -630,13 +630,6 @@
             this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.xNormalToolStripMenuItem.Text = "XNormal";
             this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
-            // 
-            // imageToRGBChannelsToolStripMenuItem
-            // 
-            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
-            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
-            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
             // 
             // splitImageToRGBAndAlphaToolStripMenuItem
             // 
@@ -694,7 +687,7 @@
             // enableModshareToolStripMenuItem
             // 
             this.enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.enableModshareToolStripMenuItem.Text = "Enable Modshare";
             this.enableModshareToolStripMenuItem.Click += new System.EventHandler(this.enableModshareToolStripMenuItem_Click);
             // 
@@ -702,7 +695,7 @@
             // 
             this.sendCurrentModToolStripMenuItem.Enabled = false;
             this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
             // 
@@ -776,6 +769,13 @@
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
+            // 
+            // whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem
+            // 
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Name = "whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem";
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += new System.EventHandler(this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click);
             // 
             // donateButton
             // 
@@ -1165,12 +1165,12 @@
             this.label8.TabIndex = 52;
             this.label8.Text = "Remote IP";
             // 
-            // whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem
+            // imageToRGBChannelsToolStripMenuItem
             // 
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Name = "whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem";
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += new System.EventHandler(this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click);
+            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
+            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
+            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -1349,10 +1349,10 @@
         private TextBox ipBox;
         private Label label8;
         private ToolStripMenuItem enableModshareToolStripMenuItem;
-        private ToolStripMenuItem imageToRGBChannelsToolStripMenuItem;
         private ToolStripMenuItem multiCreatorToolStripMenuItem;
         private ToolStripMenuItem splitImageToRGBAndAlphaToolStripMenuItem;
         private ToolStripMenuItem mergeRGBAndAlphaImagesToolStripMenuItem;
         private ToolStripMenuItem whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem;
+        private ToolStripMenuItem imageToRGBChannelsToolStripMenuItem;
     }
 }
