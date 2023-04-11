@@ -127,68 +127,7 @@ namespace FFXIVLooseTextureCompiler {
         private void generateButton_Click(object sender, EventArgs e) {
             exportLabel.Text = "Exporting";
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
-                lockDuplicateGeneration = true;
-                exportPanel.Visible = true;
-                exportPanel.BringToFront();
-                if (string.IsNullOrEmpty(penumbraModPath)) {
-                    ConfigurePenumbraModFolder();
-                }
-                if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
-                    string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
-                    jsonFilepath = Path.Combine(modPath, "default_mod.json");
-                    metaFilePath = Path.Combine(modPath, "meta.json");
-                    if (Directory.Exists(modPath)) {
-                        try {
-                            Directory.Delete(modPath, true);
-                        } catch {
-
-                        }
-                    } else {
-                        hasDoneReload = false;
-                    }
-                    Directory.CreateDirectory(modPath);
-                    exportProgress.BringToFront();
-                    exportProgress.Maximum = textureList.Items.Count * 3;
-                    exportProgress.Visible = true;
-                    Refresh();
-                    List<TextureSet> textureSets = new List<TextureSet>();
-                    foreach (TextureSet item in textureList.Items) {
-                        if (item.OmniExportMode) {
-                            ConfigureOmniConfiguration(item);
-                            exportProgress.Maximum += item.ChildSets.Count;
-                        }
-                        textureSets.Add(item);
-                    }
-                    textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex,
-                        bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
-                    ExportJson();
-                    ExportMeta();
-                    if (hasDoneReload) {
-                        PenumbraHttpApi.Redraw(0);
-                    } else {
-                        PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-                        PenumbraHttpApi.Redraw(0);
-                        if (IntegrityChecker.IntegrityCheck()) {
-                            IntegrityChecker.ShowConsolation();
-                        }
-                        hasDoneReload = true;
-                        materialList_SelectedIndexChanged(this, EventArgs.Empty);
-                    }
-                    finalizeButton.Enabled = generateButton.Enabled = false;
-                    generationCooldown.Start();
-                    exportProgress.Visible = false;
-                    exportProgress.Value = 0;
-                    lockDuplicateGeneration = false;
-                    if (!isNetworkSync) {
-                        exportPanel.Visible = false;
-                        finalizeResults = false;
-                    }
-                } else {
-                    exportPanel.Visible = false;
-                    lockDuplicateGeneration = false;
-                    finalizeResults = false;
-                    MessageBox.Show("Please enter a mod name!");
-                }
+                processGeneration.RunWorkerAsync();
             }
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
@@ -2064,6 +2003,72 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 TexLoader.ConvertPngToLtct(openFileDialog.SelectedPath);
             }
+        }
+
+        private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            lockDuplicateGeneration = true;
+            exportPanel.Visible = true;
+            exportPanel.BringToFront();
+            if (string.IsNullOrEmpty(penumbraModPath)) {
+                ConfigurePenumbraModFolder();
+            }
+            if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
+                string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                jsonFilepath = Path.Combine(modPath, "default_mod.json");
+                metaFilePath = Path.Combine(modPath, "meta.json");
+                if (Directory.Exists(modPath)) {
+                    try {
+                        Directory.Delete(modPath, true);
+                    } catch {
+
+                    }
+                } else {
+                    hasDoneReload = false;
+                }
+                Directory.CreateDirectory(modPath);
+                exportProgress.BringToFront();
+                exportProgress.Maximum = textureList.Items.Count * 3;
+                exportProgress.Visible = true;
+                Refresh();
+                List<TextureSet> textureSets = new List<TextureSet>();
+                foreach (TextureSet item in textureList.Items) {
+                    if (item.OmniExportMode) {
+                        ConfigureOmniConfiguration(item);
+                        exportProgress.Maximum += item.ChildSets.Count;
+                    }
+                    textureSets.Add(item);
+                }
+                textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex,
+                    bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
+                ExportJson();
+                ExportMeta();
+                if (hasDoneReload) {
+                    PenumbraHttpApi.Redraw(0);
+                } else {
+                    PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+                    PenumbraHttpApi.Redraw(0);
+                    if (IntegrityChecker.IntegrityCheck()) {
+                        IntegrityChecker.ShowConsolation();
+                    }
+                    hasDoneReload = true;
+                    materialList_SelectedIndexChanged(this, EventArgs.Empty);
+                }
+                finalizeButton.Enabled = generateButton.Enabled = false;
+                generationCooldown.Start();
+                exportProgress.Visible = false;
+                exportProgress.Value = 0;
+                lockDuplicateGeneration = false;
+                if (!isNetworkSync) {
+                    exportPanel.Visible = false;
+                    finalizeResults = false;
+                }
+            } else {
+                exportPanel.Visible = false;
+                lockDuplicateGeneration = false;
+                finalizeResults = false;
+                MessageBox.Show("Please enter a mod name!");
+            }
+            processGeneration.CancelAsync();
         }
     }
 }

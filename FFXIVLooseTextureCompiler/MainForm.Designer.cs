@@ -134,6 +134,7 @@
             this.modVersionTextBox = new System.Windows.Forms.TextBox();
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.processGeneration = new System.ComponentModel.BackgroundWorker();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -1218,6 +1219,11 @@
             this.label8.TabIndex = 52;
             this.label8.Text = "Remote IP";
             // 
+            // processGeneration
+            // 
+            this.processGeneration.WorkerSupportsCancellation = true;
+            this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1405,5 +1411,6 @@
         private ToolStripMenuItem pNGToLTCTToolStripMenuItem;
         private ToolStripMenuItem optimizePNGToolStripMenuItem;
         private ToolStripMenuItem convertLTCTToPNGToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker processGeneration;
     }
 }
