@@ -149,6 +149,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
         public void Export(List<TextureSet> textureSetList, string modPath, int generationType,
             bool generateNormals, bool generateMulti, bool useXNormal) {
             Stopwatch stopwatch = new Stopwatch();
@@ -310,7 +311,7 @@ namespace FFXIVLooseTextureCompiler {
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
                 && generateMulti && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreMultiGeneration) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", "", 
+                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", "",
                         textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
                     outputGenerated = true;
                 }
@@ -460,56 +461,46 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         break;
                     case ExportType.Normal:
-                        if (!normalCache.ContainsKey(inputFile)) {
+                        Bitmap output;
+                        if (normalCache.ContainsKey(inputFile)) {
+                            output = normalCache[inputFile];
+                        } else {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
-                                if (bitmap != null) {
-                                    using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height, PixelFormat.Format32bppArgb)) {
-                                        Graphics g = Graphics.FromImage(target);
-                                        g.Clear(Color.Transparent);
-                                        g.CompositingQuality = CompositingQuality.HighQuality;
-                                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                        g.SmoothingMode = SmoothingMode.HighQuality;
-                                        g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap output = null;
-                                        if (File.Exists(mask)) {
-                                            using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                                output = Normal.Calculate(target, normalMaskBitmap);
-                                            }
-                                        } else {
-                                            output = Normal.Calculate(target);
+                                using (Bitmap target = new Bitmap(bitmap.Size.Width, bitmap.Size.Height, PixelFormat.Format32bppArgb)) {
+                                    Graphics g = Graphics.FromImage(target);
+                                    g.Clear(Color.Transparent);
+                                    g.CompositingQuality = CompositingQuality.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
+                                    g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+                                    if (File.Exists(mask)) {
+                                        using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
+                                            output = Normal.Calculate(target, normalMaskBitmap);
                                         }
-                                        if (outputFile.Contains("fac_b_n")) {
-                                            Bitmap resize = new Bitmap(output, new Size(1024, 1024));
-                                            normalCache.Add(inputFile, resize);
-                                            if (!string.IsNullOrEmpty(normalCorrection)) {
-                                                output = ImageManipulation.ResizeAndMerge(resize, TexLoader.ResolveBitmap(normalCorrection));
-                                            }
-                                            output.Save(stream, ImageFormat.Png);
-                                        } else {
-                                            normalCache.Add(inputFile, output);
-                                            if (!string.IsNullOrEmpty(normalCorrection)) {
-                                                output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
-                                            }
-                                            output.Save(stream, ImageFormat.Png);
-                                        }
+                                    } else {
+                                        output = Normal.Calculate(target);
                                     }
+                                    if (outputFile.Contains("fac_b_n")) {
+                                        output = new Bitmap(output, new Size(1024, 1024));
+                                    }
+                                    normalCache.Add(inputFile, output);
                                 }
                             }
-                        } else {
-                            if (!string.IsNullOrEmpty(normalCorrection)) {
-                                ImageManipulation.ResizeAndMerge(normalCache[inputFile], TexLoader.ResolveBitmap(normalCorrection))
-                                    .Save(stream, ImageFormat.Png); ;
-                            } else {
-                                normalCache[inputFile].Save(stream, ImageFormat.Png);
-                            }
                         }
+                        if (!string.IsNullOrEmpty(normalCorrection)) {
+                            output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
+                        }
+                        output.Save(stream, ImageFormat.Png);
                         break;
                     case ExportType.MultiFace:
-                        if (!multiCache.ContainsKey(inputFile)) {
+                        if (multiCache.ContainsKey(inputFile)) {
+                            multiCache[inputFile].Save(stream, ImageFormat.Png);
+                        } else {
                             using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                                 if (bitmap != null) {
+                                    Bitmap image;
                                     if (layeringImage != null) {
-                                        Bitmap image = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
+                                        image = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
                                         Bitmap layer = TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, layeringImage));
                                         Graphics g = Graphics.FromImage(image);
                                         g.Clear(Color.Transparent);
@@ -518,20 +509,15 @@ namespace FFXIVLooseTextureCompiler {
                                         g.SmoothingMode = SmoothingMode.HighQuality;
                                         g.DrawImage(layer, 0, 0, bitmap.Width, bitmap.Height);
                                         g.DrawImage(GetMergedBitmap(inputFile), 0, 0, bitmap.Width, bitmap.Height);
-                                        Bitmap multi = MultiplyFilter.MultiplyImage(
-                                        Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, 126, 0);
-                                        multi.Save(stream, ImageFormat.Png);
-                                        multiCache.Add(inputFile, multi);
                                     } else {
-                                        Bitmap multi = MultiplyFilter.MultiplyImage(
-                                        Brightness.BrightenImage(Grayscale.MakeGrayscale3(bitmap)), 255, 126, 0);
-                                        multi.Save(stream, ImageFormat.Png);
-                                        multiCache.Add(inputFile, multi);
+                                        image = bitmap;
                                     }
+                                    Bitmap multi = MultiplyFilter.MultiplyImage(
+                                    Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, 126, 0);
+                                    multi.Save(stream, ImageFormat.Png);
+                                    multiCache.Add(inputFile, multi);
                                 }
                             }
-                        } else {
-                            multiCache[inputFile].Save(stream, ImageFormat.Png);
                         }
                         break;
                     case ExportType.MergeNormal:
@@ -540,39 +526,24 @@ namespace FFXIVLooseTextureCompiler {
                                 using (Bitmap diffuse = TexLoader.ResolveBitmap(diffuseNormal)) {
                                     if (diffuse != null) {
                                         using (Bitmap canvasImage = new Bitmap(diffuse.Size.Width, diffuse.Size.Height, PixelFormat.Format32bppArgb)) {
-                                            Bitmap output = null;
+                                            output = null;
                                             if (File.Exists(mask)) {
                                                 using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
                                                     if (outputFile.Contains("fac_b_n")) {
                                                         Bitmap resize = new Bitmap(diffuse, new Size(1024, 1024));
-                                                        output = ImageManipulation.MergeNormals(
-                                                            inputFile, resize, canvasImage,
-                                                            normalMaskBitmap, diffuseNormal);
-                                                        if (!normalCache.ContainsKey(diffuseNormal)) {
-                                                            normalCache.Add(diffuseNormal, output);
-                                                        }
-                                                        if (!string.IsNullOrEmpty(normalCorrection)) {
-                                                            output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
-                                                        }
+                                                        output = ImageManipulation.MergeNormals(inputFile, resize, canvasImage, normalMaskBitmap, diffuseNormal);
                                                     } else {
-                                                        output = ImageManipulation.MergeNormals(
-                                                            inputFile, diffuse, canvasImage,
-                                                            normalMaskBitmap, diffuseNormal);
-                                                        if (!normalCache.ContainsKey(diffuseNormal)) {
-                                                            normalCache.Add(diffuseNormal, output);
-                                                        }
-                                                        if (!string.IsNullOrEmpty(normalCorrection)) {
-                                                            output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
-                                                        }
+                                                        output = ImageManipulation.MergeNormals(inputFile, diffuse, canvasImage, normalMaskBitmap, diffuseNormal);
                                                     }
                                                 }
                                             } else {
                                                 output = ImageManipulation.MergeNormals(inputFile, diffuse, canvasImage, null, diffuseNormal);
                                             }
-                                            output.Save(stream, ImageFormat.Png);
-                                            if (!normalCache.ContainsKey(diffuseNormal)) {
-                                                normalCache.Add(diffuseNormal, output);
+                                            if (!string.IsNullOrEmpty(normalCorrection)) {
+                                                output = ImageManipulation.ResizeAndMerge(output, TexLoader.ResolveBitmap(normalCorrection));
                                             }
+                                            output.Save(stream, ImageFormat.Png);
+                                            normalCache.Add(diffuseNormal, output);
                                         }
                                     }
                                 }

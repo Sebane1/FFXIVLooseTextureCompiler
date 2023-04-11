@@ -72,13 +72,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
             return -1;
         }
         public static string NumberPadder(int value) {
-            int numbersToPad = 4 - value.ToString().Length;
-            string result = "";
-            for (int i = 0; i < numbersToPad; i++) {
-                result += "0";
-            }
-            result += value;
-            return result;
+            return value.ToString().PadLeft(4, '0');
         }
 
     }

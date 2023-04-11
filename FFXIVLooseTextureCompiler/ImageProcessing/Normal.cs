@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class Normal {
+
         public static Bitmap Calculate(string file) {
             using (Bitmap image = (Bitmap)Bitmap.FromFile(file)) {
                 int w = image.Width - 1;
@@ -24,30 +25,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 LockBitmap destination = new LockBitmap(normal);
                 source.LockBits();
                 destination.LockBits();
+                float brightness_difference = 255 * 0.5f;
                 for (int y = 0; y < h; y++) {
                     for (int x = 0; x < w; x++) {
-                        if (x > 0) {
-                            sample_l = source.GetPixel(x - 1, y).GetBrightness();
-                        } else {
-                            sample_l = source.GetPixel(x, y).GetBrightness();
-                        }
-                        if (x < w) {
-                            sample_r = source.GetPixel(x + 1, y).GetBrightness();
-                        } else {
-                            sample_r = source.GetPixel(x, y).GetBrightness();
-                        }
-                        if (y > 1) {
-                            sample_u = source.GetPixel(x, y - 1).GetBrightness();
-                        } else {
-                            sample_u = source.GetPixel(x, y).GetBrightness();
-                        }
-                        if (y < h) {
-                            sample_d = source.GetPixel(x, y + 1).GetBrightness();
-                        } else {
-                            sample_d = source.GetPixel(x, y).GetBrightness();
-                        }
-                        x_vector = (((sample_l - sample_r) + 1) * .5f) * 255;
-                        y_vector = (((sample_u - sample_d) + 1) * .5f) * 255;
+                        sample_l = x > 0 ? source.GetPixel(x - 1, y).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_r = x < w ? source.GetPixel(x + 1, y).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_u = y > 1 ? source.GetPixel(x, y - 1).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_d = y < h ? source.GetPixel(x, y + 1).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        x_vector = (((sample_l - sample_r) + 1) * brightness_difference);
+                        y_vector = (((sample_u - sample_d) + 1) * brightness_difference);
                         Color col = Color.FromArgb(255, (int)x_vector, (int)y_vector, 255);
                         destination.SetPixel(x, y, col);
                     }
@@ -57,6 +43,8 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 return normal;
             }
         }
+        //Optimized
+
         public static Bitmap Calculate(Bitmap file, Bitmap normalMask = null) {
             Bitmap image = file;
             #region Global Variables
@@ -68,10 +56,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             float sample_d;
             float x_vector;
             float y_vector;
-            //if (normalMask != null) {
-            //    Graphics g = Graphics.FromImage(image);
-            //    g.DrawImage(normalMask, 0, 0, normalMask.Width, normalMask.Height);
-            //}
             image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             Bitmap normal = new Bitmap(image.Width, image.Height);
             LockBitmap source = new LockBitmap(image);
@@ -88,10 +72,10 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             for (int y = 0; y < h + 1; y++) {
                 for (int x = 0; x < w + 1; x++) {
                     if (normalMask == null || maskReference?.GetPixel(x, y).A == 0) {
-                        if (x > 0) { sample_l = source.GetPixel(x - 1, y).GetBrightness(); } else { sample_l = source.GetPixel(x, y).GetBrightness(); }
-                        if (x < w) { sample_r = source.GetPixel(x + 1, y).GetBrightness(); } else { sample_r = source.GetPixel(x, y).GetBrightness(); }
-                        if (y > 1) { sample_u = source.GetPixel(x, y - 1).GetBrightness(); } else { sample_u = source.GetPixel(x, y).GetBrightness(); }
-                        if (y < h) { sample_d = source.GetPixel(x, y + 1).GetBrightness(); } else { sample_d = source.GetPixel(x, y).GetBrightness(); }
+                        sample_l = x > 0 ? source.GetPixel(x - 1, y).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_r = x < w ? source.GetPixel(x + 1, y).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_u = y > 1 ? source.GetPixel(x, y - 1).GetBrightness() : source.GetPixel(x, y).GetBrightness();
+                        sample_d = y < h ? source.GetPixel(x, y + 1).GetBrightness() : source.GetPixel(x, y).GetBrightness();
                         x_vector = (((sample_l - sample_r) + 1) * .5f) * 255;
                         y_vector = (((sample_u - sample_d) + 1) * .5f) * 255;
                         Color col = Color.FromArgb(255, (int)x_vector, (int)y_vector, 255);

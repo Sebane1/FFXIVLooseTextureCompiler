@@ -57,6 +57,8 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             return output;
         }
 
+        //Optimized
+
         public static byte[] BitmapToRGBA(Bitmap bitmap) {
             byte[] RGBAPixels = (byte[])new ImageConverter().ConvertTo(new ImageConverter(), typeof(byte[]));
             for (int i = 0; i < RGBAPixels.Length; i += 4) {
@@ -69,7 +71,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 RGBAPixels[i + 1] = G;
                 RGBAPixels[i + 2] = B;
                 RGBAPixels[i + 3] = A;
-
             }
             return RGBAPixels;
         }
@@ -119,36 +120,25 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         }
 
         public static Bitmap ResolveBitmap(string inputFile) {
-            bool failSafeTriggered = false;
-            if (!string.IsNullOrEmpty(inputFile)) {
-                if (File.Exists(inputFile)) {
-                    Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    while (IsFileLocked(inputFile)) {
-                        Application.DoEvents();
-                        Thread.Sleep(10);
-                    }
-                    if (!failSafeTriggered) {
-                        try {
-                            using (Bitmap bitmap =
-                                inputFile.EndsWith(".tex") ? TexToBitmap(inputFile) :
-                                inputFile.EndsWith(".dds") ? DDSToBitmap(inputFile) :
-                                inputFile.EndsWith(".ltct") ? OpenImageFromXOR(inputFile) :
-                                new Bitmap(inputFile)) {
-                                return new Bitmap(bitmap);
-                            }
-                        } catch {
-                            MessageBox.Show(inputFile + " failed to read. The tool will now skip it.");
-                            return new Bitmap(1024, 1024);
-                        }
-                    } else {
-                        MessageBox.Show(inputFile + " is missing. The tool will now skip it.");
-                        return new Bitmap(1024, 1024);
-                    }
-                } else {
-                    return new Bitmap(1024, 1024);
+            if (string.IsNullOrEmpty(inputFile) || !File.Exists(inputFile)) {
+                return new Bitmap(1024, 1024);
+            }
+
+            while (IsFileLocked(inputFile)) {
+                Application.DoEvents();
+                Thread.Sleep(10);
+            }
+
+            try {
+                using (Bitmap bitmap =
+                    inputFile.EndsWith(".tex") ? TexToBitmap(inputFile) :
+                    inputFile.EndsWith(".dds") ? DDSToBitmap(inputFile) :
+                    inputFile.EndsWith(".ltct") ? OpenImageFromXOR(inputFile) :
+                    new Bitmap(inputFile)) {
+                    return new Bitmap(bitmap);
                 }
-            } else {
+            } catch {
+                MessageBox.Show(inputFile + " failed to read. The tool will now skip it.");
                 return new Bitmap(1024, 1024);
             }
         }
@@ -199,6 +189,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 ConvertToLtct(directory);
             }
         }
+
         public static void ConvertPngToLtct(string rootDirectory) {
             foreach (string file in Directory.GetFiles(rootDirectory)) {
                 if (file.EndsWith(".png")) {
@@ -247,25 +238,16 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
 
         public static KeyValuePair<Size, byte[]> ResolveImageBytes(string inputFile) {
             KeyValuePair<Size, byte[]> data = new KeyValuePair<Size, byte[]>(new Size(1, 1), new byte[4]);
-            bool failSafeTriggered = false;
-            if (!string.IsNullOrEmpty(inputFile)) {
-                if (File.Exists(inputFile)) {
-                    Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    while (IsFileLocked(inputFile)) {
-                        Application.DoEvents();
-                        Thread.Sleep(10);
-                    }
-                    if (!failSafeTriggered) {
-                        //try {
-                        data = inputFile.EndsWith(".tex") ?
-                            TexToBytes(inputFile) : (inputFile.EndsWith(".dds") ?
-                            DDSToBytes(inputFile) : PngToBytes(inputFile));
-                        //} catch {
-                        //    MessageBox.Show(inputFile + " failed to read. The tool will now skip it.");
-                        //}
-                    }
+            if (!string.IsNullOrEmpty(inputFile) && File.Exists(inputFile)) {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                while (IsFileLocked(inputFile)) {
+                    Application.DoEvents();
+                    Thread.Sleep(10);
                 }
+                data = inputFile.EndsWith(".tex") ?
+                    TexToBytes(inputFile) : (inputFile.EndsWith(".dds") ?
+                    DDSToBytes(inputFile) : PngToBytes(inputFile));
             }
             return data;
         }

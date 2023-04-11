@@ -165,6 +165,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             destination.UnlockBits();
             return image;
         }
+
         public static Bitmap MergeAlphaToRGB(Bitmap alpha, Bitmap rgb) {
             Bitmap image = new Bitmap(rgb.Width, rgb.Height, PixelFormat.Format32bppArgb);
             LockBitmap destination = new LockBitmap(image);
