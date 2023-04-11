@@ -24,6 +24,7 @@ namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
         private int lastRaceIndex;
         private string? penumbraModPath;
+        private string modPath;
         private string jsonFilepath;
         private string metaFilePath;
         private bool enteredField;
@@ -51,6 +52,12 @@ namespace FFXIVLooseTextureCompiler {
         private bool isNetworkSync;
         private NetworkedClient networkedClient;
         private ConnectionDisplay connectionDisplay;
+        private List<TextureSet> textureSets;
+        private int choiceTypeIndex;
+        private bool bakeNormalsChecked;
+        private bool generatingMulti;
+        private int generationProgress;
+
         public bool HasSaved {
             get => hasSaved; set {
                 hasSaved = value;
@@ -72,7 +79,7 @@ namespace FFXIVLooseTextureCompiler {
             GetAuthorName();
             GetPenumbraPath();
             Text += " " + Application.ProductVersion;
-            Control.CheckForIllegalCrossThreadCalls = false;
+            //Control.CheckForIllegalCrossThreadCalls = false;
             textureProcessor = new TextureProcessor();
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
@@ -80,23 +87,44 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void TextureProcessor_OnStartedProcessing(object? sender, EventArgs e) {
-            exportLabel.Text = "Exporting";
-            Refresh();
-            Application.DoEvents();
+            StartedProcessing();
+            //Refresh();
+            //Application.DoEvents();
         }
 
         private void TextureProcessor_OnLaunchedXnormal(object? sender, EventArgs e) {
-            exportLabel.Text = "Wait For xNormal";
-            Refresh();
-            Application.DoEvents();
+            LaunchingXnormal();
+            //Refresh();
+            //Application.DoEvents();
         }
 
         private void TextureProcessor_OnProgressChange(object? sender, EventArgs e) {
-            exportProgress.Increment(1);
-            Refresh();
-            Application.DoEvents();
+            processGeneration.ReportProgress(generationProgress++);
+            //exportProgress.Increment(1);
+            //Refresh();
+            //Application.DoEvents();
         }
 
+        public void LaunchingXnormal() {
+            if (!lockDuplicateGeneration) {
+                if (generateButton.InvokeRequired) {
+                    Action safeWrite = delegate { LaunchingXnormal(); };
+                    generateButton.Invoke(safeWrite);
+                } else {
+                    exportLabel.Text = "Wait For xNormal";
+                }
+            }
+        }
+        public void StartedProcessing() {
+            if (!lockDuplicateGeneration) {
+                if (generateButton.InvokeRequired) {
+                    Action safeWrite = delegate { StartedProcessing(); };
+                    generateButton.Invoke(safeWrite);
+                } else {
+                    exportLabel.Text = "Exporting";
+                }
+            }
+        }
         private void Form1_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Application.ProductVersion;
             AutoScaleDimensions = new SizeF(96, 96);
@@ -123,11 +151,66 @@ namespace FFXIVLooseTextureCompiler {
             originalNormalBoxColour = normal.BackColor;
             originalMultiBoxColour = multi.BackColor;
             GetLastIP();
+            LoadTemplates();
         }
+
+        private void LoadTemplates() {
+            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            Directory.CreateDirectory(templatePath);
+            foreach (string file in Directory.GetFiles(templatePath)) {
+                if (file.ToLower().EndsWith(".ffxivtp")) {
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem();
+                    menuItem.Text = Path.GetFileNameWithoutExtension(file);
+                    menuItem.Click += (s, e) => {
+                        string value = file;
+                        OpenTemplate(value);
+                    };
+                    templatesToolStripMenuItem.DropDownItems.Add(menuItem);
+                }
+            }
+        }
+
         private void generateButton_Click(object sender, EventArgs e) {
             exportLabel.Text = "Exporting";
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
-                processGeneration.RunWorkerAsync();
+                if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
+                    generationProgress = 0;
+                    lockDuplicateGeneration = true;
+                    exportPanel.Visible = true;
+                    exportPanel.BringToFront();
+                    exportProgress.BringToFront();
+                    exportProgress.Maximum = textureList.Items.Count * 3;
+                    exportProgress.Visible = true;
+                    modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                    jsonFilepath = Path.Combine(modPath, "default_mod.json");
+                    metaFilePath = Path.Combine(modPath, "meta.json");
+                    if (Directory.Exists(modPath)) {
+                        try {
+                            Directory.Delete(modPath, true);
+                        } catch {
+
+                        }
+                    } else {
+                        hasDoneReload = false;
+                    }
+                    Directory.CreateDirectory(modPath);
+                    textureSets = new List<TextureSet>();
+                    foreach (TextureSet item in textureList.Items) {
+                        if (item.OmniExportMode) {
+                            ConfigureOmniConfiguration(item);
+                            exportProgress.Maximum += (item.ChildSets.Count * 3);
+                        }
+                        textureSets.Add(item);
+                    }
+                    choiceTypeIndex = generationType.SelectedIndex;
+                    bakeNormalsChecked = bakeNormals.Checked;
+                    generatingMulti = generateMultiCheckBox.Checked;
+                    processGeneration.RunWorkerAsync();
+                } else {
+                    lockDuplicateGeneration = false;
+                    finalizeResults = false;
+                    MessageBox.Show("Please enter a mod name!");
+                }
             }
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
@@ -180,7 +263,7 @@ namespace FFXIVLooseTextureCompiler {
                         string genderCode = (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
                             : RaceInfo.RaceCodeBody.Feminine[race]);
                         result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique
-                            + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(texture) + ".tex";
+                            + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(texture, baseBody) + ".tex";
                     }
                     break;
                 case 1:
@@ -188,7 +271,7 @@ namespace FFXIVLooseTextureCompiler {
                     if (race != 5) {
                         if (genderValue == 1) {
                             result = @"chara/bibo/" + RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race]
-                                + GetTextureType(texture) + ".tex";
+                                + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Bibo+ is only compatible with feminine characters", VersionText);
@@ -204,7 +287,7 @@ namespace FFXIVLooseTextureCompiler {
                             if (texture != 2) {
                                 result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
                                     : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + "0001" + @"/texture/eve2" +
-                                    RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + GetTextureType(texture) + ".tex";
+                                    RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + GetTextureType(texture, baseBody) + ".tex";
                             } else {
                                 if (race == 6) {
                                     result = "chara/human/c1401/obj/body/b0001/texture/eve2lizard_m.tex";
@@ -228,7 +311,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (genderValue == 1) {
                             result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
                                 : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + unique + @"/texture/tfgen3" +
-                                RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + "f" + GetTextureType(texture) + ".tex";
+                                RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + "f" + GetTextureType(texture, baseBody) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters", VersionText);
@@ -243,7 +326,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (race == 6 || race == 7) {
                             if (genderValue == 1) {
                                 result = @"chara/bibo/" + RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] +
-                                    GetTextureType(texture) + ".tex";
+                                    GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
                             } else {
                                 result = "";
                                 MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
@@ -264,7 +347,7 @@ namespace FFXIVLooseTextureCompiler {
                             }
                             result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
                                 : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + unique
-                                + @"/texture/--c" + RaceInfo.RaceCodeBody.Masculine[race] + "b" + unique + "_b" + GetTextureType(texture) + ".tex";
+                                + @"/texture/--c" + RaceInfo.RaceCodeBody.Masculine[race] + "b" + unique + "_b" + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
                         } else {
                             result = "";
                             MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
@@ -279,7 +362,7 @@ namespace FFXIVLooseTextureCompiler {
                     string gender = (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
                         : RaceInfo.RaceCodeBody.Feminine[race]);
                     result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "t" +
-                        xaelaCheck + "_etc" + GetTextureType(texture) + ".tex";
+                        xaelaCheck + "_etc" + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
                     break;
                 case 7:
                     // Otopop
@@ -290,7 +373,7 @@ namespace FFXIVLooseTextureCompiler {
                                 otopopNotice = true;
                             }
                         }
-                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture) + ".tex";
+                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture, baseBody) + ".tex";
 
                     } else {
                         MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
@@ -315,7 +398,7 @@ namespace FFXIVLooseTextureCompiler {
                     : RaceInfo.RaceCodeFace.Feminine[subRaceList.SelectedIndex]);
                 return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c"
                     + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1)
-                    + GetFacePart(facePart.SelectedIndex) + GetTextureType(material, true) + ".tex";
+                    + GetFacePart(facePart.SelectedIndex) + GetTextureType(material, baseBodyList.SelectedIndex, true) + ".tex";
             } else {
                 return "chara/common/texture/catchlight_1.tex";
             }
@@ -330,7 +413,7 @@ namespace FFXIVLooseTextureCompiler {
             string subRace = (genderListBody.SelectedIndex == 0 ? RaceInfo.RaceCodeFace.Masculine[subRaceList.SelectedIndex]
                 : RaceInfo.RaceCodeFace.Feminine[subRaceList.SelectedIndex]);
             return "chara/human/c" + genderCode + "/obj/hair/h" + hairValue + "/texture/--c"
-                + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, true) + ".tex";
+                + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, baseBodyList.SelectedIndex, true) + ".tex";
         }
 
         public string NumberPadder(int value) {
@@ -343,14 +426,14 @@ namespace FFXIVLooseTextureCompiler {
             return result;
         }
 
-        public string GetTextureType(int material, bool isface = false) {
+        public string GetTextureType(int material, int baseBodyIndex, bool isface = false) {
             switch (material) {
                 case 0:
                     return "_d";
                 case 1:
                     return "_n";
                 case 2:
-                    if (baseBodyList.SelectedIndex == 1 && !isface) {
+                    if (baseBodyIndex == 1 && !isface) {
                         return "_m";
                     } else {
                         return "_s";
@@ -964,7 +1047,27 @@ namespace FFXIVLooseTextureCompiler {
             HasSaved = true;
         }
 
-        //Optimized
+        public void OpenTemplate(string path) {
+            using (StreamReader file = File.OpenText(path)) {
+                JsonSerializer serializer = new JsonSerializer();
+                ProjectFile projectFile = (ProjectFile)serializer.Deserialize(file, typeof(ProjectFile));
+                TemplateConfiguration templateConfiguration = new TemplateConfiguration();
+                if (templateConfiguration.ShowDialog() == DialogResult.OK) {
+                    BringToFront();
+                    foreach (TextureSet textureSet in projectFile.MaterialSets) {
+                        textureSet.MaterialGroupName = templateConfiguration.GroupName;
+                        AddWatcher(textureSet.Diffuse);
+                        AddWatcher(textureSet.Normal);
+                        AddWatcher(textureSet.Multi);
+                        AddWatcher(textureSet.NormalMask);
+                        AddWatcher(textureSet.Glow);
+                        AddBackupPaths(textureSet);
+                    }
+                    textureList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+                }
+            }
+            HasSaved = false;
+        }
 
         private void AddBackupPaths(TextureSet textureSet) {
             if (genderListBody.SelectedIndex != 0) {
@@ -1151,8 +1254,10 @@ namespace FFXIVLooseTextureCompiler {
 
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
-            Tokenizer tokenizer = new Tokenizer((textureList.Items[textureList.SelectedIndex] as TextureSet).MaterialSetName);
+            TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
+            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
             findAndReplace.Multi.CurrentPath = multi.CurrentPath;
@@ -2006,69 +2111,49 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            lockDuplicateGeneration = true;
-            exportPanel.Visible = true;
-            exportPanel.BringToFront();
             if (string.IsNullOrEmpty(penumbraModPath)) {
                 ConfigurePenumbraModFolder();
             }
-            if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
-                string modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
-                jsonFilepath = Path.Combine(modPath, "default_mod.json");
-                metaFilePath = Path.Combine(modPath, "meta.json");
-                if (Directory.Exists(modPath)) {
-                    try {
-                        Directory.Delete(modPath, true);
-                    } catch {
-
-                    }
-                } else {
-                    hasDoneReload = false;
-                }
-                Directory.CreateDirectory(modPath);
-                exportProgress.BringToFront();
-                exportProgress.Maximum = textureList.Items.Count * 3;
-                exportProgress.Visible = true;
-                Refresh();
-                List<TextureSet> textureSets = new List<TextureSet>();
-                foreach (TextureSet item in textureList.Items) {
-                    if (item.OmniExportMode) {
-                        ConfigureOmniConfiguration(item);
-                        exportProgress.Maximum += item.ChildSets.Count;
-                    }
-                    textureSets.Add(item);
-                }
-                textureProcessor.Export(textureSets, modPath, generationType.SelectedIndex,
-                    bakeNormals.Checked, generateMultiCheckBox.Checked, finalizeResults);
-                ExportJson();
-                ExportMeta();
-                if (hasDoneReload) {
-                    PenumbraHttpApi.Redraw(0);
-                } else {
-                    PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-                    PenumbraHttpApi.Redraw(0);
-                    if (IntegrityChecker.IntegrityCheck()) {
-                        IntegrityChecker.ShowConsolation();
-                    }
-                    hasDoneReload = true;
-                    materialList_SelectedIndexChanged(this, EventArgs.Empty);
-                }
-                finalizeButton.Enabled = generateButton.Enabled = false;
-                generationCooldown.Start();
-                exportProgress.Visible = false;
-                exportProgress.Value = 0;
-                lockDuplicateGeneration = false;
-                if (!isNetworkSync) {
-                    exportPanel.Visible = false;
-                    finalizeResults = false;
-                }
-            } else {
-                exportPanel.Visible = false;
-                lockDuplicateGeneration = false;
-                finalizeResults = false;
-                MessageBox.Show("Please enter a mod name!");
-            }
+            textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
+                bakeNormalsChecked, generatingMulti, finalizeResults);
             processGeneration.CancelAsync();
+        }
+
+        private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
+            ExportJson();
+            ExportMeta();
+            if (hasDoneReload) {
+                PenumbraHttpApi.Redraw(0);
+            } else {
+                PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+                PenumbraHttpApi.Redraw(0);
+                if (IntegrityChecker.IntegrityCheck()) {
+                    IntegrityChecker.ShowConsolation();
+                }
+                hasDoneReload = true;
+                materialList_SelectedIndexChanged(this, EventArgs.Empty);
+            }
+            finalizeButton.Enabled = generateButton.Enabled = false;
+            generationCooldown.Start();
+            exportProgress.Visible = false;
+            exportProgress.Value = 0;
+            lockDuplicateGeneration = false;
+            if (!isNetworkSync) {
+                exportPanel.Visible = false;
+                finalizeResults = false;
+            }
+        }
+
+        private void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
+            exportProgress.Value = Math.Clamp(e.ProgressPercentage, 0, exportProgress.Maximum);
+        }
+
+        private void importCustomTemplateToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                OpenTemplate(openFileDialog.FileName);
+            }
         }
     }
 }

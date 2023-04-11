@@ -39,7 +39,7 @@ namespace FFXIVVoicePackCreator {
                 return filePath.Enabled;
             }
             set {
-                openButton.Enabled = filePath.Enabled = value;
+                clearButton.Enabled = openButton.Enabled = filePath.Enabled = value;
                 if (!value) {
                     filePath.Text = "";
                 }
@@ -175,6 +175,11 @@ namespace FFXIVVoicePackCreator {
             } else {
                 filePath.Text = CurrentPath;
             }
+        }
+
+        private void clearButton_Click(object sender, EventArgs e) {
+            currentPath = "";
+            filePath.Text = "";
         }
     }
 }

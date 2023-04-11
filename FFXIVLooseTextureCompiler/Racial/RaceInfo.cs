@@ -32,7 +32,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
             new RacialBodyIdentifiers("SCALE+",
                 new List<string>() { "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "raen", "xaela", "Invalid", "Invalid" }),
             new RacialBodyIdentifiers("TBSE/HRBODY",
-                new List<string>() { "0101", "0301", "0101", "0101", "0301", "Invalid", "1301", "1301", "1501", "1701" }),
+                new List<string>() { "0101", "0301", "0101", "0101", "0901", "Invalid", "1301", "1301", "1501", "1701" }),
             new RacialBodyIdentifiers("TAIL",
                 new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "", "" }) };
 

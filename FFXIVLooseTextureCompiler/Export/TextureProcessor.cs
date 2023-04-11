@@ -230,7 +230,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (OnProgressChange != null) {
                                 OnProgressChange.Invoke(this, EventArgs.Empty);
                             }
-                            Application.DoEvents();
                             if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                 if (MultiLogic(textureSet, multiDiskPath)) {
                                     if (!textureSet.IsChildSet) {
@@ -246,7 +245,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (OnProgressChange != null) {
                                 OnProgressChange.Invoke(this, EventArgs.Empty);
                             }
-                            Application.DoEvents();
                             break;
                         case 1:
                             if (!textureSet.IsChildSet) {
@@ -263,7 +261,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (OnProgressChange != null) {
                                 OnProgressChange.Invoke(this, EventArgs.Empty);
                             }
-                            Application.DoEvents();
                             if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                 if (NormalLogic(textureSet, normalDiskPath)) {
                                     option.Files.Add(textureSet.InternalNormalPath,
@@ -273,7 +270,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (OnProgressChange != null) {
                                 OnProgressChange.Invoke(this, EventArgs.Empty);
                             }
-                            Application.DoEvents();
                             if (!string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
                                 if (MultiLogic(textureSet, multiDiskPath)) {
                                     option.Files.Add(textureSet.InternalMultiPath,
@@ -283,7 +279,6 @@ namespace FFXIVLooseTextureCompiler {
                             if (OnProgressChange != null) {
                                 OnProgressChange.Invoke(this, EventArgs.Empty);
                             }
-                            Application.DoEvents();
                             break;
                     }
                 }

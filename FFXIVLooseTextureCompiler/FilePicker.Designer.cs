@@ -31,6 +31,7 @@ namespace FFXIVVoicePackCreator {
             this.openButton = new System.Windows.Forms.Button();
             this.labelName = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.clearButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,7 +41,7 @@ namespace FFXIVVoicePackCreator {
             this.filePath.Location = new System.Drawing.Point(78, 3);
             this.filePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.filePath.Name = "filePath";
-            this.filePath.Size = new System.Drawing.Size(478, 23);
+            this.filePath.Size = new System.Drawing.Size(471, 23);
             this.filePath.TabIndex = 0;
             this.filePath.TextChanged += new System.EventHandler(this.filePath_TextChanged);
             this.filePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.filePath_DragDrop);
@@ -53,10 +54,10 @@ namespace FFXIVVoicePackCreator {
             // openButton
             // 
             this.openButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.openButton.Location = new System.Drawing.Point(564, 3);
+            this.openButton.Location = new System.Drawing.Point(586, 3);
             this.openButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(80, 22);
+            this.openButton.Size = new System.Drawing.Size(58, 22);
             this.openButton.TabIndex = 1;
             this.openButton.Text = "Select";
             this.openButton.UseVisualStyleBackColor = true;
@@ -77,15 +78,15 @@ namespace FFXIVVoicePackCreator {
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnCount = 4;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.openButton, 2, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
+            this.tableLayoutPanel1.Controls.Add(this.openButton, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.filePath, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelName, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.clearButton, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -93,6 +94,18 @@ namespace FFXIVVoicePackCreator {
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(648, 28);
             this.tableLayoutPanel1.TabIndex = 5;
+            // 
+            // clearButton
+            // 
+            this.clearButton.BackColor = System.Drawing.Color.IndianRed;
+            this.clearButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.clearButton.Location = new System.Drawing.Point(556, 3);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(23, 22);
+            this.clearButton.TabIndex = 3;
+            this.clearButton.Text = "X";
+            this.clearButton.UseVisualStyleBackColor = false;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // FilePicker
             // 
@@ -116,6 +129,7 @@ namespace FFXIVVoicePackCreator {
         private System.Windows.Forms.Button openButton;
         private System.Windows.Forms.Label labelName;
         private TableLayoutPanel tableLayoutPanel1;
+        private Button clearButton;
 
         public Label LabelName { get => labelName; set => labelName = value; }
         public TextBox FilePath { get => filePath; set => filePath = value; }

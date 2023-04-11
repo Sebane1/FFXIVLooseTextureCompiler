@@ -54,6 +54,8 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.templatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importCustomTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -472,7 +474,8 @@
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveAsToolStripMenuItem,
+            this.templatesToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -480,30 +483,45 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // templatesToolStripMenuItem
+            // 
+            this.templatesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importCustomTemplateToolStripMenuItem});
+            this.templatesToolStripMenuItem.Name = "templatesToolStripMenuItem";
+            this.templatesToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.templatesToolStripMenuItem.Text = "Templates";
+            // 
+            // importCustomTemplateToolStripMenuItem
+            // 
+            this.importCustomTemplateToolStripMenuItem.Name = "importCustomTemplateToolStripMenuItem";
+            this.importCustomTemplateToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.importCustomTemplateToolStripMenuItem.Text = "Import Project As Template";
+            this.importCustomTemplateToolStripMenuItem.Click += new System.EventHandler(this.importCustomTemplateToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -864,7 +882,7 @@
             this.bulkReplaceToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(236, 136);
+            this.materialListContextMenu.Size = new System.Drawing.Size(236, 158);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
             // 
             // editPathsToolStripMenuItem
@@ -1039,6 +1057,7 @@
             this.exportProgress.Location = new System.Drawing.Point(0, 604);
             this.exportProgress.Name = "exportProgress";
             this.exportProgress.Size = new System.Drawing.Size(536, 32);
+            this.exportProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
             this.exportProgress.Click += new System.EventHandler(this.exportProgress_Click);
@@ -1221,8 +1240,11 @@
             // 
             // processGeneration
             // 
+            this.processGeneration.WorkerReportsProgress = true;
             this.processGeneration.WorkerSupportsCancellation = true;
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
+            this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
+            this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
             // MainWindow
             // 
@@ -1412,5 +1434,7 @@
         private ToolStripMenuItem optimizePNGToolStripMenuItem;
         private ToolStripMenuItem convertLTCTToPNGToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker processGeneration;
+        private ToolStripMenuItem templatesToolStripMenuItem;
+        private ToolStripMenuItem importCustomTemplateToolStripMenuItem;
     }
 }
