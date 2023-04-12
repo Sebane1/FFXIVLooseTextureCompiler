@@ -137,6 +137,7 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -788,7 +789,8 @@
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem,
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem,
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem,
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem});
+            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem,
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -882,7 +884,7 @@
             this.bulkReplaceToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(236, 158);
+            this.materialListContextMenu.Size = new System.Drawing.Size(236, 136);
             this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
             // 
             // editPathsToolStripMenuItem
@@ -1246,6 +1248,13 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
+            // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
+            // 
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += new System.EventHandler(this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1436,5 +1445,6 @@
         private System.ComponentModel.BackgroundWorker processGeneration;
         private ToolStripMenuItem templatesToolStripMenuItem;
         private ToolStripMenuItem importCustomTemplateToolStripMenuItem;
+        private ToolStripMenuItem whatAreTemplatesAndHowDoIUseThemToolStripMenuItem;
     }
 }
