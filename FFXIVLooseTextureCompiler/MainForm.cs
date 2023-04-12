@@ -174,38 +174,45 @@ namespace FFXIVLooseTextureCompiler {
             exportLabel.Text = "Exporting";
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
                 if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
-                    generationProgress = 0;
-                    lockDuplicateGeneration = true;
-                    exportPanel.Visible = true;
-                    exportPanel.BringToFront();
-                    exportProgress.BringToFront();
-                    exportProgress.Maximum = textureList.Items.Count * 3;
-                    exportProgress.Visible = true;
-                    modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
-                    jsonFilepath = Path.Combine(modPath, "default_mod.json");
-                    metaFilePath = Path.Combine(modPath, "meta.json");
-                    if (Directory.Exists(modPath)) {
-                        try {
-                            Directory.Delete(modPath, true);
-                        } catch {
+                    if (string.IsNullOrEmpty(penumbraModPath)) {
+                        ConfigurePenumbraModFolder();
+                    }
+                    if (!string.IsNullOrEmpty(penumbraModPath)) {
+                        generationProgress = 0;
+                        lockDuplicateGeneration = true;
+                        exportPanel.Visible = true;
+                        exportPanel.BringToFront();
+                        exportProgress.BringToFront();
+                        exportProgress.Maximum = textureList.Items.Count * 3;
+                        exportProgress.Visible = true;
+                        modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                        jsonFilepath = Path.Combine(modPath, "default_mod.json");
+                        metaFilePath = Path.Combine(modPath, "meta.json");
+                        if (Directory.Exists(modPath)) {
+                            try {
+                                Directory.Delete(modPath, true);
+                            } catch {
 
+                            }
+                        } else {
+                            hasDoneReload = false;
                         }
+                        Directory.CreateDirectory(modPath);
+                        textureSets = new List<TextureSet>();
+                        foreach (TextureSet item in textureList.Items) {
+                            if (item.OmniExportMode) {
+                                ConfigureOmniConfiguration(item);
+                                exportProgress.Maximum += (item.ChildSets.Count * 3);
+                            }
+                            textureSets.Add(item);
+                        }
+                        choiceTypeIndex = generationType.SelectedIndex;
+                        bakeNormalsChecked = bakeNormals.Checked;
+                        generatingMulti = generateMultiCheckBox.Checked;
+                        processGeneration.RunWorkerAsync();
                     } else {
-                        hasDoneReload = false;
+                        MessageBox.Show("No root penumbra path has been set!");
                     }
-                    Directory.CreateDirectory(modPath);
-                    textureSets = new List<TextureSet>();
-                    foreach (TextureSet item in textureList.Items) {
-                        if (item.OmniExportMode) {
-                            ConfigureOmniConfiguration(item);
-                            exportProgress.Maximum += (item.ChildSets.Count * 3);
-                        }
-                        textureSets.Add(item);
-                    }
-                    choiceTypeIndex = generationType.SelectedIndex;
-                    bakeNormalsChecked = bakeNormals.Checked;
-                    generatingMulti = generateMultiCheckBox.Checked;
-                    processGeneration.RunWorkerAsync();
                 } else {
                     lockDuplicateGeneration = false;
                     finalizeResults = false;
@@ -1601,36 +1608,40 @@ namespace FFXIVLooseTextureCompiler {
                 tbseVanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_tbse_vanilla_nm.");
                 tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
 
-                MemoryStream stream = new MemoryStream();
-                byte[] data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    textureSet.BackupTexturePaths.Diffuse))).Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-                TextureImporter.PngToTex(stream, out data);
-                stream.Flush();
-                stream.Position = 0;
-                if (data.Length > 0) {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        tbseVanilla.BackupTexturePaths.Diffuse)));
-                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Diffuse);
-                    File.WriteAllBytes(path, data);
-                }
+                Directory.CreateDirectory(
+                    Path.GetDirectoryName(
+                    Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    tbseVanilla.BackupTexturePaths.Diffuse)));
+
+                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                    TexLoader.ResolveBitmap(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    textureSet.BackupTexturePaths.Diffuse))),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    tbseVanilla.BackupTexturePaths.Diffuse));
+
+                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                     TexLoader.ResolveBitmap(
+                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                     textureSet.BackupTexturePaths.DiffuseRaen))),
+                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                     tbseVanilla.BackupTexturePaths.DiffuseRaen));
+
+                Directory.CreateDirectory(
+                    Path.GetDirectoryName(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    tbseVanilla.BackupTexturePaths.Normal)));
+
+                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                    TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    textureSet.BackupTexturePaths.Normal))),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    tbseVanilla.BackupTexturePaths.Normal));
+
+
                 if (File.Exists(textureSet.Diffuse)) {
                     ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
-                }
-                stream = new MemoryStream();
-                data = new byte[0];
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    textureSet.BackupTexturePaths.Normal))).Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-                TextureImporter.PngToTex(stream, out data);
-                stream.Flush();
-                stream.Position = 0;
-                if (data.Length > 0) {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        tbseVanilla.BackupTexturePaths.Normal)));
-                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tbseVanilla.BackupTexturePaths.Normal);
-                    File.WriteAllBytes(path, data);
                 }
                 if (File.Exists(textureSet.Normal)) {
                     ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
@@ -2111,9 +2122,6 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            if (string.IsNullOrEmpty(penumbraModPath)) {
-                ConfigurePenumbraModFolder();
-            }
             textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
                 bakeNormalsChecked, generatingMulti, finalizeResults);
             processGeneration.CancelAsync();
