@@ -46,7 +46,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
                     string bibo = bodyIdentifiers[1].RaceIdentifiers[i];
                     string eve = bodyIdentifiers[2].RaceIdentifiers[i];
                     string tnf = bodyIdentifiers[3].RaceIdentifiers[i];
-                    string tbse = bodyIdentifiers[5].RaceIdentifiers[i];
+                    string tbse = "c" + bodyIdentifiers[5].RaceIdentifiers[i];
                     if (path.Contains(bibo) || path.Contains(eve) || path.Contains(tnf) || path.Contains(tbse)) {
                         return i;
                     }
