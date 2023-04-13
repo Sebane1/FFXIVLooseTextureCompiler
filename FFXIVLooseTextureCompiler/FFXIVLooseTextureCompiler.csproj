@@ -52,10 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="MultiCreator.cs">
+    <Compile Update="Sub Utilities\MultiCreator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="FindAndReplace.cs">
+    <Compile Update="Configuration Dialogues\FindAndReplace.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
