@@ -5,18 +5,9 @@ using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator.Json;
 using Newtonsoft.Json;
 using Penumbra.Import.Dds;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static FFXIVLooseTextureCompiler.MainWindow;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace FFXIVLooseTextureCompiler {
     public class TextureProcessor {

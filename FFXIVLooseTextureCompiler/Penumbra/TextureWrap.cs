@@ -3,7 +3,6 @@
 // Decompiled with ICSharpCode.Decompiler 7.1.0.6543
 #endregion
 
-using System;
 
 public interface TextureWrap : IDisposable {
     IntPtr ImGuiHandle { get; }

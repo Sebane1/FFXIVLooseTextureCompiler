@@ -1,17 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using OtterTex;
 using Penumbra.Import.Textures;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class BulkTexManager : Form {

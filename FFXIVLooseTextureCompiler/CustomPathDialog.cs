@@ -1,14 +1,4 @@
-﻿using FFXIVLooseTextureCompiler.ImageProcessing;
-using FFXIVLooseTextureCompiler.PathOrganization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using FFXIVLooseTextureCompiler.PathOrganization;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class CustomPathDialog : Form {

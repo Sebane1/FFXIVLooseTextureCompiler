@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Anamnesis.Penumbra;
 using System.IO.Compression;
-using Anamnesis.Penumbra;
-using System.IO;
-using SixLabors.ImageSharp.PixelFormats;
+using System.Net;
+using System.Net.Sockets;
 
 namespace FFXIVLooseTextureCompiler.Networking {
     public class NetworkedClient : IDisposable {

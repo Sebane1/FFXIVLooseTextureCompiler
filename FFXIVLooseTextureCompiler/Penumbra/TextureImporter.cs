@@ -1,9 +1,5 @@
 ﻿using Lumina.Data.Files;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-
-using System.Formats.Tar;
-using System.IO;
 
 namespace Penumbra.Import.Dds;
 

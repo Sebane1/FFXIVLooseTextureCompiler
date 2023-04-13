@@ -1,12 +1,9 @@
-﻿using System;
-using System.Formats.Tar;
-using System.IO;
-using System.Numerics;
-using Lumina.Data.Files;
+﻿using Lumina.Data.Files;
 using OtterTex;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Numerics;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace Penumbra.Import.Textures;

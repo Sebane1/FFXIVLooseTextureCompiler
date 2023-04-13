@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FFXIVLooseTextureCompiler.Export {
+﻿namespace FFXIVLooseTextureCompiler.Export {
     public class BackupTexturePaths {
         public BackupTexturePaths(string path) {
             _path = path;

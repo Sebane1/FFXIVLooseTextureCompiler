@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FFXIVVoicePackCreator.Json {
+﻿namespace FFXIVVoicePackCreator.Json {
     public class Option {
         string name;
         int priority;

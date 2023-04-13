@@ -1,9 +1,6 @@
 ﻿using Lumina.Data.Files;
 using Lumina.Extensions;
 using OtterTex;
-using System;
-using System.Formats.Tar;
-using System.IO;
 
 namespace Penumbra.Import.Textures;
 
@@ -155,27 +152,27 @@ public static class TexFileParser {
 
     public static TexFile.TextureFormat ToTexFormat(this DXGIFormat format)
     => format switch {
-            DXGIFormat.R8UNorm => TexFile.TextureFormat.L8,
-            DXGIFormat.A8UNorm => TexFile.TextureFormat.A8,
-            DXGIFormat.B4G4R4A4UNorm => TexFile.TextureFormat.B4G4R4A4,
-            DXGIFormat.B5G5R5A1UNorm => TexFile.TextureFormat.B5G5R5A1,
-            DXGIFormat.B8G8R8A8UNorm => TexFile.TextureFormat.B8G8R8A8,
-            DXGIFormat.B8G8R8X8UNorm => TexFile.TextureFormat.B8G8R8X8,
-            DXGIFormat.R32Float => TexFile.TextureFormat.R32F,
-            DXGIFormat.R16G16Float => TexFile.TextureFormat.R16G16F,
-            DXGIFormat.R32G32Float => TexFile.TextureFormat.R32G32F,
-            DXGIFormat.R16G16B16A16Float => TexFile.TextureFormat.R16G16B16A16F,
-            DXGIFormat.R32G32B32A32Float => TexFile.TextureFormat.R32G32B32A32F,
-            DXGIFormat.BC1UNorm => TexFile.TextureFormat.BC1,
-            DXGIFormat.BC2UNorm => TexFile.TextureFormat.BC2,
-            DXGIFormat.BC3UNorm => TexFile.TextureFormat.BC3,
-            DXGIFormat.BC5UNorm => TexFile.TextureFormat.BC5,
-            DXGIFormat.BC7UNorm => TexFile.TextureFormat.BC7,
-            DXGIFormat.R16G16B16A16Typeless => TexFile.TextureFormat.D16,
-            DXGIFormat.R24G8Typeless => TexFile.TextureFormat.D24S8,
-            DXGIFormat.R16Typeless => TexFile.TextureFormat.Shadow16,
-            _ => TexFile.TextureFormat.Unknown,
-        };
+        DXGIFormat.R8UNorm => TexFile.TextureFormat.L8,
+        DXGIFormat.A8UNorm => TexFile.TextureFormat.A8,
+        DXGIFormat.B4G4R4A4UNorm => TexFile.TextureFormat.B4G4R4A4,
+        DXGIFormat.B5G5R5A1UNorm => TexFile.TextureFormat.B5G5R5A1,
+        DXGIFormat.B8G8R8A8UNorm => TexFile.TextureFormat.B8G8R8A8,
+        DXGIFormat.B8G8R8X8UNorm => TexFile.TextureFormat.B8G8R8X8,
+        DXGIFormat.R32Float => TexFile.TextureFormat.R32F,
+        DXGIFormat.R16G16Float => TexFile.TextureFormat.R16G16F,
+        DXGIFormat.R32G32Float => TexFile.TextureFormat.R32G32F,
+        DXGIFormat.R16G16B16A16Float => TexFile.TextureFormat.R16G16B16A16F,
+        DXGIFormat.R32G32B32A32Float => TexFile.TextureFormat.R32G32B32A32F,
+        DXGIFormat.BC1UNorm => TexFile.TextureFormat.BC1,
+        DXGIFormat.BC2UNorm => TexFile.TextureFormat.BC2,
+        DXGIFormat.BC3UNorm => TexFile.TextureFormat.BC3,
+        DXGIFormat.BC5UNorm => TexFile.TextureFormat.BC5,
+        DXGIFormat.BC7UNorm => TexFile.TextureFormat.BC7,
+        DXGIFormat.R16G16B16A16Typeless => TexFile.TextureFormat.D16,
+        DXGIFormat.R24G8Typeless => TexFile.TextureFormat.D24S8,
+        DXGIFormat.R16Typeless => TexFile.TextureFormat.Shadow16,
+        _ => TexFile.TextureFormat.Unknown,
+    };
 
     public static DXGIFormat ToDXGI(this TexFile.TextureFormat format)
         => format switch {

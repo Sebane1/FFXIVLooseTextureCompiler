@@ -1,11 +1,4 @@
 ﻿using FFXIVLooseTextureCompiler.DataTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace FFXIVLooseTextureCompiler.Racial {
     public static class RaceInfo {

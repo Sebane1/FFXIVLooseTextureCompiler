@@ -1,12 +1,4 @@
-﻿using Lumina.Data.Parsing;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FFXIVLooseTextureCompiler.ImageProcessing {
+﻿namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class AtramentumLuminisGlow {
         public static Bitmap CalculateDiffuse(Bitmap file, Bitmap glow) {
             Bitmap image = glow;

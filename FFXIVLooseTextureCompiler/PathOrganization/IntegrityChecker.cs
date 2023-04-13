@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FFXIVLooseTextureCompiler {
+﻿namespace FFXIVLooseTextureCompiler {
     public static class IntegrityChecker {
         #region Rules
         static string rule1 = "Never gonna give you up.";
@@ -35,7 +28,7 @@ namespace FFXIVLooseTextureCompiler {
             "Fatal error: you chocobo insurance has expired, please renew it! This has no impact on your export",
             "Fatal error: The operation completed successfully! Your changes are safe and sound!",
             "I hope your March 32nd has been going well!",
-            "You have great taste!", 
+            "You have great taste!",
             "Wonderfull work!"};
 
         static string[] fileOpenCheck = new string[] {

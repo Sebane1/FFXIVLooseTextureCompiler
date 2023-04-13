@@ -1,13 +1,4 @@
-﻿using KVImage;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FFXIVLooseTextureCompiler.ImageProcessing {
+﻿namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class Normal {
 
         public static Bitmap Calculate(string file) {

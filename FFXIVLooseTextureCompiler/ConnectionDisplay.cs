@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace FFXIVLooseTextureCompiler {
+﻿namespace FFXIVLooseTextureCompiler {
     public partial class ConnectionDisplay : Form {
         string id;
         bool ignoreEvent;
@@ -35,7 +25,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void ConnectionDisplay_FormClosing(object sender, FormClosingEventArgs e) {
-           // e.Cancel = true;
+            // e.Cancel = true;
         }
     }
 }

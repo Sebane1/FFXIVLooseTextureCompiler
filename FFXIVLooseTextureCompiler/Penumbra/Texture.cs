@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Formats.Tar;
-using System.IO;
-using System.Numerics;
-using OtterTex;
+﻿using OtterTex;
 using SixLabors.ImageSharp.PixelFormats;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace Penumbra.Import.Textures;
