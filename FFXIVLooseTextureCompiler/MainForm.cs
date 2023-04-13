@@ -1,34 +1,25 @@
+#region Libraries
 using Anamnesis.Penumbra;
-using FFXIVLooseTextureCompiler.DataTypes;
 using FFXIVLooseTextureCompiler.Export;
 using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator;
-using FFXIVVoicePackCreator.Json;
-using Lumina.Data.Files;
 using Newtonsoft.Json;
-using OtterTex;
-using Penumbra.Import.Dds;
-using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Windows.Interop;
 using TypingConnector;
-
+#endregion
 namespace FFXIVLooseTextureCompiler {
     public partial class MainWindow : Form {
+        #region Variables
         private int lastRaceIndex;
         private string? penumbraModPath;
         private string modPath;
         private string jsonFilepath;
         private string metaFilePath;
         private bool enteredField;
-
         private readonly string _defaultModName = "";
         private string _defaultAuthor = "FFXIV Loose Texture Compiler";
         private readonly string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
@@ -71,7 +62,8 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public string VersionText { get; private set; }
-
+        #endregion
+        #region Main Window Events
         public MainWindow() {
             AutoScaleDimensions = new SizeF(96, 96);
             InitializeComponent();
@@ -79,30 +71,62 @@ namespace FFXIVLooseTextureCompiler {
             GetAuthorName();
             GetPenumbraPath();
             Text += " " + Application.ProductVersion;
-            //Control.CheckForIllegalCrossThreadCalls = false;
             textureProcessor = new TextureProcessor();
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
             textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
         }
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            if (!HasSaved) {
+                DialogResult dialogResult = MessageBox.Show("Save changes?", Text, MessageBoxButtons.YesNoCancel);
+                switch (dialogResult) {
+                    case DialogResult.Yes:
+                        if (savePath == null) {
+                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            saveFileDialog.Filter = "FFXIV Sound Project|*.ffxivtp;";
+                            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                                savePath = saveFileDialog.FileName;
+                            }
+                        }
+                        if (savePath != null) {
+                            SaveProject(savePath);
+                        }
+                        networkedClient?.Dispose();
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            } else {
+                networkedClient?.Dispose();
+            }
+        }
+        #endregion
+        #region Generation
+        private void autoGenerateTImer_Tick(object sender, EventArgs e) {
+            generateButton_Click(this, EventArgs.Empty);
+            autoGenerateTImer.Stop();
+        }
 
+        private void finalizeButton_Click(object sender, EventArgs e) {
+            finalizeResults = true;
+            generateButton_Click(sender, e);
+        }
+        private void generationCooldown_Tick(object sender, EventArgs e) {
+            generationCooldown.Stop();
+            finalizeButton.Enabled = generateButton.Enabled = true;
+            generateButton.Text = "Generate";
+        }
         private void TextureProcessor_OnStartedProcessing(object? sender, EventArgs e) {
             StartedProcessing();
-            //Refresh();
-            //Application.DoEvents();
         }
 
         private void TextureProcessor_OnLaunchedXnormal(object? sender, EventArgs e) {
             LaunchingXnormal();
-            //Refresh();
-            //Application.DoEvents();
         }
 
         private void TextureProcessor_OnProgressChange(object? sender, EventArgs e) {
             processGeneration.ReportProgress(generationProgress++);
-            //exportProgress.Increment(1);
-            //Refresh();
-            //Application.DoEvents();
         }
 
         public void LaunchingXnormal() {
@@ -124,6 +148,38 @@ namespace FFXIVLooseTextureCompiler {
                     exportLabel.Text = "Exporting";
                 }
             }
+        }
+        private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
+            ExportJson();
+            ExportMeta();
+            if (hasDoneReload) {
+                PenumbraHttpApi.Redraw(0);
+            } else {
+                PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+                PenumbraHttpApi.Redraw(0);
+                if (IntegrityChecker.IntegrityCheck()) {
+                    IntegrityChecker.ShowConsolation();
+                }
+                hasDoneReload = true;
+                materialList_SelectedIndexChanged(this, EventArgs.Empty);
+            }
+            finalizeButton.Enabled = generateButton.Enabled = false;
+            generationCooldown.Start();
+            exportProgress.Visible = false;
+            exportProgress.Value = 0;
+            lockDuplicateGeneration = false;
+            if (!isNetworkSync) {
+                exportPanel.Visible = false;
+                finalizeResults = false;
+            }
+        }
+        private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
+                bakeNormalsChecked, generatingMulti, finalizeResults);
+            processGeneration.CancelAsync();
+        }
+        private void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
+            exportProgress.Value = Math.Clamp(e.ProgressPercentage, 0, exportProgress.Maximum);
         }
         private void Form1_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Application.ProductVersion;
@@ -153,23 +209,6 @@ namespace FFXIVLooseTextureCompiler {
             GetLastIP();
             LoadTemplates();
         }
-
-        private void LoadTemplates() {
-            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
-            Directory.CreateDirectory(templatePath);
-            foreach (string file in Directory.GetFiles(templatePath)) {
-                if (file.ToLower().EndsWith(".ffxivtp")) {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem();
-                    menuItem.Text = Path.GetFileNameWithoutExtension(file);
-                    menuItem.Click += (s, e) => {
-                        string value = file;
-                        OpenTemplate(value);
-                    };
-                    templatesToolStripMenuItem.DropDownItems.Add(menuItem);
-                }
-            }
-        }
-
         private void generateButton_Click(object sender, EventArgs e) {
             exportLabel.Text = "Exporting";
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
@@ -220,42 +259,111 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.S) {
-                Save();
+        #endregion
+        #region Path Generation
+        private void findAndBulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
+            FindAndReplace findAndReplace = new FindAndReplace();
+            findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
+            if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                foreach (TextureSet textureSet in textureList.Items) {
+                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Normal);
+                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.NormalMask);
+                    AddWatcher(textureSet.Glow);
+                }
+                textureList.SelectedIndex = -1;
+                MessageBox.Show("Replacement succeeded.", VersionText);
             }
         }
-        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
-            switch (keys) {
-                case Keys.S | Keys.Control:
-                    // ... Process Shift+Ctrl+Alt+B ...
-                    Save();
-                    return true; // signal that we've processed this key
+
+        private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
+            FindAndReplace findAndReplace = new FindAndReplace();
+            TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
+            findAndReplace.ReplacementString.Text = tokenizer.GetToken();
+            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
+            findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
+            findAndReplace.Normal.CurrentPath = normal.CurrentPath;
+            findAndReplace.Multi.CurrentPath = multi.CurrentPath;
+            findAndReplace.Mask.CurrentPath = mask.CurrentPath;
+            findAndReplace.Glow.CurrentPath = glow.CurrentPath;
+
+            findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
+            if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                foreach (TextureSet textureSet in textureList.Items) {
+                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Normal);
+                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.NormalMask);
+                    AddWatcher(textureSet.Glow);
+                }
+                textureList.SelectedIndex = -1;
+                MessageBox.Show("Replacement succeeded.", VersionText);
             }
-
-            // run base implementation
-            return base.ProcessCmdKey(ref message, keys);
         }
-
-        private void CleanDirectory() {
-            foreach (string file in Directory.GetFiles(Application.StartupPath)) {
-                if (file.Contains("WebView2") || file.Contains(".zip") || file.Contains(".pdb") || file.Contains(".config")
-                    || file.Contains(".xml") || file.Contains(".log") || file.Contains(".tmp") || file.Contains("ZipExtractor")) {
-                    try {
-                        File.Delete(file);
-                    } catch {
-
+        public void StartGeneration() {
+            if (!lockDuplicateGeneration) {
+                if (generateButton.InvokeRequired) {
+                    Action safeWrite = delegate { StartGeneration(); };
+                    generateButton.Invoke(safeWrite);
+                } else {
+                    if (autoGenerateTImer == null) {
+                        autoGenerateTImer = new System.Windows.Forms.Timer();
+                        autoGenerateTImer.Interval = 10;
+                        autoGenerateTImer.Tick += autoGenerateTImer_Tick;
+                    }
+                    if (!autoGenerateTImer.Enabled) {
+                        autoGenerateTImer.Stop();
+                        autoGenerateTImer.Start();
                     }
                 }
             }
         }
+        private void subRaceList_SelectedIndexChanged(object sender, EventArgs e) {
+            if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                auraFaceScalesDropdown.Enabled = true;
+            } else {
+                auraFaceScalesDropdown.Enabled = false;
+            }
+            switch (subRaceList.SelectedIndex) {
+                case 0:
+                    raceList.SelectedIndex = 0;
+                    break;
+                case 1:
+                    raceList.SelectedIndex = 1;
+                    break;
+                case 2:
+                case 3:
+                    raceList.SelectedIndex = 2;
+                    break;
+                case 4:
+                case 5:
+                    raceList.SelectedIndex = 3;
+                    break;
+                case 6:
+                case 7:
+                    raceList.SelectedIndex = 4;
+                    break;
+                case 8:
+                case 9:
+                    raceList.SelectedIndex = 5;
+                    break;
+                case 10:
+                    raceList.SelectedIndex = 6;
+                    break;
+                case 11:
+                    raceList.SelectedIndex = 7;
+                    break;
+                case 12:
+                case 13:
+                    raceList.SelectedIndex = 8;
+                    break;
+                case 14:
+                case 15:
+                    raceList.SelectedIndex = 9;
+                    break;
 
-        private void ConfigurePenumbraModFolder() {
-            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
-            FolderBrowserDialog folderSelect = new FolderBrowserDialog();
-            if (folderSelect.ShowDialog() == DialogResult.OK) {
-                penumbraModPath = folderSelect.SelectedPath;
-                WritePenumbraPath(penumbraModPath);
             }
         }
         private string GetBodyTexturePath(int texture, int genderValue, int baseBody, int race) {
@@ -410,9 +518,6 @@ namespace FFXIVLooseTextureCompiler {
                 return "chara/common/texture/catchlight_1.tex";
             }
         }
-
-
-
         public string GetHairTexturePath(int material) {
             string hairValue = NumberPadder(faceExtra.SelectedIndex + 1);
             string genderCode = (genderListBody.SelectedIndex == 0 ? RaceInfo.RaceCodeBody.Masculine[raceList.SelectedIndex]
@@ -422,17 +527,6 @@ namespace FFXIVLooseTextureCompiler {
             return "chara/human/c" + genderCode + "/obj/hair/h" + hairValue + "/texture/--c"
                 + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, baseBodyList.SelectedIndex, true) + ".tex";
         }
-
-        public string NumberPadder(int value) {
-            int numbersToPad = 4 - value.ToString().Length;
-            string result = "";
-            for (int i = 0; i < numbersToPad; i++) {
-                result += "0";
-            }
-            result += value;
-            return result;
-        }
-
         public string GetTextureType(int material, int baseBodyIndex, bool isface = false) {
             switch (material) {
                 case 0:
@@ -464,7 +558,153 @@ namespace FFXIVLooseTextureCompiler {
             }
             return null;
         }
+        #endregion
+        #region State Persistence
+        private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
+            WriteLastUsedOptions();
+        }
+        private void modAuthorTextBox_Leave(object sender, EventArgs e) {
+            WriteAuthorName(modAuthorTextBox.Text);
+        }
 
+        private void modWebsiteTextBox_Leave(object sender, EventArgs e) {
+            WriteAuthorWebsite(modWebsiteTextBox.Text);
+        }
+        private void LoadTemplates() {
+            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            Directory.CreateDirectory(templatePath);
+            foreach (string file in Directory.GetFiles(templatePath)) {
+                if (file.ToLower().EndsWith(".ffxivtp")) {
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem();
+                    menuItem.Text = Path.GetFileNameWithoutExtension(file);
+                    menuItem.Click += (s, e) => {
+                        string value = file;
+                        OpenTemplate(value);
+                    };
+                    templatesToolStripMenuItem.DropDownItems.Add(menuItem);
+                }
+            }
+        }
+        private void ConfigurePenumbraModFolder() {
+            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
+            FolderBrowserDialog folderSelect = new FolderBrowserDialog();
+            if (folderSelect.ShowDialog() == DialogResult.OK) {
+                penumbraModPath = folderSelect.SelectedPath;
+                WritePenumbraPath(penumbraModPath);
+            }
+        }
+        public void GetPenumbraPath() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"PenumbraPath.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    penumbraModPath = reader.ReadLine();
+                }
+            }
+        }
+        public void WritePenumbraPath(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"PenumbraPath.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+
+        public void GetLastIP() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"IPConfig.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    ipBox.Text = reader.ReadLine();
+                }
+            }
+        }
+        public void WriteLastIP(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"IPConfig.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+
+        public void GetLastUsedOptions() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"UsedOptions.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
+                    raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                    subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                    int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                    if (value < 8) {
+                        baseBodyList.SelectedIndex = value;
+                    } else {
+                        MessageBox.Show("Previously selected body type is not valid");
+                    }
+                }
+            }
+        }
+        public void WriteLastUsedOptions() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            try {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
+                    writer.WriteLine(genderListBody.SelectedIndex);
+                    writer.WriteLine(raceList.SelectedIndex);
+                    writer.WriteLine(subRaceList.SelectedIndex);
+                    writer.WriteLine(baseBodyList.SelectedIndex);
+                }
+            } catch {
+
+            }
+        }
+        private void changePenumbraPathToolStripMenuItem_Click(object sender, EventArgs e) {
+            ConfigurePenumbraModFolder();
+        }
+        public void GetAuthorWebsite() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"AuthorWebsite.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    _defaultWebsite = reader.ReadLine();
+                }
+            }
+        }
+        public void GetAuthorName() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"AuthorName.config");
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    _defaultAuthor = reader.ReadLine();
+                }
+            }
+        }
+        public void WriteAuthorWebsite(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorWebsite.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+        public void WriteAuthorName(string path) {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorName.config"))) {
+                writer.WriteLine(path);
+            }
+        }
+        #endregion
+        #region Path Management
+        private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
+            if (facePart.SelectedIndex == 4) {
+                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
+                faceExtra.Enabled = true;
+            } else if (facePart.SelectedIndex == 5) {
+                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled;
+                faceExtra.Enabled = true;
+            } else {
+                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
+                if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
+                    auraFaceScalesDropdown.Enabled = true;
+                }
+                faceExtra.Enabled = false;
+            }
+        }
         private void baseBodyList_SelectedIndexChanged(object sender, EventArgs e) {
             switch (baseBodyList.SelectedIndex) {
                 case 0:
@@ -534,87 +774,16 @@ namespace FFXIVLooseTextureCompiler {
             }
             lastRaceIndex = raceList.SelectedIndex;
         }
-
-
-        private void genderList_SelectedIndexChanged(object sender, EventArgs e) {
-
-        }
-        public void GetPenumbraPath() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string path = Path.Combine(dataPath, @"PenumbraPath.config");
-            if (File.Exists(path)) {
-                using (StreamReader reader = new StreamReader(path)) {
-                    penumbraModPath = reader.ReadLine();
+        private void omniExportModeToolStripMenuItem_Click(object sender, EventArgs e) {
+            TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+            if (textureSet != null) {
+                if (!textureSet.OmniExportMode) {
+                    ConfigureOmniConfiguration(textureSet);
+                    MessageBox.Show("Enabling universal compatibility mode allows your currently selected body textures to be compatible with other bodies on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
+                } else {
+                    textureSet.OmniExportMode = false;
+                    textureSet.ChildSets.Clear();
                 }
-            }
-        }
-        public void WritePenumbraPath(string path) {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"PenumbraPath.config"))) {
-                writer.WriteLine(path);
-            }
-        }
-
-        public void GetLastIP() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string path = Path.Combine(dataPath, @"IPConfig.config");
-            if (File.Exists(path)) {
-                using (StreamReader reader = new StreamReader(path)) {
-                    ipBox.Text = reader.ReadLine();
-                }
-            }
-        }
-        public void WriteLastIP(string path) {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"IPConfig.config"))) {
-                writer.WriteLine(path);
-            }
-        }
-
-        public void GetLastUsedOptions() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string path = Path.Combine(dataPath, @"UsedOptions.config");
-            if (File.Exists(path)) {
-                using (StreamReader reader = new StreamReader(path)) {
-                    genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
-                    raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    if (value < 8) {
-                        baseBodyList.SelectedIndex = value;
-                    } else {
-                        MessageBox.Show("Previously selected body type is not valid");
-                    }
-                }
-            }
-        }
-        public void WriteLastUsedOptions() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            try {
-                using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
-                    writer.WriteLine(genderListBody.SelectedIndex);
-                    writer.WriteLine(raceList.SelectedIndex);
-                    writer.WriteLine(subRaceList.SelectedIndex);
-                    writer.WriteLine(baseBodyList.SelectedIndex);
-                }
-            } catch {
-
-            }
-        }
-
-        private void changePenumbraPathToolStripMenuItem_Click(object sender, EventArgs e) {
-            ConfigurePenumbraModFolder();
-        }
-
-        private void donateButton_Click(object sender, EventArgs e) {
-            try {
-                Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://ko-fi.com/sebastina",
-                    UseShellExecute = true,
-                    Verb = "OPEN"
-                });
-            } catch {
-
             }
         }
 
@@ -688,8 +857,6 @@ namespace FFXIVLooseTextureCompiler {
             HasSaved = false;
         }
 
-        //Optimized
-
         private void materialList_SelectedIndexChanged(object sender, EventArgs e) {
             if (textureList.SelectedIndex == -1) {
                 currentEditLabel.Text = "Please select a texture set to start importing";
@@ -714,7 +881,6 @@ namespace FFXIVLooseTextureCompiler {
             glow.Enabled = enabled && !textureSet.MaterialSetName.ToLower().Contains("face paint")
                     && !textureSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
         }
-
 
         private void SetControlsPaths(TextureSet materialSet) {
             diffuse.CurrentPath = materialSet.Diffuse;
@@ -802,7 +968,6 @@ namespace FFXIVLooseTextureCompiler {
                 AddWatcher(textureSet.Glow);
             }
         }
-
         public void AddWatcher(string path) {
             string directory = Path.GetDirectoryName(path);
             if (Directory.Exists(directory) && !string.IsNullOrWhiteSpace(path)) {
@@ -819,21 +984,122 @@ namespace FFXIVLooseTextureCompiler {
                 watchers[path] = fileSystemWatcher;
             }
         }
+        private void multi_Leave(object sender, EventArgs e) {
+            SetPaths();
+        }
 
-        public void StartGeneration() {
-            if (!lockDuplicateGeneration) {
-                if (generateButton.InvokeRequired) {
-                    Action safeWrite = delegate { StartGeneration(); };
-                    generateButton.Invoke(safeWrite);
-                } else {
-                    if (autoGenerateTImer == null) {
-                        autoGenerateTImer = new System.Windows.Forms.Timer();
-                        autoGenerateTImer.Interval = 10;
-                        autoGenerateTImer.Tick += autoGenerateTImer_Tick;
-                    }
-                    if (!autoGenerateTImer.Enabled) {
-                        autoGenerateTImer.Stop();
-                        autoGenerateTImer.Start();
+        private void multi_Enter(object sender, EventArgs e) {
+            enteredField = true;
+        }
+
+        private void removeSelectionButton_Click(object sender, EventArgs e) {
+            hasDoneReload = false;
+            if (textureList.SelectedIndex > -1) {
+                textureList.Items.RemoveAt(textureList.SelectedIndex);
+                diffuse.CurrentPath = "";
+                normal.CurrentPath = "";
+                multi.CurrentPath = "";
+                glow.CurrentPath = "";
+                currentEditLabel.Text = "Please select a texture set to start importing";
+            }
+        }
+
+        private void clearList_Click(object sender, EventArgs e) {
+            hasDoneReload = false;
+            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?",
+                VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                {
+                    textureList.Items.Clear();
+                }
+            }
+            diffuse.CurrentPath = "";
+            normal.CurrentPath = "";
+            multi.CurrentPath = "";
+            mask.CurrentPath = "";
+            glow.CurrentPath = "";
+
+            diffuse.Enabled = false;
+            normal.Enabled = false;
+            multi.Enabled = false;
+            mask.Enabled = false;
+            glow.Enabled = false;
+
+        }
+
+        private void multi_OnFileSelected(object sender, EventArgs e) {
+            SetPaths();
+            HasSaved = false;
+            hasDoneReload = false;
+        }
+        private void addCustomPathButton_Click(object sender, EventArgs e) {
+            CustomPathDialog customPathDialog = new CustomPathDialog();
+            if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                textureList.Items.Add(customPathDialog.MaterialSet);
+            }
+        }
+
+        private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (textureList.Items.Count < 1 || textureList.SelectedIndex < 0) {
+                e.Cancel = true;
+                materialListContextMenu.Close();
+            } else {
+                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode
+                    ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
+            }
+        }
+
+        private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
+            CustomPathDialog customPathDialog = new CustomPathDialog();
+            if (textureList.SelectedIndex != -1) {
+                customPathDialog.MaterialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+                if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                    MessageBox.Show("Texture Set has been edited successfully", VersionText);
+                    hasDoneReload = false;
+                }
+            }
+            RefreshList();
+        }
+        private void RefreshList() {
+            for (int i = 0; i < textureList.Items.Count; i++) {
+                textureList.Items[i] = textureList.Items[i];
+            }
+        }
+
+        private void moveUpButton_Click(object sender, EventArgs e) {
+            if (textureList.SelectedIndex > 0) {
+                object object1 = textureList.Items[textureList.SelectedIndex - 1];
+                object object2 = textureList.Items[textureList.SelectedIndex];
+
+                textureList.Items[textureList.SelectedIndex] = object1;
+                textureList.Items[textureList.SelectedIndex - 1] = object2;
+                textureList.SelectedIndex -= 1;
+            }
+        }
+
+        private void moveDownButton_Click(object sender, EventArgs e) {
+            if (textureList.SelectedIndex + 1 < textureList.Items.Count && textureList.SelectedIndex != -1) {
+                object object1 = textureList.Items[textureList.SelectedIndex + 1];
+                object object2 = textureList.Items[textureList.SelectedIndex];
+
+                textureList.Items[textureList.SelectedIndex] = object1;
+                textureList.Items[textureList.SelectedIndex + 1] = object2;
+                textureList.SelectedIndex += 1;
+            }
+        }
+        #endregion
+        #region File Management
+        private void modDescriptionTextBox_TextChanged(object sender, EventArgs e) {
+            HasSaved = false;
+        }
+
+        private void CleanDirectory() {
+            foreach (string file in Directory.GetFiles(Application.StartupPath)) {
+                if (file.Contains("WebView2") || file.Contains(".zip") || file.Contains(".pdb") || file.Contains(".config")
+                    || file.Contains(".xml") || file.Contains(".log") || file.Contains(".tmp") || file.Contains("ZipExtractor")) {
+                    try {
+                        File.Delete(file);
+                    } catch {
+
                     }
                 }
             }
@@ -897,96 +1163,12 @@ namespace FFXIVLooseTextureCompiler {
             currentEditLabel.Text = "Please select a texture set to start importing";
             lockDuplicateGeneration = false;
         }
-
-        private void multi_Leave(object sender, EventArgs e) {
-            SetPaths();
-        }
-
-        private void multi_Enter(object sender, EventArgs e) {
-            enteredField = true;
-        }
-
-        private void removeSelectionButton_Click(object sender, EventArgs e) {
-            hasDoneReload = false;
-            if (textureList.SelectedIndex > -1) {
-                textureList.Items.RemoveAt(textureList.SelectedIndex);
-                diffuse.CurrentPath = "";
-                normal.CurrentPath = "";
-                multi.CurrentPath = "";
-                glow.CurrentPath = "";
-                currentEditLabel.Text = "Please select a texture set to start importing";
-            }
-        }
-
-        private void clearList_Click(object sender, EventArgs e) {
-            hasDoneReload = false;
-            if (MessageBox.Show("This will irriversably remove everything from the list, including any changes. Are you sure?",
-                VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
-                {
-                    textureList.Items.Clear();
-                }
-            }
-            diffuse.CurrentPath = "";
-            normal.CurrentPath = "";
-            multi.CurrentPath = "";
-            mask.CurrentPath = "";
-            glow.CurrentPath = "";
-
-            diffuse.Enabled = false;
-            normal.Enabled = false;
-            multi.Enabled = false;
-            mask.Enabled = false;
-            glow.Enabled = false;
-
-        }
-
-        private void multi_OnFileSelected(object sender, EventArgs e) {
-            SetPaths();
-            HasSaved = false;
-            hasDoneReload = false;
-        }
-
-        private void modDescriptionTextBox_TextChanged(object sender, EventArgs e) {
-            HasSaved = false;
-        }
-        public void GetAuthorWebsite() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string path = Path.Combine(dataPath, @"AuthorWebsite.config");
-            if (File.Exists(path)) {
-                using (StreamReader reader = new StreamReader(path)) {
-                    _defaultWebsite = reader.ReadLine();
-                }
-            }
-        }
-        public void GetAuthorName() {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            string path = Path.Combine(dataPath, @"AuthorName.config");
-            if (File.Exists(path)) {
-                using (StreamReader reader = new StreamReader(path)) {
-                    _defaultAuthor = reader.ReadLine();
-                }
-            }
-        }
-
-        public void WriteAuthorWebsite(string path) {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorWebsite.config"))) {
-                writer.WriteLine(path);
-            }
-        }
-        public void WriteAuthorName(string path) {
-            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"AuthorName.config"))) {
-                writer.WriteLine(path);
-            }
-        }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             Save();
             if (IntegrityChecker.IntegrityCheck()) {
                 IntegrityChecker.ShowSave();
             }
         }
-
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
@@ -995,7 +1177,6 @@ namespace FFXIVLooseTextureCompiler {
                 SaveProject(savePath);
             }
         }
-
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
             lockDuplicateGeneration = true;
             if (CleanSlate()) {
@@ -1141,111 +1322,19 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-
-        private void modAuthorTextBox_Leave(object sender, EventArgs e) {
-            WriteAuthorName(modAuthorTextBox.Text);
+        #endregion
+        #region Sub Programs
+        private void diffuseMergerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new DiffuseMerger().Show();
         }
-
-        private void modWebsiteTextBox_Leave(object sender, EventArgs e) {
-            WriteAuthorWebsite(modWebsiteTextBox.Text);
-        }
-
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
-            if (!HasSaved) {
-                DialogResult dialogResult = MessageBox.Show("Save changes?", Text, MessageBoxButtons.YesNoCancel);
-                switch (dialogResult) {
-                    case DialogResult.Yes:
-                        if (savePath == null) {
-                            SaveFileDialog saveFileDialog = new SaveFileDialog();
-                            saveFileDialog.Filter = "FFXIV Sound Project|*.ffxivtp;";
-                            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                                savePath = saveFileDialog.FileName;
-                            }
-                        }
-                        if (savePath != null) {
-                            SaveProject(savePath);
-                        }
-                        networkedClient?.Dispose();
-                        break;
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                }
-            } else {
-                networkedClient?.Dispose();
-            }
-        }
-
-        private void addCustomPathButton_Click(object sender, EventArgs e) {
-            CustomPathDialog customPathDialog = new CustomPathDialog();
-            if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                textureList.Items.Add(customPathDialog.MaterialSet);
-            }
-        }
-
-        private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (textureList.Items.Count < 1 || textureList.SelectedIndex < 0) {
-                e.Cancel = true;
-                materialListContextMenu.Close();
-            } else {
-                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode
-                    ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
-            }
-        }
-
-        private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
-            CustomPathDialog customPathDialog = new CustomPathDialog();
-            if (textureList.SelectedIndex != -1) {
-                customPathDialog.MaterialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-                if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                    MessageBox.Show("Texture Set has been edited successfully", VersionText);
-                    hasDoneReload = false;
-                }
-            }
-            RefreshList();
-        }
-        private void RefreshList() {
-            for (int i = 0; i < textureList.Items.Count; i++) {
-                textureList.Items[i] = textureList.Items[i];
-            }
-        }
-
-        private void moveUpButton_Click(object sender, EventArgs e) {
-            if (textureList.SelectedIndex > 0) {
-                object object1 = textureList.Items[textureList.SelectedIndex - 1];
-                object object2 = textureList.Items[textureList.SelectedIndex];
-
-                textureList.Items[textureList.SelectedIndex] = object1;
-                textureList.Items[textureList.SelectedIndex - 1] = object2;
-                textureList.SelectedIndex -= 1;
-            }
-        }
-
-        private void moveDownButton_Click(object sender, EventArgs e) {
-            if (textureList.SelectedIndex + 1 < textureList.Items.Count && textureList.SelectedIndex != -1) {
-                object object1 = textureList.Items[textureList.SelectedIndex + 1];
-                object object2 = textureList.Items[textureList.SelectedIndex];
-
-                textureList.Items[textureList.SelectedIndex] = object1;
-                textureList.Items[textureList.SelectedIndex + 1] = object2;
-                textureList.SelectedIndex += 1;
-            }
-        }
-
-        private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
-            WriteLastUsedOptions();
-        }
-
-        private void generationCooldown_Tick(object sender, EventArgs e) {
-            generationCooldown.Stop();
-            finalizeButton.Enabled = generateButton.Enabled = true;
-            generateButton.Text = "Generate";
-        }
-
         private void bulkTexViewerToolStripMenuItem_Click(object sender, EventArgs e) {
             new BulkTexManager().Show();
         }
-
+        public string NumberPadder(int value) {
+            return value.ToString().PadLeft(4, '0');
+        }
+        #endregion
+        #region Project Config
         private void generationType_SelectedIndexChanged(object sender, EventArgs e) {
             hasDoneReload = false;
         }
@@ -1258,40 +1347,8 @@ namespace FFXIVLooseTextureCompiler {
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
         }
-
-        private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
-            FindAndReplace findAndReplace = new FindAndReplace();
-            TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
-            findAndReplace.ReplacementString.Text = tokenizer.GetToken();
-            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
-            findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
-            findAndReplace.Normal.CurrentPath = normal.CurrentPath;
-            findAndReplace.Multi.CurrentPath = multi.CurrentPath;
-            findAndReplace.Mask.CurrentPath = mask.CurrentPath;
-            findAndReplace.Glow.CurrentPath = glow.CurrentPath;
-
-            findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
-            if (findAndReplace.ShowDialog() == DialogResult.OK) {
-                foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Diffuse);
-                    AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Multi);
-                    AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
-                }
-                textureList.SelectedIndex = -1;
-                MessageBox.Show("Replacement succeeded.", VersionText);
-            }
-        }
-
-        private void findAndBulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
-            FindAndReplace findAndReplace = new FindAndReplace();
-            findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
-            if (findAndReplace.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Replacement succeeded.", VersionText);
-            }
-        }
+        #endregion
+        #region Json Export
         private void ExportJson() {
             string jsonText = @"{
   ""Name"": """",
@@ -1324,348 +1381,11 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-        private void exportProgress_Click(object sender, EventArgs e) {
-
-        }
-
-        private void diffuseMergerToolStripMenuItem_Click(object sender, EventArgs e) {
-            new DiffuseMerger().Show();
-        }
-
-        private void editToolStripMenuItem_Click(object sender, EventArgs e) {
-
-        }
-
-        private void discordButton_Click(object sender, EventArgs e) {
-            try {
-                Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://discord.gg/rtGXwMn7pX",
-                    UseShellExecute = true,
-                    Verb = "OPEN"
-                });
-            } catch {
-
-            }
-        }
-
-        private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
-            if (facePart.SelectedIndex == 4) {
-                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
-                faceExtra.Enabled = true;
-            } else if (facePart.SelectedIndex == 5) {
-                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled;
-                faceExtra.Enabled = true;
-            } else {
-                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
-                if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                    auraFaceScalesDropdown.Enabled = true;
-                }
-                faceExtra.Enabled = false;
-            }
-        }
-
-        private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
-            new HelpWindow().Show();
-        }
-
-        private void autoGenerateTImer_Tick(object sender, EventArgs e) {
-            generateButton_Click(this, EventArgs.Empty);
-            autoGenerateTImer.Stop();
-        }
-
-        private void normal_Load(object sender, EventArgs e) {
-
-        }
-
-        private void omniExportModeToolStripMenuItem_Click(object sender, EventArgs e) {
-            TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-            if (textureSet != null) {
-                if (!textureSet.OmniExportMode) {
-                    ConfigureOmniConfiguration(textureSet);
-                    MessageBox.Show("Enabling universal compatibility mode allows your currently selected body textures to be compatible with other bodies on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
-                } else {
-                    textureSet.OmniExportMode = false;
-                    textureSet.ChildSets.Clear();
-                }
-            }
-        }
-
-
-        private void ConfigureOmniConfiguration(TextureSet textureSet) {
-            textureSet.OmniExportMode = true;
-            textureSet.ChildSets.Clear();
-            int race = RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath);
-            if ((textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex"))
-                && !textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
-                textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-                TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo [IsChild]";
-                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
-                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
-                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse?.Replace(".", "_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal?.Replace(".", "_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi?.Replace(".", "_bibo_m_baseTexBaked.");
-                bibo.Glow = textureSet.Glow?.Replace(".", "_bibo_g_baseTexBaked.");
-                bibo.NormalMask = textureSet.NormalMask?.Replace(".", "_bibo_nm_baseTexBaked.");
-                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-                TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve [IsChild]";
-                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
-                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
-                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
-                eve.Diffuse = textureSet.Diffuse?.Replace(".", "_gen3_d_baseTexBaked.");
-                eve.Normal = textureSet.Normal?.Replace(".", "_gen3_n_baseTexBaked.");
-                eve.Multi = textureSet.Multi?.Replace(".", "_gen3_m_baseTexBaked.");
-                eve.Glow = textureSet.Glow?.Replace(".", "_gen3_g_baseTexBaked.");
-                eve.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
-                eve.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm [IsChild]";
-                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
-                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
-                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
-                gen3.Diffuse = textureSet.Diffuse?.Replace(".", "_gen3_d_baseTexBaked.");
-                gen3.Normal = textureSet.Normal?.Replace(".", "_gen3_n_baseTexBaked.");
-                gen3.Multi = textureSet.Multi?.Replace(".", "_gen3_m_baseTexBaked.");
-                gen3.Glow = textureSet.Glow?.Replace(".", "_gen3_g_baseTexBaked.");
-                gen3.NormalMask = textureSet.NormalMask?.Replace(".", "_gen3_nm_baseTexBaked.");
-                gen3.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                textureSet.ChildSets.Add(bibo);
-                textureSet.ChildSets.Add(eve);
-                textureSet.ChildSets.Add(gen3);
-            } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                textureSet.BackupTexturePaths = textureProcessor.BiboPath;
-
-                TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla [IsChild]";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse?.Replace(".", "_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal?.Replace(".", "_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi?.Replace(".", "_gen2_m_baseTexBaked.");
-                vanilla.Glow = textureSet.Glow?.Replace(".", "_gen2_g_baseTexBaked.");
-                vanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_gen2_nm_baseTexBaked.");
-                vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
-
-                TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve [IsChild]";
-                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
-                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
-                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
-                eve.Diffuse = textureSet.Diffuse.Replace(".", "_gen3_d_baseTexBaked.");
-                eve.Normal = textureSet.Normal.Replace(".", "_gen3_n_baseTexBaked.");
-                eve.Multi = textureSet.Multi.Replace(".", "_gen3_m_baseTexBaked.");
-                eve.Glow = textureSet.Glow.Replace(".", "_gen3_g_baseTexBaked.");
-                eve.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
-                eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
-
-                TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm [IsChild]";
-                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
-                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
-                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
-                gen3.Diffuse = textureSet.Diffuse?.Replace(".", "_gen3_d_baseTexBaked.");
-                gen3.Normal = textureSet.Normal?.Replace(".", "_gen3_n_baseTexBaked.");
-                gen3.Multi = textureSet.Multi?.Replace(".", "_gen3_m_baseTexBaked.");
-                gen3.Glow = textureSet.Glow?.Replace(".", "_gen3_g_baseTexBaked.");
-                gen3.NormalMask = textureSet.NormalMask.Replace(".", "_gen3_nm_baseTexBaked.");
-                gen3.BackupTexturePaths = textureProcessor.BiboGen3Path;
-
-                textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(eve);
-                textureSet.ChildSets.Add(gen3);
-            } else if (textureSet.InternalDiffusePath.Contains("eve")) {
-                textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla [IsChild]";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse?.Replace(".", "_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal?.Replace(".", "_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi?.Replace(".", "_gen2_m_baseTexBaked.");
-                vanilla.Glow = textureSet.Glow?.Replace(".", "_gen2_g_baseTexBaked.");
-                vanilla.NormalMask = textureSet.NormalMask.Replace(".", "_gen2_nm_baseTexBaked.");
-                vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-                TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo+ [IsChild]";
-                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
-                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
-                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse?.Replace(".", "_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal?.Replace(".", "_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi?.Replace(".", "_bibo_m_baseTexBaked.");
-                bibo.Glow = textureSet.Glow?.Replace(".", "_bibo_g_baseTexBaked.");
-                bibo.NormalMask = textureSet.NormalMask.Replace(".", "_bibo_nm_baseTexBaked.");
-                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-                TextureSet gen3 = new TextureSet();
-                gen3.MaterialSetName = "Tight & Firm [IsChild]";
-                gen3.InternalDiffusePath = GetBodyTexturePath(0, 1, 3, race);
-                gen3.InternalNormalPath = GetBodyTexturePath(1, 1, 3, race);
-                gen3.InternalMultiPath = GetBodyTexturePath(2, 1, 3, race);
-                gen3.Diffuse = textureSet.Diffuse;
-                gen3.Normal = textureSet.Normal;
-                gen3.Multi = textureSet.Multi;
-                gen3.Glow = textureSet.Glow;
-                gen3.NormalMask = textureSet.NormalMask;
-                gen3.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(bibo);
-                textureSet.ChildSets.Add(gen3);
-            } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
-                textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla [IsChild]";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse?.Replace(".", "_gen2_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal?.Replace(".", "_gen2_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi?.Replace(".", "_gen2_m_baseTexBaked.");
-                vanilla.Glow = textureSet.Glow?.Replace(".", "_gen2_g_baseTexBaked.");
-                vanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_gen2_nm_baseTexBaked.");
-                vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-                TextureSet bibo = new TextureSet();
-                bibo.MaterialSetName = "Bibo+ [IsChild]";
-                bibo.InternalDiffusePath = GetBodyTexturePath(0, 1, 1, race);
-                bibo.InternalNormalPath = GetBodyTexturePath(1, 1, 1, race);
-                bibo.InternalMultiPath = GetBodyTexturePath(2, 1, 1, race);
-                bibo.Diffuse = textureSet.Diffuse?.Replace(".", "_bibo_d_baseTexBaked.");
-                bibo.Normal = textureSet.Normal?.Replace(".", "_bibo_n_baseTexBaked.");
-                bibo.Multi = textureSet.Multi?.Replace(".", "_bibo_m_baseTexBaked.");
-                bibo.Glow = textureSet.Glow?.Replace(".", "_bibo_g_baseTexBaked.");
-                bibo.NormalMask = textureSet.NormalMask?.Replace(".", "_bibo_nm_baseTexBaked.");
-                bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-                TextureSet eve = new TextureSet();
-                eve.MaterialSetName = "Eve [IsChild]";
-                eve.InternalDiffusePath = GetBodyTexturePath(0, 1, 2, race);
-                eve.InternalNormalPath = GetBodyTexturePath(1, 1, 2, race);
-                eve.InternalMultiPath = GetBodyTexturePath(2, 1, 2, race);
-                eve.Diffuse = textureSet.Diffuse;
-                eve.Normal = textureSet.Normal;
-                eve.Multi = textureSet.Multi;
-                eve.Glow = textureSet.Glow;
-                eve.NormalMask = textureSet.NormalMask;
-                eve.BackupTexturePaths = textureProcessor.Gen3Path;
-
-                textureSet.ChildSets.Add(vanilla);
-                textureSet.ChildSets.Add(bibo);
-                textureSet.ChildSets.Add(eve);
-            } else if (textureSet.InternalDiffusePath.Contains("chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g_d")) {
-                textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-
-                TextureSet vanilla = new TextureSet();
-                vanilla.MaterialSetName = "Vanilla [IsChild]";
-                vanilla.InternalDiffusePath = GetBodyTexturePath(0, 1, 0, race);
-                vanilla.InternalNormalPath = GetBodyTexturePath(1, 1, 0, race);
-                vanilla.InternalMultiPath = GetBodyTexturePath(2, 1, 0, race);
-                vanilla.Diffuse = textureSet.Diffuse?.Replace(".", "_vanilla_lala_d_baseTexBaked.");
-                vanilla.Normal = textureSet.Normal?.Replace(".", "_vanilla_lala_n_baseTexBaked.");
-                vanilla.Multi = textureSet.Multi?.Replace(".", "_vanilla_lala_m_baseTexBaked.");
-                vanilla.Glow = textureSet.Glow?.Replace(".", "_vanilla_lala_g_baseTexBaked.");
-                vanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_vanilla_lala_nm_baseTexBaked.");
-                vanilla.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-
-                textureSet.ChildSets.Add(vanilla);
-            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
-                textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-                TextureSet otopop = new TextureSet();
-                otopop.MaterialSetName = "Otopop [IsChild]";
-                otopop.InternalDiffusePath = GetBodyTexturePath(0, 1, 7, race);
-                otopop.InternalNormalPath = GetBodyTexturePath(1, 1, 7, race);
-                otopop.InternalMultiPath = GetBodyTexturePath(2, 1, 7, race);
-                otopop.Diffuse = textureSet.Diffuse?.Replace(".", "_otopop_d_baseTexBaked.");
-                otopop.Normal = textureSet.Normal?.Replace(".", "_otopop_n_baseTexBaked.");
-                otopop.Multi = textureSet.Multi?.Replace(".", "_otopop_m_baseTexBaked.");
-                otopop.Glow = textureSet.Glow?.Replace(".", "_otopop_g_baseTexBaked.");
-                otopop.NormalMask = textureSet.NormalMask?.Replace(".", "_otopop_nm_baseTexBaked.");
-                otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-
-                textureSet.ChildSets.Add(otopop);
-            } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                TextureSet tbseVanilla = new TextureSet();
-                tbseVanilla.MaterialSetName = "Vanilla [IsChild]";
-                tbseVanilla.InternalDiffusePath = GetBodyTexturePath(0, 0, 0, race);
-                tbseVanilla.InternalNormalPath = GetBodyTexturePath(1, 0, 0, race);
-                tbseVanilla.InternalMultiPath = GetBodyTexturePath(2, 0, 0, race);
-                tbseVanilla.Diffuse = textureSet.Diffuse?.Replace(".", "_tbse_vanilla_d.");
-                tbseVanilla.Normal = textureSet.Normal?.Replace(".", "_tbse_vanilla_n.");
-                tbseVanilla.Multi = textureSet.Multi?.Replace(".", "_tbse_vanilla_m.");
-                tbseVanilla.Glow = textureSet.Glow?.Replace(".", "_tbse_vanilla_g.");
-                tbseVanilla.NormalMask = textureSet.NormalMask?.Replace(".", "_tbse_vanilla_nm.");
-                tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
-
-                Directory.CreateDirectory(
-                    Path.GetDirectoryName(
-                    Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    tbseVanilla.BackupTexturePaths.Diffuse)));
-
-                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                    TexLoader.ResolveBitmap(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    textureSet.BackupTexturePaths.Diffuse))),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    tbseVanilla.BackupTexturePaths.Diffuse));
-
-                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                     TexLoader.ResolveBitmap(
-                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                     textureSet.BackupTexturePaths.DiffuseRaen))),
-                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                     tbseVanilla.BackupTexturePaths.DiffuseRaen));
-
-                Directory.CreateDirectory(
-                    Path.GetDirectoryName(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    tbseVanilla.BackupTexturePaths.Normal)));
-
-                TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                    TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    textureSet.BackupTexturePaths.Normal))),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    tbseVanilla.BackupTexturePaths.Normal));
-
-
-                if (File.Exists(textureSet.Diffuse)) {
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
-                }
-                if (File.Exists(textureSet.Normal)) {
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
-                }
-                if (File.Exists(textureSet.Multi)) {
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Multi)).Save(tbseVanilla.Multi);
-                }
-                if (File.Exists(textureSet.Glow)) {
-                    ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Glow)).Save(tbseVanilla.Glow);
-                }
-
-                textureSet.ChildSets.Add(tbseVanilla);
-            }
-        }
-
-        private void finalizeButton_Click(object sender, EventArgs e) {
-            finalizeResults = true;
-            generateButton_Click(sender, e);
-        }
-
+        #endregion
+        #region Standalone XNormal Conversion
         private void xNormalToolStripMenuItem_Click(object sender, EventArgs e) {
             XNormal.OpenXNormal();
         }
-
         private void biboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1798,6 +1518,440 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
+        private void extractAtramentumLuminisGlowMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion", VersionText);
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(
+                        TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
+                }
+            }
+        }
+        #endregion
+        #region Universal Texture Configuration
+        private void ConfigureOmniConfiguration(TextureSet textureSet) {
+            textureSet.OmniExportMode = true;
+            textureSet.ChildSets.Clear();
+            int race = RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath);
+            if ((textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex"))
+                && !textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
+                ConfigureVanillaFemaleCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
+                ConfigureBiboFemaleCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("eve")) {
+                ConfigureEveFemaleCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
+                ConfigureGen3FemaleCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g_d")) {
+                ConfigureLalafaelVanillaCrossCompatibilty(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
+                ConfigureOtopopCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
+                ConfigureTBSECrossCompatibility(textureSet, race);
+            }
+        }
+
+        private void ConfigureTextureSet(string name, string prefix, int race, int gender, int body,
+            TextureSet destinationTextureSet, TextureSet baseTextureSet) {
+            destinationTextureSet.MaterialSetName = name;
+            destinationTextureSet.InternalDiffusePath = GetBodyTexturePath(0, gender, body, race);
+            destinationTextureSet.InternalNormalPath = GetBodyTexturePath(1, gender, body, race);
+            destinationTextureSet.InternalMultiPath = GetBodyTexturePath(2, gender, body, race);
+            destinationTextureSet.Diffuse = baseTextureSet.Diffuse?.Replace(".", $"_{prefix}_d_baseTexBaked.");
+            destinationTextureSet.Normal = baseTextureSet.Normal?.Replace(".", $"_{prefix}_n_baseTexBaked.");
+            destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.");
+            destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.");
+            destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.");
+        }
+        private void ConfigureTextureSet(string name, int race, int gender, int body,
+            TextureSet baseTextureSet, TextureSet destinationTextureSet) {
+            destinationTextureSet.MaterialSetName = name;
+            destinationTextureSet.InternalDiffusePath = GetBodyTexturePath(0, gender, body, race);
+            destinationTextureSet.InternalNormalPath = GetBodyTexturePath(1, gender, body, race);
+            destinationTextureSet.InternalMultiPath = GetBodyTexturePath(2, gender, body, race);
+            destinationTextureSet.Diffuse = baseTextureSet.Diffuse;
+            destinationTextureSet.Normal = baseTextureSet.Normal;
+            destinationTextureSet.Multi = baseTextureSet.Multi;
+            destinationTextureSet.Glow = baseTextureSet.Glow;
+            destinationTextureSet.NormalMask = baseTextureSet.NormalMask;
+        }
+
+
+        private void ConfigureTBSECrossCompatibility(TextureSet textureSet, int race) {
+            TextureSet tbseVanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "tbse_vanilla", race, 0, 0, tbseVanilla, textureSet);
+            tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
+
+            Directory.CreateDirectory(
+                Path.GetDirectoryName(
+                Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                tbseVanilla.BackupTexturePaths.Diffuse)));
+
+            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                TexLoader.ResolveBitmap(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                textureSet.BackupTexturePaths.Diffuse))),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                tbseVanilla.BackupTexturePaths.Diffuse));
+
+            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                 TexLoader.ResolveBitmap(
+                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                 textureSet.BackupTexturePaths.DiffuseRaen))),
+                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                 tbseVanilla.BackupTexturePaths.DiffuseRaen));
+
+            Directory.CreateDirectory(
+                Path.GetDirectoryName(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                tbseVanilla.BackupTexturePaths.Normal)));
+
+            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
+                TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                textureSet.BackupTexturePaths.Normal))),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                tbseVanilla.BackupTexturePaths.Normal));
+
+
+            if (File.Exists(textureSet.Diffuse)) {
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
+            }
+            if (File.Exists(textureSet.Normal)) {
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
+            }
+            if (File.Exists(textureSet.Multi)) {
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Multi)).Save(tbseVanilla.Multi);
+            }
+            if (File.Exists(textureSet.Glow)) {
+                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Glow)).Save(tbseVanilla.Glow);
+            }
+
+            textureSet.ChildSets.Add(tbseVanilla);
+        }
+
+        private void ConfigureOtopopCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+
+            TextureSet otopop = new TextureSet();
+            ConfigureTextureSet("Otopop [IsChild]", "otopop", race, 1, 7, otopop, textureSet);
+            otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+
+            textureSet.ChildSets.Add(otopop);
+        }
+
+        private void ConfigureLalafaelVanillaCrossCompatibilty(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+
+            TextureSet vanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "vanilla_lala", race, 1, 0, vanilla, textureSet);
+            vanilla.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+
+            textureSet.ChildSets.Add(vanilla);
+        }
+
+        private void ConfigureGen3FemaleCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            TextureSet vanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
+            vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+
+            TextureSet bibo = new TextureSet();
+            ConfigureTextureSet("Bibo+ [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
+            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
+
+            TextureSet eve = new TextureSet();
+            ConfigureTextureSet("Eve [IsChild]", race, 1, 2, eve, textureSet);
+            eve.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            textureSet.ChildSets.Add(vanilla);
+            textureSet.ChildSets.Add(bibo);
+            textureSet.ChildSets.Add(eve);
+        }
+
+        private void ConfigureEveFemaleCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            TextureSet vanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
+            vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+
+            TextureSet bibo = new TextureSet();
+            ConfigureTextureSet("Bibo+ [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
+            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
+
+            TextureSet gen3 = new TextureSet();
+            ConfigureTextureSet("Tight & Firm [IsChild]", race, 1, 3, gen3, textureSet);
+            gen3.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            textureSet.ChildSets.Add(vanilla);
+            textureSet.ChildSets.Add(bibo);
+            textureSet.ChildSets.Add(gen3);
+        }
+
+        private void ConfigureBiboFemaleCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+
+            TextureSet vanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
+            vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
+
+            TextureSet eve = new TextureSet();
+            ConfigureTextureSet("Eve [IsChild]", "gen3", race, 1, 2, eve, textureSet);
+            eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
+
+            TextureSet gen3 = new TextureSet();
+            ConfigureTextureSet("Tight & Firm [IsChild]", "gen3", race, 1, 3, gen3, textureSet);
+            gen3.BackupTexturePaths = textureProcessor.BiboGen3Path;
+
+            textureSet.ChildSets.Add(vanilla);
+            textureSet.ChildSets.Add(eve);
+            textureSet.ChildSets.Add(gen3);
+        }
+
+        private void ConfigureVanillaFemaleCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
+
+            TextureSet bibo = new TextureSet();
+            ConfigureTextureSet("Bibo [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
+            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
+
+            TextureSet eve = new TextureSet();
+            ConfigureTextureSet("Eve[IsChild]", "gen3", race, 1, 2, eve, textureSet);
+            eve.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            TextureSet gen3 = new TextureSet();
+            ConfigureTextureSet("Tight & Firm [IsChild]", "gen3", race, 1, 3, gen3, textureSet);
+            gen3.BackupTexturePaths = textureProcessor.Gen3Path;
+
+            textureSet.ChildSets.Add(bibo);
+            textureSet.ChildSets.Add(eve);
+            textureSet.ChildSets.Add(gen3);
+        }
+        #endregion
+        #region Image Conversion Utilities
+        private void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_R."));
+                ImageManipulation.ExtractGreen(image).Save(openFileDialog.FileName.Replace(".", "_G."));
+                ImageManipulation.ExtractBlue(image).Save(openFileDialog.FileName.Replace(".", "_B."));
+                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_A."));
+                MessageBox.Show("Image successfully split into seperate channels", VersionText);
+            }
+        }
+
+        private void multiCreatorToolStripMenuItem_Click(object sender, EventArgs e) {
+            new MultiCreator().Show();
+        }
+
+        private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractTransparency(image).Save(openFileDialog.FileName.Replace(".", "_RGB."));
+                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_Alpha."));
+                MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
+            }
+        }
+
+        private void mergeRGBAndAlphaImagesToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialogRGB = new OpenFileDialog();
+            OpenFileDialog openFileDialogAlpha = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialogRGB.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialogAlpha.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select RGB texture");
+            if (openFileDialogRGB.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select alpha texture");
+                if (openFileDialogAlpha.ShowDialog() == DialogResult.OK) {
+                    MessageBox.Show("Please select where you want to save the conversion", VersionText);
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
+                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName);
+                    }
+                }
+            }
+        }
+
+        private void bulkConvertImagesToLTCTToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select input folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexLoader.ConvertToLtct(openFileDialog.SelectedPath);
+            }
+        }
+
+        private void bulkConvertLTCTToPNGToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select input folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexLoader.ConvertLtctToPng(openFileDialog.SelectedPath);
+            }
+        }
+
+        private void optimizePNGToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select input folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexLoader.RunOptiPNG(openFileDialog.SelectedPath);
+            }
+        }
+
+        private void convertPNGToLTCTToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select input folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexLoader.ConvertPngToLtct(openFileDialog.SelectedPath);
+            }
+        }
+        #endregion
+        #region Mod Share
+        private void enableModshareToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("By enabling this feature you understand that we hold no responsibility for what data may be sent to you by other users. Only use this feature with people you trust.",
+                VersionText, MessageBoxButtons.OKCancel) == DialogResult.OK) {
+                if (networkedClient == null) {
+                    networkedClient = new NetworkedClient((ipBox.Text.Contains("0.0.0.0")
+                        || string.IsNullOrEmpty(ipBox.Text)) ? "50.70.229.19" : ipBox.Text);
+                }
+                networkedClient.Start();
+                if (networkedClient.Connected) {
+                    enableModshareToolStripMenuItem.Enabled = false;
+                    sendCurrentModToolStripMenuItem.Enabled = true;
+
+                    if (!listenForFiles.IsBusy) {
+                        if (connectionDisplay == null) {
+                            connectionDisplay = new ConnectionDisplay(networkedClient.Id);
+                            connectionDisplay.RequestedToSendCurrentMod += delegate {
+                                sendCurrentModToolStripMenuItem_Click(sender, e);
+                            };
+                        }
+                        listenForFiles.RunWorkerAsync();
+                        connectionDisplay.Show();
+                    }
+                }
+            }
+        }
+
+        private void sendCurrentModToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
+                isNetworkSync = true;
+                generateButton_Click(this, EventArgs.Empty);
+                exportPanel.Visible = true;
+                exportLabel.Text = "Sending Over Network";
+                exportProgress.Visible = true;
+                Application.DoEvents();
+                Refresh();
+                networkedClient.SendModFolder(connectionDisplay.SendId, modNameTextBox.Text, penumbraModPath);
+                exportProgress.Value = exportProgress.Maximum;
+                exportPanel.Visible = false;
+                exportProgress.Visible = false;
+                exportLabel.Text = "Send Attempt Finished";
+                isNetworkSync = false;
+                if (!networkedClient.Connected) {
+                    enableModshareToolStripMenuItem.Enabled = true;
+                    sendCurrentModToolStripMenuItem.Enabled = false;
+                    MessageBox.Show("Sending Mod failed!", VersionText);
+                } else {
+                    MessageBox.Show("Mod files sent!", VersionText);
+                }
+            } else {
+                MessageBox.Show("No mod is loaded to send", VersionText);
+            }
+        }
+
+        private void listenForFilesToolStripMenuItem_Click(object sender, EventArgs e) {
+        }
+
+        private void listenForFiles_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            networkedClient.ListenForFiles(penumbraModPath, connectionDisplay);
+            if (!networkedClient.Connected) {
+                enableModshareToolStripMenuItem.Enabled = true;
+                sendCurrentModToolStripMenuItem.Enabled = false;
+                listenForFiles.CancelAsync();
+            }
+        }
+
+        private void ipBox_TextChanged(object sender, EventArgs e) {
+            WriteLastIP(ipBox.Text);
+        }
+
+        private void ipBox_KeyUp(object sender, KeyEventArgs e) {
+            WriteLastIP(ipBox.Text);
+        }
+        #endregion
+        #region Hotkeys
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Control && e.KeyCode == Keys.S) {
+                Save();
+            }
+        }
+        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
+            switch (keys) {
+                case Keys.S | Keys.Control:
+                    // ... Process Shift+Ctrl+Alt+B ...
+                    Save();
+                    return true; // signal that we've processed this key
+            }
+
+            // run base implementation
+            return base.ProcessCmdKey(ref message, keys);
+        }
+        #endregion
+        #region Links
+        private void donateButton_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://ko-fi.com/sebastina",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+
+        private void discordButton_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://discord.gg/rtGXwMn7pX",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
+        #endregion
+        #region Help
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.", VersionText);
+        }
+        private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
+            new HelpWindow().Show();
+        }
+        private void importCustomTemplateToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                OpenTemplate(openFileDialog.FileName);
+            }
+        }
+
         private void howDoIUseThisToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1882,201 +2036,6 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void extractAtramentumLuminisGlowMapToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select where you want to save the conversion", VersionText);
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(
-                        TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
-                }
-            }
-        }
-
-        private void subRaceList_SelectedIndexChanged(object sender, EventArgs e) {
-            if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                auraFaceScalesDropdown.Enabled = true;
-            } else {
-                auraFaceScalesDropdown.Enabled = false;
-            }
-            switch (subRaceList.SelectedIndex) {
-                case 0:
-                    raceList.SelectedIndex = 0;
-                    break;
-                case 1:
-                    raceList.SelectedIndex = 1;
-                    break;
-                case 2:
-                case 3:
-                    raceList.SelectedIndex = 2;
-                    break;
-                case 4:
-                case 5:
-                    raceList.SelectedIndex = 3;
-                    break;
-                case 6:
-                case 7:
-                    raceList.SelectedIndex = 4;
-                    break;
-                case 8:
-                case 9:
-                    raceList.SelectedIndex = 5;
-                    break;
-                case 10:
-                    raceList.SelectedIndex = 6;
-                    break;
-                case 11:
-                    raceList.SelectedIndex = 7;
-                    break;
-                case 12:
-                case 13:
-                    raceList.SelectedIndex = 8;
-                    break;
-                case 14:
-                case 15:
-                    raceList.SelectedIndex = 9;
-                    break;
-
-            }
-        }
-
-        private void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.", VersionText);
-        }
-
-        private void sendCurrentModToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (!string.IsNullOrEmpty(modNameTextBox.Text)) {
-                isNetworkSync = true;
-                generateButton_Click(this, EventArgs.Empty);
-                exportPanel.Visible = true;
-                exportLabel.Text = "Sending Over Network";
-                exportProgress.Visible = true;
-                Application.DoEvents();
-                Refresh();
-                networkedClient.SendModFolder(connectionDisplay.SendId, modNameTextBox.Text, penumbraModPath);
-                exportProgress.Value = exportProgress.Maximum;
-                exportPanel.Visible = false;
-                exportProgress.Visible = false;
-                exportLabel.Text = "Send Attempt Finished";
-                isNetworkSync = false;
-                if (!networkedClient.Connected) {
-                    enableModshareToolStripMenuItem.Enabled = true;
-                    sendCurrentModToolStripMenuItem.Enabled = false;
-                    MessageBox.Show("Sending Mod failed!", VersionText);
-                } else {
-                    MessageBox.Show("Mod files sent!", VersionText);
-                }
-            } else {
-                MessageBox.Show("No mod is loaded to send", VersionText);
-            }
-        }
-
-        private void listenForFilesToolStripMenuItem_Click(object sender, EventArgs e) {
-        }
-
-        private void listenForFiles_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            networkedClient.ListenForFiles(penumbraModPath, connectionDisplay);
-            if (!networkedClient.Connected) {
-                enableModshareToolStripMenuItem.Enabled = true;
-                sendCurrentModToolStripMenuItem.Enabled = false;
-                listenForFiles.CancelAsync();
-            }
-        }
-
-        private void ipBox_TextChanged(object sender, EventArgs e) {
-            WriteLastIP(ipBox.Text);
-        }
-
-        private void ipBox_KeyUp(object sender, KeyEventArgs e) {
-            WriteLastIP(ipBox.Text);
-        }
-
-        private void enableModshareToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("By enabling this feature you understand that we hold no responsibility for what data may be sent to you by other users. Only use this feature with people you trust.",
-                VersionText, MessageBoxButtons.OKCancel) == DialogResult.OK) {
-                if (networkedClient == null) {
-                    networkedClient = new NetworkedClient((ipBox.Text.Contains("0.0.0.0")
-                        || string.IsNullOrEmpty(ipBox.Text)) ? "50.70.229.19" : ipBox.Text);
-                }
-                networkedClient.Start();
-                if (networkedClient.Connected) {
-                    enableModshareToolStripMenuItem.Enabled = false;
-                    sendCurrentModToolStripMenuItem.Enabled = true;
-
-                    if (!listenForFiles.IsBusy) {
-                        if (connectionDisplay == null) {
-                            connectionDisplay = new ConnectionDisplay(networkedClient.Id);
-                            connectionDisplay.RequestedToSendCurrentMod += delegate {
-                                sendCurrentModToolStripMenuItem_Click(sender, e);
-                            };
-                        }
-                        listenForFiles.RunWorkerAsync();
-                        connectionDisplay.Show();
-                    }
-                }
-            }
-        }
-
-        private void modShareToolStripMenuItem_Click(object sender, EventArgs e) {
-
-        }
-
-        private void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_R."));
-                ImageManipulation.ExtractGreen(image).Save(openFileDialog.FileName.Replace(".", "_G."));
-                ImageManipulation.ExtractBlue(image).Save(openFileDialog.FileName.Replace(".", "_B."));
-                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_A."));
-                MessageBox.Show("Image successfully split into seperate channels", VersionText);
-            }
-        }
-
-        private void multiCreatorToolStripMenuItem_Click(object sender, EventArgs e) {
-            new MultiCreator().Show();
-        }
-
-        private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractTransparency(image).Save(openFileDialog.FileName.Replace(".", "_RGB."));
-                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_Alpha."));
-                MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
-            }
-        }
-
-        private void mergeRGBAndAlphaImagesToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialogRGB = new OpenFileDialog();
-            OpenFileDialog openFileDialogAlpha = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialogRGB.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            openFileDialogAlpha.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            MessageBox.Show("Please select RGB texture");
-            if (openFileDialogRGB.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select alpha texture");
-                if (openFileDialogAlpha.ShowDialog() == DialogResult.OK) {
-                    MessageBox.Show("Please select where you want to save the conversion", VersionText);
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
-                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName);
-                    }
-                }
-            }
-        }
-
         private void whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -2086,81 +2045,6 @@ namespace FFXIVLooseTextureCompiler {
                 });
             } catch {
 
-            }
-        }
-
-        private void bulkConvertImagesToLTCTToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select input folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertToLtct(openFileDialog.SelectedPath);
-            }
-        }
-
-        private void bulkConvertLTCTToPNGToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select input folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertLtctToPng(openFileDialog.SelectedPath);
-            }
-        }
-
-        private void optimizePNGToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select input folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.RunOptiPNG(openFileDialog.SelectedPath);
-            }
-        }
-
-        private void convertPNGToLTCTToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select input folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertPngToLtct(openFileDialog.SelectedPath);
-            }
-        }
-
-        private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
-                bakeNormalsChecked, generatingMulti, finalizeResults);
-            processGeneration.CancelAsync();
-        }
-
-        private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
-            ExportJson();
-            ExportMeta();
-            if (hasDoneReload) {
-                PenumbraHttpApi.Redraw(0);
-            } else {
-                PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-                PenumbraHttpApi.Redraw(0);
-                if (IntegrityChecker.IntegrityCheck()) {
-                    IntegrityChecker.ShowConsolation();
-                }
-                hasDoneReload = true;
-                materialList_SelectedIndexChanged(this, EventArgs.Empty);
-            }
-            finalizeButton.Enabled = generateButton.Enabled = false;
-            generationCooldown.Start();
-            exportProgress.Visible = false;
-            exportProgress.Value = 0;
-            lockDuplicateGeneration = false;
-            if (!isNetworkSync) {
-                exportPanel.Visible = false;
-                finalizeResults = false;
-            }
-        }
-
-        private void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
-            exportProgress.Value = Math.Clamp(e.ProgressPercentage, 0, exportProgress.Maximum);
-        }
-
-        private void importCustomTemplateToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "FFXIV Texture Project|*.ffxivtp;";
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                OpenTemplate(openFileDialog.FileName);
             }
         }
 
@@ -2175,5 +2059,6 @@ namespace FFXIVLooseTextureCompiler {
 
             }
         }
+        #endregion
     }
 }

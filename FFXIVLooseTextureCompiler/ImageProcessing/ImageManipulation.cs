@@ -1,10 +1,4 @@
-﻿using SixLabors.ImageSharp.ColorSpaces;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class ImageManipulation {
@@ -24,7 +18,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap Resize(Bitmap file, int width, int height) {
             Bitmap image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(image);
@@ -35,14 +28,12 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         public static Bitmap CutInHalf(Bitmap file) {
             return file.Clone(new Rectangle(file.Width / 2, 0, file.Width / 2, file.Height), PixelFormat.Format32bppArgb);
         }
-
         public static Bitmap ResizeAndMerge(Bitmap target, Bitmap source) {
             Bitmap image = new Bitmap(target);
             Graphics g = Graphics.FromImage(image);
             g.DrawImage(source, 0, 0, target.Width, target.Height);
             return image;
         }
-
         public static Bitmap ExtractTransparency(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -71,7 +62,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap ExtractRed(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -86,7 +76,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap ExtractGreen(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -101,7 +90,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap ExtractBlue(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -116,7 +104,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap ExtractAlpha(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -131,7 +118,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-
         public static Bitmap MergeGrayscalesToARGB(Bitmap red, Bitmap green, Bitmap blue, Bitmap alpha) {
             Bitmap image = new Bitmap(red);
             LockBitmap destination = new LockBitmap(image);
@@ -165,7 +151,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             destination.UnlockBits();
             return image;
         }
-
         public static Bitmap MergeAlphaToRGB(Bitmap alpha, Bitmap rgb) {
             Bitmap image = new Bitmap(rgb.Width, rgb.Height, PixelFormat.Format32bppArgb);
             LockBitmap destination = new LockBitmap(image);
@@ -187,7 +172,6 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             destination.UnlockBits();
             return image;
         }
-
         public static Bitmap MergeNormals(string inputFile, Bitmap diffuse, Bitmap canvasImage, Bitmap normalMask, string diffuseNormal) {
             Graphics g = Graphics.FromImage(canvasImage);
             g.Clear(Color.White);

@@ -162,7 +162,7 @@
             this.genderListBody.Size = new System.Drawing.Size(80, 23);
             this.genderListBody.TabIndex = 1;
             this.genderListBody.Text = "Masculine";
-            this.genderListBody.SelectedIndexChanged += new System.EventHandler(this.genderList_SelectedIndexChanged);
+           
             // 
             // raceList
             // 
@@ -275,7 +275,7 @@
             this.normal.Size = new System.Drawing.Size(528, 28);
             this.normal.TabIndex = 18;
             this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.normal.Load += new System.EventHandler(this.normal_Load);
+          
             this.normal.Enter += new System.EventHandler(this.multi_Enter);
             this.normal.Leave += new System.EventHandler(this.multi_Leave);
             // 
@@ -531,7 +531,7 @@
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            
             // 
             // findAndBulkReplaceToolStripMenuItem
             // 
@@ -755,7 +755,7 @@
             this.modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
             this.modShareToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.modShareToolStripMenuItem.Text = "Mod Share";
-            this.modShareToolStripMenuItem.Click += new System.EventHandler(this.modShareToolStripMenuItem_Click);
+           
             // 
             // enableModshareToolStripMenuItem
             // 
@@ -1062,7 +1062,7 @@
             this.exportProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
-            this.exportProgress.Click += new System.EventHandler(this.exportProgress_Click);
+            
             // 
             // bakeNormals
             // 

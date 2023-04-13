@@ -3,7 +3,6 @@ using Penumbra.Import.Dds;
 using Penumbra.Import.Textures;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.IO;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public static class TexLoader {
