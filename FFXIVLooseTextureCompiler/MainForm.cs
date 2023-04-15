@@ -40,6 +40,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool generatingMulti;
         private int generationProgress;
         private bool hasDoneReload;
+        private bool willCloseWhenComplete;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -146,7 +147,7 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
                 PenumbraHttpApi.Redraw(0);
-                if (IntegrityChecker.IntegrityCheck()) {
+                if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
                     IntegrityChecker.ShowConsolation();
                 }
                 hasDoneReload = true;
@@ -160,6 +161,10 @@ namespace FFXIVLooseTextureCompiler {
             if (!isNetworkSync) {
                 exportPanel.Visible = false;
                 finalizeResults = false;
+            }
+            if (willCloseWhenComplete) {
+                hasSaved = true;
+                Close();
             }
         }
         private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
@@ -800,7 +805,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void multi_Enter(object sender, EventArgs e) {
-          
+
         }
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
@@ -1129,6 +1134,13 @@ namespace FFXIVLooseTextureCompiler {
                     if (File.Exists(args[1]) && args[1].Contains(".ffxivtp")) {
                         savePath = args[1];
                         OpenProject(savePath);
+
+                        if (args.Length > 2) {
+                            if (args[2].Contains("-process")) {
+                                willCloseWhenComplete = true;
+                                finalizeButton_Click(this, EventArgs.Empty);
+                            }
+                        }
                     }
                 }
             }
