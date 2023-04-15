@@ -19,24 +19,15 @@ namespace FFXIVLooseTextureCompiler {
         private string modPath;
         private string jsonFilepath;
         private string metaFilePath;
-        private bool enteredField;
-        private readonly string _defaultModName = "";
         private string _defaultAuthor = "FFXIV Loose Texture Compiler";
         private readonly string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
         private string _defaultWebsite = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
         private string savePath;
         private bool hasSaved;
-        private bool foundInstance;
-        private bool hasDoneReload;
-        private int fileCount;
-        private Dictionary<string, Bitmap> normalCache;
-        private Dictionary<string, Bitmap> multiCache;
-        private Dictionary<string, string> xnormalCache;
         private Dictionary<string, FileSystemWatcher> watchers = new Dictionary<string, FileSystemWatcher>();
         private bool lockDuplicateGeneration;
         private bool finalizeResults;
         private TextureProcessor textureProcessor;
-        private bool otopopNotice;
         private Color originalDiffuseBoxColour;
         private Color originalNormalBoxColour;
         private Color originalMultiBoxColour;
@@ -48,6 +39,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool bakeNormalsChecked;
         private bool generatingMulti;
         private int generationProgress;
+        private bool hasDoneReload;
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -808,7 +800,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void multi_Enter(object sender, EventArgs e) {
-            enteredField = true;
+          
         }
 
         private void removeSelectionButton_Click(object sender, EventArgs e) {
