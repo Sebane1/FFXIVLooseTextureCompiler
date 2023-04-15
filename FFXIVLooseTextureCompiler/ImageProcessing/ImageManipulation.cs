@@ -193,5 +193,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 }
             }
         }
+
+        public static Bitmap MirrorAndDuplicate(Bitmap file) {
+            Bitmap canvas = new Bitmap(file.Width * 2, file.Height);
+            Graphics graphics = Graphics.FromImage(canvas);
+            graphics.DrawImage(file, new Point(file.Width, 0));
+            canvas.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            graphics = Graphics.FromImage(canvas);
+            graphics.DrawImage(file, new Point(file.Width, 0));
+            return canvas;
+        }
     }
 }

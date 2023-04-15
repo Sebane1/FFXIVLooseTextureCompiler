@@ -125,7 +125,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
 
             while (IsFileLocked(inputFile)) {
                 Application.DoEvents();
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
 
             try {

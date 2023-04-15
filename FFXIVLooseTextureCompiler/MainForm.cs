@@ -130,25 +130,22 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void LaunchingXnormal() {
-            if (!lockDuplicateGeneration) {
-                if (generateButton.InvokeRequired) {
-                    Action safeWrite = delegate { LaunchingXnormal(); };
-                    generateButton.Invoke(safeWrite);
-                } else {
-                    exportLabel.Text = "Wait For xNormal";
-                }
+            if (generateButton.InvokeRequired) {
+                Action safeWrite = delegate { LaunchingXnormal(); };
+                generateButton.Invoke(safeWrite);
+            } else {
+                exportLabel.Text = "Wait For xNormal";
             }
         }
         public void StartedProcessing() {
-            if (!lockDuplicateGeneration) {
-                if (generateButton.InvokeRequired) {
-                    Action safeWrite = delegate { StartedProcessing(); };
-                    generateButton.Invoke(safeWrite);
-                } else {
-                    exportLabel.Text = "Exporting";
-                }
+            if (generateButton.InvokeRequired) {
+                Action safeWrite = delegate { StartedProcessing(); };
+                generateButton.Invoke(safeWrite);
+            } else {
+                exportLabel.Text = "Exporting";
             }
         }
+
         private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             ExportJson();
             ExportMeta();
@@ -183,6 +180,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void Form1_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Application.ProductVersion;
+            RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
             diffuse.FilePath.Enabled = false;
             normal.FilePath.Enabled = false;
@@ -240,7 +238,7 @@ namespace FFXIVLooseTextureCompiler {
                         textureSets = new List<TextureSet>();
                         foreach (TextureSet item in textureList.Items) {
                             if (item.OmniExportMode) {
-                                ConfigureOmniConfiguration(item);
+                                UniversalTextureSetCreator.ConfigureOmniConfiguration(item);
                                 exportProgress.Maximum += (item.ChildSets.Count * 3);
                             }
                             textureSets.Add(item);
@@ -366,198 +364,7 @@ namespace FFXIVLooseTextureCompiler {
 
             }
         }
-        private string GetBodyTexturePath(int texture, int genderValue, int baseBody, int race) {
-            string result = "";
-            string unique = (((string)raceList.Items[race]).Contains("Xaela") ? "0101" : "0001");
-            switch (baseBody) {
-                case 0:
-                    // Vanila
-                    if (texture == 2 && race == 5) {
-                        result = @"chara/common/texture/skin_m.tex";
-                    } else {
-                        string genderCode = (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
-                            : RaceInfo.RaceCodeBody.Feminine[race]);
-                        result = @"chara/human/c" + genderCode + @"/obj/body/b" + unique
-                            + @"/texture/--c" + genderCode + "b" + unique + GetTextureType(texture, baseBody) + ".tex";
-                    }
-                    break;
-                case 1:
-                    // Bibo+
-                    if (race != 5) {
-                        if (genderValue == 1) {
-                            result = @"chara/bibo/" + RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race]
-                                + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
-                        } else {
-                            result = "";
-                            MessageBox.Show("Bibo+ is only compatible with feminine characters", VersionText);
-                        }
-                    } else {
-                        MessageBox.Show("Bibo+ is not compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 2:
-                    // Eve
-                    if (race != 5) {
-                        if (genderValue == 1) {
-                            if (texture != 2) {
-                                result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
-                                    : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + "0001" + @"/texture/eve2" +
-                                    RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + GetTextureType(texture, baseBody) + ".tex";
-                            } else {
-                                if (race == 6) {
-                                    result = "chara/human/c1401/obj/body/b0001/texture/eve2lizard_m.tex";
-                                } else if (race == 7) {
-                                    result = "chara/human/c1401/obj/body/b0001/texture/eve2lizard2_m.tex";
-                                } else {
-                                    result = "chara/common/texture/skin_gen3.tex";
-                                }
-                            }
-                        } else {
-                            result = "";
-                            MessageBox.Show("Eve is only compatible with feminine characters", VersionText);
-                        }
-                    } else {
-                        MessageBox.Show("Eve is not compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 3:
-                    // Gen3 and T&F3
-                    if (race != 5) {
-                        if (genderValue == 1) {
-                            result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
-                                : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + unique + @"/texture/tfgen3" +
-                                RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] + "f" + GetTextureType(texture, baseBody) + ".tex";
-                        } else {
-                            result = "";
-                            MessageBox.Show("Gen3 and T&F3 are only compatible with feminine characters", VersionText);
-                        }
-                    } else {
-                        MessageBox.Show("Gen3 and T&F3 are not compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 4:
-                    // Scales+
-                    if (race != 5) {
-                        if (race == 6 || race == 7) {
-                            if (genderValue == 1) {
-                                result = @"chara/bibo/" + RaceInfo.BodyIdentifiers[baseBody].RaceIdentifiers[race] +
-                                    GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
-                            } else {
-                                result = "";
-                                MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
-                            }
-                        } else {
-                            MessageBox.Show("Scales+ is only compatible with feminine Au Ra characters", VersionText);
-                        }
-                    } else {
-                        MessageBox.Show("Scales+ is not compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 5:
-                    if (race != 5) {
-                        if (genderValue == 0) {
-                            // TBSE and HRBODY
-                            if (texture == 1 || texture == 2) {
-                                unique = uniqueAuRa.Checked ? "0101" : "0001";
-                            }
-                            result = @"chara/human/c" + (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
-                                : RaceInfo.RaceCodeBody.Feminine[race]) + @"/obj/body/b" + unique
-                                + @"/texture/--c" + RaceInfo.RaceCodeBody.Masculine[race] + "b" + unique + "_b" + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
-                        } else {
-                            result = "";
-                            MessageBox.Show("TBSE and HRBODY are only compatible with masculine characters", VersionText);
-                        }
-                    } else {
-                        MessageBox.Show("TBSE and HRBODY are not compatible with lalafells", VersionText);
-                    }
-                    break;
-                case 6:
-                    // Tails
-                    string xaelaCheck = (race == 7 ? "010" : "000") + (tailList.SelectedIndex + 1);
-                    string gender = (genderValue == 0 ? RaceInfo.RaceCodeBody.Masculine[race]
-                        : RaceInfo.RaceCodeBody.Feminine[race]);
-                    result = @"chara/human/c" + gender + @"/obj/tail/t" + xaelaCheck + @"/texture/--c" + gender + "t" +
-                        xaelaCheck + "_etc" + GetTextureType(texture, baseBodyList.SelectedIndex) + ".tex";
-                    break;
-                case 7:
-                    // Otopop
-                    if (race == 5) {
-                        if (texture == 0) {
-                            if (!otopopNotice) {
-                                MessageBox.Show("By using Otopop you agree to the following:\r\n\r\nYou are not making a NSFW mod. \r\n\r\nCommercial mod releases require a commercial license from the Otopop creator.");
-                                otopopNotice = true;
-                            }
-                        }
-                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g" + GetTextureType(texture, baseBody) + ".tex";
 
-                    } else {
-                        MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
-                    }
-                    break;
-            }
-            return result;
-        }
-        public string GetFaceTexturePath(int material) {
-            if (material != 3) {
-                string faceIdCheck = "000";
-                string selectedText = (string)subRaceList.Items[subRaceList.SelectedIndex];
-                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
-                    || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart.SelectedIndex != 2 && (material == 0
-                    || auraFaceScalesDropdown.SelectedIndex == 2))
-                    || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 1 && material != 2)
-                    || (selectedText.ToLower() == "veena" && facePart.SelectedIndex == 2 && material == 2)) {
-                    faceIdCheck = "010";
-                }
-                string subRace = (genderListBody.SelectedIndex == 0 ? RaceInfo.RaceCodeFace.Masculine[subRaceList.SelectedIndex]
-                    : RaceInfo.RaceCodeFace.Feminine[subRaceList.SelectedIndex]);
-                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType.SelectedIndex + 1) + "/texture/--c"
-                    + subRace + "f" + faceIdCheck + (faceType.SelectedIndex + 1)
-                    + GetFacePart(facePart.SelectedIndex) + GetTextureType(material, baseBodyList.SelectedIndex, true) + ".tex";
-            } else {
-                return "chara/common/texture/catchlight_1.tex";
-            }
-        }
-        public string GetHairTexturePath(int material) {
-            string hairValue = NumberPadder(faceExtra.SelectedIndex + 1);
-            string genderCode = (genderListBody.SelectedIndex == 0 ? RaceInfo.RaceCodeBody.Masculine[raceList.SelectedIndex]
-                : RaceInfo.RaceCodeBody.Feminine[raceList.SelectedIndex]);
-            string subRace = (genderListBody.SelectedIndex == 0 ? RaceInfo.RaceCodeFace.Masculine[subRaceList.SelectedIndex]
-                : RaceInfo.RaceCodeFace.Feminine[subRaceList.SelectedIndex]);
-            return "chara/human/c" + genderCode + "/obj/hair/h" + hairValue + "/texture/--c"
-                + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, baseBodyList.SelectedIndex, true) + ".tex";
-        }
-        public string GetTextureType(int material, int baseBodyIndex, bool isface = false) {
-            switch (material) {
-                case 0:
-                    return "_d";
-                case 1:
-                    return "_n";
-                case 2:
-                    if (baseBodyIndex == 1 && !isface) {
-                        return "_m";
-                    } else {
-                        return "_s";
-                    }
-            }
-            return null;
-        }
-        public string GetFacePart(int material) {
-            switch (material) {
-                case 0:
-                    return asymCheckbox.Checked ? "_fac_b" : "_fac";
-                case 1:
-                case 3:
-                    return "_etc";
-                case 2:
-                    return "_iri";
-                case 6:
-                    return "_fac_b";
-                case 7:
-                    return "_etc_b";
-            }
-            return null;
-        }
         #endregion
         #region State Persistence
         private void ffxivRefreshTimer_Tick(object sender, EventArgs e) {
@@ -778,8 +585,8 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
             if (textureSet != null) {
                 if (!textureSet.OmniExportMode) {
-                    ConfigureOmniConfiguration(textureSet);
-                    MessageBox.Show("Enabling universal compatibility mode allows your currently selected body textures to be compatible with other bodies on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
+                    UniversalTextureSetCreator.ConfigureOmniConfiguration(textureSet);
+                    MessageBox.Show("Enabling universal compatibility mode allows your currently selected body or face textures to be compatible with other body/face configurations on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
                 } else {
                     textureSet.OmniExportMode = false;
                     textureSet.ChildSets.Clear();
@@ -794,13 +601,14 @@ namespace FFXIVLooseTextureCompiler {
                 (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text)
                 + ", " + raceList.Text;
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                textureSet.InternalDiffusePath = GetBodyTexturePath(0, genderListBody.SelectedIndex,
-                    baseBodyList.SelectedIndex, raceList.SelectedIndex);
+                textureSet.InternalDiffusePath = RacePaths.GetBodyTexturePath(0, genderListBody.SelectedIndex,
+                    baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
             }
-            textureSet.InternalNormalPath = GetBodyTexturePath(1, genderListBody.SelectedIndex,
-                baseBodyList.SelectedIndex, raceList.SelectedIndex);
-            textureSet.InternalMultiPath = GetBodyTexturePath(2, genderListBody.SelectedIndex,
-                baseBodyList.SelectedIndex, raceList.SelectedIndex);
+            textureSet.InternalNormalPath = RacePaths.GetBodyTexturePath(1, genderListBody.SelectedIndex,
+                    baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
+
+            textureSet.InternalMultiPath = RacePaths.GetBodyTexturePath(2, genderListBody.SelectedIndex,
+                    baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
             AddBackupPaths(textureSet);
             textureList.Items.Add(textureSet);
             HasSaved = false;
@@ -816,10 +624,16 @@ namespace FFXIVLooseTextureCompiler {
             switch (facePart.SelectedIndex) {
                 default:
                     if (facePart.SelectedIndex != 1) {
-                        textureSet.InternalDiffusePath = GetFaceTexturePath(0);
+                        textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                            facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
                     }
-                    textureSet.InternalNormalPath = GetFaceTexturePath(1);
-                    textureSet.InternalMultiPath = GetFaceTexturePath(2);
+
+                    textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+
+                    textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(2, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+
                     if (facePart.SelectedIndex == 0) {
                         if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
                             if (auraFaceScalesDropdown.SelectedIndex > 0) {
@@ -837,9 +651,14 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case 2:
-                    textureSet.InternalDiffusePath = GetFaceTexturePath(1);
-                    textureSet.InternalNormalPath = GetFaceTexturePath(2);
-                    textureSet.InternalMultiPath = GetFaceTexturePath(3);
+                    textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(1, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+
+                    textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(2, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+
+                    textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(3, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
                     break;
                 case 4:
                     textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
@@ -847,8 +666,8 @@ namespace FFXIVLooseTextureCompiler {
                 case 5:
                     textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
                         + ", " + raceList.Text;
-                    textureSet.InternalNormalPath = GetHairTexturePath(1);
-                    textureSet.InternalMultiPath = GetHairTexturePath(2);
+                    textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex, genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
+                    textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex, genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
                     break;
 
             }
@@ -1260,31 +1079,31 @@ namespace FFXIVLooseTextureCompiler {
         private void AddBackupPaths(TextureSet textureSet) {
             if (genderListBody.SelectedIndex != 0) {
                 if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                    textureSet.BackupTexturePaths = textureProcessor.BiboPath;
+                    textureSet.BackupTexturePaths = BackupTexturePaths.BiboPath;
                 } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
-                    textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
+                    textureSet.BackupTexturePaths = BackupTexturePaths.Gen3Path;
                 } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
-                    textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
+                    textureSet.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
                 } else {
-                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ? textureProcessor.VanillaLalaPath : textureProcessor.Gen3Gen2Path;
+                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ? BackupTexturePaths.VanillaLalaPath : BackupTexturePaths.Gen3Gen2Path;
                 }
             } else {
                 if (raceList.SelectedIndex == 5) {
-                    textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
+                    textureSet.BackupTexturePaths = BackupTexturePaths.VanillaLalaPath;
                 } else {
                     // Midlander, Elezen, Miqo'te
                     if (textureSet.InternalDiffusePath.Contains("--c0101b0001_b_d")) {
-                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePath;
                     } else
                     // Highlander
                     if (textureSet.InternalDiffusePath.Contains("--c0301b0001_b_d")) {
-                        textureSet.BackupTexturePaths = textureProcessor.TbsePathHighlander;
+                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePathHighlander;
                     } else
                     // Viera
                     if (textureSet.InternalDiffusePath.Contains("--c1701b0001_b_d")) {
-                        textureSet.BackupTexturePaths = textureProcessor.TbsePathViera;
+                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePathViera;
                     } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                        textureSet.BackupTexturePaths = textureProcessor.TbsePath;
+                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePath;
                     }
                 }
             }
@@ -1329,9 +1148,6 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void bulkTexViewerToolStripMenuItem_Click(object sender, EventArgs e) {
             new BulkTexManager().Show();
-        }
-        public string NumberPadder(int value) {
-            return value.ToString().PadLeft(4, '0');
         }
         #endregion
         #region Project Config
@@ -1531,208 +1347,6 @@ namespace FFXIVLooseTextureCompiler {
                         TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
             }
-        }
-        #endregion
-        #region Universal Texture Configuration
-        private void ConfigureOmniConfiguration(TextureSet textureSet) {
-            textureSet.OmniExportMode = true;
-            textureSet.ChildSets.Clear();
-            int race = RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath);
-            if ((textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex"))
-                && !textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
-                ConfigureVanillaFemaleCrossCompatibility(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                ConfigureBiboFemaleCrossCompatibility(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("eve")) {
-                ConfigureEveFemaleCrossCompatibility(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
-                ConfigureGen3FemaleCrossCompatibility(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g_d")) {
-                ConfigureLalafaelVanillaCrossCompatibilty(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
-                ConfigureOtopopCrossCompatibility(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                ConfigureTBSECrossCompatibility(textureSet, race);
-            }
-        }
-
-        private void ConfigureTextureSet(string name, string prefix, int race, int gender, int body,
-            TextureSet destinationTextureSet, TextureSet baseTextureSet) {
-            destinationTextureSet.MaterialSetName = name;
-            destinationTextureSet.InternalDiffusePath = GetBodyTexturePath(0, gender, body, race);
-            destinationTextureSet.InternalNormalPath = GetBodyTexturePath(1, gender, body, race);
-            destinationTextureSet.InternalMultiPath = GetBodyTexturePath(2, gender, body, race);
-            destinationTextureSet.Diffuse = baseTextureSet.Diffuse?.Replace(".", $"_{prefix}_d_baseTexBaked.");
-            destinationTextureSet.Normal = baseTextureSet.Normal?.Replace(".", $"_{prefix}_n_baseTexBaked.");
-            destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.");
-            destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.");
-            destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.");
-        }
-        private void ConfigureTextureSet(string name, int race, int gender, int body,
-            TextureSet baseTextureSet, TextureSet destinationTextureSet) {
-            destinationTextureSet.MaterialSetName = name;
-            destinationTextureSet.InternalDiffusePath = GetBodyTexturePath(0, gender, body, race);
-            destinationTextureSet.InternalNormalPath = GetBodyTexturePath(1, gender, body, race);
-            destinationTextureSet.InternalMultiPath = GetBodyTexturePath(2, gender, body, race);
-            destinationTextureSet.Diffuse = baseTextureSet.Diffuse;
-            destinationTextureSet.Normal = baseTextureSet.Normal;
-            destinationTextureSet.Multi = baseTextureSet.Multi;
-            destinationTextureSet.Glow = baseTextureSet.Glow;
-            destinationTextureSet.NormalMask = baseTextureSet.NormalMask;
-        }
-
-
-        private void ConfigureTBSECrossCompatibility(TextureSet textureSet, int race) {
-            TextureSet tbseVanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "tbse_vanilla", race, 0, 0, tbseVanilla, textureSet);
-            tbseVanilla.BackupTexturePaths = new BackupTexturePaths(@"res\textures\tbse\vanilla\");
-
-            Directory.CreateDirectory(
-                Path.GetDirectoryName(
-                Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                tbseVanilla.BackupTexturePaths.Diffuse)));
-
-            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                TexLoader.ResolveBitmap(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                textureSet.BackupTexturePaths.Diffuse))),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                tbseVanilla.BackupTexturePaths.Diffuse));
-
-            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                 TexLoader.ResolveBitmap(
-                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                 textureSet.BackupTexturePaths.DiffuseRaen))),
-                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                 tbseVanilla.BackupTexturePaths.DiffuseRaen));
-
-            Directory.CreateDirectory(
-                Path.GetDirectoryName(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                tbseVanilla.BackupTexturePaths.Normal)));
-
-            TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
-                TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                textureSet.BackupTexturePaths.Normal))),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                tbseVanilla.BackupTexturePaths.Normal));
-
-
-            if (File.Exists(textureSet.Diffuse)) {
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Diffuse)).Save(tbseVanilla.Diffuse);
-            }
-            if (File.Exists(textureSet.Normal)) {
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Normal)).Save(tbseVanilla.Normal);
-            }
-            if (File.Exists(textureSet.Multi)) {
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Multi)).Save(tbseVanilla.Multi);
-            }
-            if (File.Exists(textureSet.Glow)) {
-                ImageManipulation.CutInHalf(TexLoader.ResolveBitmap(textureSet.Glow)).Save(tbseVanilla.Glow);
-            }
-
-            textureSet.ChildSets.Add(tbseVanilla);
-        }
-
-        private void ConfigureOtopopCrossCompatibility(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-
-            TextureSet otopop = new TextureSet();
-            ConfigureTextureSet("Otopop [IsChild]", "otopop", race, 1, 7, otopop, textureSet);
-            otopop.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-
-            textureSet.ChildSets.Add(otopop);
-        }
-
-        private void ConfigureLalafaelVanillaCrossCompatibilty(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.OtopopLalaPath;
-
-            TextureSet vanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "vanilla_lala", race, 1, 0, vanilla, textureSet);
-            vanilla.BackupTexturePaths = textureProcessor.VanillaLalaPath;
-
-            textureSet.ChildSets.Add(vanilla);
-        }
-
-        private void ConfigureGen3FemaleCrossCompatibility(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            TextureSet vanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
-            vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-            TextureSet bibo = new TextureSet();
-            ConfigureTextureSet("Bibo+ [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
-            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-            TextureSet eve = new TextureSet();
-            ConfigureTextureSet("Eve [IsChild]", race, 1, 2, eve, textureSet);
-            eve.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            textureSet.ChildSets.Add(vanilla);
-            textureSet.ChildSets.Add(bibo);
-            textureSet.ChildSets.Add(eve);
-        }
-
-        private void ConfigureEveFemaleCrossCompatibility(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            TextureSet vanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
-            vanilla.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-            TextureSet bibo = new TextureSet();
-            ConfigureTextureSet("Bibo+ [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
-            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-            TextureSet gen3 = new TextureSet();
-            ConfigureTextureSet("Tight & Firm [IsChild]", race, 1, 3, gen3, textureSet);
-            gen3.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            textureSet.ChildSets.Add(vanilla);
-            textureSet.ChildSets.Add(bibo);
-            textureSet.ChildSets.Add(gen3);
-        }
-
-        private void ConfigureBiboFemaleCrossCompatibility(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.BiboPath;
-
-            TextureSet vanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "gen2", race, 1, 0, vanilla, textureSet);
-            vanilla.BackupTexturePaths = textureProcessor.BiboGen2Path;
-
-            TextureSet eve = new TextureSet();
-            ConfigureTextureSet("Eve [IsChild]", "gen3", race, 1, 2, eve, textureSet);
-            eve.BackupTexturePaths = textureProcessor.BiboGen3Path;
-
-            TextureSet gen3 = new TextureSet();
-            ConfigureTextureSet("Tight & Firm [IsChild]", "gen3", race, 1, 3, gen3, textureSet);
-            gen3.BackupTexturePaths = textureProcessor.BiboGen3Path;
-
-            textureSet.ChildSets.Add(vanilla);
-            textureSet.ChildSets.Add(eve);
-            textureSet.ChildSets.Add(gen3);
-        }
-
-        private void ConfigureVanillaFemaleCrossCompatibility(TextureSet textureSet, int race) {
-            textureSet.BackupTexturePaths = textureProcessor.Gen3Gen2Path;
-
-            TextureSet bibo = new TextureSet();
-            ConfigureTextureSet("Bibo [IsChild]", "bibo", race, 1, 1, bibo, textureSet);
-            bibo.BackupTexturePaths = textureProcessor.Gen3BiboPath;
-
-            TextureSet eve = new TextureSet();
-            ConfigureTextureSet("Eve[IsChild]", "gen3", race, 1, 2, eve, textureSet);
-            eve.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            TextureSet gen3 = new TextureSet();
-            ConfigureTextureSet("Tight & Firm [IsChild]", "gen3", race, 1, 3, gen3, textureSet);
-            gen3.BackupTexturePaths = textureProcessor.Gen3Path;
-
-            textureSet.ChildSets.Add(bibo);
-            textureSet.ChildSets.Add(eve);
-            textureSet.ChildSets.Add(gen3);
         }
         #endregion
         #region Image Conversion Utilities

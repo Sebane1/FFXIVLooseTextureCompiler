@@ -18,43 +18,15 @@ namespace FFXIVLooseTextureCompiler {
         private List<KeyValuePair<string, string>> textureSetQueue;
         private int fileCount;
 
-        BackupTexturePaths biboPath = new BackupTexturePaths(@"res\textures\bibo\bibo\");
-        BackupTexturePaths biboGen3Path = new BackupTexturePaths(@"res\textures\bibo\gen3\");
-        BackupTexturePaths biboGen2Path = new BackupTexturePaths(@"res\textures\bibo\gen2\");
-
-        BackupTexturePaths gen3BiboPath = new BackupTexturePaths(@"res\textures\gen3\bibo\");
-        BackupTexturePaths gen3Path = new BackupTexturePaths(@"res\textures\gen3\gen3\");
-        BackupTexturePaths gen3Gen2Path = new BackupTexturePaths(@"res\textures\gen3\gen2\");
-
-        BackupTexturePaths tbsePath = new BackupTexturePaths(@"res\textures\tbse\tbse\");
-        BackupTexturePaths tbsePathHighlander = new BackupTexturePaths(@"res\textures\tbse\highlander\");
-        BackupTexturePaths tbsePathViera = new BackupTexturePaths(@"res\textures\tbse\viera\");
-
-        BackupTexturePaths otopopLalaPath = new BackupTexturePaths(@"res\textures\otopop\otopop\");
-        BackupTexturePaths vanillaLalaPath = new BackupTexturePaths(@"res\textures\otopop\vanilla\");
-
         private bool finalizeResults;
         private bool generateNormals;
         private bool generateMulti;
-
-        public BackupTexturePaths BiboPath { get => biboPath; set => biboPath = value; }
-        public BackupTexturePaths BiboGen3Path { get => biboGen3Path; set => biboGen3Path = value; }
-        public BackupTexturePaths BiboGen2Path { get => biboGen2Path; set => biboGen2Path = value; }
-        public BackupTexturePaths Gen3BiboPath { get => gen3BiboPath; set => gen3BiboPath = value; }
-        public BackupTexturePaths Gen3Path { get => gen3Path; set => gen3Path = value; }
-        public BackupTexturePaths Gen3Gen2Path { get => gen3Gen2Path; set => gen3Gen2Path = value; }
-        public BackupTexturePaths OtopopLalaPath { get => otopopLalaPath; set => otopopLalaPath = value; }
-
-        public BackupTexturePaths TbsePath { get => tbsePath; set => tbsePath = value; }
-        public BackupTexturePaths VanillaLalaPath { get => vanillaLalaPath; set => vanillaLalaPath = value; }
-        public BackupTexturePaths TbsePathHighlander { get => tbsePathHighlander; set => tbsePathHighlander = value; }
-        public BackupTexturePaths TbsePathViera { get => tbsePathViera; set => tbsePathViera = value; }
 
         public event EventHandler OnProgressChange;
         public event EventHandler OnStartedProcessing;
         public event EventHandler OnLaunchedXnormal;
 
-        Bitmap GetMergedBitmap(string file) {
+        private Bitmap GetMergedBitmap(string file) {
             if (file.Contains("baseTexBaked") && (file.Contains("_d_") || file.Contains("_g_"))) {
                 Bitmap alpha = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "alpha_baseTexBaked"));
                 Bitmap rgb = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "rgb_baseTexBaked"));
@@ -76,10 +48,14 @@ namespace FFXIVLooseTextureCompiler {
                         if (child.Diffuse.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Diffuse, child.Diffuse);
                             Bitmap diffuse = TexLoader.ResolveBitmap(parent.Diffuse);
-                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
-                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Diffuse.Replace("baseTexBaked", "alpha"));
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Diffuse.Replace("baseTexBaked", "rgb"));
+                            if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha)) && Directory.Exists(Path.GetDirectoryName(diffuseRGB))) {
+                                ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
+                                ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
+                                xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Diffuse.Replace("baseTexBaked", "alpha"));
+                                xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Diffuse.Replace("baseTexBaked", "rgb"));
+                            } else {
+                                MessageBox.Show("Something has gone terribly wrong. " + parent.Diffuse + "is missing");
+                            }
                         }
                     }
                 }

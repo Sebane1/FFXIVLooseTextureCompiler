@@ -97,7 +97,11 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_TextChanged(object sender, EventArgs e) {
-
+            if (filePath.Text.ToLower().Contains("basetexbaked")) {
+                currentPath = null;
+                filePath.Text = null;
+                MessageBox.Show("Please remove the prefix 'baseTexBaked' from the file name! \r\n\r\nAlternatively, please use the source image that was used to generate this texture.");
+            }
         }
 
         private void filePath_DragEnter(object sender, DragEventArgs e) {

@@ -1,11 +1,18 @@
 ﻿using FFXIVLooseTextureCompiler.DataTypes;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace FFXIVLooseTextureCompiler.Racial {
     public static class RaceInfo {
+        private static List<string> subRaces = new List<string>() { "Midlander" , "Highlander","Wildwood","Duskwight","Seeker",
+            "Keeper", "Sea Wolves", "Hellsgaurd", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helions", "The Lost", "Rava", "Veena" };
+        private static List<string> races = new List<string>() { "Midlander","Highlander","Elezen","Miqo'te","Roegadyn",
+            "Lalafell","Raen","Xaela","Hrothgar","Viera",};
 
         private static RaceCode raceCodeBody = new RaceCode(new string[] {
             "0101","0301","0101","0101","0901","1101","1301","1301","1501","1701"}, new string[] {
             "0201","0401","0201","0201","0401","1101","1401","1401","0000","1801"});
+
         private static RaceCode raceCodeFace = new RaceCode(new string[] {
                 "0101", "0301", "0501", "0501", "0701",
                 "0701", "0901", "0901", "1101", "1101",
@@ -13,6 +20,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
                 "0201", "0401", "0601", "0601", "0801",
                 "0801", "1001", "1001", "1201", "1201",
                 "1401", "1401", "1601", "1601", "1801", "1801" });
+
         private static List<RacialBodyIdentifiers> bodyIdentifiers = new List<RacialBodyIdentifiers>(){
             new RacialBodyIdentifiers("VANILLA",
                 new List<string>() { "201", "401", "201", "201", "401", "1101", "1401", "1401", "Invalid", "1801" }),
@@ -32,6 +40,8 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static RaceCode RaceCodeBody { get => raceCodeBody; set => raceCodeBody = value; }
         public static RaceCode RaceCodeFace { get => raceCodeFace; set => raceCodeFace = value; }
         internal static List<RacialBodyIdentifiers> BodyIdentifiers { get => bodyIdentifiers; set => bodyIdentifiers = value; }
+        public static List<string> SubRaces { get => subRaces; set => subRaces = value; }
+        public static List<string> Races { get => races; set => races = value; }
 
         public static int ReverseRaceLookup(string path) {
             if (!string.IsNullOrEmpty(path)) {
