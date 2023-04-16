@@ -19,6 +19,7 @@ namespace FFXIVLooseTextureCompiler {
                     internalMultiPathTextbox.Text = textureSet.InternalMultiPath;
                     ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
                     ignoreMultiCheckbox.Checked = textureSet.IgnoreMultiGeneration;
+                    invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
                 }
             }
@@ -59,6 +60,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 textureSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
                 textureSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
+                textureSet.InvertNormalGeneration = invertNormals.Checked;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
             }

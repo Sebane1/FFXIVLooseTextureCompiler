@@ -41,6 +41,7 @@ namespace FFXIVLooseTextureCompiler {
         private int generationProgress;
         private bool hasDoneReload;
         private bool willCloseWhenComplete;
+        Stopwatch stopwatch = new Stopwatch();
 
         public bool HasSaved {
             get => hasSaved; set {
@@ -128,6 +129,7 @@ namespace FFXIVLooseTextureCompiler {
                 generateButton.Invoke(safeWrite);
             } else {
                 exportLabel.Text = "Wait For xNormal";
+                Console.WriteLine(exportLabel.Text);
             }
         }
         public void StartedProcessing() {
@@ -136,6 +138,7 @@ namespace FFXIVLooseTextureCompiler {
                 generateButton.Invoke(safeWrite);
             } else {
                 exportLabel.Text = "Exporting";
+                Console.WriteLine(exportLabel.Text);
             }
         }
 
@@ -162,10 +165,14 @@ namespace FFXIVLooseTextureCompiler {
                 exportPanel.Visible = false;
                 finalizeResults = false;
             }
+            stopwatch.Stop();
             if (willCloseWhenComplete) {
                 hasSaved = true;
                 Close();
+            } else if (finalizeResults) {
+                MessageBox.Show("Export completed in " + stopwatch.Elapsed + "!");
             }
+            stopwatch.Reset();
         }
         private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
             textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
@@ -174,6 +181,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
             exportProgress.Value = Math.Clamp(e.ProgressPercentage, 0, exportProgress.Maximum);
+            Console.WriteLine(exportProgress.Value + "% Complete");
         }
         private void Form1_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Application.ProductVersion;
@@ -243,6 +251,7 @@ namespace FFXIVLooseTextureCompiler {
                         choiceTypeIndex = generationType.SelectedIndex;
                         bakeNormalsChecked = bakeNormals.Checked;
                         generatingMulti = generateMultiCheckBox.Checked;
+                        stopwatch.Start();
                         processGeneration.RunWorkerAsync();
                     } else {
                         MessageBox.Show("No root penumbra path has been set!");

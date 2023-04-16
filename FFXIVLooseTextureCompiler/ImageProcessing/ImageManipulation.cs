@@ -28,6 +28,20 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
         public static Bitmap CutInHalf(Bitmap file) {
             return file.Clone(new Rectangle(file.Width / 2, 0, file.Width / 2, file.Height), PixelFormat.Format32bppArgb);
         }
+
+        public static Bitmap InvertImage(Bitmap file) {
+            Bitmap invertedImage = new Bitmap(file);
+            using (LockBitmap invertedBits = new LockBitmap(invertedImage)) {
+                for (int y = 0; (y <= (invertedBits.Height - 1)); y++) {
+                    for (int x = 0; (x <= (invertedBits.Width - 1)); x++) {
+                        Color invertedPixel = invertedBits.GetPixel(x, y);
+                        invertedPixel = Color.FromArgb(255, (255 - invertedPixel.R), (255 - invertedPixel.G), (255 - invertedPixel.B));
+                        invertedBits.SetPixel(x, y, invertedPixel);
+                    }
+                }
+            }
+            return invertedImage;
+        }
         public static Bitmap ResizeAndMerge(Bitmap target, Bitmap source) {
             Bitmap image = new Bitmap(target);
             Graphics g = Graphics.FromImage(image);

@@ -112,6 +112,9 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.");
             destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.");
             destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.");
+            destinationTextureSet.IgnoreNormalGeneration = baseTextureSet.IgnoreNormalGeneration;
+            destinationTextureSet.IgnoreMultiGeneration = baseTextureSet.IgnoreMultiGeneration;
+            destinationTextureSet.InvertNormalGeneration = baseTextureSet.InvertNormalGeneration;
         }
         private static void ConfigureTextureSet(string name, int race, int gender, int body,
            TextureSet destinationTextureSet, TextureSet baseTextureSet) {
@@ -124,6 +127,9 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             destinationTextureSet.Multi = baseTextureSet.Multi;
             destinationTextureSet.Glow = baseTextureSet.Glow;
             destinationTextureSet.NormalMask = baseTextureSet.NormalMask;
+            destinationTextureSet.IgnoreNormalGeneration = baseTextureSet.IgnoreNormalGeneration;
+            destinationTextureSet.IgnoreMultiGeneration = baseTextureSet.IgnoreMultiGeneration;
+            destinationTextureSet.InvertNormalGeneration = baseTextureSet.InvertNormalGeneration;
         }
 
 

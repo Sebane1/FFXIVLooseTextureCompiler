@@ -40,6 +40,7 @@
             this.ignoreMultiCheckbox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.normalCorrection = new System.Windows.Forms.TextBox();
+            this.invertNormals = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // materialSetNameTextBox
@@ -109,7 +110,7 @@
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(280, 204);
+            this.acceptChangesButton.Location = new System.Drawing.Point(280, 200);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(111, 23);
             this.acceptChangesButton.TabIndex = 8;
@@ -119,7 +120,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(392, 204);
+            this.button1.Location = new System.Drawing.Point(392, 200);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 23);
             this.button1.TabIndex = 9;
@@ -179,11 +180,22 @@
             this.normalCorrection.Size = new System.Drawing.Size(324, 23);
             this.normalCorrection.TabIndex = 14;
             // 
+            // invertNormals
+            // 
+            this.invertNormals.AutoSize = true;
+            this.invertNormals.Location = new System.Drawing.Point(8, 180);
+            this.invertNormals.Name = "invertNormals";
+            this.invertNormals.Size = new System.Drawing.Size(104, 19);
+            this.invertNormals.TabIndex = 16;
+            this.invertNormals.Text = "Invert Normals";
+            this.invertNormals.UseVisualStyleBackColor = true;
+            // 
             // CustomPathDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(455, 231);
+            this.ClientSize = new System.Drawing.Size(455, 227);
+            this.Controls.Add(this.invertNormals);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.normalCorrection);
             this.Controls.Add(this.ignoreMultiCheckbox);
@@ -230,5 +242,6 @@
         private CheckBox ignoreMultiCheckbox;
         private Label label2;
         private TextBox normalCorrection;
+        private CheckBox invertNormals;
     }
 }
