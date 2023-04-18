@@ -12,9 +12,9 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static string VersionText { get; set; }
 
         public static string GetFaceTexturePath(int material, int gender, int subRaceValue, int facePart, int faceType, int auraFaceScales, bool asym) {
-            string faceIdCheck = "00";
             string selectedText = RaceInfo.SubRaces[subRaceValue];
             if (facePart == 2 && asym) {
+                string faceIdCheck = "00";
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
                     || (selectedText.ToLower() == "xaela") || (selectedText.ToLower() == "veena")) {
@@ -24,6 +24,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
                     + "_" + (gender == 0 ? "male" : "female") + "/f" + faceIdCheck + (faceType + 1) + GetTextureType(material, 0, false, true) + ".tex";
             }
             if (material != 3) {
+                string faceIdCheck = "000";
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
                     || (selectedText.ToLower() == "xaela" && facePart != 2 && (material == 0 || auraFaceScales == 2))
