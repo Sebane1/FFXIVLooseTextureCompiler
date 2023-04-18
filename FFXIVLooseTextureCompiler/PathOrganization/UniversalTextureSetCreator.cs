@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.PathOrganization {
     public static class UniversalTextureSetCreator {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textureSet"></param>
         public static void ConfigureOmniConfiguration(TextureSet textureSet) {
             textureSet.OmniExportMode = true;
             textureSet.ChildSets.Clear();
@@ -23,9 +27,11 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             } else if (textureSet.InternalDiffusePath.Contains("gen3")) {
                 ConfigureGen3FemaleCrossCompatibility(textureSet, race);
             } else if (textureSet.InternalDiffusePath.Contains("chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_g_d")) {
-                ConfigureLalafaelVanillaCrossCompatibilty(textureSet, race);
-            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
                 ConfigureOtopopCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
+                ConfigureLalafellVanillaCrossCompatibility(textureSet, race);
+            } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_b")) {
+                ConfigureAsymLalafellCrossCompatibility(textureSet, race);
             } else if (textureSet.InternalDiffusePath.Contains("fac_b")) {
                 ConfigureAsymFaceCrossCompatibility(textureSet, race);
             } else if (textureSet.InternalDiffusePath.Contains("fac_")) {
@@ -116,6 +122,7 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             destinationTextureSet.IgnoreMultiGeneration = baseTextureSet.IgnoreMultiGeneration;
             destinationTextureSet.InvertNormalGeneration = baseTextureSet.InvertNormalGeneration;
         }
+
         private static void ConfigureTextureSet(string name, int race, int gender, int body,
            TextureSet destinationTextureSet, TextureSet baseTextureSet) {
             destinationTextureSet.MaterialSetName = name;
@@ -158,11 +165,6 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
                  Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                  tbseVanilla.BackupTexturePaths.DiffuseRaen));
 
-            Directory.CreateDirectory(
-                Path.GetDirectoryName(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                tbseVanilla.BackupTexturePaths.Normal)));
-
             TexLoader.WriteImageToXOR(ImageManipulation.CutInHalf(
                 TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                 textureSet.BackupTexturePaths.Normal))),
@@ -189,23 +191,48 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             textureSet.ChildSets.Add(tbseVanilla);
         }
 
-        private static void ConfigureOtopopCrossCompatibility(TextureSet textureSet, int race) {
+        private static void ConfigureLalafellVanillaCrossCompatibility(TextureSet textureSet, int race) {
             textureSet.BackupTexturePaths = BackupTexturePaths.VanillaLalaPath;
 
             TextureSet otopop = new TextureSet();
             ConfigureTextureSet("Otopop [IsChild]", "otopop", race, 1, 7, otopop, textureSet);
             otopop.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
 
+            TextureSet asymLalaFell = new TextureSet();
+            ConfigureTextureSet("Asym Lala [IsChild]", "asym_lala", race, 0, 8, asymLalaFell, textureSet);
+            asymLalaFell.BackupTexturePaths = BackupTexturePaths.AsymLalaPath;
+
+            textureSet.ChildSets.Add(asymLalaFell);
             textureSet.ChildSets.Add(otopop);
         }
 
-        private static void ConfigureLalafaelVanillaCrossCompatibilty(TextureSet textureSet, int race) {
+        private static void ConfigureAsymLalafellCrossCompatibility(TextureSet textureSet, int race) {
+            textureSet.BackupTexturePaths = BackupTexturePaths.AsymLalaPath;
+
+            TextureSet otopop = new TextureSet();
+            ConfigureTextureSet("Otopop [IsChild]", "otopop", race, 0, 7, otopop, textureSet);
+            otopop.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
+
+            TextureSet vanilla = new TextureSet();
+            ConfigureTextureSet("Vanilla [IsChild]", "vanilla_lala", race, 0, 0, vanilla, textureSet);
+            vanilla.BackupTexturePaths = BackupTexturePaths.VanillaLalaPath;
+
+            textureSet.ChildSets.Add(vanilla);
+            textureSet.ChildSets.Add(otopop);
+        }
+
+        private static void ConfigureOtopopCrossCompatibility(TextureSet textureSet, int race) {
             textureSet.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
 
             TextureSet vanilla = new TextureSet();
-            ConfigureTextureSet("Vanilla [IsChild]", "vanilla_lala", race, 1, 0, vanilla, textureSet);
+            ConfigureTextureSet("Vanilla [IsChild]", "vanilla_lala", race, 0, 0, vanilla, textureSet);
             vanilla.BackupTexturePaths = BackupTexturePaths.VanillaLalaPath;
 
+            TextureSet asymLalafell = new TextureSet();
+            ConfigureTextureSet("Asym Lala [IsChild]", "asym_lala", race, 0, 8, asymLalafell, textureSet);
+            asymLalafell.BackupTexturePaths = BackupTexturePaths.AsymLalaPath;
+
+            textureSet.ChildSets.Add(asymLalafell);
             textureSet.ChildSets.Add(vanilla);
         }
 

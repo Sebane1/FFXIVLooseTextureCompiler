@@ -367,7 +367,6 @@ namespace FFXIVLooseTextureCompiler {
                 case 15:
                     raceList.SelectedIndex = 9;
                     break;
-
             }
         }
 
@@ -1333,7 +1332,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void vanillaToRedefinedLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void vanillaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
@@ -1342,7 +1341,35 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.VanillaLalaToRedefinedLala(openFileDialog.FileName, saveFileDialog.FileName);
+                    XNormal.VanillaLalaToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void otopopToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.OtopopToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
+                }
+            }
+        }
+
+        private void asymLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            saveFileDialog.Filter = "Texture File|*.png;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select where you want to save the conversion");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    XNormal.AsymLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
                 }
             }
         }

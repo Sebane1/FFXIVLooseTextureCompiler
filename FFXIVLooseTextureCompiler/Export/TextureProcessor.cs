@@ -322,15 +322,15 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.Diffuse);
                 outputGenerated = true;
             } else {
+                string underlay = textureSet.BackupTexturePaths != null ? (RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath) == 6 ?
+                     textureSet.BackupTexturePaths.DiffuseRaen : textureSet.BackupTexturePaths.Diffuse) : "";
                 if (string.IsNullOrEmpty(textureSet.Glow) || textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.None, "", "",
-                        textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount),
+                        ExportType.None, "", "", underlay);
                     outputGenerated = true;
                 } else {
-                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Glow, "",
-                        textureSet.Glow, textureSet.BackupTexturePaths != null ?
-                        (RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath) == 6 ?
-                        textureSet.BackupTexturePaths.DiffuseRaen : textureSet.BackupTexturePaths.Diffuse) : "");
+                    ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount),
+                        ExportType.Glow, "", textureSet.Glow, underlay);
                     outputGenerated = true;
                 }
             }
@@ -435,7 +435,7 @@ namespace FFXIVLooseTextureCompiler {
                                     g.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
                                     if (File.Exists(mask)) {
                                         using (Bitmap normalMaskBitmap = TexLoader.ResolveBitmap(mask)) {
-                                            output = Normal.Calculate(modifier ? ImageManipulation.InvertImage(target) : target,normalMaskBitmap);
+                                            output = Normal.Calculate(modifier ? ImageManipulation.InvertImage(target) : target, normalMaskBitmap);
                                         }
                                     } else {
                                         output = Normal.Calculate(modifier ? ImageManipulation.InvertImage(target) : target);

@@ -11,7 +11,7 @@ namespace FFXIVLooseTextureCompiler {
         private const string gen3Legacy = "res\\model\\gen3Legacy.sbm";
         private const string vanillaLala = "res\\model\\vanillap.sbm";
         private const string otopop = "res\\model\\genp.sbm";
-        private const string redefinedLala = "res\\model\\asymLala.sbm";
+        private const string asymLala = "res\\model\\asymp.sbm";
         int count = 0;
 
         List<XNormalExportJob> biboToGen2Batch = new List<XNormalExportJob>();
@@ -22,7 +22,9 @@ namespace FFXIVLooseTextureCompiler {
         List<XNormalExportJob> gen2ToGen3Batch = new List<XNormalExportJob>();
 
         List<XNormalExportJob> otopopToVanillaLalaBatch = new List<XNormalExportJob>();
-        List<XNormalExportJob> otopopToRedefinedLalaBatch = new List<XNormalExportJob>();
+        List<XNormalExportJob> otopopToAsymLalaBatch = new List<XNormalExportJob>();
+        List<XNormalExportJob> asymLalaToOtopopBatch = new List<XNormalExportJob>();
+        List<XNormalExportJob> asymLalaToVanillaLalaBatch = new List<XNormalExportJob>();
         List<XNormalExportJob> vanillaLalaToOtopopBatch = new List<XNormalExportJob>();
         List<XNormalExportJob> vanillaLalaToAsymLalaBatch = new List<XNormalExportJob>();
 
@@ -61,37 +63,52 @@ namespace FFXIVLooseTextureCompiler {
                 if (outputPath.Contains("otopop")) {
                     VanillaLalaToOtopop(inputPath, outputPath);
                 }
+            } else if (internalPath.Contains("v01_c1101b0001_b")) {
+                if (outputPath.Contains("otopop")) {
+                    AsymLalaToOtopop(inputPath, outputPath);
+                }
+                if (outputPath.Contains("vanilla_lala")) {
+                    AsymLalaToVanillaLala(inputPath, outputPath);
+                }
             }
         }
+
         public void AddToBatch(string internalPath, string inputPath, string outputPath) {
             if (File.Exists(inputPath)) {
                 if (internalPath.Contains("bibo")) {
                     if (outputPath.Contains("gen2")) {
                         biboToGen2Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, biboLegacy, gen2, count++ + ".xml"));
-                    }
-                    if (outputPath.Contains("gen3")) {
+                    } else if (outputPath.Contains("gen3")) {
                         biboToGen3Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, bibo, gen3, count++ + ".xml"));
                     }
                 } else if (internalPath.Contains("eve") || internalPath.Contains("gen3")) {
                     if (outputPath.Contains("gen2")) {
                         gen3ToGen2Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen3Legacy, gen2, count++ + ".xml"));
-                    }
-                    if (outputPath.Contains("bibo")) {
+                    } else if (outputPath.Contains("bibo")) {
                         gen3ToBiboBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen3, bibo, count++ + ".xml"));
                     }
                 } else if (internalPath.Contains("body")) {
                     if (outputPath.Contains("bibo")) {
                         gen2ToBiboBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen2, biboLegacy, count++ + ".xml"));
-                    }
-                    if (outputPath.Contains($"gen3")) {
+                    } else if (outputPath.Contains($"gen3")) {
                         gen2ToGen3Batch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, gen2, gen3Legacy, count++ + ".xml"));
                     } else if (internalPath.Contains("--c1101b0001")) {
                         if (outputPath.Contains("otopop")) {
                             vanillaLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, otopop, count++ + ".xml"));
+                        } else if (outputPath.Contains("asym_lala")) {
+                            vanillaLalaToAsymLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, vanillaLala, asymLala, count++ + ".xml"));
                         }
                     } else if (internalPath.Contains("v01_c1101b0001_g")) {
                         if (outputPath.Contains("vanilla_lala")) {
                             otopopToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, vanillaLala, count++ + ".xml"));
+                        } else if (outputPath.Contains("asym_lala")) {
+                            otopopToAsymLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, otopop, asymLala, count++ + ".xml"));
+                        }
+                    } else if (internalPath.Contains("v01_c1101b0001_b")) {
+                        if (outputPath.Contains("vanilla_lala")) {
+                            asymLalaToVanillaLalaBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, asymLala, vanillaLala, count++ + ".xml"));
+                        } else if (outputPath.Contains("otopop")) {
+                            asymLalaToOtopopBatch.Add(new XNormalExportJob(internalPath, inputPath, outputPath, asymLala, otopop, count++ + ".xml"));
                         }
                     }
                 }
@@ -134,16 +151,28 @@ namespace FFXIVLooseTextureCompiler {
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
 
-        public static void VanillaLalaToRedefinedLala(string inputImage, string outputImage) {
+        public static void VanillaLalaToAsymLala(string inputImage, string outputImage) {
             CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaLala),
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, redefinedLala), inputImage, outputImage.Replace("_baseTexBaked", null));
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, asymLala), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+        public static void AsymLalaToVanillaLala(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, asymLala),
+           Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vanillaLala), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+
+        public static void AsymLalaToOtopop(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, asymLala),
+          Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop), inputImage, outputImage.Replace("_baseTexBaked", null));
+        }
+        public static void OtopopToAsymLala(string inputImage, string outputImage) {
+            CallXNormal(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, otopop),
+          Path.Combine(AppDomain.CurrentDomain.BaseDirectory, asymLala), inputImage, outputImage.Replace("_baseTexBaked", null));
         }
 
         public static void OpenXNormal() {
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
             Process process = Process.Start(executable);
         }
-
         public static void CallXNormal(string inputFBX, string outputFBX, string inputImage, string outputImage) {
             string path = Path.Combine(Application.UserAppDataPath, xmlFileName);
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
@@ -175,7 +204,12 @@ namespace FFXIVLooseTextureCompiler {
             exportJobs.AddRange(gen2ToGen3Batch);
 
             exportJobs.AddRange(otopopToVanillaLalaBatch);
+            exportJobs.AddRange(otopopToAsymLalaBatch);
+            exportJobs.AddRange(asymLalaToOtopopBatch);
+            exportJobs.AddRange(asymLalaToVanillaLalaBatch);
             exportJobs.AddRange(vanillaLalaToOtopopBatch);
+            exportJobs.AddRange(vanillaLalaToAsymLalaBatch);
+
             Dictionary<string, string> generationCache = new Dictionary<string, string>();
             string executable = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xNormal);
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");

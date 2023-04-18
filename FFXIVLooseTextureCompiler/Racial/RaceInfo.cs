@@ -1,6 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.DataTypes;
 using System.Windows;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace FFXIVLooseTextureCompiler.Racial {
     public static class RaceInfo {
@@ -11,7 +12,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
 
         private static RaceCode raceCodeBody = new RaceCode(new string[] {
             "0101","0301","0101","0101","0901","1101","1301","1301","1501","1701"}, new string[] {
-            "0201","0401","0201","0201","0401","1101","1401","1401","0000","1801"});
+            "0201","0401","0201","0201","0401","1101","1401","1401","1601","1801"});
 
         private static RaceCode raceCodeFace = new RaceCode(new string[] {
                 "0101", "0301", "0501", "0501", "0701",
@@ -77,6 +78,44 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static string NumberPadder(int value) {
             return value.ToString().PadLeft(4, '0');
         }
+        public static int GetMainRace(int subRace) {
+            switch (subRace) {
+                case 0:
+                    return 0;
+                case 1:
+                    return 1;
+                case 2:
+                case 3:
+                    return 2;
 
+                case 4:
+                case 5:
+                    return 3;
+
+                case 6:
+                case 7:
+                    return 4;
+
+                case 8:
+                case 9:
+                    return 5;
+
+                case 10:
+                    return 6;
+
+                case 11:
+                    return 7;
+
+                case 12:
+                case 13:
+                    return 8;
+
+                case 14:
+                case 15:
+                    return 9;
+
+            }
+            return -1;
+        }
     }
 }

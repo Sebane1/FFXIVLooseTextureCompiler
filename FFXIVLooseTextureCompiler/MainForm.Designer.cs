@@ -97,6 +97,7 @@
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateButton = new System.Windows.Forms.Button();
             this.textureList = new System.Windows.Forms.ListBox();
             this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -137,7 +138,6 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -162,7 +162,6 @@
             this.genderListBody.Size = new System.Drawing.Size(80, 23);
             this.genderListBody.TabIndex = 1;
             this.genderListBody.Text = "Masculine";
-           
             // 
             // raceList
             // 
@@ -275,7 +274,6 @@
             this.normal.Size = new System.Drawing.Size(528, 28);
             this.normal.TabIndex = 18;
             this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-          
             this.normal.Enter += new System.EventHandler(this.multi_Enter);
             this.normal.Leave += new System.EventHandler(this.multi_Leave);
             // 
@@ -531,7 +529,6 @@
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
-            
             // 
             // findAndBulkReplaceToolStripMenuItem
             // 
@@ -755,7 +752,6 @@
             this.modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
             this.modShareToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.modShareToolStripMenuItem.Text = "Mod Share";
-           
             // 
             // enableModshareToolStripMenuItem
             // 
@@ -850,6 +846,13 @@
             this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
             this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
             this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += new System.EventHandler(this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click);
+            // 
+            // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
+            // 
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
+            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += new System.EventHandler(this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click);
             // 
             // donateButton
             // 
@@ -1062,7 +1065,6 @@
             this.exportProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.exportProgress.TabIndex = 38;
             this.exportProgress.Visible = false;
-            
             // 
             // bakeNormals
             // 
@@ -1247,13 +1249,6 @@
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
-            // 
-            // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
-            // 
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += new System.EventHandler(this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

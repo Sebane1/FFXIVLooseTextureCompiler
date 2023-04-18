@@ -1,4 +1,6 @@
-﻿namespace FFXIVLooseTextureCompiler.Export {
+﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+
+namespace FFXIVLooseTextureCompiler.Export {
     public class BackupTexturePaths {
         public BackupTexturePaths(string path) {
             _path = path;
@@ -23,7 +25,7 @@
         public string Diffuse { get => _path + _diffuse; }
         public string DiffuseRaen { get => _path + _diffuseRaen; }
         public string Normal { get => _path + _normal; }
-        public string Path {
+        public string InternalPath {
             get => _path; set {
                 _path = value;
             }
@@ -42,19 +44,44 @@
         private static BackupTexturePaths tbsePathViera = new BackupTexturePaths(@"res\textures\tbse\viera\");
 
         private static BackupTexturePaths otopopLalaPath = new BackupTexturePaths(@"res\textures\otopop\otopop\");
+        private static BackupTexturePaths asymLalaPath = new BackupTexturePaths(@"res\textures\otopop\asym\");
         private static BackupTexturePaths vanillaLalaPath = new BackupTexturePaths(@"res\textures\otopop\vanilla\");
 
-        public static BackupTexturePaths BiboPath { get => biboPath; set => biboPath = value; }
-        public static BackupTexturePaths BiboGen3Path { get => biboGen3Path; set => biboGen3Path = value; }
-        public static BackupTexturePaths BiboGen2Path { get => biboGen2Path; set => biboGen2Path = value; }
-        public static BackupTexturePaths Gen3BiboPath { get => gen3BiboPath; set => gen3BiboPath = value; }
-        public static BackupTexturePaths Gen3Path { get => gen3Path; set => gen3Path = value; }
-        public static BackupTexturePaths Gen3Gen2Path { get => gen3Gen2Path; set => gen3Gen2Path = value; }
-        public static BackupTexturePaths OtopopLalaPath { get => otopopLalaPath; set => otopopLalaPath = value; }
-        public static BackupTexturePaths TbsePath { get => tbsePath; set => tbsePath = value; }
-        public static BackupTexturePaths VanillaLalaPath { get => vanillaLalaPath; set => vanillaLalaPath = value; }
-        public static BackupTexturePaths TbsePathHighlander { get => tbsePathHighlander; set => tbsePathHighlander = value; }
-        public static BackupTexturePaths TbsePathViera { get => tbsePathViera; set => tbsePathViera = value; }
+        public static BackupTexturePaths BiboPath { get => biboPath; }
+        public static BackupTexturePaths BiboGen3Path { get => biboGen3Path; }
+        public static BackupTexturePaths BiboGen2Path { get => biboGen2Path; }
+        public static BackupTexturePaths Gen3BiboPath { get => gen3BiboPath; }
+        public static BackupTexturePaths Gen3Path { get => gen3Path; }
+        public static BackupTexturePaths Gen3Gen2Path { get => gen3Gen2Path; }
+        public static BackupTexturePaths OtopopLalaPath { get => otopopLalaPath; }
+        public static BackupTexturePaths TbsePath { get => tbsePath; }
+        public static BackupTexturePaths VanillaLalaPath { get => vanillaLalaPath; }
+        public static BackupTexturePaths TbsePathHighlander { get => tbsePathHighlander; }
+        public static BackupTexturePaths TbsePathViera { get => tbsePathViera; }
+        public static BackupTexturePaths AsymLalaPath {
+            get {
+                if (!File.Exists(asymLalaPath.Diffuse)) {
+                    Directory.CreateDirectory(
+                    Path.GetDirectoryName(
+                    Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    asymLalaPath.Diffuse)));
 
+                    TexLoader.WriteImageToXOR(ImageManipulation.MirrorAndDuplicate(
+                    TexLoader.ResolveBitmap(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        vanillaLalaPath.Diffuse))),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        asymLalaPath.Diffuse));
+
+                    TexLoader.WriteImageToXOR(ImageManipulation.MirrorAndDuplicate(
+                        TexLoader.ResolveBitmap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        vanillaLalaPath.Normal))),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        asymLalaPath.Normal));
+                }
+                return asymLalaPath;
+            }
+        }
     }
 }

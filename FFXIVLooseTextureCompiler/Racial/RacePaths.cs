@@ -12,13 +12,21 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static string VersionText { get; set; }
 
         public static string GetFaceTexturePath(int material, int gender, int subRaceValue, int facePart, int faceType, int auraFaceScales, bool asym) {
-            if (material != 3) {
-                string faceIdCheck = "000";
-                string selectedText = RaceInfo.SubRaces[subRaceValue];
+            string faceIdCheck = "00";
+            string selectedText = RaceInfo.SubRaces[subRaceValue];
+            if (facePart == 2 && asym) {
                 if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
-                    || (selectedText.ToLower() == "xaela" && facePart != 2 && (material == 0
-                    || auraFaceScales == 2))
+                    || (selectedText.ToLower() == "xaela") || (selectedText.ToLower() == "veena")) {
+                    faceIdCheck = "10";
+                }
+                return "chara/asymeyes/" + RaceInfo.Races[RaceInfo.GetMainRace(subRaceValue)].ToLower() + "_" + RaceInfo.SubRaces[subRaceValue].Replace(" ", null).ToLower()
+                    + "_" + (gender == 0 ? "male" : "female") + "/f" + faceIdCheck + (faceType + 1) + GetTextureType(material, 0, false, true) + ".tex";
+            }
+            if (material != 3) {
+                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
+                    || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
+                    || (selectedText.ToLower() == "xaela" && facePart != 2 && (material == 0 || auraFaceScales == 2))
                     || (selectedText.ToLower() == "veena" && facePart == 1 && material != 2)
                     || (selectedText.ToLower() == "veena" && facePart == 2 && material == 2)) {
                     faceIdCheck = "010";
@@ -26,11 +34,10 @@ namespace FFXIVLooseTextureCompiler.Racial {
                 string subRace = (gender == 0 ? RaceInfo.RaceCodeFace.Masculine[subRaceValue]
                     : RaceInfo.RaceCodeFace.Feminine[subRaceValue]);
                 return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType + 1) + "/texture/--c"
-                    + subRace + "f" + faceIdCheck + (faceType + 1)
+                    + subRace + "f" + faceIdCheck + ((faceType + (subRaceValue == 12 || subRaceValue == 13 ? 4 : 0)) + 1)
                     + GetFacePart(facePart, asym) + GetTextureType(material, 0, true) + ".tex";
             } else {
                 return "chara/common/texture/catchlight_1.tex";
-
             }
         }
         public static string GetBodyTexturePath(int texture, int genderValue, int baseBody, int race, int tail, bool uniqueAuRa = false) {
@@ -161,6 +168,14 @@ namespace FFXIVLooseTextureCompiler.Racial {
                         MessageBox.Show("Otopop is only compatible with lalafells", VersionText);
                     }
                     break;
+                case 8:
+                    // Asymmetrical Vanilla Lalafell
+                    if (race == 5) {
+                        result = @"chara/human/c1101/obj/body/b0001/texture/v01_c1101b0001_b" + GetTextureType(texture, baseBody) + ".tex";
+                    } else {
+                        MessageBox.Show("Asymmetrical Vanilla Lalafell is only compatible with lalafells", VersionText);
+                    }
+                    break;
             }
             return result;
         }
@@ -173,18 +188,20 @@ namespace FFXIVLooseTextureCompiler.Racial {
             return "chara/human/c" + genderCode + "/obj/hair/h" + hairValue + "/texture/--c"
                 + genderCode + "h" + hairValue + "_hir" + GetTextureType(material, 0, true) + ".tex";
         }
-        public static string GetTextureType(int material, int baseBodyIndex, bool isface = false) {
+        public static string GetTextureType(int material, int baseBodyIndex, bool isface = false, bool isVerbose = false) {
             switch (material) {
                 case 0:
-                    return "_d";
+                    return isVerbose ? "_diffuse" : "_d";
                 case 1:
-                    return "_n";
+                    return isVerbose ? "_normal" : "_n";
                 case 2:
                     if (baseBodyIndex == 1 && !isface) {
-                        return "_m";
+                        return isVerbose ? "_multi" : "_m";
                     } else {
-                        return "_s";
+                        return isVerbose ? "_multi" : "_s";
                     }
+                case 3:
+                    return "_catchlight";
             }
             return null;
         }
