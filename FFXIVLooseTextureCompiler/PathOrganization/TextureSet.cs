@@ -34,7 +34,20 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
         public string Normal { get { if (normal == null) { normal = ""; } return normal; } set => normal = value; }
         public string Multi { get { if (multi == null) { multi = ""; } return multi; } set => multi = value; }
         public string NormalMask { get { if (normalMask == null) { normalMask = ""; } return normalMask; } set => normalMask = value; }
-        public string Glow { get { if (glow == null) { glow = ""; } return glow; } set => glow = value; }
+        public string Glow {
+            get {
+                if (glow == null) {
+                    glow = "";
+                }
+                return glow;
+            }
+            set {
+                if (!string.IsNullOrEmpty(value)) {
+                    IgnoreMultiGeneration = false;
+                }
+                glow = value;
+            }
+        }
         public string InternalDiffusePath { get => internalDiffusePath; set => internalDiffusePath = value; }
         public string InternalNormalPath { get => internalNormalPath; set => internalNormalPath = value; }
         public string InternalMultiPath { get => internalMultiPath; set => internalMultiPath = value; }

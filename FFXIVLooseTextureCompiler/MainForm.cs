@@ -671,8 +671,12 @@ namespace FFXIVLooseTextureCompiler {
                 case 5:
                     textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
                         + ", " + raceList.Text;
-                    textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex, genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
-                    textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex, genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
+
+                    textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex, 
+                        genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
+
+                    textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex, 
+                        genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
                     break;
 
             }
@@ -779,7 +783,6 @@ namespace FFXIVLooseTextureCompiler {
                         }
                     }
                     generateMultiCheckBox.Checked = true;
-                    textureSet.IgnoreMultiGeneration = false;
                 }
                 textureSet.Diffuse = diffuse.CurrentPath;
                 textureSet.Normal = normal.CurrentPath;
