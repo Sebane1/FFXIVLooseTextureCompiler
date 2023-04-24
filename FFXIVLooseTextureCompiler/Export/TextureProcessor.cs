@@ -41,8 +41,8 @@ namespace FFXIVLooseTextureCompiler {
         public void BatchTextureSet(TextureSet parent, TextureSet child) {
             if (!string.IsNullOrEmpty(child.Diffuse)) {
                 if (!xnormalCache.ContainsKey(child.Diffuse)) {
-                    string diffuseAlpha = parent.Diffuse.Replace(".", "_alpha.");
-                    string diffuseRGB = parent.Diffuse.Replace(".", "_rgb.");
+                    string diffuseAlpha = parent.Diffuse.Replace(".", "_alpha.").Replace(".tex", ".png");
+                    string diffuseRGB = parent.Diffuse.Replace(".", "_rgb.").Replace(".tex", ".png");
                     if (finalizeResults || !File.Exists(child.Diffuse.Replace("baseTexBaked", "rgb_baseTexBaked"))
                         || !File.Exists(child.Diffuse.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.Diffuse.Contains("baseTexBaked")) {
@@ -266,13 +266,22 @@ namespace FFXIVLooseTextureCompiler {
         private bool MultiLogic(TextureSet textureSet, string multiDiskPath) {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.DontManipulate);
+                if (!string.IsNullOrEmpty(textureSet.Glow)) {
+                    ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.GlowMulti, "", textureSet.Glow);
+                } else {
+                    ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.DontManipulate);
+                }
                 outputGenerated = true;
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
                 && generateMulti && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
                 if (!textureSet.IgnoreMultiGeneration) {
-                    ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", "",
-                        textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    if (textureSet.InternalDiffusePath.Contains("b0001_b_d") || textureSet.InternalDiffusePath.Contains("b0101_b_d")) {
+                        ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiTbse, "", textureSet.Glow,
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    } else {
+                        ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.Multi, "", textureSet.Glow,
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    }
                     outputGenerated = true;
                 }
             }
@@ -288,7 +297,7 @@ namespace FFXIVLooseTextureCompiler {
                     outputGenerated = true;
                 } else {
                     if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
-                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowMulti, "",
+                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowEyeMulti, "",
                             textureSet.Glow);
                         outputGenerated = true;
                     } else {
@@ -350,12 +359,14 @@ namespace FFXIVLooseTextureCompiler {
         public enum ExportType {
             None,
             Normal,
-            MultiFace,
+            Multi,
             MergeNormal,
             Glow,
-            GlowMulti,
+            GlowEyeMulti,
             XNormalImport,
-            DontManipulate
+            DontManipulate,
+            GlowMulti,
+            MultiTbse
         }
         public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None,
             string diffuseNormal = "", string mask = "", string layeringImage = "", string normalCorrection = "", bool modifier = false) {
@@ -412,6 +423,14 @@ namespace FFXIVLooseTextureCompiler {
                             }
                         }
                         break;
+                    case ExportType.GlowEyeMulti:
+                        using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
+                            if (bitmap != null) {
+                                Bitmap glowBitmap = AtramentumLuminisGlow.CalculateEyeMulti(bitmap, TexLoader.ResolveBitmap(mask));
+                                glowBitmap.Save(stream, ImageFormat.Png);
+                            }
+                        }
+                        break;
                     case ExportType.GlowMulti:
                         using (Bitmap bitmap = TexLoader.ResolveBitmap(inputFile)) {
                             if (bitmap != null) {
@@ -452,7 +471,8 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         output.Save(stream, ImageFormat.Png);
                         break;
-                    case ExportType.MultiFace:
+                    case ExportType.Multi:
+                    case ExportType.MultiTbse:
                         if (multiCache.ContainsKey(inputFile)) {
                             multiCache[inputFile].Save(stream, ImageFormat.Png);
                         } else {
@@ -472,8 +492,11 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         image = bitmap;
                                     }
-                                    Bitmap multi = MultiplyFilter.MultiplyImage(
-                                    Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, 126, 0);
+                                    Bitmap generatedMulti = MultiplyFilter.MultiplyImage(
+                                    Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, (byte)(exportType != ExportType.MultiTbse ? 126 : 0), 0);
+                                    Bitmap multi = !string.IsNullOrEmpty(mask)
+                                        ? AtramentumLuminisGlow.CalculateMulti(generatedMulti, TexLoader.ResolveBitmap(mask))
+                                        : generatedMulti;
                                     multi.Save(stream, ImageFormat.Png);
                                     multiCache.Add(inputFile, multi);
                                 }

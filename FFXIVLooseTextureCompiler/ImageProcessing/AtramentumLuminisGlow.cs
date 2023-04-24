@@ -43,7 +43,7 @@
             return diffuse;
         }
 
-        public static Bitmap CalculateMulti(Bitmap file, Bitmap glow) {
+        public static Bitmap CalculateEyeMulti(Bitmap file, Bitmap glow) {
             Bitmap image = glow;
             Bitmap multi = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -57,6 +57,31 @@
                         Color destinationPixel = destination.GetPixel(x, y);
                         if (sourcePixel.A > 0) {
                             Color col = Color.FromArgb(255 - sourcePixel.A, destinationPixel.R, destinationPixel.G, destinationPixel.B);
+                            destination.SetPixel(x, y, col);
+                        }
+                    }
+                }
+            } else {
+                MessageBox.Show("Glow merging failed with multi. Images are not the same size.");
+            }
+            destination.UnlockBits();
+            source.UnlockBits();
+            return multi;
+        }
+
+        public static Bitmap CalculateMulti(Bitmap file, Bitmap glow) {
+            Bitmap image = glow;
+            Bitmap multi = new Bitmap(file);
+            LockBitmap source = new LockBitmap(image);
+            LockBitmap destination = new LockBitmap(multi);
+            source.LockBits();
+            destination.LockBits();
+            if (file.Width == glow.Width && file.Height == glow.Height) {
+                for (int y = 0; y < image.Height; y++) {
+                    for (int x = 0; x < image.Width; x++) {
+                        Color sourcePixel = source.GetPixel(x, y);
+                        if (sourcePixel.A > 0) {
+                            Color col = Color.FromArgb(0, 0, 0, 0);
                             destination.SetPixel(x, y, col);
                         }
                     }
