@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace FFXIVLooseTextureCompiler.PathOrganization {
     public static class UniversalTextureSetCreator {
         /// <summary>
-        /// 
+        /// Adds children to a primary texture set.
         /// </summary>
         /// <param name="textureSet"></param>
         public static void ConfigureOmniConfiguration(TextureSet textureSet) {
@@ -113,11 +113,11 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
                     }
                     break;
             }
-            destinationTextureSet.Diffuse = baseTextureSet.Diffuse?.Replace(".", $"_{prefix}_d_baseTexBaked.");
-            destinationTextureSet.Normal = baseTextureSet.Normal?.Replace(".", $"_{prefix}_n_baseTexBaked.");
-            destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.");
-            destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.");
-            destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.");
+            destinationTextureSet.Diffuse = baseTextureSet.Diffuse?.Replace(".", $"_{prefix}_d_baseTexBaked.").Replace(".tex", ".png");
+            destinationTextureSet.Normal = baseTextureSet.Normal?.Replace(".", $"_{prefix}_n_baseTexBaked.").Replace(".tex", ".png");
+            destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.".Replace(".tex", ".png"));
+            destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.").Replace(".tex", ".png");
+            destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.").Replace(".tex", ".png");
             destinationTextureSet.IgnoreNormalGeneration = baseTextureSet.IgnoreNormalGeneration;
             destinationTextureSet.IgnoreMultiGeneration = baseTextureSet.IgnoreMultiGeneration;
             destinationTextureSet.InvertNormalGeneration = baseTextureSet.InvertNormalGeneration;

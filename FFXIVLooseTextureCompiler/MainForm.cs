@@ -778,6 +778,8 @@ namespace FFXIVLooseTextureCompiler {
                             watchers.Remove(directoryGlow);
                         }
                     }
+                    generateMultiCheckBox.Checked = true;
+                    textureSet.IgnoreMultiGeneration = false;
                 }
                 textureSet.Diffuse = diffuse.CurrentPath;
                 textureSet.Normal = normal.CurrentPath;
@@ -1217,7 +1219,7 @@ namespace FFXIVLooseTextureCompiler {
         private void biboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1231,7 +1233,7 @@ namespace FFXIVLooseTextureCompiler {
         private void gen3ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1245,7 +1247,7 @@ namespace FFXIVLooseTextureCompiler {
         private void gen3ToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1259,7 +1261,7 @@ namespace FFXIVLooseTextureCompiler {
         private void gen2ToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1273,7 +1275,7 @@ namespace FFXIVLooseTextureCompiler {
         private void gen2ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1291,7 +1293,7 @@ namespace FFXIVLooseTextureCompiler {
         private void biboToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1306,7 +1308,7 @@ namespace FFXIVLooseTextureCompiler {
         private void otopopToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1321,7 +1323,7 @@ namespace FFXIVLooseTextureCompiler {
         private void vanillaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1335,7 +1337,7 @@ namespace FFXIVLooseTextureCompiler {
         private void vanillaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1349,7 +1351,7 @@ namespace FFXIVLooseTextureCompiler {
         private void otopopToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1363,7 +1365,7 @@ namespace FFXIVLooseTextureCompiler {
         private void asymLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1377,7 +1379,7 @@ namespace FFXIVLooseTextureCompiler {
         private void extractAtramentumLuminisGlowMapToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
