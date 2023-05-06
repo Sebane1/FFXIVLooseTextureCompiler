@@ -21,7 +21,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
                     faceIdCheck = "10";
                 }
                 return "chara/asymeyes/" + RaceInfo.Races[RaceInfo.GetMainRace(subRaceValue)]
-                    .ToLower().Replace("midlander", "hyur").Replace("highlander", "hyur") + "_" 
+                    .ToLower().Replace("midlander", "hyur").Replace("highlander", "hyur").ToLower().Replace("xaela", "aura").Replace("raen", "aura") + "_" 
                     + RaceInfo.SubRaces[subRaceValue].Replace(" ", null).ToLower()
                     + "_" + (gender == 0 ? "male" : "female") + "/f" + faceIdCheck + (faceType + 1) + GetTextureType(material, 0, false, true) + ".tex";
             }
