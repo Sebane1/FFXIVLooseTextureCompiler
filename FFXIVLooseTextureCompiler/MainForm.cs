@@ -530,7 +530,9 @@ namespace FFXIVLooseTextureCompiler {
                     genderListBody.SelectedIndex = 1;
                     genderListBody.Enabled = false;
                     tailList.Enabled = false;
-                    raceList.SelectedIndex = 0;
+                    if (raceList.SelectedIndex == 5) {
+                        raceList.SelectedIndex = 0;
+                    }
                     uniqueAuRa.Enabled = false;
                     break;
                 case 4:
@@ -544,7 +546,9 @@ namespace FFXIVLooseTextureCompiler {
                     genderListBody.SelectedIndex = 0;
                     genderListBody.Enabled = false;
                     tailList.Enabled = false;
-                    raceList.SelectedIndex = 0;
+                    if (raceList.SelectedIndex == 5) {
+                        raceList.SelectedIndex = 0;
+                    }
                     uniqueAuRa.Enabled = true;
                     break;
                 case 6:
@@ -672,10 +676,10 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
                         + ", " + raceList.Text;
 
-                    textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex, 
+                    textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex,
                         genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
 
-                    textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex, 
+                    textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex,
                         genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
                     break;
 
@@ -738,50 +742,12 @@ namespace FFXIVLooseTextureCompiler {
         public void SetPaths() {
             if (textureList.SelectedIndex != -1) {
                 TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-                string directoryDiffuse = Path.GetDirectoryName(textureSet.Diffuse);
-                if (!string.IsNullOrWhiteSpace(directoryDiffuse)) {
-                    if (watchers.ContainsKey(directoryDiffuse)) {
-                        if (textureSet.Diffuse != diffuse.CurrentPath) {
-                            watchers[directoryDiffuse].Dispose();
-                            watchers.Remove(directoryDiffuse);
-                        }
-                    }
-                }
-                string directoryNormal = Path.GetDirectoryName(textureSet.Normal);
-                if (!string.IsNullOrWhiteSpace(directoryNormal)) {
-                    if (watchers.ContainsKey(directoryNormal)) {
-                        if (textureSet.Normal != normal.CurrentPath) {
-                            watchers[directoryNormal].Dispose();
-                            watchers.Remove(directoryNormal);
-                        }
-                    }
-                }
-                string directoryMulti = Path.GetDirectoryName(textureSet.Multi);
-                if (!string.IsNullOrWhiteSpace(directoryMulti)) {
-                    if (watchers.ContainsKey(directoryMulti)) {
-                        if (textureSet.Multi != multi.CurrentPath) {
-                            watchers[directoryMulti].Dispose();
-                            watchers.Remove(directoryMulti);
-                        }
-                    }
-                }
-                string directoryMask = Path.GetDirectoryName(textureSet.NormalMask);
-                if (!string.IsNullOrWhiteSpace(directoryMask)) {
-                    if (watchers.ContainsKey(directoryMask)) {
-                        if (textureSet.NormalMask != mask.CurrentPath) {
-                            watchers[directoryMask].Dispose();
-                            watchers.Remove(directoryMask);
-                        }
-                    }
-                }
-                string directoryGlow = Path.GetDirectoryName(textureSet.Glow);
-                if (!string.IsNullOrWhiteSpace(directoryGlow)) {
-                    if (watchers.ContainsKey(directoryGlow)) {
-                        if (textureSet.Glow != glow.CurrentPath) {
-                            watchers[directoryGlow].Dispose();
-                            watchers.Remove(directoryGlow);
-                        }
-                    }
+                DisposeWatcher(textureSet.Diffuse, diffuse);
+                DisposeWatcher(textureSet.Normal, normal);
+                DisposeWatcher(textureSet.Multi, multi);
+                DisposeWatcher(textureSet.NormalMask, mask);
+                DisposeWatcher(textureSet.Glow, glow);
+                if (!string.IsNullOrWhiteSpace(textureSet.Glow)) {
                     generateMultiCheckBox.Checked = true;
                 }
                 textureSet.Diffuse = diffuse.CurrentPath;
@@ -795,6 +761,16 @@ namespace FFXIVLooseTextureCompiler {
                 AddWatcher(textureSet.Multi);
                 AddWatcher(textureSet.NormalMask);
                 AddWatcher(textureSet.Glow);
+            }
+        }
+        public void DisposeWatcher(string path, FilePicker filePicker) {
+            if (!string.IsNullOrWhiteSpace(path)) {
+                if (watchers.ContainsKey(path)) {
+                    if (path != filePicker.CurrentPath) {
+                        watchers[path].Dispose();
+                        watchers.Remove(path);
+                    }
+                }
             }
         }
         public void AddWatcher(string path) {
