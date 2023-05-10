@@ -61,6 +61,7 @@
             // 
             // skin
             // 
+            this.skin.BackColor = System.Drawing.Color.LavenderBlush;
             this.skin.CurrentPath = null;
             this.skin.Filter = null;
             this.skin.Index = -1;
@@ -74,6 +75,7 @@
             // 
             // face
             // 
+            this.face.BackColor = System.Drawing.Color.LavenderBlush;
             this.face.CurrentPath = null;
             this.face.Filter = null;
             this.face.Index = -1;
@@ -87,6 +89,7 @@
             // 
             // eyes
             // 
+            this.eyes.BackColor = System.Drawing.Color.Lavender;
             this.eyes.CurrentPath = null;
             this.eyes.Filter = null;
             this.eyes.Index = -1;
@@ -384,10 +387,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(351, 241);
-            this.Controls.Add(this.exportPanel);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.donateButton);
-            this.Controls.Add(this.exportProgress);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.normalGeneration);
             this.Controls.Add(this.previewButton);
@@ -402,6 +403,8 @@
             this.Controls.Add(this.face);
             this.Controls.Add(this.skin);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.exportPanel);
+            this.Controls.Add(this.exportProgress);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -412,6 +415,7 @@
             this.Load += new System.EventHandler(this.MainFormSimplified_Load);
             this.Shown += new System.EventHandler(this.MainWindowSimplified_Load);
             this.VisibleChanged += new System.EventHandler(this.MainWindowSimplified_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.exportPanel.ResumeLayout(false);

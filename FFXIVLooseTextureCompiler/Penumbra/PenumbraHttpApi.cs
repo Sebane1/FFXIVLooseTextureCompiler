@@ -13,13 +13,13 @@ public static partial class PenumbraHttpApi {
 
         await PenumbraApi.Post("/redraw", data);
 
-        await Task.Delay(500);
+        await Task.Delay(200);
     }
     public static async Task Reload(string modPath, string modName) {
         ModReloadData data = new ModReloadData(modPath, modName);
         await PenumbraApi.Post("/reloadmod", data);
 
-        await Task.Delay(500);
+        await Task.Delay(200);
     }
 
     private record ModReloadData(string Path, string Name) {

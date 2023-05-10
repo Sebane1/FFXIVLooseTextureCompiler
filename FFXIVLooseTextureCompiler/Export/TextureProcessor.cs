@@ -227,9 +227,13 @@ namespace FFXIVLooseTextureCompiler {
                             break;
                         case 1:
                             if (!textureSet.IsChildSet) {
-                                option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
+                                if (!string.IsNullOrEmpty(textureSet.Diffuse) || 
+                                    !string.IsNullOrEmpty(textureSet.Normal) || 
+                                    !string.IsNullOrEmpty(textureSet.Multi)) {
+                                    option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
                                     : textureSet.MaterialSetName + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
-                                group.Options.Add(option);
+                                    group.Options.Add(option);
+                                }
                             }
                             if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {

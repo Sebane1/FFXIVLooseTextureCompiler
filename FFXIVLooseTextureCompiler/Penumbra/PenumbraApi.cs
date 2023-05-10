@@ -46,10 +46,10 @@ internal static class PenumbraApi {
 
             return response;
         } catch (Exception ex) {
-            if (!calledWarningOnce) {
-                MessageBox.Show(@"Error communicating with Penumbra. Try to select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"".");
-                calledWarningOnce = true;
-            }
+            //if (!calledWarningOnce) {
+            //    //MessageBox.Show(@"Error communicating with Penumbra. Try to select ""Enable HTTP API"" inside of penumbra under ""Settings -> Advanced"".");
+            //    //calledWarningOnce = true;
+            //}
             return null;
         }
     }

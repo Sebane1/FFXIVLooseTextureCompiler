@@ -170,8 +170,12 @@ namespace FFXIVLooseTextureCompiler {
 
         private void progressChecker_Tick(object sender, EventArgs e) {
             exportPanel.Visible = exportProgress.Visible = mainWindow.LockDuplicateGeneration;
-            exportProgress.Maximum = mainWindow.ExportProgress.Maximum;
-            exportProgress.Value = mainWindow.ExportProgress.Value;
+            if (mainWindow.LockDuplicateGeneration) {
+                exportPanel.BringToFront();
+                exportProgress.BringToFront();
+                exportProgress.Maximum = mainWindow.ExportProgress.Maximum;
+                exportProgress.Value = mainWindow.ExportProgress.Value;
+            }
         }
 
         private void normalGeneration_SelectedIndexChanged(object sender, EventArgs e) {
@@ -248,6 +252,22 @@ namespace FFXIVLooseTextureCompiler {
 
         private void donateButton_Click(object sender, EventArgs e) {
             mainWindow.donateButton_Click(sender, e);
+        }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Control && e.KeyCode == Keys.S) {
+                mainWindow.Save();
+            }
+        }
+        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
+            switch (keys) {
+                case Keys.S | Keys.Control:
+                    // ... Process Shift+Ctrl+Alt+B ...
+                    mainWindow.Save();
+                    return true; // signal that we've processed this key
+            }
+
+            // run base implementation
+            return base.ProcessCmdKey(ref message, keys);
         }
     }
 }

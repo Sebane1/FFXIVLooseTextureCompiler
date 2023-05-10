@@ -1015,7 +1015,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             lockDuplicateGeneration = false;
         }
-        private void Save() {
+        public void Save() {
             lockDuplicateGeneration = true;
             if (savePath == null) {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
