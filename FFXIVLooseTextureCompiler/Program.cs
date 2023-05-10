@@ -18,7 +18,7 @@ namespace FFXIVLooseTextureCompiler {
 
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length <= 1) {
-                AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/Updater/update2.xml");
+                AutoUpdater.Start("https://raw.githubusercontent.com/Sebane1/FFXIVLooseTextureCompiler/main/Updater/update3.xml");
                 AutoUpdater.ApplicationExitEvent += delegate () {
                     launchForm = false;
                 };

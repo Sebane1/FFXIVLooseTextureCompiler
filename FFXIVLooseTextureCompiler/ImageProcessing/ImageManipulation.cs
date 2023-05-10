@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using System.Windows.Media.Media3D;
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class ImageManipulation {
@@ -132,6 +133,24 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
+
+        public static Bitmap GenerateXNormalTranslationMap() {
+            Bitmap image = new Bitmap(4096, 4096);
+            using (LockBitmap bitmap = new LockBitmap(image)) {
+                int i = int.MinValue;
+                for (int x = 0; x < bitmap.Width; x++) {
+                    for (int y = 0; y < bitmap.Height; y++) {
+                        // Set to some colour
+                        Color color = Color.FromArgb(i);
+                        color = Color.FromArgb(255, color.R, color.G, color.B);
+                        bitmap.SetPixel(x, y, color);
+                        i++;
+                    }
+                }
+            }
+            return image;
+        }
+
         public static Bitmap MergeGrayscalesToARGB(Bitmap red, Bitmap green, Bitmap blue, Bitmap alpha) {
             Bitmap image = new Bitmap(red);
             LockBitmap destination = new LockBitmap(image);

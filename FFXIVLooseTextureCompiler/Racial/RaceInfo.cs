@@ -44,6 +44,20 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static List<string> SubRaces { get => subRaces; set => subRaces = value; }
         public static List<string> Races { get => races; set => races = value; }
 
+        public static string ReverseBodyLookup(string internalPath) {
+            if (internalPath.Contains("bibo")) {
+                return "bibo";
+            } else if (internalPath.Contains("eve") || internalPath.Contains("gen3")) {
+                return "gen3";
+            } else if (internalPath.Contains("body")) {
+                return "gen2";
+            } else if (internalPath.Contains("skin_otopop") || internalPath.Contains("v01_c1101b0001_g")) {
+                return "otopop";
+            } else if (internalPath.Contains("1_b_d")) {
+                return "tbse";
+            }
+            return "";
+        }
         public static int ReverseRaceLookup(string path) {
             if (!string.IsNullOrEmpty(path)) {
                 for (int i = 0; i < 10; i++) {
@@ -78,7 +92,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
         public static string NumberPadder(int value) {
             return value.ToString().PadLeft(4, '0');
         }
-        public static int GetMainRace(int subRace) {
+        public static int SubRaceToMainRace(int subRace) {
             switch (subRace) {
                 case 0:
                     return 0;

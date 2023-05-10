@@ -9,6 +9,13 @@
         public bool BakeMissingNormals { get; set; }
         public bool GenerateMulti { get; set; }
 
+        public bool SimpleMode { get; set; }
+
+        public int SimpleBodyType { get; set; }
+        public int SimpleSubRaceType { get; set; }
+        public int SimpleFaceType { get; set; }
+        public int SimpleNormalGeneration { get; set; }
+
         public int ExportType { get; set; }
         public List<TextureSet> MaterialSets { get; set; }
     }

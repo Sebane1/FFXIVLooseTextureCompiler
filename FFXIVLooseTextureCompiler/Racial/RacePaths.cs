@@ -20,7 +20,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
                     || (selectedText.ToLower() == "xaela") || (selectedText.ToLower() == "veena")) {
                     faceIdCheck = "10";
                 }
-                return "chara/asymeyes/" + RaceInfo.Races[RaceInfo.GetMainRace(subRaceValue)]
+                return "chara/asymeyes/" + RaceInfo.Races[RaceInfo.SubRaceToMainRace(subRaceValue)]
                     .ToLower().Replace("midlander", "hyur").Replace("highlander", "hyur")
                     .ToLower().Replace("xaela", "aura").Replace("raen", "aura")
                     .Replace(@"'", null) + "_" 

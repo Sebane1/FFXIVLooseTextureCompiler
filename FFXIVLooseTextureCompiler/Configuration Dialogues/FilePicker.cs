@@ -169,10 +169,14 @@ namespace FFXIVVoicePackCreator {
                 filePath.Text = CurrentPath;
             }
         }
-
-        private void clearButton_Click(object sender, EventArgs e) {
+        public void ClearValue() {
             currentPath = "";
             filePath.Text = "";
+            OnFileSelected.Invoke(this, EventArgs.Empty);
+        }
+
+        private void clearButton_Click(object sender, EventArgs e) {
+            ClearValue();
         }
     }
 }

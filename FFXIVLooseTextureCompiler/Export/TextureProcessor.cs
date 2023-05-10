@@ -49,10 +49,21 @@ namespace FFXIVLooseTextureCompiler {
                             xnormalCache.Add(child.Diffuse, child.Diffuse);
                             Bitmap diffuse = TexLoader.ResolveBitmap(parent.Diffuse);
                             if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha)) && Directory.Exists(Path.GetDirectoryName(diffuseRGB))) {
+                                string childAlpha = child.Diffuse.Replace("baseTexBaked", "alpha");
+                                string childRGB = child.Diffuse.Replace("baseTexBaked", "rgb");
                                 ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
                                 ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
-                                xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Diffuse.Replace("baseTexBaked", "alpha"));
-                                xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Diffuse.Replace("baseTexBaked", "rgb"));
+                                if (finalizeResults) {
+                                    xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, childAlpha);
+                                    xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, childRGB);
+                                } else {
+                                    if (!File.Exists(childAlpha)) {
+                                        new Bitmap(1024, 1024).Save(childAlpha.Replace(".", "_baseTexBaked."), ImageFormat.Png);
+                                    }
+                                    if (!File.Exists(childRGB)) {
+                                        new Bitmap(1024, 1024).Save(childRGB.Replace(".", "_baseTexBaked."), ImageFormat.Png);
+                                    }
+                                }
                             } else {
                                 MessageBox.Show("Something has gone terribly wrong. " + parent.Diffuse + "is missing");
                             }
