@@ -102,7 +102,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         #endregion
-        #region Generation
+        #region Export
         private void autoGenerateTImer_Tick(object sender, EventArgs e) {
             generateButton_Click(this, EventArgs.Empty);
             autoGenerateTImer.Stop();
@@ -1747,8 +1747,6 @@ namespace FFXIVLooseTextureCompiler {
 
             }
         }
-        #endregion
-
         private void thisToolIsTooHardMakeItSimplerToolStripMenuItem_Click(object sender, EventArgs e) {
             if (textureList.Items.Count == 0 || textureList.Items.Count == 3) {
                 isSimpleMode = true;
@@ -1759,5 +1757,6 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("This project is too complex for simple mode");
             }
         }
+        #endregion
     }
 }

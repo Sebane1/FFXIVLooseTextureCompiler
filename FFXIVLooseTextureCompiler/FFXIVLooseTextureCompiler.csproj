@@ -6,8 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyVersion>1.1.0.1</AssemblyVersion>
-    <FileVersion>1.1.0.1</FileVersion>
+    <AssemblyVersion>1.1.0.2</AssemblyVersion>
+    <FileVersion>1.1.0.2</FileVersion>
     <Version>1.1.0.1</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>

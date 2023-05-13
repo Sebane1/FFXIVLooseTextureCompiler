@@ -54,7 +54,7 @@
             LockBitmap maskReference = null;
             if (normalMask != null) {
                 normalMask.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                maskReference = new LockBitmap(normalMask);
+                maskReference = new LockBitmap(new Bitmap(normalMask, image.Width, image.Height));
                 maskReference.LockBits();
             }
             source.LockBits();
