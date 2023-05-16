@@ -1,7 +1,7 @@
 ﻿namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class AtramentumLuminisGlow {
         public static Bitmap CalculateDiffuse(Bitmap file, Bitmap glow) {
-            Bitmap image = glow;
+            Bitmap image = new Bitmap(glow, file.Width, file.Height);
             Bitmap diffuse = new Bitmap(file);
             Bitmap mergedImage = new Bitmap(diffuse);
 
@@ -17,25 +17,21 @@
             source.LockBits();
             destination.LockBits();
             mergedImagePixels.LockBits();
-            if (file.Width == glow.Width && file.Height == glow.Height) {
-                for (int y = 0; y < image.Height; y++) {
-                    for (int x = 0; x < image.Width; x++) {
-                        Color sourcePixel = source.GetPixel(x, y);
-                        Color mergedPixel = mergedImagePixels.GetPixel(x, y);
-                        if (sourcePixel.A > 20) {
-                            Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
-                            destination.SetPixel(x, y, col);
-                        } else if (sourcePixel.A > 10) {
-                            Color col = Color.FromArgb(255 - sourcePixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
-                            destination.SetPixel(x, y, col);
-                        } else if (sourcePixel.A > 0) {
-                            Color col = Color.FromArgb(mergedPixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
-                            destination.SetPixel(x, y, col);
-                        }
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color mergedPixel = mergedImagePixels.GetPixel(x, y);
+                    if (sourcePixel.A > 20) {
+                        Color col = Color.FromArgb(255 - sourcePixel.A, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                        destination.SetPixel(x, y, col);
+                    } else if (sourcePixel.A > 10) {
+                        Color col = Color.FromArgb(255 - sourcePixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
+                        destination.SetPixel(x, y, col);
+                    } else if (sourcePixel.A > 0) {
+                        Color col = Color.FromArgb(mergedPixel.A, mergedPixel.R, mergedPixel.G, mergedPixel.B);
+                        destination.SetPixel(x, y, col);
                     }
                 }
-            } else {
-                MessageBox.Show("Glow merging failed with diffuse. Images are not the same size.");
             }
             destination.UnlockBits();
             source.UnlockBits();
@@ -44,25 +40,21 @@
         }
 
         public static Bitmap CalculateEyeMulti(Bitmap file, Bitmap glow) {
-            Bitmap image = glow;
+            Bitmap image = new Bitmap(glow, file.Width, file.Height);
             Bitmap multi = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
             LockBitmap destination = new LockBitmap(multi);
             source.LockBits();
             destination.LockBits();
-            if (file.Width == glow.Width && file.Height == glow.Height) {
-                for (int y = 0; y < image.Height; y++) {
-                    for (int x = 0; x < image.Width; x++) {
-                        Color sourcePixel = source.GetPixel(x, y);
-                        Color destinationPixel = destination.GetPixel(x, y);
-                        if (sourcePixel.A > 0) {
-                            Color col = Color.FromArgb(255 - sourcePixel.A, destinationPixel.R, destinationPixel.G, destinationPixel.B);
-                            destination.SetPixel(x, y, col);
-                        }
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color destinationPixel = destination.GetPixel(x, y);
+                    if (sourcePixel.A > 0) {
+                        Color col = Color.FromArgb(255 - sourcePixel.A, destinationPixel.R, destinationPixel.G, destinationPixel.B);
+                        destination.SetPixel(x, y, col);
                     }
                 }
-            } else {
-                MessageBox.Show("Glow merging failed with multi. Images are not the same size.");
             }
             destination.UnlockBits();
             source.UnlockBits();
@@ -70,24 +62,20 @@
         }
 
         public static Bitmap CalculateMulti(Bitmap file, Bitmap glow) {
-            Bitmap image = glow;
+            Bitmap image = new Bitmap(glow, file.Width, file.Height);
             Bitmap multi = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
             LockBitmap destination = new LockBitmap(multi);
             source.LockBits();
             destination.LockBits();
-            if (file.Width == glow.Width && file.Height == glow.Height) {
-                for (int y = 0; y < image.Height; y++) {
-                    for (int x = 0; x < image.Width; x++) {
-                        Color sourcePixel = source.GetPixel(x, y);
-                        if (sourcePixel.A > 0) {
-                            Color col = Color.FromArgb(0, 0, 0, 0);
-                            destination.SetPixel(x, y, col);
-                        }
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    if (sourcePixel.A > 0) {
+                        Color col = Color.FromArgb(255, sourcePixel.R, sourcePixel.G, 0);
+                        destination.SetPixel(x, y, col);
                     }
                 }
-            } else {
-                MessageBox.Show("Glow merging failed with multi. Images are not the same size.");
             }
             destination.UnlockBits();
             source.UnlockBits();
