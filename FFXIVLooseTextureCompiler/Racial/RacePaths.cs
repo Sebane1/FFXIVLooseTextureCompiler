@@ -30,7 +30,7 @@ namespace FFXIVLooseTextureCompiler.Racial {
             }
             if (material != 3) {
                 string faceIdCheck = "000";
-                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsgaurd" || selectedText.ToLower() == "highlander"
+                if (selectedText.ToLower() == "the lost" || selectedText.ToLower() == "hellsguard" || selectedText.ToLower() == "highlander"
                     || selectedText.ToLower() == "duskwight" || selectedText.ToLower() == "keeper" || selectedText.ToLower() == "dunesfolk"
                     || (selectedText.ToLower() == "xaela" && facePart != 2 && (material == 0 || auraFaceScales == 2))
                     || (selectedText.ToLower() == "veena" && facePart == 1 && material != 2)
