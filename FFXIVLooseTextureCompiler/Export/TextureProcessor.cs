@@ -307,7 +307,8 @@ namespace FFXIVLooseTextureCompiler {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                 if (generateNormals && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
-                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask,
+                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, 
+                        textureSet.Diffuse, textureSet.NormalMask,
                         textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
                     outputGenerated = true;
                 } else {
