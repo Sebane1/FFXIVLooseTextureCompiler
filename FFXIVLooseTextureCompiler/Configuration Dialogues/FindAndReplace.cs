@@ -14,6 +14,8 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
+        public bool IsForEyes { get; internal set; }
+
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(replacementString.Text)) {
                 foreach (TextureSet textureSet in textureSet) {
@@ -52,7 +54,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
-            if (replacementString.Text.ToLower().Contains("eyes")) {
+            if (IsForEyes) {
                 diffuse.LabelName.Text = "Normal";
                 normal.LabelName.Text = "Multi";
                 multi.LabelName.Text = "Catchlight";
@@ -68,7 +70,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void replacementString_TextChanged(object sender, EventArgs e) {
-            if (replacementString.Text.ToLower().Contains("eyes")) {
+            if (IsForEyes) {
                 diffuse.LabelName.Text = "Normal";
                 normal.LabelName.Text = "Multi";
                 multi.LabelName.Text = "Catchlight";

@@ -2,7 +2,7 @@
 
 namespace FFXIVLooseTextureCompiler.ImageProcessing {
     public class Grayscale {
-        public static Bitmap MakeGrayscale3(Bitmap original) {
+        public static Bitmap MakeGrayscale(Bitmap original) {
             //create a blank bitmap the same size as original
             Bitmap newBitmap = new Bitmap(original.Width, original.Height);
 

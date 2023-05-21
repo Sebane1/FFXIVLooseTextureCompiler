@@ -68,6 +68,14 @@
             this.gen2ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otopopToVanillaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eyeToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertImageToEyeMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertImagesToAsymEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pNGToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertLTCTToPNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateXNormalTranslationMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,11 +85,6 @@
             this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pNGToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertLTCTToPNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generateXNormalTranslationMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,6 +142,7 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
+            this.convertFolderToEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -542,6 +546,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.convertStandaloneTextureToolStripMenuItem,
+            this.eyeToolsToolStripMenuItem,
+            this.devToolsToolStripMenuItem,
             this.extractAtramentumLuminisGlowMapToolStripMenuItem,
             this.bulkTexViewerToolStripMenuItem,
             this.diffuseMergerToolStripMenuItem,
@@ -550,8 +556,7 @@
             this.splitImageToRGBAndAlphaToolStripMenuItem,
             this.imageToRGBChannelsToolStripMenuItem,
             this.mergeRGBAndAlphaImagesToolStripMenuItem,
-            this.xNormalToolStripMenuItem,
-            this.devToolsToolStripMenuItem});
+            this.xNormalToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -627,6 +632,69 @@
             this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
             // 
+            // eyeToolsToolStripMenuItem
+            // 
+            this.eyeToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertImageToEyeMultiToolStripMenuItem,
+            this.convertImagesToAsymEyeMapsToolStripMenuItem,
+            this.convertFolderToEyeMapsToolStripMenuItem});
+            this.eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
+            this.eyeToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.eyeToolsToolStripMenuItem.Text = "Eye Tools";
+            // 
+            // convertImageToEyeMultiToolStripMenuItem
+            // 
+            this.convertImageToEyeMultiToolStripMenuItem.Name = "convertImageToEyeMultiToolStripMenuItem";
+            this.convertImageToEyeMultiToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.convertImageToEyeMultiToolStripMenuItem.Text = "Convert Image To Eye Maps";
+            this.convertImageToEyeMultiToolStripMenuItem.Click += new System.EventHandler(this.convertImageToEyeMultiToolStripMenuItem_Click);
+            // 
+            // convertImagesToAsymEyeMapsToolStripMenuItem
+            // 
+            this.convertImagesToAsymEyeMapsToolStripMenuItem.Name = "convertImagesToAsymEyeMapsToolStripMenuItem";
+            this.convertImagesToAsymEyeMapsToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.convertImagesToAsymEyeMapsToolStripMenuItem.Text = "Convert Images To Asym Eye Maps";
+            this.convertImagesToAsymEyeMapsToolStripMenuItem.Click += new System.EventHandler(this.convertImagesToAsymEyeMapsToolStripMenuItem_Click);
+            // 
+            // devToolsToolStripMenuItem
+            // 
+            this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.textureToLTCTToolStripMenuItem,
+            this.pNGToLTCTToolStripMenuItem,
+            this.convertLTCTToPNGToolStripMenuItem,
+            this.generateXNormalTranslationMapToolStripMenuItem});
+            this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
+            this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.devToolsToolStripMenuItem.Text = "Dev Tools";
+            // 
+            // textureToLTCTToolStripMenuItem
+            // 
+            this.textureToLTCTToolStripMenuItem.Name = "textureToLTCTToolStripMenuItem";
+            this.textureToLTCTToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.textureToLTCTToolStripMenuItem.Text = "Texture To LTCT";
+            this.textureToLTCTToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertImagesToLTCTToolStripMenuItem_Click);
+            // 
+            // pNGToLTCTToolStripMenuItem
+            // 
+            this.pNGToLTCTToolStripMenuItem.Name = "pNGToLTCTToolStripMenuItem";
+            this.pNGToLTCTToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.pNGToLTCTToolStripMenuItem.Text = "PNG To LTCT";
+            this.pNGToLTCTToolStripMenuItem.Click += new System.EventHandler(this.convertPNGToLTCTToolStripMenuItem_Click);
+            // 
+            // convertLTCTToPNGToolStripMenuItem
+            // 
+            this.convertLTCTToPNGToolStripMenuItem.Name = "convertLTCTToPNGToolStripMenuItem";
+            this.convertLTCTToPNGToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
+            this.convertLTCTToPNGToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertLTCTToPNGToolStripMenuItem_Click);
+            // 
+            // generateXNormalTranslationMapToolStripMenuItem
+            // 
+            this.generateXNormalTranslationMapToolStripMenuItem.Name = "generateXNormalTranslationMapToolStripMenuItem";
+            this.generateXNormalTranslationMapToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.generateXNormalTranslationMapToolStripMenuItem.Text = "Generate XNormal Translation Map";
+            this.generateXNormalTranslationMapToolStripMenuItem.Click += new System.EventHandler(this.generateXNormalTranslationMapToolStripMenuItem_Click);
+            // 
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
             this.extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
@@ -689,45 +757,6 @@
             this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
             this.xNormalToolStripMenuItem.Text = "XNormal";
             this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
-            // 
-            // devToolsToolStripMenuItem
-            // 
-            this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.textureToLTCTToolStripMenuItem,
-            this.pNGToLTCTToolStripMenuItem,
-            this.convertLTCTToPNGToolStripMenuItem,
-            this.generateXNormalTranslationMapToolStripMenuItem});
-            this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
-            this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.devToolsToolStripMenuItem.Text = "Dev Tools";
-            // 
-            // textureToLTCTToolStripMenuItem
-            // 
-            this.textureToLTCTToolStripMenuItem.Name = "textureToLTCTToolStripMenuItem";
-            this.textureToLTCTToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.textureToLTCTToolStripMenuItem.Text = "Texture To LTCT";
-            this.textureToLTCTToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertImagesToLTCTToolStripMenuItem_Click);
-            // 
-            // pNGToLTCTToolStripMenuItem
-            // 
-            this.pNGToLTCTToolStripMenuItem.Name = "pNGToLTCTToolStripMenuItem";
-            this.pNGToLTCTToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.pNGToLTCTToolStripMenuItem.Text = "PNG To LTCT";
-            this.pNGToLTCTToolStripMenuItem.Click += new System.EventHandler(this.convertPNGToLTCTToolStripMenuItem_Click);
-            // 
-            // convertLTCTToPNGToolStripMenuItem
-            // 
-            this.convertLTCTToPNGToolStripMenuItem.Name = "convertLTCTToPNGToolStripMenuItem";
-            this.convertLTCTToPNGToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
-            this.convertLTCTToPNGToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertLTCTToPNGToolStripMenuItem_Click);
-            // 
-            // generateXNormalTranslationMapToolStripMenuItem
-            // 
-            this.generateXNormalTranslationMapToolStripMenuItem.Name = "generateXNormalTranslationMapToolStripMenuItem";
-            this.generateXNormalTranslationMapToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.generateXNormalTranslationMapToolStripMenuItem.Text = "Generate XNormal Translation Map";
-            this.generateXNormalTranslationMapToolStripMenuItem.Click += new System.EventHandler(this.generateXNormalTranslationMapToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 
@@ -1258,6 +1287,13 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
+            // convertFolderToEyeMapsToolStripMenuItem
+            // 
+            this.convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
+            this.convertFolderToEyeMapsToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
+            this.convertFolderToEyeMapsToolStripMenuItem.Click += new System.EventHandler(this.convertFolderToEyeMapsToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1450,6 +1486,10 @@
         private ToolStripMenuItem whatAreTemplatesAndHowDoIUseThemToolStripMenuItem;
         private ToolStripMenuItem thisToolIsTooHardMakeItSimplerToolStripMenuItem;
         private ToolStripMenuItem generateXNormalTranslationMapToolStripMenuItem;
+        private ToolStripMenuItem eyeToolsToolStripMenuItem;
+        private ToolStripMenuItem convertImageToEyeMultiToolStripMenuItem;
+        private ToolStripMenuItem convertImagesToAsymEyeMapsToolStripMenuItem;
+        private ToolStripMenuItem convertFolderToEyeMapsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

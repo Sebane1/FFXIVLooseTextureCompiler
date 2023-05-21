@@ -185,7 +185,7 @@
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(176, 23);
             this.generateButton.TabIndex = 8;
-            this.generateButton.Text = "Generate (To finish mod)";
+            this.generateButton.Text = "Finalize (To finish mod)";
             this.generateButton.UseVisualStyleBackColor = true;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 

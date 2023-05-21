@@ -83,7 +83,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
-            if (materialSetNameTextBox.Text.ToLower().Contains("eyes")) {
+            if (textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
                 diffuseLabel.Text = "Internal Normal";
                 normalLabel.Text = "Internal Multi";
                 multiLabel.Text = "Internal Catchlight";

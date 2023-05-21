@@ -183,7 +183,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         diffuseOption = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Normal" : "Diffuse")
+                                        + (textureSet.InternalMultiPath.ToLower().Contains("catchlight") ? "Normal" : "Diffuse")
                                         + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(diffuseOption);
                                     }
@@ -198,7 +198,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (NormalLogic(textureSet, normalDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         normalOption = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "")
-                                        + (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Multi" : "Normal")
+                                        + (textureSet.InternalMultiPath.ToLower().Contains("catchlight") ? "Multi" : "Normal")
                                         + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(normalOption);
                                     }
@@ -213,7 +213,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (MultiLogic(textureSet, multiDiskPath)) {
                                     if (!textureSet.IsChildSet) {
                                         multiOption = new Option((textureSets.Count > 1 ? textureSet.MaterialSetName + " " : "") +
-                                    (textureSet.MaterialSetName.ToLower().Contains("eyes") ? "Catchlight" : "Multi")
+                                    (textureSet.InternalMultiPath.ToLower().Contains("catchlight") ? "Catchlight" : "Multi")
                                     + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                         group.Options.Add(multiOption);
                                     }
@@ -288,7 +288,7 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 outputGenerated = true;
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
-                && generateMulti && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                && generateMulti && !(textureSet.InternalMultiPath.ToLower().Contains("catchlight"))) {
                 if (!textureSet.IgnoreMultiGeneration) {
                     if (textureSet.InternalDiffusePath.Contains("b0001_b_d") || textureSet.InternalDiffusePath.Contains("b0101_b_d")) {
                         ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiTbse, "", textureSet.Glow,
@@ -306,13 +306,13 @@ namespace FFXIVLooseTextureCompiler {
         private bool NormalLogic(TextureSet textureSet, string normalDiskPath) {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
-                if (generateNormals && !textureSet.MaterialSetName.ToLower().Contains("eyes")) {
+                if (generateNormals && !textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
                     ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, 
                         textureSet.Diffuse, textureSet.NormalMask,
                         textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
                     outputGenerated = true;
                 } else {
-                    if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+                    if (!string.IsNullOrEmpty(textureSet.Glow) && (textureSet.InternalMultiPath.ToLower().Contains("catchlight"))) {
                         ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.GlowEyeMulti, "",
                             textureSet.Glow);
                         outputGenerated = true;
@@ -322,7 +322,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)
-            && generateNormals && !(textureSet.MaterialSetName.ToLower().Contains("eyes"))) {
+            && generateNormals && !(textureSet.InternalMultiPath.ToLower().Contains("catchlight"))) {
                 if (!textureSet.IgnoreNormalGeneration) {
                     if (textureSet.BackupTexturePaths != null) {
                         ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)),
@@ -342,14 +342,14 @@ namespace FFXIVLooseTextureCompiler {
 
         private bool DiffuseLogic(TextureSet textureSet, string diffuseDiskPath) {
             bool outputGenerated = false;
-            if ((textureSet.MaterialSetName.ToLower().Contains("eyes") && generateNormals)) {
+            if ((textureSet.InternalMultiPath.ToLower().Contains("catchlight") && generateNormals)) {
                 ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount), ExportType.Normal,
                     textureSet.Diffuse);
                 outputGenerated = true;
             } else {
                 string underlay = textureSet.BackupTexturePaths != null ? (RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath) == 6 ?
                      textureSet.BackupTexturePaths.DiffuseRaen : textureSet.BackupTexturePaths.Diffuse) : "";
-                if (string.IsNullOrEmpty(textureSet.Glow) || textureSet.MaterialSetName.ToLower().Contains("eyes")) {
+                if (string.IsNullOrEmpty(textureSet.Glow) || textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
                     ExportTex(textureSet.Diffuse, AppendNumber(diffuseDiskPath, fileCount),
                         ExportType.None, "", "", underlay);
                     outputGenerated = true;
@@ -509,7 +509,7 @@ namespace FFXIVLooseTextureCompiler {
                                         image = bitmap;
                                     }
                                     Bitmap generatedMulti = MultiplyFilter.MultiplyImage(
-                                    Brightness.BrightenImage(Grayscale.MakeGrayscale3(image)), 255, (byte)(exportType != ExportType.MultiTbse ? 126 : 0), 0);
+                                    Brightness.BrightenImage(Grayscale.MakeGrayscale(image)), 255, (byte)(exportType != ExportType.MultiTbse ? 126 : 0), 0);
                                     Bitmap multi = !string.IsNullOrEmpty(mask)
                                         ? AtramentumLuminisGlow.CalculateMulti(generatedMulti, TexLoader.ResolveBitmap(mask))
                                         : generatedMulti;

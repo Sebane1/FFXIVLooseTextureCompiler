@@ -72,7 +72,7 @@
                 for (int x = 0; x < image.Width; x++) {
                     Color sourcePixel = source.GetPixel(x, y);
                     if (sourcePixel.A > 0) {
-                        Color col = Color.FromArgb(255, sourcePixel.R, sourcePixel.G, 0);
+                        Color col = Color.FromArgb(sourcePixel.A, sourcePixel.R, sourcePixel.G, 255 - sourcePixel.A);
                         destination.SetPixel(x, y, col);
                     }
                 }
