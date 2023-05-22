@@ -1,9 +1,11 @@
-﻿using FFXIVLooseTextureCompiler.PathOrganization;
+﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -268,6 +270,27 @@ namespace FFXIVLooseTextureCompiler {
 
             // run base implementation
             return base.ProcessCmdKey(ref message, keys);
+        }
+
+        private void convertPictureToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                Bitmap eyeMulti = ImageManipulation.BitmapToEyeMulti(image);
+                eyeMulti.Save(openFileDialog.FileName.Replace(".", "_eye_texture."));
+                MessageBox.Show("Image successfully converted to eye multi", mainWindow.VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
         }
     }
 }

@@ -227,8 +227,8 @@ namespace FFXIVLooseTextureCompiler {
                             break;
                         case 1:
                             if (!textureSet.IsChildSet) {
-                                if (!string.IsNullOrEmpty(textureSet.Diffuse) || 
-                                    !string.IsNullOrEmpty(textureSet.Normal) || 
+                                if (!string.IsNullOrEmpty(textureSet.Diffuse) ||
+                                    !string.IsNullOrEmpty(textureSet.Normal) ||
                                     !string.IsNullOrEmpty(textureSet.Multi)) {
                                     option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName ? "Enable"
                                     : textureSet.MaterialSetName + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
@@ -281,14 +281,10 @@ namespace FFXIVLooseTextureCompiler {
         private bool MultiLogic(TextureSet textureSet, string multiDiskPath) {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Multi) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)) {
-                if (!string.IsNullOrEmpty(textureSet.Glow)) {
+                if (!string.IsNullOrEmpty(textureSet.Glow) && !textureSet.InternalMultiPath.Contains("catchlight")) {
                     ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.GlowMulti, "", textureSet.Glow);
                 } else {
-                    if (textureSet.InternalMultiPath.Contains("hair")) {
-                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.DontManipulate);
-                    } else {
-                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.None);
-                    }
+                    ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.None);
                 }
                 outputGenerated = true;
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
@@ -311,7 +307,7 @@ namespace FFXIVLooseTextureCompiler {
             bool outputGenerated = false;
             if (!string.IsNullOrEmpty(textureSet.Normal) && !string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                 if (generateNormals && !textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
-                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, 
+                    ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal,
                         textureSet.Diffuse, textureSet.NormalMask,
                         textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "", textureSet.NormalCorrection);
                     outputGenerated = true;

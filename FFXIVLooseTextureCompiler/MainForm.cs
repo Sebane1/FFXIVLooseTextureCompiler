@@ -1652,7 +1652,7 @@ namespace FFXIVLooseTextureCompiler {
         #endregion
         #region Help
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\n Special thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -1790,7 +1790,16 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.ConvertToEyeMaps(openFileDialog.FileName);
-                MessageBox.Show("Image successfully converted to eye multi", VersionText);
+                MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
             }
         }
 
@@ -1805,6 +1814,15 @@ namespace FFXIVLooseTextureCompiler {
                 if (openFileDialog2.ShowDialog() == DialogResult.OK) {
                     ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName);
                     MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
+                    try {
+                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                            FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                            UseShellExecute = true,
+                            Verb = "OPEN"
+                        });
+                    } catch {
+
+                    }
                 }
             }
         }
@@ -1816,7 +1834,16 @@ namespace FFXIVLooseTextureCompiler {
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
                 ImageManipulation.ConvertToEyeMaps(file);
                 }
-                MessageBox.Show("Images successfully converted to eye multi", VersionText);
+                MessageBox.Show("Images successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
             }
         }
     }

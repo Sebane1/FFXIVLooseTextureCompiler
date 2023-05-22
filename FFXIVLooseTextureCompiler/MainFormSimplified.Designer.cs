@@ -46,8 +46,6 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableModShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,6 +53,8 @@
             this.discordButton = new System.Windows.Forms.Button();
             this.exportPanel = new System.Windows.Forms.Panel();
             this.exportLabel = new System.Windows.Forms.Label();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertPictureToEyeMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.exportPanel.SuspendLayout();
             this.SuspendLayout();
@@ -252,7 +252,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.configToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.modShareToolStripMenuItem,
             this.creditsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -275,45 +275,30 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
-            // configToolStripMenuItem
-            // 
-            this.configToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changePenumbraPathToolStripMenuItem});
-            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
-            this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.configToolStripMenuItem.Text = "Config";
-            // 
-            // changePenumbraPathToolStripMenuItem
-            // 
-            this.changePenumbraPathToolStripMenuItem.Name = "changePenumbraPathToolStripMenuItem";
-            this.changePenumbraPathToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
-            this.changePenumbraPathToolStripMenuItem.Click += new System.EventHandler(this.changePenumbraPathToolStripMenuItem_Click);
             // 
             // modShareToolStripMenuItem
             // 
@@ -326,7 +311,7 @@
             // enableModShareToolStripMenuItem
             // 
             this.enableModShareToolStripMenuItem.Name = "enableModShareToolStripMenuItem";
-            this.enableModShareToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.enableModShareToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.enableModShareToolStripMenuItem.Text = "Enable Mod Share";
             this.enableModShareToolStripMenuItem.Click += new System.EventHandler(this.enableModShareToolStripMenuItem_Click);
             // 
@@ -381,6 +366,21 @@
             this.exportLabel.Size = new System.Drawing.Size(210, 47);
             this.exportLabel.TabIndex = 0;
             this.exportLabel.Text = "Exporting...";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertPictureToEyeMultiToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // convertPictureToEyeMultiToolStripMenuItem
+            // 
+            this.convertPictureToEyeMultiToolStripMenuItem.Name = "convertPictureToEyeMultiToolStripMenuItem";
+            this.convertPictureToEyeMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.convertPictureToEyeMultiToolStripMenuItem.Text = "Convert Picture To Eye Texture";
+            this.convertPictureToEyeMultiToolStripMenuItem.Click += new System.EventHandler(this.convertPictureToEyeMultiToolStripMenuItem_Click);
             // 
             // MainFormSimplified
             // 
@@ -444,8 +444,6 @@
         private System.Windows.Forms.Timer progressChecker;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem configToolStripMenuItem;
-        private ToolStripMenuItem changePenumbraPathToolStripMenuItem;
         private ToolStripMenuItem creditsToolStripMenuItem;
         private ToolStripMenuItem modShareToolStripMenuItem;
         private ToolStripMenuItem enableModShareToolStripMenuItem;
@@ -457,6 +455,8 @@
         private Button discordButton;
         private Panel exportPanel;
         private Label exportLabel;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem convertPictureToEyeMultiToolStripMenuItem;
 
         public ComboBox BodyType { get => bodyType; set => bodyType = value; }
         public ComboBox SubRace { get => subRace; set => subRace = value; }
