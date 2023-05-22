@@ -284,7 +284,11 @@ namespace FFXIVLooseTextureCompiler {
                 if (!string.IsNullOrEmpty(textureSet.Glow)) {
                     ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.GlowMulti, "", textureSet.Glow);
                 } else {
-                    ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.DontManipulate);
+                    if (textureSet.InternalMultiPath.Contains("hair")) {
+                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.DontManipulate);
+                    } else {
+                        ExportTex(textureSet.Multi, AppendNumber(multiDiskPath, fileCount), ExportType.None);
+                    }
                 }
                 outputGenerated = true;
             } else if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalMultiPath)
