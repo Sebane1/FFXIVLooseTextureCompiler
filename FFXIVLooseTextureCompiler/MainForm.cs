@@ -1454,6 +1454,51 @@ namespace FFXIVLooseTextureCompiler {
         }
         #endregion
         #region Image Conversion Utilities
+
+        private void bulkImageToTexToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string file in Directory.EnumerateFiles(openFileDialog.SelectedPath)) {
+                    if (FilePicker.CheckExtentions(file)) {
+                        textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                        MessageBox.Show("The operation succeeded!", VersionText);
+                    }
+                }
+            }
+        }
+
+        private void recursiveBulkImageToTexToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                RecursiveImageToText(openFileDialog.SelectedPath);
+                MessageBox.Show("The operation succeeded!", VersionText);
+            }
+        }
+        private void multiMapToGrayscaleToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_grayscale."));
+                MessageBox.Show("Multi successfully converted to grayscale", VersionText);
+            }
+        }
+        public void RecursiveImageToText(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
+            foreach (string file in Directory.EnumerateFiles(filePath)) {
+                if (FilePicker.CheckExtentions(file)) {
+                    textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                }
+            }
+            if (layer < maxLayer) {
+                foreach (string directory in Directory.EnumerateDirectories(filePath)) {
+                    RecursiveImageToText(directory, layer + 1, maxLayer);
+                }
+            }
+        }
         private void convertImageToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
@@ -1795,40 +1840,6 @@ namespace FFXIVLooseTextureCompiler {
                 });
             } catch {
 
-            }
-        }
-
-        private void bulkImageToTexToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                foreach (string file in Directory.EnumerateFiles(openFileDialog.SelectedPath)) {
-                    if (FilePicker.CheckExtentions(file)) {
-                        textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
-                        MessageBox.Show("The operation succeeded!", VersionText);
-                    }
-                }
-            }
-        }
-
-        private void recursiveBulkImageToTexToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
-            MessageBox.Show("Please select folder");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                RecursiveImageToText(openFileDialog.SelectedPath);
-                MessageBox.Show("The operation succeeded!", VersionText);
-            }
-        }
-        public void RecursiveImageToText(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
-            foreach (string file in Directory.EnumerateFiles(filePath)) {
-                if (FilePicker.CheckExtentions(file)) {
-                    textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
-                }
-            }
-            if (layer < maxLayer) {
-                foreach (string directory in Directory.EnumerateDirectories(filePath)) {
-                    RecursiveImageToText(directory, layer + 1, maxLayer);
-                }
             }
         }
         private void whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click(object sender, EventArgs e) {
