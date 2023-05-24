@@ -375,7 +375,6 @@ namespace FFXIVLooseTextureCompiler {
         private void modAuthorTextBox_Leave(object sender, EventArgs e) {
             WriteAuthorName(modAuthorTextBox.Text);
         }
-
         private void modWebsiteTextBox_Leave(object sender, EventArgs e) {
             WriteAuthorWebsite(modWebsiteTextBox.Text);
         }
@@ -1126,7 +1125,9 @@ namespace FFXIVLooseTextureCompiler {
                 if (templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
                     foreach (TextureSet textureSet in projectFile.MaterialSets) {
-                        textureSet.MaterialGroupName = templateConfiguration.GroupName;
+                        if (!templateConfiguration.GroupName.Contains("Default")) {
+                            textureSet.MaterialGroupName = templateConfiguration.GroupName;
+                        }
                         AddWatcher(textureSet.Diffuse);
                         AddWatcher(textureSet.Normal);
                         AddWatcher(textureSet.Multi);
@@ -1149,7 +1150,8 @@ namespace FFXIVLooseTextureCompiler {
                 } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
                     textureSet.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
                 } else {
-                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ? BackupTexturePaths.VanillaLalaPath : BackupTexturePaths.Gen3Gen2Path;
+                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ? 
+                    BackupTexturePaths.VanillaLalaPath : BackupTexturePaths.Gen3Gen2Path;
                 }
             } else {
                 if (raceList.SelectedIndex == 5) {
@@ -1231,12 +1233,10 @@ namespace FFXIVLooseTextureCompiler {
         private void generationType_SelectedIndexChanged(object sender, EventArgs e) {
             hasDoneReload = false;
         }
-
         private void bakeMissingNormalsCheckbox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
             mask.Enabled = bakeNormals.Checked && textureList.SelectedIndex > -1;
         }
-
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
         }
@@ -1292,7 +1292,6 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
-
         private void gen3ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1455,6 +1454,68 @@ namespace FFXIVLooseTextureCompiler {
         }
         #endregion
         #region Image Conversion Utilities
+        private void convertImageToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.ConvertToEyeMaps(openFileDialog.FileName);
+                MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
+        private void convertImagesToAsymEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            OpenFileDialog openFileDialog2 = new OpenFileDialog();
+            openFileDialog2.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select left input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select right input texture");
+                if (openFileDialog2.ShowDialog() == DialogResult.OK) {
+                    ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName);
+                    MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
+                    try {
+                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                            FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                            UseShellExecute = true,
+                            Verb = "OPEN"
+                        });
+                    } catch {
+
+                    }
+                }
+            }
+        }
+
+        private void convertFolderToEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
+                    ImageManipulation.ConvertToEyeMaps(file);
+                }
+                MessageBox.Show("Images successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
         private void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1741,14 +1802,35 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                foreach (string file in Directory.GetFiles(openFileDialog.SelectedPath)) {
+                foreach (string file in Directory.EnumerateFiles(openFileDialog.SelectedPath)) {
                     if (FilePicker.CheckExtentions(file)) {
                         textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                        MessageBox.Show("The operation succeeded!", VersionText);
                     }
                 }
             }
         }
 
+        private void recursiveBulkImageToTexToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
+            MessageBox.Show("Please select folder");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                RecursiveImageToText(openFileDialog.SelectedPath);
+                MessageBox.Show("The operation succeeded!", VersionText);
+            }
+        }
+        public void RecursiveImageToText(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
+            foreach (string file in Directory.EnumerateFiles(filePath)) {
+                if (FilePicker.CheckExtentions(file)) {
+                    textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                }
+            }
+            if (layer < maxLayer) {
+                foreach (string directory in Directory.EnumerateDirectories(filePath)) {
+                    RecursiveImageToText(directory, layer + 1, maxLayer);
+                }
+            }
+        }
         private void whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
                 Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1779,72 +1861,9 @@ namespace FFXIVLooseTextureCompiler {
                 mainFormSimplified.Show();
                 WriteDefaultMode();
             } else {
-                MessageBox.Show("This project is too complex for simple mode");
+                MessageBox.Show("This project is too complex for simple mode", VersionText);
             }
         }
         #endregion
-
-        private void convertImageToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            MessageBox.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMaps(openFileDialog.FileName);
-                MessageBox.Show("Image successfully converted to eye maps", VersionText);
-                try {
-                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
-                        UseShellExecute = true,
-                        Verb = "OPEN"
-                    });
-                } catch {
-
-                }
-            }
-        }
-
-        private void convertImagesToAsymEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            OpenFileDialog openFileDialog2 = new OpenFileDialog();
-            openFileDialog2.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            MessageBox.Show("Please select left input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                MessageBox.Show("Please select right input texture");
-                if (openFileDialog2.ShowDialog() == DialogResult.OK) {
-                    ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName);
-                    MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
-                    try {
-                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                            FileName = Path.GetDirectoryName(openFileDialog.FileName),
-                            UseShellExecute = true,
-                            Verb = "OPEN"
-                        });
-                    } catch {
-
-                    }
-                }
-            }
-        }
-
-        private void convertFolderToEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if(folderBrowserDialog.ShowDialog() == DialogResult.OK) {
-                foreach(string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
-                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
-                ImageManipulation.ConvertToEyeMaps(file);
-                }
-                MessageBox.Show("Images successfully converted to eye maps", VersionText);
-                try {
-                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
-                        UseShellExecute = true,
-                        Verb = "OPEN"
-                    });
-                } catch {
-
-                }
-            }
-        }
     }
 }

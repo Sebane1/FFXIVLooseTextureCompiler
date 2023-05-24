@@ -35,6 +35,7 @@
             this.groupNameTextBox.Name = "groupNameTextBox";
             this.groupNameTextBox.Size = new System.Drawing.Size(360, 23);
             this.groupNameTextBox.TabIndex = 0;
+            this.groupNameTextBox.Text = "Default";
             // 
             // label
             // 
