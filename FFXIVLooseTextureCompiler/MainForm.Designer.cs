@@ -72,6 +72,7 @@
             this.convertImageToEyeMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertImagesToAsymEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertFolderToEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiMapToGrayscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colourChannelSplittingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -145,7 +146,6 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
-            this.multiMapToGrayscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -548,12 +548,12 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.extractAtramentumLuminisGlowMapToolStripMenuItem,
             this.convertStandaloneTextureToolStripMenuItem,
             this.eyeToolsToolStripMenuItem,
             this.colourChannelSplittingToolStripMenuItem,
-            this.devToolsToolStripMenuItem,
             this.imageToTexConversionToolStripMenuItem,
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem});
+            this.devToolsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -576,56 +576,56 @@
             // biboToGen3ToolStripMenuItem
             // 
             this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
             // 
             // biboToGen2ToolStripMenuItem
             // 
             this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
             this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             this.otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             this.otopopToVanillaToolStripMenuItem.Click += new System.EventHandler(this.otopopToVanillaToolStripMenuItem_Click);
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             this.vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
             // 
@@ -660,6 +660,13 @@
             this.convertFolderToEyeMapsToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
             this.convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
             this.convertFolderToEyeMapsToolStripMenuItem.Click += new System.EventHandler(this.convertFolderToEyeMapsToolStripMenuItem_Click);
+            // 
+            // multiMapToGrayscaleToolStripMenuItem
+            // 
+            this.multiMapToGrayscaleToolStripMenuItem.Name = "multiMapToGrayscaleToolStripMenuItem";
+            this.multiMapToGrayscaleToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.multiMapToGrayscaleToolStripMenuItem.Text = "Multi Map To Grayscale";
+            this.multiMapToGrayscaleToolStripMenuItem.Click += new System.EventHandler(this.multiMapToGrayscaleToolStripMenuItem_Click);
             // 
             // colourChannelSplittingToolStripMenuItem
             // 
@@ -1305,13 +1312,6 @@
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
-            // 
-            // multiMapToGrayscaleToolStripMenuItem
-            // 
-            this.multiMapToGrayscaleToolStripMenuItem.Name = "multiMapToGrayscaleToolStripMenuItem";
-            this.multiMapToGrayscaleToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.multiMapToGrayscaleToolStripMenuItem.Text = "Multi Map To Grayscale";
-            this.multiMapToGrayscaleToolStripMenuItem.Click += new System.EventHandler(this.multiMapToGrayscaleToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
