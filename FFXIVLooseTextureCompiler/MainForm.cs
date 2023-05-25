@@ -1523,20 +1523,26 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             OpenFileDialog openFileDialog2 = new OpenFileDialog();
             openFileDialog2.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Texture File|*.png;";
+
             MessageBox.Show("Please select left input texture (left side of image, not left side of face)");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select right input texture (right side of image, not right side of face)");
                 if (openFileDialog2.ShowDialog() == DialogResult.OK) {
-                    ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName);
-                    MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
-                    try {
-                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                            FileName = Path.GetDirectoryName(openFileDialog.FileName),
-                            UseShellExecute = true,
-                            Verb = "OPEN"
-                        });
-                    } catch {
+                    MessageBox.Show("Please pick a file name for the merged result");
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                        ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName, saveFileDialog.FileName);
+                        MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
+                        try {
+                            Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                                FileName = Path.GetDirectoryName(saveFileDialog.FileName),
+                                UseShellExecute = true,
+                                Verb = "OPEN"
+                            });
+                        } catch {
 
+                        }
                     }
                 }
             }
@@ -1691,9 +1697,6 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 MessageBox.Show("No mod is loaded to send", VersionText);
             }
-        }
-
-        private void listenForFilesToolStripMenuItem_Click(object sender, EventArgs e) {
         }
 
         private void listenForFiles_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {

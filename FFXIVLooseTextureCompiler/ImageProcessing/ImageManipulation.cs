@@ -295,7 +295,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             return normal;
         }
 
-        public static void ConvertToAsymEyeMaps(string filename1, string filename2) {
+        public static void ConvertToAsymEyeMaps(string filename1, string filename2, string output) {
             Bitmap image = TexLoader.ResolveBitmap(filename1);
             Bitmap eyeMulti = BitmapToEyeMulti(image);
             Bitmap eyeGlow = GrayscaleToAlpha(eyeMulti);
@@ -309,15 +309,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 Bitmap catchLight2 = BitmapToCatchlight(eyeMulti2);
                 Bitmap normal2 = BitmapToEyeNormal(eyeMulti2);
 
-                SideBySide(eyeMulti, eyeMulti2).Save(filename1.Replace(".", "_eye_multi_asym."), ImageFormat.Png);
-                SideBySide(eyeGlow, eyeGlow2).Save(filename1.Replace(".", "_eye_glow_asym."), ImageFormat.Png);
-                SideBySide(catchLight, catchLight2).Save(filename1.Replace(".", "_eye_catchlight_asym."), ImageFormat.Png);
-                SideBySide(normal, normal2).Save(filename1.Replace(".", "_eye_normal_asym."), ImageFormat.Png);
+                SideBySide(eyeMulti, eyeMulti2).Save(ReplaceExtension(output.Replace(".", "_eye_multi_asym."), ".png"), ImageFormat.Png);
+                SideBySide(eyeGlow, eyeGlow2).Save(ReplaceExtension(output.Replace(".", "_eye_glow_asym."), ".png"), ImageFormat.Png);
+                SideBySide(catchLight, catchLight2).Save(ReplaceExtension(output.Replace(".", "_eye_catchlight_asym."), ".png"), ImageFormat.Png);
+                SideBySide(normal, normal2).Save(ReplaceExtension(output.Replace(".", "_eye_normal_asym."), ".png"), ImageFormat.Png);
             } else {
-                SideBySide(eyeMulti, eyeMulti).Save(filename1.Replace(".", "_eye_multi_asym."), ImageFormat.Png);
-                SideBySide(eyeGlow, eyeGlow).Save(filename1.Replace(".", "_eye_glow_asym."), ImageFormat.Png);
-                SideBySide(catchLight, catchLight).Save(filename1.Replace(".", "_eye_catchlight_asym."), ImageFormat.Png);
-                SideBySide(normal, normal).Save(filename1.Replace(".", "_eye_normal_asym."), ImageFormat.Png);
+                SideBySide(eyeMulti, eyeMulti).Save(ReplaceExtension(output.Replace(".", "_eye_multi_asym."), ".png"), ImageFormat.Png);
+                SideBySide(eyeGlow, eyeGlow).Save(ReplaceExtension(output.Replace(".", "_eye_glow_asym."), ".png"), ImageFormat.Png);
+                SideBySide(catchLight, catchLight).Save(ReplaceExtension(output.Replace(".", "_eye_catchlight_asym."), ".png"), ImageFormat.Png);
+                SideBySide(normal, normal).Save(ReplaceExtension(output.Replace(".", "_eye_normal_asym."), ".png"), ImageFormat.Png);
             }
         }
         public static void ConvertToEyeMaps(string filename) {
@@ -327,10 +327,13 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             Bitmap catchLight = BitmapToCatchlight(eyeMulti);
             Bitmap normal = BitmapToEyeNormal(eyeMulti);
 
-            eyeMulti.Save(filename.Replace(".", "_eye_multi."), ImageFormat.Png);
-            eyeGlow.Save(filename.Replace(".", "_eye_glow."), ImageFormat.Png);
-            catchLight.Save(filename.Replace(".", "_eye_catchlight."), ImageFormat.Png);
-            normal.Save(filename.Replace(".", "_eye_normal."), ImageFormat.Png);
+            eyeMulti.Save(ReplaceExtension(filename.Replace(".", "_eye_multi."), ".png"), ImageFormat.Png);
+            eyeGlow.Save(ReplaceExtension(filename.Replace(".", "_eye_glow."), ".png"), ImageFormat.Png);
+            catchLight.Save(ReplaceExtension(filename.Replace(".", "_eye_catchlight."), ".png"), ImageFormat.Png);
+            normal.Save(ReplaceExtension(filename.Replace(".", "_eye_normal."), ".png"), ImageFormat.Png);
+        }
+        public static string ReplaceExtension(string path, string extension) {
+            return path.Replace(".dds", extension).Replace(".png", extension).Replace(".bmp", extension).Replace(".tex", extension);
         }
     }
 }
