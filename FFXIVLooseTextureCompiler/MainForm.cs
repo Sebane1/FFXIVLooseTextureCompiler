@@ -413,7 +413,7 @@ namespace FFXIVLooseTextureCompiler {
                 path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher\\pluginConfigs\\Penumbra.json");
                 if (File.Exists(path)) {
                     using (StreamReader reader = new StreamReader(path)) {
-                        for (int i = 0; i < 7; i++) {
+                        for (int i = 0; i < 11; i++) {
                             penumbraModPath = reader.ReadLine()
                                 .Replace("\"ModDirectory\": ", null)
                                 .Replace(",", null)
