@@ -763,16 +763,16 @@ namespace FFXIVLooseTextureCompiler {
                     && !textureSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
         }
 
-        private void SetControlsPaths(TextureSet materialSet) {
-            diffuse.CurrentPath = materialSet.Diffuse;
-            normal.CurrentPath = materialSet.Normal;
-            multi.CurrentPath = materialSet.Multi;
-            mask.CurrentPath = materialSet.NormalMask;
-            glow.CurrentPath = materialSet.Glow;
+        private void SetControlsPaths(TextureSet textureSet) {
+            diffuse.CurrentPath = textureSet.Diffuse;
+            normal.CurrentPath = textureSet.Normal;
+            multi.CurrentPath = textureSet.Multi;
+            mask.CurrentPath = textureSet.NormalMask;
+            glow.CurrentPath = textureSet.Glow;
         }
 
-        private void SetControlsColors(TextureSet materialSet) {
-            if (materialSet.InternalMultiPath.ToLower().Contains("catchlight")) {
+        private void SetControlsColors(TextureSet texturelSet) {
+            if (texturelSet.InternalMultiPath != null && texturelSet.InternalMultiPath.ToLower().Contains("catchlight")) {
                 diffuse.LabelName.Text = "Normal";
                 normal.LabelName.Text = "Multi";
                 multi.LabelName.Text = "Catchlight";

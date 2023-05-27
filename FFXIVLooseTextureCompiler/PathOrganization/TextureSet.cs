@@ -2,18 +2,18 @@
 
 namespace FFXIVLooseTextureCompiler.PathOrganization {
     public class TextureSet {
-        string materialSetName;
-        string materialGroupName;
+        string materialSetName = "";
+        string materialGroupName = "";
 
-        string diffuse;
-        string normal;
-        string multi;
+        string diffuse = "";
+        string normal = "";
+        string multi = "";
 
-        string internalDiffusePath;
-        string internalNormalPath;
-        string internalMultiPath;
-        private string normalMask;
-        private string glow;
+        string internalDiffusePath = "";
+        string internalNormalPath = "";
+        string internalMultiPath = "";
+        private string normalMask = "";
+        private string glow = "" ;
 
         private bool ignoreNormalGeneration;
         private bool ignoreMultiGeneration;
@@ -48,9 +48,22 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
                 glow = value;
             }
         }
-        public string InternalDiffusePath { get => internalDiffusePath; set => internalDiffusePath = value; }
-        public string InternalNormalPath { get => internalNormalPath; set => internalNormalPath = value; }
-        public string InternalMultiPath { get => internalMultiPath; set => internalMultiPath = value; }
+        public string InternalDiffusePath {
+            get {
+                return internalDiffusePath == null ? internalDiffusePath = "" : internalDiffusePath;
+            }
+            set => internalDiffusePath = value; }
+        public string InternalNormalPath {
+            get {
+                return internalNormalPath == null ? internalNormalPath = "" : internalNormalPath;
+            }
+            set => internalNormalPath = value; }
+        public string InternalMultiPath {
+            get {
+                return internalMultiPath == null ? internalMultiPath = "" : internalMultiPath;
+            }
+            set => internalMultiPath = value;
+        }
         public string MaterialGroupName {
             get {
                 if (string.IsNullOrEmpty(materialGroupName)) {
