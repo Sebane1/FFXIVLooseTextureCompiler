@@ -100,6 +100,7 @@
             this.howDoIUseThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howDoIMakeStuffBumpyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howDoIMakeStuffGlowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howDoIMakeEyesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,7 +147,7 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
-            this.howDoIMakeEyesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customizeGroupsButton = new System.Windows.Forms.Button();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -234,9 +235,9 @@
             // generateButton
             // 
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateButton.Location = new System.Drawing.Point(400, 608);
+            this.generateButton.Location = new System.Drawing.Point(420, 608);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(64, 24);
+            this.generateButton.Size = new System.Drawing.Size(56, 24);
             this.generateButton.TabIndex = 7;
             this.generateButton.Text = "Preview";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -885,6 +886,13 @@
             this.howDoIMakeStuffGlowToolStripMenuItem.Text = "How do I make stuff glow?";
             this.howDoIMakeStuffGlowToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeStuffGlowToolStripMenuItem_Click);
             // 
+            // howDoIMakeEyesToolStripMenuItem
+            // 
+            this.howDoIMakeEyesToolStripMenuItem.Name = "howDoIMakeEyesToolStripMenuItem";
+            this.howDoIMakeEyesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
+            this.howDoIMakeEyesToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeEyesToolStripMenuItem_Click);
+            // 
             // canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem
             // 
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Name = "canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem";
@@ -1112,10 +1120,12 @@
             this.generationType.FormattingEnabled = true;
             this.generationType.Items.AddRange(new object[] {
             "Detailed",
-            "Simple"});
-            this.generationType.Location = new System.Drawing.Point(80, 607);
+            "Simple",
+            "Dropdown",
+            "Group Is Checkbox"});
+            this.generationType.Location = new System.Drawing.Point(82, 607);
             this.generationType.Name = "generationType";
-            this.generationType.Size = new System.Drawing.Size(70, 23);
+            this.generationType.Size = new System.Drawing.Size(106, 23);
             this.generationType.TabIndex = 36;
             this.generationType.Text = "Detailed";
             this.generationType.SelectedIndexChanged += new System.EventHandler(this.generationType_SelectedIndexChanged);
@@ -1143,7 +1153,7 @@
             // 
             this.bakeNormals.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bakeNormals.AutoSize = true;
-            this.bakeNormals.Location = new System.Drawing.Point(156, 611);
+            this.bakeNormals.Location = new System.Drawing.Point(192, 611);
             this.bakeNormals.Name = "bakeNormals";
             this.bakeNormals.Size = new System.Drawing.Size(116, 19);
             this.bakeNormals.TabIndex = 39;
@@ -1155,7 +1165,7 @@
             // 
             this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(276, 611);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(316, 612);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -1220,9 +1230,9 @@
             // finalizeButton
             // 
             this.finalizeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.finalizeButton.Location = new System.Drawing.Point(468, 608);
+            this.finalizeButton.Location = new System.Drawing.Point(476, 608);
             this.finalizeButton.Name = "finalizeButton";
-            this.finalizeButton.Size = new System.Drawing.Size(64, 24);
+            this.finalizeButton.Size = new System.Drawing.Size(56, 24);
             this.finalizeButton.TabIndex = 46;
             this.finalizeButton.Text = "Finalize";
             this.finalizeButton.UseVisualStyleBackColor = true;
@@ -1275,6 +1285,7 @@
             // exportPanel
             // 
             this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
+            this.exportPanel.Controls.Add(this.customizeGroupsButton);
             this.exportPanel.Controls.Add(this.exportLabel);
             this.exportPanel.Location = new System.Drawing.Point(0, 0);
             this.exportPanel.Name = "exportPanel";
@@ -1323,18 +1334,21 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
-            // howDoIMakeEyesToolStripMenuItem
+            // customizeGroupsButton
             // 
-            this.howDoIMakeEyesToolStripMenuItem.Name = "howDoIMakeEyesToolStripMenuItem";
-            this.howDoIMakeEyesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
-            this.howDoIMakeEyesToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeEyesToolStripMenuItem_Click);
+            this.customizeGroupsButton.Location = new System.Drawing.Point(432, 388);
+            this.customizeGroupsButton.Name = "customizeGroupsButton";
+            this.customizeGroupsButton.Size = new System.Drawing.Size(100, 23);
+            this.customizeGroupsButton.TabIndex = 53;
+            this.customizeGroupsButton.Text = "Group Manager";
+            this.customizeGroupsButton.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(537, 636);
+            this.Controls.Add(this.generateButton);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.ipBox);
             this.Controls.Add(this.addFaceButton);
@@ -1365,7 +1379,6 @@
             this.Controls.Add(this.faceType);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.subRaceList);
-            this.Controls.Add(this.generateButton);
             this.Controls.Add(this.genderListBody);
             this.Controls.Add(this.modDescriptionTextBox);
             this.Controls.Add(this.raceList);
@@ -1530,6 +1543,7 @@
         private ToolStripMenuItem recursiveBulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem multiMapToGrayscaleToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeEyesToolStripMenuItem;
+        private Button customizeGroupsButton;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
