@@ -146,6 +146,7 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
+            this.howDoIMakeEyesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -845,6 +846,7 @@
             this.howDoIUseThisToolStripMenuItem,
             this.howDoIMakeStuffBumpyToolStripMenuItem,
             this.howDoIMakeStuffGlowToolStripMenuItem,
+            this.howDoIMakeEyesToolStripMenuItem,
             this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem,
             this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem,
             this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem,
@@ -1321,6 +1323,13 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
+            // howDoIMakeEyesToolStripMenuItem
+            // 
+            this.howDoIMakeEyesToolStripMenuItem.Name = "howDoIMakeEyesToolStripMenuItem";
+            this.howDoIMakeEyesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
+            this.howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
+            this.howDoIMakeEyesToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeEyesToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1520,6 +1529,7 @@
         private ToolStripMenuItem bulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem recursiveBulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem multiMapToGrayscaleToolStripMenuItem;
+        private ToolStripMenuItem howDoIMakeEyesToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
