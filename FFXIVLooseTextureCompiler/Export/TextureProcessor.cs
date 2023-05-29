@@ -128,7 +128,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        public void Export(List<TextureSet> textureSetList, string modPath, int generationType,
+        public void Export(List<TextureSet> textureSetList, Dictionary<string, int> groupOptionTypes, string modPath, int generationType,
             bool generateNormals, bool generateMulti, bool useXNormal) {
             int i = 0;
             fileCount = 0;
@@ -165,8 +165,12 @@ namespace FFXIVLooseTextureCompiler {
                 OnStartedProcessing.Invoke(this, EventArgs.Empty);
             }
             foreach (List<TextureSet> textureSets in groups.Values) {
+                int choiceOption = groupOptionTypes.ContainsKey(textureSets[0].MaterialGroupName)
+                ? (groupOptionTypes[textureSets[0].MaterialGroupName] == 0
+                ? generationType : groupOptionTypes[textureSets[0].MaterialGroupName] - 1)
+                : generationType;
                 Group group = new Group(textureSets[0].MaterialGroupName.Replace(@"/", "-").Replace(@"\", "-"), "", 0,
-                    (generationType == 2 && textureSets.Count > 1) ? "Single" : "Multi", 0);
+                    (choiceOption == 2 && textureSets.Count > 1) ? "Single" : "Multi", 0);
                 Option option = null;
                 Option diffuseOption = null;
                 Option normalOption = null;
@@ -179,7 +183,7 @@ namespace FFXIVLooseTextureCompiler {
                         Path.Combine(modPath, textureSet.InternalNormalPath.Replace("/", @"\")) : "";
                     string multiDiskPath = !string.IsNullOrEmpty(textureSet.InternalMultiPath) ?
                         Path.Combine(modPath, textureSet.InternalMultiPath.Replace("/", @"\")) : "";
-                    switch (generationType) {
+                    switch (choiceOption) {
                         case 0:
                             if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
@@ -212,11 +216,11 @@ namespace FFXIVLooseTextureCompiler {
                         case 1:
                         case 2:
                         case 3:
-                            if ((!textureSet.IsChildSet && generationType != 3) || (generationType == 3 && !alreadySetOption)) {
+                            if ((!textureSet.IsChildSet && choiceOption != 3) || (choiceOption == 3 && !alreadySetOption)) {
                                 if (!string.IsNullOrEmpty(textureSet.Diffuse) ||
                                     !string.IsNullOrEmpty(textureSet.Normal) ||
                                     !string.IsNullOrEmpty(textureSet.Multi)) {
-                                    option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName || generationType == 3 ? "Enable"
+                                    option = new Option(textureSet.MaterialSetName == textureSet.MaterialGroupName || choiceOption == 3 ? "Enable"
                                     : textureSet.MaterialSetName + (textureSet.ChildSets.Count > 0 ? " (Universal)" : ""), 0);
                                     group.Options.Add(option);
                                     alreadySetOption = true;
@@ -224,8 +228,8 @@ namespace FFXIVLooseTextureCompiler {
                             }
                             if (!string.IsNullOrEmpty(textureSet.Diffuse) && !string.IsNullOrEmpty(textureSet.InternalDiffusePath)) {
                                 if (DiffuseLogic(textureSet, diffuseDiskPath)) {
-                                    option.Files.Add(textureSet.InternalDiffusePath,
-                                        AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"), fileCount++));
+                                    option.Files[textureSet.InternalDiffusePath] =
+                                        AppendNumber(textureSet.InternalDiffusePath.Replace("/", @"\"), fileCount++);
                                 }
                             }
                             if (OnProgressChange != null) {
@@ -233,8 +237,8 @@ namespace FFXIVLooseTextureCompiler {
                             }
                             if (!string.IsNullOrEmpty(textureSet.InternalNormalPath)) {
                                 if (NormalLogic(textureSet, normalDiskPath)) {
-                                    option.Files.Add(textureSet.InternalNormalPath,
-                                        AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"), fileCount++));
+                                    option.Files[textureSet.InternalNormalPath] =
+                                        AppendNumber(textureSet.InternalNormalPath.Replace("/", @"\"), fileCount++);
                                 }
                             }
                             if (OnProgressChange != null) {
@@ -253,7 +257,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
                 if (group.Options.Count > 0) {
-                    string groupPath = Path.Combine(modPath, $"group_" + i++ + $"_{group.Name.ToLower().Replace(" ", "_")}.json");
+                    string groupPath = Path.Combine(modPath, $"group_" + (i++).ToString().PadLeft(3) + $"_{group.Name.ToLower().Replace(" ", "_")}.json");
                     ExportGroup(groupPath, group);
                 }
             }

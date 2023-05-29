@@ -41,11 +41,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.normalCorrection = new System.Windows.Forms.TextBox();
             this.invertNormals = new System.Windows.Forms.CheckBox();
+            this.groupChoiceType = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // materialSetNameTextBox
             // 
-            this.materialSetNameTextBox.Location = new System.Drawing.Point(128, 36);
+            this.materialSetNameTextBox.Location = new System.Drawing.Point(113, 36);
             this.materialSetNameTextBox.Name = "materialSetNameTextBox";
             this.materialSetNameTextBox.Size = new System.Drawing.Size(324, 23);
             this.materialSetNameTextBox.TabIndex = 0;
@@ -71,7 +73,7 @@
             // 
             // internalDiffusePathTextBox
             // 
-            this.internalDiffusePathTextBox.Location = new System.Drawing.Point(128, 64);
+            this.internalDiffusePathTextBox.Location = new System.Drawing.Point(113, 64);
             this.internalDiffusePathTextBox.Name = "internalDiffusePathTextBox";
             this.internalDiffusePathTextBox.Size = new System.Drawing.Size(324, 23);
             this.internalDiffusePathTextBox.TabIndex = 2;
@@ -87,7 +89,7 @@
             // 
             // internalNormalPathTextBox
             // 
-            this.internalNormalPathTextBox.Location = new System.Drawing.Point(128, 92);
+            this.internalNormalPathTextBox.Location = new System.Drawing.Point(113, 92);
             this.internalNormalPathTextBox.Name = "internalNormalPathTextBox";
             this.internalNormalPathTextBox.Size = new System.Drawing.Size(324, 23);
             this.internalNormalPathTextBox.TabIndex = 4;
@@ -103,14 +105,14 @@
             // 
             // internalMultiPathTextbox
             // 
-            this.internalMultiPathTextbox.Location = new System.Drawing.Point(128, 120);
+            this.internalMultiPathTextbox.Location = new System.Drawing.Point(113, 120);
             this.internalMultiPathTextbox.Name = "internalMultiPathTextbox";
             this.internalMultiPathTextbox.Size = new System.Drawing.Size(324, 23);
             this.internalMultiPathTextbox.TabIndex = 6;
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(280, 200);
+            this.acceptChangesButton.Location = new System.Drawing.Point(264, 200);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(111, 23);
             this.acceptChangesButton.TabIndex = 8;
@@ -120,7 +122,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(392, 200);
+            this.button1.Location = new System.Drawing.Point(376, 200);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 23);
             this.button1.TabIndex = 9;
@@ -139,7 +141,7 @@
             // 
             // groupNameTextBox
             // 
-            this.groupNameTextBox.Location = new System.Drawing.Point(128, 8);
+            this.groupNameTextBox.Location = new System.Drawing.Point(112, 8);
             this.groupNameTextBox.Name = "groupNameTextBox";
             this.groupNameTextBox.Size = new System.Drawing.Size(324, 23);
             this.groupNameTextBox.TabIndex = 10;
@@ -157,7 +159,7 @@
             // ignoreMultiCheckbox
             // 
             this.ignoreMultiCheckbox.AutoSize = true;
-            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(316, 180);
+            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(300, 180);
             this.ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
             this.ignoreMultiCheckbox.Size = new System.Drawing.Size(133, 19);
             this.ignoreMultiCheckbox.TabIndex = 13;
@@ -175,7 +177,7 @@
             // 
             // normalCorrection
             // 
-            this.normalCorrection.Location = new System.Drawing.Point(127, 148);
+            this.normalCorrection.Location = new System.Drawing.Point(112, 148);
             this.normalCorrection.Name = "normalCorrection";
             this.normalCorrection.Size = new System.Drawing.Size(324, 23);
             this.normalCorrection.TabIndex = 14;
@@ -183,19 +185,40 @@
             // invertNormals
             // 
             this.invertNormals.AutoSize = true;
-            this.invertNormals.Location = new System.Drawing.Point(8, 180);
+            this.invertNormals.Location = new System.Drawing.Point(4, 180);
             this.invertNormals.Name = "invertNormals";
             this.invertNormals.Size = new System.Drawing.Size(104, 19);
             this.invertNormals.TabIndex = 16;
             this.invertNormals.Text = "Invert Normals";
             this.invertNormals.UseVisualStyleBackColor = true;
             // 
+            // groupChoiceType
+            // 
+            this.groupChoiceType.FormattingEnabled = true;
+            this.groupChoiceType.Items.AddRange(new object[] {
+            "Use Global Setting"});
+            this.groupChoiceType.Location = new System.Drawing.Point(112, 200);
+            this.groupChoiceType.Name = "groupChoiceType";
+            this.groupChoiceType.Size = new System.Drawing.Size(148, 23);
+            this.groupChoiceType.TabIndex = 17;
+            this.groupChoiceType.SelectedIndexChanged += new System.EventHandler(this.groupChoiceType_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(4, 204);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(107, 15);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Group Choice Type";
+            // 
             // CustomPathDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(455, 227);
-            this.Controls.Add(this.invertNormals);
+            this.ClientSize = new System.Drawing.Size(442, 228);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.groupChoiceType);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.normalCorrection);
             this.Controls.Add(this.ignoreMultiCheckbox);
@@ -212,6 +235,7 @@
             this.Controls.Add(this.internalDiffusePathTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.materialSetNameTextBox);
+            this.Controls.Add(this.invertNormals);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -243,5 +267,7 @@
         private Label label2;
         private TextBox normalCorrection;
         private CheckBox invertNormals;
+        private ComboBox groupChoiceType;
+        private Label label3;
     }
 }

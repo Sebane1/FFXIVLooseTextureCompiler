@@ -6,8 +6,10 @@ namespace FFXIVLooseTextureCompiler {
             InitializeComponent();
         }
         TextureSet textureSet = new TextureSet();
-
-        public TextureSet MaterialSet {
+        public ComboBox GroupingType {
+            get { return groupChoiceType; }
+        }
+        public TextureSet TextureSet {
             get => textureSet;
             set {
                 textureSet = value;
@@ -92,6 +94,10 @@ namespace FFXIVLooseTextureCompiler {
                 normalLabel.Text = "Internal Normal";
                 multiLabel.Text = "Internal Multi";
             }
+        }
+
+        private void groupChoiceType_SelectedIndexChanged(object sender, EventArgs e) {
+
         }
     }
 }

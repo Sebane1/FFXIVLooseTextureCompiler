@@ -41,6 +41,7 @@ namespace FFXIVLooseTextureCompiler {
         private int generationProgress;
         private bool hasDoneReload;
         private bool willCloseWhenComplete;
+        private Dictionary<string, int> groupOptionTypes = new Dictionary<string, int>();
         Stopwatch stopwatch = new Stopwatch();
 
         public bool HasSaved {
@@ -150,17 +151,13 @@ namespace FFXIVLooseTextureCompiler {
         private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             ExportJson();
             ExportMeta();
-            if (hasDoneReload) {
-                PenumbraHttpApi.Redraw(0);
-            } else {
-                PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-                PenumbraHttpApi.Redraw(0);
-                if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
-                    IntegrityChecker.ShowConsolation();
-                }
-                hasDoneReload = true;
-                materialList_SelectedIndexChanged(this, EventArgs.Empty);
+            PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+            PenumbraHttpApi.Redraw(0);
+            if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
+                IntegrityChecker.ShowConsolation();
             }
+            hasDoneReload = true;
+            materialList_SelectedIndexChanged(this, EventArgs.Empty);
             finalizeButton.Enabled = generateButton.Enabled = false;
             generationCooldown.Start();
             exportProgress.Visible = false;
@@ -205,7 +202,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            textureProcessor.Export(textureSets, modPath, choiceTypeIndex,
+            textureProcessor.Export(textureSets, groupOptionTypes, modPath, choiceTypeIndex,
                 bakeNormalsChecked, generatingMulti, finalizeResults);
             processGeneration.CancelAsync();
         }
@@ -887,8 +884,12 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void addCustomPathButton_Click(object sender, EventArgs e) {
             CustomPathDialog customPathDialog = new CustomPathDialog();
+            foreach (string option in generationType.Items) {
+                customPathDialog.GroupingType.Items.Add(option);
+                customPathDialog.GroupingType.SelectedIndex = 0;
+            }
             if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                textureList.Items.Add(customPathDialog.MaterialSet);
+                textureList.Items.Add(customPathDialog.TextureSet);
             }
         }
 
@@ -903,10 +904,17 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void editPathsToolStripMenuItem_Click(object sender, EventArgs e) {
-            CustomPathDialog customPathDialog = new CustomPathDialog();
             if (textureList.SelectedIndex != -1) {
-                customPathDialog.MaterialSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+                CustomPathDialog customPathDialog = new CustomPathDialog();
+                customPathDialog.TextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+                foreach (string option in generationType.Items) {
+                    customPathDialog.GroupingType.Items.Add(option);
+                }
+                customPathDialog.GroupingType.SelectedIndex = (
+                groupOptionTypes.ContainsKey(customPathDialog.TextureSet.MaterialGroupName) ?
+                groupOptionTypes[customPathDialog.TextureSet.MaterialGroupName] : 0);
                 if (customPathDialog.ShowDialog() == DialogResult.OK) {
+                    groupOptionTypes[customPathDialog.TextureSet.MaterialGroupName] = customPathDialog.GroupingType.SelectedIndex;
                     MessageBox.Show("Texture Set has been edited successfully", VersionText);
                     hasDoneReload = false;
                 }
@@ -1080,7 +1088,10 @@ namespace FFXIVLooseTextureCompiler {
                 generationType.SelectedIndex = projectFile.ExportType;
                 bakeNormals.Checked = projectFile.BakeMissingNormals;
                 generateMultiCheckBox.Checked = projectFile.GenerateMulti;
-                textureList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+                if (projectFile.GroupOptionTypes != null) {
+                    groupOptionTypes = projectFile.GroupOptionTypes;
+                }
+                textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 if (projectFile.SimpleMode) {
                     if (isSimpleMode) {
                         mainFormSimplified.BodyType.SelectedIndex = projectFile.SimpleBodyType;
@@ -1105,7 +1116,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
 
-                foreach (TextureSet textureSet in projectFile.MaterialSets) {
+                foreach (TextureSet textureSet in projectFile.TextureSets) {
                     AddWatcher(textureSet.Diffuse);
                     AddWatcher(textureSet.Normal);
                     AddWatcher(textureSet.Multi);
@@ -1124,7 +1135,7 @@ namespace FFXIVLooseTextureCompiler {
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
                 if (templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
-                    foreach (TextureSet textureSet in projectFile.MaterialSets) {
+                    foreach (TextureSet textureSet in projectFile.TextureSets) {
                         if (!templateConfiguration.GroupName.Contains("Default")) {
                             textureSet.MaterialGroupName = templateConfiguration.GroupName;
                         }
@@ -1135,7 +1146,7 @@ namespace FFXIVLooseTextureCompiler {
                         AddWatcher(textureSet.Glow);
                         AddBackupPaths(textureSet);
                     }
-                    textureList.Items.AddRange(projectFile.MaterialSets?.ToArray());
+                    textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 }
             }
             HasSaved = false;
@@ -1150,7 +1161,7 @@ namespace FFXIVLooseTextureCompiler {
                 } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
                     textureSet.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
                 } else {
-                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ? 
+                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ?
                     BackupTexturePaths.VanillaLalaPath : BackupTexturePaths.Gen3Gen2Path;
                 }
             } else {
@@ -1184,7 +1195,8 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.Version = modVersionTextBox.Text;
                 projectFile.Description = modDescriptionTextBox.Text;
                 projectFile.Website = modWebsiteTextBox.Text;
-                projectFile.MaterialSets = new List<TextureSet>();
+                projectFile.GroupOptionTypes = groupOptionTypes;
+                projectFile.TextureSets = new List<TextureSet>();
                 projectFile.ExportType = generationType.SelectedIndex;
                 projectFile.BakeMissingNormals = bakeNormals.Checked;
                 projectFile.GenerateMulti = generateMultiCheckBox.Checked;
@@ -1194,7 +1206,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.SimpleSubRaceType = mainFormSimplified.SubRace.SelectedIndex;
                 projectFile.SimpleNormalGeneration = mainFormSimplified.NormalGeneration.SelectedIndex;
                 foreach (TextureSet materialSet in textureList.Items) {
-                    projectFile.MaterialSets.Add(materialSet);
+                    projectFile.TextureSets.Add(materialSet);
                 }
                 serializer.Serialize(writer, projectFile);
             }
@@ -1760,6 +1772,17 @@ namespace FFXIVLooseTextureCompiler {
         }
         #endregion
         #region Help
+        private void howDoIMakeEyesToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1Smef3rexDHoRQSV1ZjT6R20EeIIyVK4W73wjPZDcys4/edit?usp=sharing",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
@@ -1879,17 +1902,5 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         #endregion
-
-        private void howDoIMakeEyesToolStripMenuItem_Click(object sender, EventArgs e) {
-            try {
-                Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                    FileName = "https://docs.google.com/document/d/1Smef3rexDHoRQSV1ZjT6R20EeIIyVK4W73wjPZDcys4/edit?usp=sharing",
-                    UseShellExecute = true,
-                    Verb = "OPEN"
-                });
-            } catch {
-
-            }
-        }
     }
 }

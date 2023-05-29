@@ -147,7 +147,6 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
-            this.customizeGroupsButton = new System.Windows.Forms.Button();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -1165,7 +1164,7 @@
             // 
             this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(316, 612);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(312, 611);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -1285,7 +1284,6 @@
             // exportPanel
             // 
             this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportPanel.Controls.Add(this.customizeGroupsButton);
             this.exportPanel.Controls.Add(this.exportLabel);
             this.exportPanel.Location = new System.Drawing.Point(0, 0);
             this.exportPanel.Name = "exportPanel";
@@ -1333,15 +1331,6 @@
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
-            // 
-            // customizeGroupsButton
-            // 
-            this.customizeGroupsButton.Location = new System.Drawing.Point(432, 388);
-            this.customizeGroupsButton.Name = "customizeGroupsButton";
-            this.customizeGroupsButton.Size = new System.Drawing.Size(100, 23);
-            this.customizeGroupsButton.TabIndex = 53;
-            this.customizeGroupsButton.Text = "Group Manager";
-            this.customizeGroupsButton.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
@@ -1543,7 +1532,6 @@
         private ToolStripMenuItem recursiveBulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem multiMapToGrayscaleToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeEyesToolStripMenuItem;
-        private Button customizeGroupsButton;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
