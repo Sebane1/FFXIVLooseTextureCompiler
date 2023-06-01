@@ -184,7 +184,7 @@ namespace FFXIVLooseTextureCompiler {
                     CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, inputFBX)),
                     CleanXmlEscapeSequences(inputImage),
                     CleanXmlEscapeSequences(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFBX)),
-                    CleanXmlEscapeSequences(outputImage)));
+                    CleanXmlEscapeSequences(outputImage), false));
             }
             ProcessStartInfo processStartInfo = new ProcessStartInfo(@"""" + executable + @"""");
             processStartInfo.UseShellExecute = true;
