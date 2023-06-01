@@ -39,8 +39,9 @@ namespace FFXIVLooseTextureCompiler.Racial {
                 }
                 string subRace = (gender == 0 ? RaceInfo.RaceCodeFace.Masculine[subRaceValue]
                     : RaceInfo.RaceCodeFace.Feminine[subRaceValue]);
-                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + (faceType + 1) + "/texture/--c"
-                    + subRace + "f" + faceIdCheck + ((faceType + (subRaceValue == 12 || subRaceValue == 13 ? 4 : 0)) + 1)
+                int faceOffset = (faceType + (subRaceValue == 12 || subRaceValue == 13 ? 4 : 0)) + 1;
+                return "chara/human/c" + subRace + "/obj/face/f" + faceIdCheck + faceOffset + "/texture/--c"
+                    + subRace + "f" + faceIdCheck + faceOffset
                     + GetFacePart(facePart, asym) + GetTextureType(material, 0, true) + ".tex";
             } else {
                 return "chara/common/texture/catchlight_1.tex";
