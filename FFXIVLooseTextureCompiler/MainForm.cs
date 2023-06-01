@@ -468,14 +468,17 @@ namespace FFXIVLooseTextureCompiler {
             string path = Path.Combine(dataPath, @"UsedOptions.config");
             if (File.Exists(path)) {
                 using (StreamReader reader = new StreamReader(path)) {
-                    genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
-                    raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
-                    if (value < 8) {
-                        baseBodyList.SelectedIndex = value;
-                    } else {
-                        MessageBox.Show("Previously selected body type is not valid");
+                    try {
+                        genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
+                        raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                        subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                        int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
+                        if (value < 8) {
+                            baseBodyList.SelectedIndex = value;
+                        } else {
+                            MessageBox.Show("Previously selected body type is not valid");
+                        }
+                    } catch {
                     }
                 }
             }

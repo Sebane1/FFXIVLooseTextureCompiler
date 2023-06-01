@@ -147,6 +147,7 @@
             this.ipBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
+            this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -265,6 +266,7 @@
             this.multi.Name = "multi";
             this.multi.Size = new System.Drawing.Size(528, 28);
             this.multi.TabIndex = 19;
+            this.helperToolTip.SetToolTip(this.multi, "The orange looking image goes here.");
             this.multi.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.multi.Enter += new System.EventHandler(this.multi_Enter);
             this.multi.Leave += new System.EventHandler(this.multi_Leave);
@@ -282,6 +284,7 @@
             this.normal.Name = "normal";
             this.normal.Size = new System.Drawing.Size(528, 28);
             this.normal.TabIndex = 18;
+            this.helperToolTip.SetToolTip(this.normal, "The blue and red bump map goes here");
             this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.normal.Enter += new System.EventHandler(this.multi_Enter);
             this.normal.Leave += new System.EventHandler(this.multi_Leave);
@@ -299,6 +302,7 @@
             this.diffuse.Name = "diffuse";
             this.diffuse.Size = new System.Drawing.Size(528, 28);
             this.diffuse.TabIndex = 17;
+            this.helperToolTip.SetToolTip(this.diffuse, "Skin, and tattoo overlays go here.");
             this.diffuse.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.diffuse.Enter += new System.EventHandler(this.multi_Enter);
             this.diffuse.Leave += new System.EventHandler(this.multi_Leave);
@@ -1184,6 +1188,7 @@
             this.mask.Name = "mask";
             this.mask.Size = new System.Drawing.Size(528, 28);
             this.mask.TabIndex = 41;
+            this.helperToolTip.SetToolTip(this.mask, "Used to restrict where generated normal maps actually use generated normals.");
             this.mask.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.mask.Enter += new System.EventHandler(this.multi_Enter);
             this.mask.Leave += new System.EventHandler(this.multi_Leave);
@@ -1222,6 +1227,8 @@
             this.glow.Name = "glow";
             this.glow.Size = new System.Drawing.Size(528, 28);
             this.glow.TabIndex = 45;
+            this.helperToolTip.SetToolTip(this.glow, "Used to make the character glow. Use a transparent overlay where you want glow to" +
+        " happen. Similar to a using an overlay.");
             this.glow.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
             this.glow.Enter += new System.EventHandler(this.multi_Enter);
             this.glow.Leave += new System.EventHandler(this.multi_Leave);
@@ -1532,6 +1539,7 @@
         private ToolStripMenuItem recursiveBulkImageToTexToolStripMenuItem;
         private ToolStripMenuItem multiMapToGrayscaleToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeEyesToolStripMenuItem;
+        private ToolTip helperToolTip;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
