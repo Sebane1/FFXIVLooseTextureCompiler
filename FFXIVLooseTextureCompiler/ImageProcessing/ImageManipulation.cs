@@ -260,6 +260,27 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 }
             }
         }
+        public static Bitmap MergeNormals(Bitmap inputFile, Bitmap diffuse, Bitmap canvasImage, Bitmap normalMask, string diffuseNormal) {
+            Graphics g = Graphics.FromImage(canvasImage);
+            g.Clear(Color.White);
+            g.DrawImage(diffuse, 0, 0, diffuse.Width, diffuse.Height);
+            Bitmap normal = Normal.Calculate(canvasImage, normalMask);
+            using (Bitmap originalNormal = inputFile) {
+                using (Bitmap destination = new Bitmap(originalNormal, originalNormal.Width, originalNormal.Height)) {
+                    try {
+                        Bitmap resize = new Bitmap(originalNormal.Width, originalNormal.Height);
+                        g = Graphics.FromImage(resize);
+                        g.Clear(Color.White);
+                        g.DrawImage(normal, 0, 0, originalNormal.Width, originalNormal.Height);
+                        KVImage.ImageBlender imageBlender = new KVImage.ImageBlender();
+                        return imageBlender.BlendImages(destination, 0, 0, destination.Width, destination.Height,
+                            resize, 0, 0, KVImage.ImageBlender.BlendOperation.Blend_Overlay);
+                    } catch {
+                        return normal;
+                    }
+                }
+            }
+        }
 
         public static Bitmap MirrorAndDuplicate(Bitmap file) {
             Bitmap canvas = new Bitmap(file.Width * 2, file.Height);
