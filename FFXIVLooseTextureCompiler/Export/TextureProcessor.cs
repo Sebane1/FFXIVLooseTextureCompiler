@@ -27,7 +27,7 @@ namespace FFXIVLooseTextureCompiler {
         public event EventHandler OnLaunchedXnormal;
 
         private Bitmap GetMergedBitmap(string file) {
-            if (file.Contains("baseTexBaked") && (file.Contains("_d_") || file.Contains("_g_"))) {
+            if (file.Contains("baseTexBaked") && (file.Contains("_d_") || file.Contains("_g_") || file.Contains("_n_"))) {
                 Bitmap alpha = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "alpha_baseTexBaked"));
                 Bitmap rgb = TexLoader.ResolveBitmap(file.Replace("baseTexBaked", "rgb_baseTexBaked"));
                 Bitmap merged = ImageManipulation.MergeAlphaToRGB(alpha, rgb);
@@ -48,7 +48,8 @@ namespace FFXIVLooseTextureCompiler {
                         if (child.Diffuse.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Diffuse, child.Diffuse);
                             Bitmap diffuse = TexLoader.ResolveBitmap(parent.Diffuse);
-                            if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha)) && Directory.Exists(Path.GetDirectoryName(diffuseRGB))) {
+                            if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha)) 
+                                && Directory.Exists(Path.GetDirectoryName(diffuseRGB))) {
                                 string childAlpha = child.Diffuse.Replace("baseTexBaked", "alpha");
                                 string childRGB = child.Diffuse.Replace("baseTexBaked", "rgb");
                                 ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
@@ -73,10 +74,17 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (!string.IsNullOrEmpty(child.Normal)) {
                 if (!xnormalCache.ContainsKey(child.Normal)) {
-                    if (finalizeResults || !File.Exists(child.Normal)) {
+                    string normalAlpha = parent.Normal.Replace(".", "_alpha.");
+                    string normalRGB = parent.Normal.Replace(".", "_rgb.");
+                    if (finalizeResults || !File.Exists(child.Normal.Replace("baseTexBaked", "rgb_baseTexBaked"))
+                        || !File.Exists(child.Normal.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.Normal.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Normal, child.Normal);
-                            xnormal.AddToBatch(parent.InternalNormalPath, parent.Normal, child.Normal, true);
+                            Bitmap normal = TexLoader.ResolveBitmap(parent.Normal);
+                            ImageManipulation.ExtractTransparency(normal).Save(normalAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(normal,true).Save(normalRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, normalAlpha, child.Normal.Replace("baseTexBaked", "alpha"), false);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, normalRGB, child.Normal.Replace("baseTexBaked", "rgb"), true);
                         }
                     }
                 }
@@ -93,34 +101,34 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (!string.IsNullOrEmpty(child.Glow)) {
                 if (!xnormalCache.ContainsKey(child.Glow)) {
-                    string diffuseAlpha = parent.Glow.Replace(".", "_alpha.");
-                    string diffuseRGB = parent.Glow.Replace(".", "_rgb.");
+                    string glowAlpha = parent.Glow.Replace(".", "_alpha.");
+                    string glowRGB = parent.Glow.Replace(".", "_rgb.");
                     if (finalizeResults || !File.Exists(child.Glow.Replace("baseTexBaked", "rgb_baseTexBaked"))
                         || !File.Exists(child.Glow.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.Glow.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Glow, child.Glow);
-                            Bitmap diffuse = TexLoader.ResolveBitmap(parent.Glow);
-                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
-                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.Glow.Replace("baseTexBaked", "alpha"), false);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.Glow.Replace("baseTexBaked", "rgb"), false);
+                            Bitmap glow = TexLoader.ResolveBitmap(parent.Glow);
+                            ImageManipulation.ExtractTransparency(glow).Save(glowAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(glow).Save(glowRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, glowAlpha, child.Glow.Replace("baseTexBaked", "alpha"), false);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, glowRGB, child.Glow.Replace("baseTexBaked", "rgb"), false);
                         }
                     }
                 }
             }
             if (!string.IsNullOrEmpty(child.NormalMask)) {
                 if (!xnormalCache.ContainsKey(child.NormalMask)) {
-                    string diffuseAlpha = parent.NormalMask.Replace(".", "_alpha.");
-                    string diffuseRGB = parent.NormalMask.Replace(".", "_rgb.");
+                    string normalMaskAlpha = parent.NormalMask.Replace(".", "_alpha.");
+                    string normalMaskRGB = parent.NormalMask.Replace(".", "_rgb.");
                     if (finalizeResults || !File.Exists(child.NormalMask.Replace("baseTexBaked", "rgb_baseTexBaked"))
                         || !File.Exists(child.NormalMask.Replace("baseTexBaked", "alpha_baseTexBaked"))) {
                         if (child.NormalMask.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.NormalMask, child.NormalMask);
-                            Bitmap diffuse = TexLoader.ResolveBitmap(parent.NormalMask);
-                            ImageManipulation.ExtractTransparency(diffuse).Save(diffuseAlpha, ImageFormat.Png);
-                            ImageManipulation.ExtractRGB(diffuse).Save(diffuseRGB, ImageFormat.Png);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseAlpha, child.NormalMask.Replace("baseTexBaked", "alpha"), false);
-                            xnormal.AddToBatch(parent.InternalDiffusePath, diffuseRGB, child.NormalMask.Replace("baseTexBaked", "rgb"), true);
+                            Bitmap normalMask = TexLoader.ResolveBitmap(parent.NormalMask);
+                            ImageManipulation.ExtractTransparency(normalMask).Save(normalMaskAlpha, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(normalMask).Save(normalMaskRGB, ImageFormat.Png);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, normalMaskAlpha, child.NormalMask.Replace("baseTexBaked", "alpha"), false);
+                            xnormal.AddToBatch(parent.InternalDiffusePath, normalMaskRGB, child.NormalMask.Replace("baseTexBaked", "rgb"), false);
                         }
                     }
                 }
@@ -320,7 +328,8 @@ namespace FFXIVLooseTextureCompiler {
                             textureSet.Glow);
                         outputGenerated = true;
                     } else {
-                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : "");
+                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", 
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : "");
                         outputGenerated = true;
                     }
                 }
@@ -330,11 +339,13 @@ namespace FFXIVLooseTextureCompiler {
                     if (textureSet.BackupTexturePaths != null) {
                         ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)),
                             AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask,
-                            (textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : ""), textureSet.NormalCorrection, textureSet.InvertNormalGeneration);
+                            (textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : ""), 
+                            textureSet.NormalCorrection, textureSet.InvertNormalGeneration);
                         outputGenerated = true;
                     } else {
                         ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount),
-                            ExportType.Normal, "", textureSet.NormalMask, textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "",
+                            ExportType.Normal, "", textureSet.NormalMask, textureSet.BackupTexturePaths != null ? 
+                            textureSet.BackupTexturePaths.Diffuse : "",
                             textureSet.NormalCorrection, textureSet.InvertNormalGeneration);
                         outputGenerated = true;
                     }

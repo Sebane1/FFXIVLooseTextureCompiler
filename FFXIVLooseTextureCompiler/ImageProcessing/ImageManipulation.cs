@@ -64,7 +64,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
-        public static Bitmap ExtractRGB(Bitmap file) {
+        public static Bitmap ExtractRGB(Bitmap file, bool isNormal = false) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
             source.LockBits();
@@ -72,6 +72,11 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 for (int x = 0; x < image.Width; x++) {
                     Color sourcePixel = source.GetPixel(x, y);
                     Color col = Color.FromArgb(255, sourcePixel.R, sourcePixel.G, sourcePixel.B);
+                    if (isNormal) {
+                        if (sourcePixel.R == 0 && sourcePixel.G == 0 & sourcePixel.B == 0) {
+                            col = Color.FromArgb(255, 127, 128, 255);
+                        }
+                    }
                     source.SetPixel(x, y, col);
                 }
             };
