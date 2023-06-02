@@ -235,7 +235,7 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 for (int x = 0; x < image.Width; x++) {
                     Color alphaPixel = alphaBits.GetPixel(x, y);
                     Color rgbPixel = rgbBits.GetPixel(x, y);
-                    Color col = Color.FromArgb(alphaPixel.R, rgbPixel.R, rgbPixel.G, rgbPixel.B);
+                    Color col = Color.FromArgb(rgbPixel.A != 0 ? alphaPixel.R : 0, rgbPixel.R, rgbPixel.G, rgbPixel.B);
                     destination.SetPixel(x, y, col);
                 }
             };
