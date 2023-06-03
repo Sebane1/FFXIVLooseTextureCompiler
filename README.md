@@ -18,6 +18,7 @@ Make sure you have .net desktop runtime 7.0 (not to be confused with .net runtim
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.1-windows-x64-installer
 
 You may need to install XNormal if you run into any errors that say stuff is missing (using universal texture set feature).
+
 https://xnormal.net/
 
 Select your body, race, texture, etc and hit generate. The tool should spit out files with all the nessecary path names.
