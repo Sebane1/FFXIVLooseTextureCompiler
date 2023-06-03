@@ -34,11 +34,15 @@ Core features:
 - Drag and drop texture assignment
 - Automatic path generation
 - Automatic penumbra options, and ability to customize groups for exports to penumbra
-- png, dds, bmp, and .tex support (yes you can compile existing makeup or body mods into this tool with just the .tex files) 
+- png, dds, bmp, and .tex support (yes you can compile existing makeup, hair, or body mods into this tool with just the .tex files)
 - Ability to add custom texture paths if this tool doesn't already autogenerate them
-- Automatic redraw on generation
+- Automatic redraw/reload on mod generation
 - Can automatically generate normals, if only a diffuse is provided, or alternatively merge the generated normal data with existing normals.
 - Can be used to convert one body texture to other body textures with automated use of XNormal
+- Can generate valid eye maps (Normal, Multi, Catchlight, Glow) based on any singular picture.
+- Automatic underlay support when providing transparent overlays.
+- Atramentum Luminis support.
+- Share your authored mods directly to other users via Mod Share. Edit each others characters after exchanging temporary pairing codes, and help debug mod issues.
 - Low learning curve.
 
 
