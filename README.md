@@ -10,6 +10,7 @@ https://github.com/Sebane1/FFXIVLooseTextureCompiler/releases
 ![FFXIVLTC2](https://github.com/Sebane1/FFXIVLooseTextureCompiler/assets/7157688/37349b65-348c-4554-84d0-0dad869c3064)
 
 Tutorials and resources can be found here:
+
 https://loosetexturecompiler.zip/
 
 Make sure you have .net desktop runtime 7.0 (not to be confused with .net runtime 7.0)
