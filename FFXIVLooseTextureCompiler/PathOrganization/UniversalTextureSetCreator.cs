@@ -1,11 +1,6 @@
 ﻿using FFXIVLooseTextureCompiler.Export;
 using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Racial;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FFXIVLooseTextureCompiler.PathOrganization {
     public static class UniversalTextureSetCreator {
@@ -17,7 +12,8 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
             textureSet.OmniExportMode = true;
             textureSet.ChildSets.Clear();
             int race = RaceInfo.ReverseRaceLookup(textureSet.InternalDiffusePath);
-            if ((textureSet.InternalDiffusePath.Contains("0001_d.tex") || textureSet.InternalDiffusePath.Contains("0101_d.tex"))
+            if (((textureSet.InternalDiffusePath.Contains("0001_d.tex") && !textureSet.InternalDiffusePath.Contains("fac")) 
+                || (textureSet.InternalDiffusePath.Contains("0101_d.tex") && !textureSet.InternalDiffusePath.Contains("fac")))
                 && !textureSet.InternalDiffusePath.Contains("--c1101b0001_")) {
                 ConfigureVanillaFemaleCrossCompatibility(textureSet, race);
             } else if (textureSet.InternalDiffusePath.Contains("bibo")) {
