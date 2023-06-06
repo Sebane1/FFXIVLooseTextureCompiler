@@ -679,6 +679,7 @@ namespace FFXIVLooseTextureCompiler {
 
             }
             textureSet.IgnoreMultiGeneration = true;
+            textureSet.BackupTexturePaths = null;
             textureList.Items.Add(textureSet);
             HasSaved = false;
         }
