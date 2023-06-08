@@ -80,6 +80,8 @@
             this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureToBodyMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureToFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToTexConversionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -148,6 +150,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
             this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.textureToAsymFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -688,6 +691,9 @@
             this.mergeRGBAndAlphaImagesToolStripMenuItem,
             this.imageToRGBChannelsToolStripMenuItem,
             this.splitImageToRGBAndAlphaToolStripMenuItem,
+            this.textureToBodyMultiToolStripMenuItem,
+            this.textureToFaceMultiToolStripMenuItem,
+            this.textureToAsymFaceMultiToolStripMenuItem,
             this.xNormalToolStripMenuItem});
             this.colourChannelSplittingToolStripMenuItem.Name = "colourChannelSplittingToolStripMenuItem";
             this.colourChannelSplittingToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
@@ -727,6 +733,20 @@
             this.splitImageToRGBAndAlphaToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.splitImageToRGBAndAlphaToolStripMenuItem.Text = "Split Image to RGB and Alpha";
             this.splitImageToRGBAndAlphaToolStripMenuItem.Click += new System.EventHandler(this.splitImageToRGBAndAlphaToolStripMenuItem_Click);
+            // 
+            // textureToBodyMultiToolStripMenuItem
+            // 
+            this.textureToBodyMultiToolStripMenuItem.Name = "textureToBodyMultiToolStripMenuItem";
+            this.textureToBodyMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.textureToBodyMultiToolStripMenuItem.Text = "Texture To Body Multi";
+            this.textureToBodyMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToBodyMultiToolStripMenuItem_Click);
+            // 
+            // textureToFaceMultiToolStripMenuItem
+            // 
+            this.textureToFaceMultiToolStripMenuItem.Name = "textureToFaceMultiToolStripMenuItem";
+            this.textureToFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.textureToFaceMultiToolStripMenuItem.Text = "Texture To Face Multi";
+            this.textureToFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToFaceMultiToolStripMenuItem_Click);
             // 
             // xNormalToolStripMenuItem
             // 
@@ -1339,6 +1359,13 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
+            // textureToAsymFaceMultiToolStripMenuItem
+            // 
+            this.textureToAsymFaceMultiToolStripMenuItem.Name = "textureToAsymFaceMultiToolStripMenuItem";
+            this.textureToAsymFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.textureToAsymFaceMultiToolStripMenuItem.Text = "Texture To Asym Face Multi";
+            this.textureToAsymFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToAsymFaceMultiToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1540,6 +1567,9 @@
         private ToolStripMenuItem multiMapToGrayscaleToolStripMenuItem;
         private ToolStripMenuItem howDoIMakeEyesToolStripMenuItem;
         private ToolTip helperToolTip;
+        private ToolStripMenuItem textureToBodyMultiToolStripMenuItem;
+        private ToolStripMenuItem textureToFaceMultiToolStripMenuItem;
+        private ToolStripMenuItem textureToAsymFaceMultiToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

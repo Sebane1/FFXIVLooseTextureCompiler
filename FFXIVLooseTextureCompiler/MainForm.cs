@@ -1477,7 +1477,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 foreach (string file in Directory.EnumerateFiles(openFileDialog.SelectedPath)) {
                     if (FilePicker.CheckExtentions(file)) {
-                        textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                        textureProcessor.ExportTex(file, ImageManipulation.ReplaceExtension(file, ".tex"));
                         MessageBox.Show("The operation succeeded!", VersionText);
                     }
                 }
@@ -1494,19 +1494,18 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void multiMapToGrayscaleToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_grayscale."));
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale."));
                 MessageBox.Show("Multi successfully converted to grayscale", VersionText);
             }
         }
         public void RecursiveImageToText(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
             foreach (string file in Directory.EnumerateFiles(filePath)) {
                 if (FilePicker.CheckExtentions(file)) {
-                    textureProcessor.ExportTex(file, file.Replace(".png", ".tex").Replace(".dds", ".tex").Replace(".bmp", ".tex"));
+                    textureProcessor.ExportTex(file, ImageManipulation.ReplaceExtension(file, ".tex"));
                 }
             }
             if (layer < maxLayer) {
@@ -1590,10 +1589,10 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(openFileDialog.FileName.Replace(".", "_R."));
-                ImageManipulation.ExtractGreen(image).Save(openFileDialog.FileName.Replace(".", "_G."));
-                ImageManipulation.ExtractBlue(image).Save(openFileDialog.FileName.Replace(".", "_B."));
-                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_A."));
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."));
+                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."));
+                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."));
+                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."));
                 MessageBox.Show("Image successfully split into seperate channels", VersionText);
             }
         }
@@ -1609,8 +1608,8 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractTransparency(image).Save(openFileDialog.FileName.Replace(".", "_RGB."));
-                ImageManipulation.ExtractAlpha(image).Save(openFileDialog.FileName.Replace(".", "_Alpha."));
+                ImageManipulation.ExtractTransparency(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."));
+                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."));
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
@@ -1906,5 +1905,41 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         #endregion
+
+        private void textureToBodyMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.GenerateSkinMulti(image)
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                MessageBox.Show("Texture converted to body multi", VersionText);
+            }
+        }
+
+        private void textureToFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.GenerateFaceMulti(image, false)
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                MessageBox.Show("Texture converted to body multi", VersionText);
+            }
+        }
+
+        private void textureToAsymFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.GenerateFaceMulti(image, true)
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                MessageBox.Show("Texture converted to body multi", VersionText);
+            }
+        }
     }
 }

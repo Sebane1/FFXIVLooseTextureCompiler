@@ -111,6 +111,62 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             source.UnlockBits();
             return image;
         }
+
+        public static Bitmap GenerateFaceMulti(Bitmap file, bool asym) {
+            Bitmap image = new Bitmap(Grayscale.MakeGrayscale(file));
+            LockBitmap source = new LockBitmap(image);
+            bool isEqualWidthAndHeight = file.Width == file.Height;
+            float lipAreaWidth = (isEqualWidthAndHeight ? 0.125f : 0.25f) * (float)file.Width;
+            Rectangle rectangle = new Rectangle(
+                (int)(asym ? ((file.Width / 2) - (lipAreaWidth)) : 0),
+                (int)(0.6f * (float)file.Height),
+                (int)(lipAreaWidth * (asym ? 2 : 1)),
+                (int)(0.8f * (float)file.Height));
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    bool insideRectangle = rectangle.Contains(x, y);
+                    Color col = insideRectangle ?
+                        Color.FromArgb(255,
+                        Math.Clamp(sourcePixel.G < 135 ? 255 : sourcePixel.G + 100, 0, 255),
+
+                        Math.Clamp(sourcePixel.G < 135 ? 180 : 126, 0, 255),
+
+                        Math.Clamp(sourcePixel.G < 135 ? 255 : (sourcePixel.G < 20 ? sourcePixel.G : 0), 0, 255))
+                        :
+
+                        Color.FromArgb(255,
+
+                        Math.Clamp(sourcePixel.G < 40 ? 130 : sourcePixel.G + 100, 0, 255),
+
+                        Math.Clamp((sourcePixel.G < 40 && sourcePixel.G > 20 ? sourcePixel.G + 120
+                        : (sourcePixel.G < 20 ? sourcePixel.G : 126)), 0, 255),
+                        0);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+        public static Bitmap GenerateSkinMulti(Bitmap file) {
+            Bitmap image = new Bitmap(Grayscale.MakeGrayscale(file));
+            LockBitmap source = new LockBitmap(image);
+            source.LockBits();
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color sourcePixel = source.GetPixel(x, y);
+                    Color col = Color.FromArgb(255,
+                        Math.Clamp(sourcePixel.G < 40 ? 130 : sourcePixel.G + 100, 0, 255),
+                        Math.Clamp(sourcePixel.G < 40 && sourcePixel.G > 20 ? sourcePixel.G + 120 :
+                        (sourcePixel.G < 20 ? sourcePixel.G : 126), 0, 255), 0);
+                    source.SetPixel(x, y, col);
+                }
+            };
+            source.UnlockBits();
+            return image;
+        }
+
         public static Bitmap ExtractBlue(Bitmap file) {
             Bitmap image = new Bitmap(file);
             LockBitmap source = new LockBitmap(image);
@@ -335,15 +391,15 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
                 Bitmap catchLight2 = BitmapToCatchlight(eyeMulti2);
                 Bitmap normal2 = BitmapToEyeNormal(eyeMulti2);
 
-                SideBySide(eyeMulti, eyeMulti2).Save(ReplaceExtension(output.Replace(".", "_eye_multi_asym."), ".png"), ImageFormat.Png);
-                SideBySide(eyeGlow, eyeGlow2).Save(ReplaceExtension(output.Replace(".", "_eye_glow_asym."), ".png"), ImageFormat.Png);
-                SideBySide(catchLight, catchLight2).Save(ReplaceExtension(output.Replace(".", "_eye_catchlight_asym."), ".png"), ImageFormat.Png);
-                SideBySide(normal, normal2).Save(ReplaceExtension(output.Replace(".", "_eye_normal_asym."), ".png"), ImageFormat.Png);
+                SideBySide(eyeMulti, eyeMulti2).Save(ReplaceExtension(AddSuffix(output, "_eye_multi_asym"), ".png"), ImageFormat.Png);
+                SideBySide(eyeGlow, eyeGlow2).Save(ReplaceExtension(AddSuffix(output, "_eye_glow_asym"), ".png"), ImageFormat.Png);
+                SideBySide(catchLight, catchLight2).Save(ReplaceExtension(AddSuffix(output, "_eye_catchlight_asym"), ".png"), ImageFormat.Png);
+                SideBySide(normal, normal2).Save(ReplaceExtension(AddSuffix(output, "_eye_normal_asym"), ".png"), ImageFormat.Png);
             } else {
-                SideBySide(eyeMulti, eyeMulti).Save(ReplaceExtension(output.Replace(".", "_eye_multi_asym."), ".png"), ImageFormat.Png);
-                SideBySide(eyeGlow, eyeGlow).Save(ReplaceExtension(output.Replace(".", "_eye_glow_asym."), ".png"), ImageFormat.Png);
-                SideBySide(catchLight, catchLight).Save(ReplaceExtension(output.Replace(".", "_eye_catchlight_asym."), ".png"), ImageFormat.Png);
-                SideBySide(normal, normal).Save(ReplaceExtension(output.Replace(".", "_eye_normal_asym."), ".png"), ImageFormat.Png);
+                SideBySide(eyeMulti, eyeMulti).Save(ReplaceExtension(AddSuffix(output, "_eye_multi_asym"), ".png"), ImageFormat.Png);
+                SideBySide(eyeGlow, eyeGlow).Save(ReplaceExtension(AddSuffix(output, "_eye_glow_asym"), ".png"), ImageFormat.Png);
+                SideBySide(catchLight, catchLight).Save(ReplaceExtension(AddSuffix(output, "_eye_catchlight_asym"), ".png"), ImageFormat.Png);
+                SideBySide(normal, normal).Save(ReplaceExtension(AddSuffix(output, "_eye_normal_asym"), ".png"), ImageFormat.Png);
             }
         }
         public static void ConvertToEyeMaps(string filename) {
@@ -353,13 +409,20 @@ namespace FFXIVLooseTextureCompiler.ImageProcessing {
             Bitmap catchLight = BitmapToCatchlight(eyeMulti);
             Bitmap normal = BitmapToEyeNormal(eyeMulti);
 
-            eyeMulti.Save(ReplaceExtension(filename.Replace(".", "_eye_multi."), ".png"), ImageFormat.Png);
-            eyeGlow.Save(ReplaceExtension(filename.Replace(".", "_eye_glow."), ".png"), ImageFormat.Png);
-            catchLight.Save(ReplaceExtension(filename.Replace(".", "_eye_catchlight."), ".png"), ImageFormat.Png);
-            normal.Save(ReplaceExtension(filename.Replace(".", "_eye_normal."), ".png"), ImageFormat.Png);
+            eyeMulti.Save(ReplaceExtension(AddSuffix(filename, "_eye_multi"), ".png"), ImageFormat.Png);
+            eyeGlow.Save(ReplaceExtension(AddSuffix(filename, "_eye_glow"), ".png"), ImageFormat.Png);
+            catchLight.Save(ReplaceExtension(AddSuffix(filename, "_eye_catchlight"), ".png"), ImageFormat.Png);
+            normal.Save(ReplaceExtension(AddSuffix(filename, "_eye_normal"), ".png"), ImageFormat.Png);
         }
         public static string ReplaceExtension(string path, string extension) {
-            return path.Replace(".dds", extension).Replace(".png", extension).Replace(".bmp", extension).Replace(".tex", extension);
+            return Path.ChangeExtension(path, extension);
         }
+        public static string AddSuffix(string filename, string suffix) {
+            string fDir = Path.GetDirectoryName(filename);
+            string fName = Path.GetFileNameWithoutExtension(filename);
+            string fExt = Path.GetExtension(filename);
+            return !string.IsNullOrEmpty(filename) ? Path.Combine(fDir, String.Concat(fName, suffix, fExt)) : "";
+        }
+
     }
 }

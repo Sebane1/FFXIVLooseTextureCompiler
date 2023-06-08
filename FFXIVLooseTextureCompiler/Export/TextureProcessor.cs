@@ -48,7 +48,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (child.Diffuse.Contains("baseTexBaked")) {
                             xnormalCache.Add(child.Diffuse, child.Diffuse);
                             Bitmap diffuse = TexLoader.ResolveBitmap(parent.Diffuse);
-                            if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha)) 
+                            if (Directory.Exists(Path.GetDirectoryName(diffuseAlpha))
                                 && Directory.Exists(Path.GetDirectoryName(diffuseRGB))) {
                                 string childAlpha = child.Diffuse.Replace("baseTexBaked", "alpha");
                                 string childRGB = child.Diffuse.Replace("baseTexBaked", "rgb");
@@ -82,7 +82,7 @@ namespace FFXIVLooseTextureCompiler {
                             xnormalCache.Add(child.Normal, child.Normal);
                             Bitmap normal = TexLoader.ResolveBitmap(parent.Normal);
                             ImageManipulation.ExtractTransparency(normal).Save(normalAlpha, ImageFormat.Png);
-                            ImageManipulation.ExtractRGB(normal,true).Save(normalRGB, ImageFormat.Png);
+                            ImageManipulation.ExtractRGB(normal, true).Save(normalRGB, ImageFormat.Png);
                             xnormal.AddToBatch(parent.InternalDiffusePath, normalAlpha, child.Normal.Replace("baseTexBaked", "alpha"), false);
                             xnormal.AddToBatch(parent.InternalDiffusePath, normalRGB, child.Normal.Replace("baseTexBaked", "rgb"), true);
                         }
@@ -304,7 +304,13 @@ namespace FFXIVLooseTextureCompiler {
                     if (textureSet.InternalDiffusePath.Contains("b0001_b_d") || textureSet.InternalDiffusePath.Contains("b0101_b_d")) {
                         ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiTbse, "", textureSet.Glow,
                             textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
-                    } else {
+                    } else if (textureSet.InternalDiffusePath.Contains("fac_b_d")) {
+                        ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFaceAsym, "", textureSet.Glow,
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    } else if (textureSet.InternalDiffusePath.Contains("fac_d")) {
+                        ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.MultiFace, "", textureSet.Glow,
+                            textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
+                    }else {
                         ExportTex(textureSet.Diffuse, AppendNumber(multiDiskPath, fileCount), ExportType.Multi, "", textureSet.Glow,
                             textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Diffuse : "");
                     }
@@ -328,7 +334,7 @@ namespace FFXIVLooseTextureCompiler {
                             textureSet.Glow);
                         outputGenerated = true;
                     } else {
-                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "", 
+                        ExportTex(textureSet.Normal, AppendNumber(normalDiskPath, fileCount), ExportType.None, "", "",
                             textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : "");
                         outputGenerated = true;
                     }
@@ -339,12 +345,12 @@ namespace FFXIVLooseTextureCompiler {
                     if (textureSet.BackupTexturePaths != null) {
                         ExportTex((Path.Combine(AppDomain.CurrentDomain.BaseDirectory, textureSet.BackupTexturePaths.Normal)),
                             AppendNumber(normalDiskPath, fileCount), ExportType.MergeNormal, textureSet.Diffuse, textureSet.NormalMask,
-                            (textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : ""), 
+                            (textureSet.BackupTexturePaths != null ? textureSet.BackupTexturePaths.Normal : ""),
                             textureSet.NormalCorrection, textureSet.InvertNormalGeneration);
                         outputGenerated = true;
                     } else {
                         ExportTex(textureSet.Diffuse, AppendNumber(normalDiskPath, fileCount),
-                            ExportType.Normal, "", textureSet.NormalMask, textureSet.BackupTexturePaths != null ? 
+                            ExportType.Normal, "", textureSet.NormalMask, textureSet.BackupTexturePaths != null ?
                             textureSet.BackupTexturePaths.Diffuse : "",
                             textureSet.NormalCorrection, textureSet.InvertNormalGeneration);
                         outputGenerated = true;
@@ -410,7 +416,9 @@ namespace FFXIVLooseTextureCompiler {
             XNormalImport,
             DontManipulate,
             GlowMulti,
-            MultiTbse
+            MultiTbse,
+            MultiFace,
+            MultiFaceAsym
         }
         public void ExportTex(string inputFile, string outputFile, ExportType exportType = ExportType.None,
             string diffuseNormal = "", string mask = "", string layeringImage = "", string normalCorrection = "", bool modifier = false) {
@@ -519,6 +527,8 @@ namespace FFXIVLooseTextureCompiler {
                         output.Save(stream, ImageFormat.Png);
                         break;
                     case ExportType.Multi:
+                    case ExportType.MultiFace:
+                    case ExportType.MultiFaceAsym:
                     case ExportType.MultiTbse:
                         if (multiCache.ContainsKey(inputFile)) {
                             multiCache[inputFile].Save(stream, ImageFormat.Png);
@@ -540,9 +550,12 @@ namespace FFXIVLooseTextureCompiler {
                                     } else {
                                         image = bitmap;
                                     }
-                                    Bitmap generatedMulti = MultiplyFilter.MultiplyImage(
-                                    Brightness.BrightenImage(Grayscale.MakeGrayscale(image)), 255,
-                                    (byte)(exportType != ExportType.MultiTbse ? 126 : 0), 0);
+                                    Bitmap generatedMulti = exportType != ExportType.MultiTbse
+                                    ? (exportType == ExportType.MultiFace || exportType == ExportType.MultiFaceAsym) ?
+                                    ImageManipulation.GenerateFaceMulti(image, exportType == ExportType.MultiFaceAsym) :
+                                    ImageManipulation.GenerateSkinMulti(image)
+                                    : MultiplyFilter.MultiplyImage(Brightness.BrightenImage(Grayscale.MakeGrayscale(image)), 255,
+                                    (byte)0, 0);
                                     Bitmap multi = !string.IsNullOrEmpty(mask)
                                         ? AtramentumLuminisGlow.CalculateMulti(generatedMulti, TexLoader.ResolveBitmap(mask))
                                         : generatedMulti;

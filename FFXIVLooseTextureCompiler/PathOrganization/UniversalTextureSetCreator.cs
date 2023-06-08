@@ -115,11 +115,16 @@ namespace FFXIVLooseTextureCompiler.PathOrganization {
                     destinationTextureSet.BackupTexturePaths = null;
                     break;
             }
-            destinationTextureSet.Diffuse = baseTextureSet.Diffuse?.Replace(".", $"_{prefix}_d_baseTexBaked.").Replace(".tex", ".png");
-            destinationTextureSet.Normal = baseTextureSet.Normal?.Replace(".", $"_{prefix}_n_baseTexBaked.").Replace(".tex", ".png");
-            destinationTextureSet.Multi = baseTextureSet.Multi?.Replace(".", $"_{prefix}_m_baseTexBaked.".Replace(".tex", ".png"));
-            destinationTextureSet.Glow = baseTextureSet.Glow?.Replace(".", $"_{prefix}_g_baseTexBaked.").Replace(".tex", ".png");
-            destinationTextureSet.NormalMask = baseTextureSet.NormalMask?.Replace(".", $"_{prefix}_nm_baseTexBaked.").Replace(".tex", ".png");
+            destinationTextureSet.Diffuse = ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(baseTextureSet.Diffuse, $"_{prefix}_d_baseTexBaked"), ".png");
+            destinationTextureSet.Normal = ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(baseTextureSet.Normal, $"_{prefix}_n_baseTexBaked"), ".png");
+            destinationTextureSet.Multi = ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(baseTextureSet.Multi, $"_{prefix}_m_baseTexBaked"), ".png");
+            destinationTextureSet.Glow = ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(baseTextureSet.Glow, $"_{prefix}_g_baseTexBaked"), ".png");
+            destinationTextureSet.NormalMask = ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(baseTextureSet.NormalMask, $"_{prefix}_nm_baseTexBaked"), ".png");
             destinationTextureSet.IgnoreNormalGeneration = baseTextureSet.IgnoreNormalGeneration;
             destinationTextureSet.IgnoreMultiGeneration = baseTextureSet.IgnoreMultiGeneration;
             destinationTextureSet.InvertNormalGeneration = baseTextureSet.InvertNormalGeneration;
