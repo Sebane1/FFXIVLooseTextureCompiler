@@ -76,7 +76,13 @@ namespace FFXIVLooseTextureCompiler {
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
             textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
+            Racial.RacePaths.otopopNoticeTriggered += RacePaths_otopopNoticeTriggered;
         }
+
+        private void RacePaths_otopopNoticeTriggered(object? sender, EventArgs e) {
+            MessageBox.Show("By using Otopop you agree to the following:\r\n\r\nYou are not making a NSFW mod. \r\n\r\nCommercial mod releases require a commercial license from the Otopop creator.");
+        }
+
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
             if (!HasSaved) {
                 DialogResult dialogResult = MessageBox.Show("Save changes?", VersionText, MessageBoxButtons.YesNoCancel);
@@ -153,9 +159,9 @@ namespace FFXIVLooseTextureCompiler {
             ExportMeta();
             PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
             PenumbraHttpApi.Redraw(0);
-            if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
-                IntegrityChecker.ShowConsolation();
-            }
+            //if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
+            //    IntegrityChecker.ShowConsolation();
+            //}
             hasDoneReload = true;
             materialList_SelectedIndexChanged(this, EventArgs.Empty);
             finalizeButton.Enabled = generateButton.Enabled = false;
@@ -229,9 +235,9 @@ namespace FFXIVLooseTextureCompiler {
                  faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             GetLastUsedOptions();
-            if (IntegrityChecker.IntegrityCheck()) {
-                IntegrityChecker.ShowRules();
-            }
+            //if (IntegrityChecker.IntegrityCheck()) {
+            //    IntegrityChecker.ShowRules();
+            //}
             originalDiffuseBoxColour = diffuse.BackColor;
             originalNormalBoxColour = normal.BackColor;
             originalMultiBoxColour = multi.BackColor;
@@ -1036,9 +1042,9 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             Save();
-            if (IntegrityChecker.IntegrityCheck()) {
-                IntegrityChecker.ShowSave();
-            }
+            //if (IntegrityChecker.IntegrityCheck()) {
+            //    IntegrityChecker.ShowSave();
+            //}
         }
         public void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1057,9 +1063,9 @@ namespace FFXIVLooseTextureCompiler {
                     savePath = openFileDialog.FileName;
                     OpenProject(savePath);
                     generationCooldown.Start();
-                    if (IntegrityChecker.IntegrityCheck()) {
-                        IntegrityChecker.ShowOpen();
-                    }
+                    //if (IntegrityChecker.IntegrityCheck()) {
+                    //    IntegrityChecker.ShowOpen();
+                    //}
                 }
                 HasSaved = true;
             }
