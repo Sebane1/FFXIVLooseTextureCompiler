@@ -79,7 +79,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
             if (!HasSaved) {
-                DialogResult dialogResult = MessageBox.Show("Save changes?", Text, MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("Save changes?", VersionText, MessageBoxButtons.YesNoCancel);
                 switch (dialogResult) {
                     case DialogResult.Yes:
                         if (savePath == null) {
@@ -316,7 +316,8 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
             Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
-            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
+            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName 
+                != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
             findAndReplace.Multi.CurrentPath = multi.CurrentPath;
