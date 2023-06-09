@@ -1,0 +1,3 @@
+[submodule "LooseTextureCompilerCore"]
+	path = LooseTextureCompilerCore
+	url = https://github.com/Sebane1/LooseTextureCompilerCore.git
