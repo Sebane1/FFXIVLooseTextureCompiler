@@ -8,17 +8,11 @@ namespace FFXIVVoicePackCreator {
 
         int index = 0;
         bool isSaveMode = false;
-        bool isSwappable = true;
-        bool isPlayable = true;
         public event EventHandler OnFileSelected;
 
         string filter;
         private Point startPos;
         private bool canDoDragDrop;
-        private bool ignoreClear;
-        private bool muteState;
-        private int maxTime = 4000;
-        private Color color;
         private string currentPath;
 
         [Category("Filter"), Description("Changes what type of selection is made")]
@@ -38,7 +32,6 @@ namespace FFXIVVoicePackCreator {
         public string CurrentPath { get => currentPath; set { currentPath = value; filePath.Text = value; } }
 
         private void filePicker_Load(object sender, EventArgs e) {
-            color = BackColor;
             AutoScaleDimensions = new SizeF(96, 96);
             labelName.Text = (index == -1 ? FirstCharToUpper(Name) : ($"({index})  " + FirstCharToUpper(Name)));
             filePath.AllowDrop = true;

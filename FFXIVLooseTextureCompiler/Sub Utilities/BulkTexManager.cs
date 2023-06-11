@@ -1,6 +1,6 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using OtterTex;
-using Penumbra.Import.Textures;
+using Penumbra.LTCImport.Textures;
 using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
@@ -111,7 +111,7 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog(this) == DialogResult.OK) {
                 foreach (string item in textureList.Items) {
                     using (var stream = new FileStream(item.ToString(), FileMode.Open, FileAccess.Read)) {
-                        var scratch = TexFileParser.Parse(stream);
+                        var scratch = PenumbraTexFileParser.Parse(stream);
                         var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
                         RGBAPixels = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
 

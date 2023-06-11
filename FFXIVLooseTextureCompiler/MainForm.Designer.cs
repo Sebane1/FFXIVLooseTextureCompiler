@@ -26,7 +26,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Timer autoGenerateTImer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.genderListBody = new System.Windows.Forms.ComboBox();
+            this.genderList = new System.Windows.Forms.ComboBox();
             this.raceList = new System.Windows.Forms.ComboBox();
             this.tailList = new System.Windows.Forms.ComboBox();
             this.baseBodyList = new System.Windows.Forms.ComboBox();
@@ -37,7 +37,7 @@
             this.diffuse = new FFXIVVoicePackCreator.FilePicker();
             this.asymCheckbox = new System.Windows.Forms.CheckBox();
             this.facePart = new System.Windows.Forms.ComboBox();
-            this.faceType = new System.Windows.Forms.ComboBox();
+            this.faceTypeList = new System.Windows.Forms.ComboBox();
             this.subRaceList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.modDescriptionTextBox = new System.Windows.Forms.TextBox();
@@ -136,7 +136,7 @@
             this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
             this.mask = new FFXIVVoicePackCreator.FilePicker();
             this.discordButton = new System.Windows.Forms.Button();
-            this.faceExtra = new System.Windows.Forms.ComboBox();
+            this.faceExtraList = new System.Windows.Forms.ComboBox();
             this.glow = new FFXIVVoicePackCreator.FilePicker();
             this.finalizeButton = new System.Windows.Forms.Button();
             this.auraFaceScalesDropdown = new System.Windows.Forms.ComboBox();
@@ -166,15 +166,15 @@
             // 
             // genderListBody
             // 
-            this.genderListBody.FormattingEnabled = true;
-            this.genderListBody.Items.AddRange(new object[] {
+            this.genderList.FormattingEnabled = true;
+            this.genderList.Items.AddRange(new object[] {
             "Masculine",
             "Feminine"});
-            this.genderListBody.Location = new System.Drawing.Point(148, 112);
-            this.genderListBody.Name = "genderListBody";
-            this.genderListBody.Size = new System.Drawing.Size(80, 23);
-            this.genderListBody.TabIndex = 1;
-            this.genderListBody.Text = "Masculine";
+            this.genderList.Location = new System.Drawing.Point(148, 112);
+            this.genderList.Name = "genderListBody";
+            this.genderList.Size = new System.Drawing.Size(80, 23);
+            this.genderList.TabIndex = 1;
+            this.genderList.Text = "Masculine";
             // 
             // raceList
             // 
@@ -341,8 +341,8 @@
             // 
             // faceType
             // 
-            this.faceType.FormattingEnabled = true;
-            this.faceType.Items.AddRange(new object[] {
+            this.faceTypeList.FormattingEnabled = true;
+            this.faceTypeList.Items.AddRange(new object[] {
             "Face 1",
             "Face 2",
             "Face 3",
@@ -352,11 +352,11 @@
             "Face 7",
             "Face 8",
             "Face 9"});
-            this.faceType.Location = new System.Drawing.Point(88, 140);
-            this.faceType.Name = "faceType";
-            this.faceType.Size = new System.Drawing.Size(60, 23);
-            this.faceType.TabIndex = 3;
-            this.faceType.Text = "Face 4";
+            this.faceTypeList.Location = new System.Drawing.Point(88, 140);
+            this.faceTypeList.Name = "faceType";
+            this.faceTypeList.Size = new System.Drawing.Size(60, 23);
+            this.faceTypeList.TabIndex = 3;
+            this.faceTypeList.Text = "Face 4";
             // 
             // subRaceList
             // 
@@ -1227,13 +1227,13 @@
             // 
             // faceExtra
             // 
-            this.faceExtra.Enabled = false;
-            this.faceExtra.FormattingEnabled = true;
-            this.faceExtra.Location = new System.Drawing.Point(228, 140);
-            this.faceExtra.Name = "faceExtra";
-            this.faceExtra.Size = new System.Drawing.Size(48, 23);
-            this.faceExtra.TabIndex = 43;
-            this.faceExtra.Text = "999";
+            this.faceExtraList.Enabled = false;
+            this.faceExtraList.FormattingEnabled = true;
+            this.faceExtraList.Location = new System.Drawing.Point(228, 140);
+            this.faceExtraList.Name = "faceExtra";
+            this.faceExtraList.Size = new System.Drawing.Size(48, 23);
+            this.faceExtraList.TabIndex = 43;
+            this.faceExtraList.Text = "999";
             // 
             // glow
             // 
@@ -1378,7 +1378,7 @@
             this.Controls.Add(this.auraFaceScalesDropdown);
             this.Controls.Add(this.finalizeButton);
             this.Controls.Add(this.glow);
-            this.Controls.Add(this.faceExtra);
+            this.Controls.Add(this.faceExtraList);
             this.Controls.Add(this.discordButton);
             this.Controls.Add(this.mask);
             this.Controls.Add(this.generateMultiCheckBox);
@@ -1399,10 +1399,10 @@
             this.Controls.Add(this.textureList);
             this.Controls.Add(this.facePart);
             this.Controls.Add(this.donateButton);
-            this.Controls.Add(this.faceType);
+            this.Controls.Add(this.faceTypeList);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.subRaceList);
-            this.Controls.Add(this.genderListBody);
+            this.Controls.Add(this.genderList);
             this.Controls.Add(this.modDescriptionTextBox);
             this.Controls.Add(this.raceList);
             this.Controls.Add(this.tailList);
@@ -1443,7 +1443,7 @@
         }
 
         #endregion
-        private ComboBox genderListBody;
+        private ComboBox genderList;
         private ComboBox raceList;
         private ComboBox tailList;
         private ComboBox baseBodyList;
@@ -1461,7 +1461,7 @@
         private TextBox modDescriptionTextBox;
         private Label label3;
         private ComboBox facePart;
-        private ComboBox faceType;
+        private ComboBox faceTypeList;
         private ComboBox subRaceList;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem configToolStripMenuItem;
@@ -1501,7 +1501,7 @@
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
         private FFXIVVoicePackCreator.FilePicker mask;
         private Button discordButton;
-        private ComboBox faceExtra;
+        private ComboBox faceExtraList;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem howToGetTexturesToolStripMenuItem;
         private System.Windows.Forms.Timer autoGenerateTImer;
@@ -1573,7 +1573,7 @@
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
-        public ComboBox FaceType { get => faceType; set => faceType = value; }
+        public ComboBox FaceType { get => faceTypeList; set => faceTypeList = value; }
         public ComboBox FacePart { get => facePart; set => facePart = value; }
         public ComboBox BaseBodyList { get => baseBodyList; set => baseBodyList = value; }
         public TextBox ModNameTextBox { get => modNameTextBox; set => modNameTextBox = value; }

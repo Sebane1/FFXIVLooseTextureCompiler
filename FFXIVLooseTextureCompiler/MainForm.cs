@@ -159,9 +159,6 @@ namespace FFXIVLooseTextureCompiler {
             ExportMeta();
             PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
             PenumbraHttpApi.Redraw(0);
-            //if (IntegrityChecker.IntegrityCheck() && !willCloseWhenComplete) {
-            //    IntegrityChecker.ShowConsolation();
-            //}
             hasDoneReload = true;
             materialList_SelectedIndexChanged(this, EventArgs.Empty);
             finalizeButton.Enabled = generateButton.Enabled = false;
@@ -226,18 +223,15 @@ namespace FFXIVLooseTextureCompiler {
             mask.FilePath.Enabled = false;
             glow.FilePath.Enabled = false;
             for (int i = 0; i < 300; i++) {
-                faceExtra.Items.Add((i + 1) + "");
+                faceExtraList.Items.Add((i + 1) + "");
             }
             uniqueAuRa.Enabled = false;
-            auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderListBody.SelectedIndex =
+            auraFaceScalesDropdown.SelectedIndex = baseBodyList.SelectedIndex = genderList.SelectedIndex =
                  raceList.SelectedIndex = tailList.SelectedIndex =
-                 subRaceList.SelectedIndex = faceType.SelectedIndex = facePart.SelectedIndex =
-                 faceExtra.SelectedIndex = generationType.SelectedIndex = 0;
+                 subRaceList.SelectedIndex = faceTypeList.SelectedIndex = facePart.SelectedIndex =
+                 faceExtraList.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             GetLastUsedOptions();
-            //if (IntegrityChecker.IntegrityCheck()) {
-            //    IntegrityChecker.ShowRules();
-            //}
             originalDiffuseBoxColour = diffuse.BackColor;
             originalNormalBoxColour = normal.BackColor;
             originalMultiBoxColour = multi.BackColor;
@@ -322,7 +316,7 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
             Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
-            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName 
+            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName
                 != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
@@ -476,7 +470,7 @@ namespace FFXIVLooseTextureCompiler {
             if (File.Exists(path)) {
                 using (StreamReader reader = new StreamReader(path)) {
                     try {
-                        genderListBody.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
+                        genderList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue); ;
                         raceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
                         subRaceList.SelectedIndex = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
                         int value = Math.Clamp(int.Parse(reader.ReadLine()), 0, int.MaxValue);
@@ -494,7 +488,7 @@ namespace FFXIVLooseTextureCompiler {
             string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
             try {
                 using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"UsedOptions.config"))) {
-                    writer.WriteLine(genderListBody.SelectedIndex);
+                    writer.WriteLine(genderList.SelectedIndex);
                     writer.WriteLine(raceList.SelectedIndex);
                     writer.WriteLine(subRaceList.SelectedIndex);
                     writer.WriteLine(baseBodyList.SelectedIndex);
@@ -540,31 +534,32 @@ namespace FFXIVLooseTextureCompiler {
         #region Path Management
         private void facePart_SelectedIndexChanged(object sender, EventArgs e) {
             if (facePart.SelectedIndex == 4) {
-                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = false;
-                faceExtra.Enabled = true;
+                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceTypeList.Enabled = subRaceList.Enabled = false;
+                faceExtraList.Enabled = true;
             } else if (facePart.SelectedIndex == 5) {
-                auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceType.Enabled;
-                faceExtra.Enabled = true;
+                auraFaceScalesDropdown.Enabled = false;
+                asymCheckbox.Enabled = faceTypeList.Enabled;
+                faceExtraList.Enabled = true;
             } else {
-                asymCheckbox.Enabled = faceType.Enabled = subRaceList.Enabled = true;
+                asymCheckbox.Enabled = faceTypeList.Enabled = subRaceList.Enabled = true;
                 if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
                     auraFaceScalesDropdown.Enabled = true;
                 }
-                faceExtra.Enabled = false;
+                faceExtraList.Enabled = false;
             }
         }
         private void baseBodyList_SelectedIndexChanged(object sender, EventArgs e) {
             switch (baseBodyList.SelectedIndex) {
                 case 0:
-                    genderListBody.Enabled = true;
+                    genderList.Enabled = true;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 1:
                 case 2:
                 case 3:
-                    genderListBody.SelectedIndex = 1;
-                    genderListBody.Enabled = false;
+                    genderList.SelectedIndex = 1;
+                    genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -573,14 +568,14 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 4:
                     raceList.SelectedIndex = 6;
-                    genderListBody.SelectedIndex = 1;
-                    genderListBody.Enabled = false;
+                    genderList.SelectedIndex = 1;
+                    genderList.Enabled = false;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 5:
-                    genderListBody.SelectedIndex = 0;
-                    genderListBody.Enabled = false;
+                    genderList.SelectedIndex = 0;
+                    genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -589,15 +584,14 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 6:
                     raceList.SelectedIndex = 6;
-                    genderListBody.Enabled = true;
+                    genderList.Enabled = true;
                     tailList.Enabled = true;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 7:
-                case 8:
-                case 9:
-                    genderListBody.Enabled = false;
+                    genderList.Enabled = false;
                     raceList.SelectedIndex = 5;
+                    tailList.Enabled = false;
                     break;
             }
         }
@@ -643,7 +637,7 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
             textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
-                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderListBody.Text)
+                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderList.Text)
                 + ", " + raceList.Text;
             AddBodyPaths(textureSet);
             textureList.Items.Add(textureSet);
@@ -652,24 +646,24 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddBodyPaths(TextureSet textureSet) {
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                textureSet.InternalDiffusePath = RacePaths.GetBodyTexturePath(0, genderListBody.SelectedIndex,
+                textureSet.InternalDiffusePath = RacePaths.GetBodyTexturePath(0, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
             }
-            textureSet.InternalNormalPath = RacePaths.GetBodyTexturePath(1, genderListBody.SelectedIndex,
+            textureSet.InternalNormalPath = RacePaths.GetBodyTexturePath(1, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetBodyTexturePath(2, genderListBody.SelectedIndex,
+            textureSet.InternalMultiPath = RacePaths.GetBodyTexturePath(2, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
-            AddBackupPaths(textureSet);
+            BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
             textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
-                + (faceExtra.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderListBody.Text : "Unisex")
+                + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4 ? faceType.Text : "Multi Face");
+                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
                     AddFacePaths(textureSet);
@@ -692,53 +686,53 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void AddDecalPath(TextureSet textureSet) {
-            textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtra.SelectedIndex + 1) + ".tex";
+            textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtraList.SelectedIndex + 1) + ".tex";
         }
 
         public void AddHairPaths(TextureSet textureSet) {
-            textureSet.MaterialSetName = facePart.Text + " " + (faceExtra.SelectedIndex + 1) + ", " + genderListBody.Text
+            textureSet.MaterialSetName = facePart.Text + " " + (faceExtraList.SelectedIndex + 1) + ", " + genderList.Text
       + ", " + raceList.Text;
 
-            textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtra.SelectedIndex,
-                genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
+            textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtraList.SelectedIndex,
+                genderList.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
 
-            textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtra.SelectedIndex,
-                genderListBody.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
+            textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtraList.SelectedIndex,
+                genderList.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
         }
 
         public void AddEyePaths(TextureSet textureSet) {
-            textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(1, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-            2, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(2, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-            2, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(3, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-            2, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(3, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
         }
 
         public void AddFacePaths(TextureSet textureSet) {
             if (facePart.SelectedIndex != 1) {
-                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-                    facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                    facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
             }
 
-            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-            facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(2, genderListBody.SelectedIndex, subRaceList.SelectedIndex,
-            facePart.SelectedIndex, faceType.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
             if (facePart.SelectedIndex == 0) {
                 if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
                     if (auraFaceScalesDropdown.SelectedIndex > 0) {
-                        if (faceType.SelectedIndex < 4) {
+                        if (faceTypeList.SelectedIndex < 4) {
                             if (asymCheckbox.Checked) {
                                 textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                      @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + "a.png");
+                                      @"res\textures\s" + (genderList.SelectedIndex == 0 ? "m" : "f") + faceTypeList.SelectedIndex + "a.png");
                             } else {
                                 textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                    @"res\textures\s" + (genderListBody.SelectedIndex == 0 ? "m" : "f") + faceType.SelectedIndex + ".png");
+                                    @"res\textures\s" + (genderList.SelectedIndex == 0 ? "m" : "f") + faceTypeList.SelectedIndex + ".png");
                             }
                         }
                     }
@@ -763,9 +757,9 @@ namespace FFXIVLooseTextureCompiler {
             if (textureSet == null) {
                 enabled = false;
             }
-            diffuse.Enabled = enabled;
-            normal.Enabled = enabled;
-            multi.Enabled = enabled;
+            diffuse.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalDiffusePath);
+            normal.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalNormalPath);
+            multi.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMultiPath);
             mask.Enabled = enabled && bakeNormals.Checked;
             glow.Enabled = enabled && !textureSet.MaterialSetName.ToLower().Contains("face paint")
                     && !textureSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
@@ -1133,7 +1127,7 @@ namespace FFXIVLooseTextureCompiler {
                     AddWatcher(textureSet.Multi);
                     AddWatcher(textureSet.NormalMask);
                     AddWatcher(textureSet.Glow);
-                    AddBackupPaths(textureSet);
+                    BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
                 }
             }
             HasSaved = true;
@@ -1155,7 +1149,7 @@ namespace FFXIVLooseTextureCompiler {
                         AddWatcher(textureSet.Multi);
                         AddWatcher(textureSet.NormalMask);
                         AddWatcher(textureSet.Glow);
-                        AddBackupPaths(textureSet);
+                        BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
                     }
                     textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 }
@@ -1163,39 +1157,7 @@ namespace FFXIVLooseTextureCompiler {
             HasSaved = false;
         }
 
-        private void AddBackupPaths(TextureSet textureSet) {
-            if (genderListBody.SelectedIndex != 0) {
-                if (textureSet.InternalDiffusePath.Contains("bibo")) {
-                    textureSet.BackupTexturePaths = BackupTexturePaths.BiboPath;
-                } else if (textureSet.InternalDiffusePath.Contains("gen3") || textureSet.InternalDiffusePath.Contains("eve")) {
-                    textureSet.BackupTexturePaths = BackupTexturePaths.Gen3Path;
-                } else if (textureSet.InternalDiffusePath.Contains("v01_c1101b0001_g")) {
-                    textureSet.BackupTexturePaths = BackupTexturePaths.OtopopLalaPath;
-                } else {
-                    textureSet.BackupTexturePaths = raceList.SelectedIndex == 5 ?
-                    BackupTexturePaths.VanillaLalaPath : BackupTexturePaths.Gen3Gen2Path;
-                }
-            } else {
-                if (raceList.SelectedIndex == 5) {
-                    textureSet.BackupTexturePaths = BackupTexturePaths.VanillaLalaPath;
-                } else {
-                    // Midlander, Elezen, Miqo'te
-                    if (textureSet.InternalDiffusePath.Contains("--c0101b0001_b_d")) {
-                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePath;
-                    } else
-                    // Highlander
-                    if (textureSet.InternalDiffusePath.Contains("--c0301b0001_b_d")) {
-                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePathHighlander;
-                    } else
-                    // Viera
-                    if (textureSet.InternalDiffusePath.Contains("--c1701b0001_b_d")) {
-                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePathViera;
-                    } else if (textureSet.InternalDiffusePath.Contains("_b_d")) {
-                        textureSet.BackupTexturePaths = BackupTexturePaths.TbsePath;
-                    }
-                }
-            }
-        }
+
 
         public void SaveProject(string path) {
             using (StreamWriter writer = new StreamWriter(path)) {
@@ -1216,8 +1178,8 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.SimpleFaceType = mainFormSimplified.FaceType.SelectedIndex;
                 projectFile.SimpleSubRaceType = mainFormSimplified.SubRace.SelectedIndex;
                 projectFile.SimpleNormalGeneration = mainFormSimplified.NormalGeneration.SelectedIndex;
-                foreach (TextureSet materialSet in textureList.Items) {
-                    projectFile.TextureSets.Add(materialSet);
+                foreach (TextureSet textureSet in textureList.Items) {
+                    projectFile.TextureSets.Add(textureSet);
                 }
                 serializer.Serialize(writer, projectFile);
             }
