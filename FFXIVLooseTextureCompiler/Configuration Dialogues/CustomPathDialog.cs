@@ -14,8 +14,8 @@ namespace FFXIVLooseTextureCompiler {
             set {
                 textureSet = value;
                 if (textureSet != null) {
-                    groupNameTextBox.Text = textureSet.MaterialGroupName;
-                    materialSetNameTextBox.Text = textureSet.MaterialSetName;
+                    groupNameTextBox.Text = textureSet.GroupName;
+                    materialSetNameTextBox.Text = textureSet.TextureSetName;
                     internalDiffusePathTextBox.Text = textureSet.InternalDiffusePath;
                     internalNormalPathTextBox.Text = textureSet.InternalNormalPath;
                     internalMultiPathTextbox.Text = textureSet.InternalMultiPath;

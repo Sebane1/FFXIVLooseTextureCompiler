@@ -19,8 +19,8 @@ namespace FFXIVLooseTextureCompiler {
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(replacementString.Text)) {
                 foreach (TextureSet textureSet in textureSet) {
-                    if (textureSet.MaterialSetName.ToLower().Contains(replacementString.Text.ToLower())
-                        && textureSet.MaterialGroupName.ToLower().Contains(groupTextBox.Text.ToLower())) {
+                    if (textureSet.TextureSetName.ToLower().Contains(replacementString.Text.ToLower())
+                        && textureSet.TextureSetName.ToLower().Contains(groupTextBox.Text.ToLower())) {
                         if (!string.IsNullOrEmpty(diffuse.FilePath.Text)) {
                             textureSet.Diffuse = diffuse.FilePath.Text;
                         }

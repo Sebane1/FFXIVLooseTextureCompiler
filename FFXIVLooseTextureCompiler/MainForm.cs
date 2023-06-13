@@ -314,10 +314,10 @@ namespace FFXIVLooseTextureCompiler {
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
             TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.MaterialSetName);
+            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.TextureSetName);
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
-            findAndReplace.ReplacementGroup.Text = sourceTextureSet.MaterialGroupName
-                != sourceTextureSet.MaterialSetName ? sourceTextureSet.MaterialGroupName : "";
+            findAndReplace.ReplacementGroup.Text = sourceTextureSet.GroupName
+                != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
             findAndReplace.Multi.CurrentPath = multi.CurrentPath;
@@ -636,7 +636,7 @@ namespace FFXIVLooseTextureCompiler {
         private void addBodyEditButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
+            textureSet.TextureSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
                 (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderList.Text)
                 + ", " + raceList.Text;
             AddBodyPaths(textureSet);
@@ -660,7 +660,7 @@ namespace FFXIVLooseTextureCompiler {
         private void addFaceButton_Click(object sender, EventArgs e) {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
-            textureSet.MaterialSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
+            textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
                 + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
                 + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
@@ -690,7 +690,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void AddHairPaths(TextureSet textureSet) {
-            textureSet.MaterialSetName = facePart.Text + " " + (faceExtraList.SelectedIndex + 1) + ", " + genderList.Text
+            textureSet.TextureSetName = facePart.Text + " " + (faceExtraList.SelectedIndex + 1) + ", " + genderList.Text
       + ", " + raceList.Text;
 
             textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtraList.SelectedIndex,
@@ -746,7 +746,7 @@ namespace FFXIVLooseTextureCompiler {
                 SetControlsEnabled(false);
             } else {
                 TextureSet materialSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
-                currentEditLabel.Text = "Editing: " + materialSet.MaterialSetName;
+                currentEditLabel.Text = "Editing: " + materialSet.TextureSetName;
                 SetControlsEnabled(true, materialSet);
                 SetControlsPaths(materialSet);
                 SetControlsColors(materialSet);
@@ -761,8 +761,8 @@ namespace FFXIVLooseTextureCompiler {
             normal.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalNormalPath);
             multi.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMultiPath);
             mask.Enabled = enabled && bakeNormals.Checked;
-            glow.Enabled = enabled && !textureSet.MaterialSetName.ToLower().Contains("face paint")
-                    && !textureSet.MaterialSetName.ToLower().Contains("hair") && diffuse.Enabled;
+            glow.Enabled = enabled && !textureSet.TextureSetName.ToLower().Contains("face paint")
+                    && !textureSet.TextureSetName.ToLower().Contains("hair") && diffuse.Enabled;
         }
 
         private void SetControlsPaths(TextureSet textureSet) {
@@ -916,10 +916,10 @@ namespace FFXIVLooseTextureCompiler {
                     customPathDialog.GroupingType.Items.Add(option);
                 }
                 customPathDialog.GroupingType.SelectedIndex = (
-                groupOptionTypes.ContainsKey(customPathDialog.TextureSet.MaterialGroupName) ?
-                groupOptionTypes[customPathDialog.TextureSet.MaterialGroupName] : 0);
+                groupOptionTypes.ContainsKey(customPathDialog.TextureSet.GroupName) ?
+                groupOptionTypes[customPathDialog.TextureSet.GroupName] : 0);
                 if (customPathDialog.ShowDialog() == DialogResult.OK) {
-                    groupOptionTypes[customPathDialog.TextureSet.MaterialGroupName] = customPathDialog.GroupingType.SelectedIndex;
+                    groupOptionTypes[customPathDialog.TextureSet.GroupName] = customPathDialog.GroupingType.SelectedIndex;
                     MessageBox.Show("Texture Set has been edited successfully", VersionText);
                     hasDoneReload = false;
                 }
@@ -1142,7 +1142,7 @@ namespace FFXIVLooseTextureCompiler {
                     BringToFront();
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
                         if (!templateConfiguration.GroupName.Contains("Default")) {
-                            textureSet.MaterialGroupName = templateConfiguration.GroupName;
+                            textureSet.GroupName = templateConfiguration.GroupName;
                         }
                         AddWatcher(textureSet.Diffuse);
                         AddWatcher(textureSet.Normal);
