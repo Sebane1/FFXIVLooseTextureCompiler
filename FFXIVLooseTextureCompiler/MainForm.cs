@@ -262,7 +262,11 @@ namespace FFXIVLooseTextureCompiler {
                         metaFilePath = Path.Combine(modPath, "meta.json");
                         if (Directory.Exists(modPath)) {
                             try {
-                                Directory.Delete(modPath, true);
+                                if (!File.Exists("project.ffxivtp")) {
+                                    Directory.Delete(modPath, true);
+                                } else {
+                                    textureProcessor.CleanGeneratedAssets(modPath);
+                                }
                             } catch {
 
                             }
@@ -270,6 +274,7 @@ namespace FFXIVLooseTextureCompiler {
                             hasDoneReload = false;
                         }
                         Directory.CreateDirectory(modPath);
+                        SaveProject(Path.Combine(penumbraModPath, modNameTextBox.Text + ".ffxivtp"), true);
                         textureSets = new List<TextureSet>();
                         foreach (TextureSet item in textureList.Items) {
                             if (item.OmniExportMode) {
@@ -1036,9 +1041,6 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             Save();
-            //if (IntegrityChecker.IntegrityCheck()) {
-            //    IntegrityChecker.ShowSave();
-            //}
         }
         public void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1159,7 +1161,7 @@ namespace FFXIVLooseTextureCompiler {
 
 
 
-        public void SaveProject(string path) {
+        public void SaveProject(string path, bool ignoreSaveAlert = false) {
             using (StreamWriter writer = new StreamWriter(path)) {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = new ProjectFile();
@@ -1184,7 +1186,9 @@ namespace FFXIVLooseTextureCompiler {
                 serializer.Serialize(writer, projectFile);
             }
             HasSaved = true;
-            MessageBox.Show("Save successfull", VersionText);
+            if (!ignoreSaveAlert) {
+                MessageBox.Show("Save successfull", VersionText);
+            }
         }
         private void CheckForCommandArguments() {
             string[] args = Environment.GetCommandLineArgs();
@@ -1432,7 +1436,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    AtramentumLuminisGlow.ExtractGlowMapFormLegacyDiffuse(
+                    AtramentumLuminisGlow.ExtractGlowMapFromDiffuse(
                         TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
             }
@@ -1467,7 +1471,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale."));
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale"));
                 MessageBox.Show("Multi successfully converted to grayscale", VersionText);
             }
         }
@@ -1577,7 +1581,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractTransparency(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."));
+                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."));
                 ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."));
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }

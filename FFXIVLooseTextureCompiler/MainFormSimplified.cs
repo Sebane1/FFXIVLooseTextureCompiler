@@ -1,16 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MainFormSimplified : Form {
@@ -44,8 +35,6 @@ namespace FFXIVLooseTextureCompiler {
                     faceTextureSet = mainWindow.TextureList.Items[1] as TextureSet;
                     eyesTextureSet = mainWindow.TextureList.Items[2] as TextureSet;
                 } else {
-                    //mainWindow.Show();
-                    //this.Hide();
                     return;
                 }
                 mainWindow.Hide();
