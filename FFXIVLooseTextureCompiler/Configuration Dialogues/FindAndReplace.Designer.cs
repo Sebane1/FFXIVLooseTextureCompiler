@@ -43,7 +43,7 @@ namespace FFXIVLooseTextureCompiler {
             // acceptChangesButton
             // 
             this.acceptChangesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptChangesButton.Location = new System.Drawing.Point(200, 317);
+            this.acceptChangesButton.Location = new System.Drawing.Point(200, 320);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(143, 24);
             this.acceptChangesButton.TabIndex = 8;
@@ -54,7 +54,7 @@ namespace FFXIVLooseTextureCompiler {
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(344, 317);
+            this.button1.Location = new System.Drawing.Point(344, 320);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 24);
             this.button1.TabIndex = 9;
@@ -172,7 +172,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(414, 343);
+            this.ClientSize = new System.Drawing.Size(414, 346);
             this.Controls.Add(this.groupTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.glow);

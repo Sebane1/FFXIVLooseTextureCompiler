@@ -82,6 +82,7 @@
             this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textureToBodyMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textureToFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureToAsymFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToTexConversionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -150,7 +151,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
             this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.textureToAsymFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -164,14 +164,14 @@
             autoGenerateTImer.Interval = 200;
             autoGenerateTImer.Tick += new System.EventHandler(this.autoGenerateTImer_Tick);
             // 
-            // genderListBody
+            // genderList
             // 
             this.genderList.FormattingEnabled = true;
             this.genderList.Items.AddRange(new object[] {
             "Masculine",
             "Feminine"});
             this.genderList.Location = new System.Drawing.Point(148, 112);
-            this.genderList.Name = "genderListBody";
+            this.genderList.Name = "genderList";
             this.genderList.Size = new System.Drawing.Size(80, 23);
             this.genderList.TabIndex = 1;
             this.genderList.Text = "Masculine";
@@ -339,7 +339,7 @@
             this.facePart.Text = "Eyebrows";
             this.facePart.SelectedIndexChanged += new System.EventHandler(this.facePart_SelectedIndexChanged);
             // 
-            // faceType
+            // faceTypeList
             // 
             this.faceTypeList.FormattingEnabled = true;
             this.faceTypeList.Items.AddRange(new object[] {
@@ -353,7 +353,7 @@
             "Face 8",
             "Face 9"});
             this.faceTypeList.Location = new System.Drawing.Point(88, 140);
-            this.faceTypeList.Name = "faceType";
+            this.faceTypeList.Name = "faceTypeList";
             this.faceTypeList.Size = new System.Drawing.Size(60, 23);
             this.faceTypeList.TabIndex = 3;
             this.faceTypeList.Text = "Face 4";
@@ -747,6 +747,13 @@
             this.textureToFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.textureToFaceMultiToolStripMenuItem.Text = "Texture To Face Multi";
             this.textureToFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToFaceMultiToolStripMenuItem_Click);
+            // 
+            // textureToAsymFaceMultiToolStripMenuItem
+            // 
+            this.textureToAsymFaceMultiToolStripMenuItem.Name = "textureToAsymFaceMultiToolStripMenuItem";
+            this.textureToAsymFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.textureToAsymFaceMultiToolStripMenuItem.Text = "Texture To Asym Face Multi";
+            this.textureToAsymFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToAsymFaceMultiToolStripMenuItem_Click);
             // 
             // xNormalToolStripMenuItem
             // 
@@ -1225,12 +1232,12 @@
             this.discordButton.UseVisualStyleBackColor = false;
             this.discordButton.Click += new System.EventHandler(this.discordButton_Click);
             // 
-            // faceExtra
+            // faceExtraList
             // 
             this.faceExtraList.Enabled = false;
             this.faceExtraList.FormattingEnabled = true;
             this.faceExtraList.Location = new System.Drawing.Point(228, 140);
-            this.faceExtraList.Name = "faceExtra";
+            this.faceExtraList.Name = "faceExtraList";
             this.faceExtraList.Size = new System.Drawing.Size(48, 23);
             this.faceExtraList.TabIndex = 43;
             this.faceExtraList.Text = "999";
@@ -1358,13 +1365,6 @@
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
-            // 
-            // textureToAsymFaceMultiToolStripMenuItem
-            // 
-            this.textureToAsymFaceMultiToolStripMenuItem.Name = "textureToAsymFaceMultiToolStripMenuItem";
-            this.textureToAsymFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.textureToAsymFaceMultiToolStripMenuItem.Text = "Texture To Asym Face Multi";
-            this.textureToAsymFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToAsymFaceMultiToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
