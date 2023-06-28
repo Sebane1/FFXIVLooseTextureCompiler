@@ -60,6 +60,20 @@ namespace FFXIVLooseTextureCompiler {
                         }
                     }
                     break;
+                case 4:
+                    foreach (TextureSet textureSet in _textureSets) {
+                        if (textureSet.TextureSetName.Contains(findBox.Text)) {
+                            textureSet.TextureSetName = replaceBox.Text;
+                        }
+                    }
+                    break;
+                case 5:
+                    foreach (TextureSet textureSet in _textureSets) {
+                        if (textureSet.GroupName.Contains(findBox.Text)) {
+                            textureSet.GroupName = replaceBox.Text;
+                        }
+                    }
+                    break;
             }
         }
     }

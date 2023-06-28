@@ -68,8 +68,10 @@
             this.replacementTypeComboBox.Items.AddRange(new object[] {
             "Search And Replace Inside Name",
             "Search And Replace Inside Group",
-            "Find Name Then Change Group",
-            "Find In Group Then Change Name"});
+            "Find Name Then Change Whole Group",
+            "Find In Group Then Change Whole Name",
+            "Find In Name Then Replace Whole Name ",
+            "Find In Group Then Change Whole Group"});
             this.replacementTypeComboBox.Location = new System.Drawing.Point(4, 132);
             this.replacementTypeComboBox.Name = "replacementTypeComboBox";
             this.replacementTypeComboBox.Size = new System.Drawing.Size(328, 22);
