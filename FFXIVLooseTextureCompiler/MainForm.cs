@@ -1914,5 +1914,28 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
+
+        private void duplicateToolStripMenuItem_Click(object sender, EventArgs e) {
+            TextureSet newTextureSet = new TextureSet();
+            TextureSet textureSet = (textureList.SelectedItem as TextureSet);
+            newTextureSet.Diffuse = textureSet.Diffuse;
+            newTextureSet.Normal = textureSet.Normal;
+            newTextureSet.Multi = textureSet.Multi;
+            newTextureSet.Glow = newTextureSet.Glow;
+            newTextureSet.NormalCorrection = newTextureSet.NormalCorrection;
+            newTextureSet.InternalDiffusePath = textureSet.InternalDiffusePath;
+            newTextureSet.InternalNormalPath = textureSet.InternalNormalPath;
+            newTextureSet.InternalMultiPath = textureSet.InternalMultiPath;
+            newTextureSet.BackupTexturePaths = textureSet.BackupTexturePaths;
+            newTextureSet.ChildSets = textureSet.ChildSets;
+            newTextureSet.GroupName = textureSet.GroupName;
+            newTextureSet.TextureSetName = textureSet.GroupName;
+            newTextureSet.InvertNormalGeneration = textureSet.InvertNormalGeneration;
+            newTextureSet.IgnoreNormalGeneration = textureSet.IgnoreNormalGeneration;
+            newTextureSet.IgnoreMultiGeneration = textureSet.IgnoreMultiGeneration;
+            newTextureSet.OmniExportMode = textureSet.OmniExportMode;
+            textureList.Items.Add(newTextureSet);
+            textureList.SelectedIndex = textureList.Items.Count - 1;
+        }
     }
 }
