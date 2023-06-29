@@ -118,6 +118,7 @@
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBodyButton = new System.Windows.Forms.Button();
             this.addFaceButton = new System.Windows.Forms.Button();
@@ -151,7 +152,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
             this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bulkNameReplacement = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -996,6 +997,7 @@
             this.omniExportModeToolStripMenuItem,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
+            this.bulkNameReplacement,
             this.bulkReplaceToolStripMenuItem,
             this.duplicateToolStripMenuItem,
             this.deleteToolStripMenuItem});
@@ -1037,6 +1039,13 @@
             this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
             this.bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
             this.bulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.bulkReplaceToolStripMenuItem_Click);
+            // 
+            // duplicateToolStripMenuItem
+            // 
+            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.duplicateToolStripMenuItem.Text = "Duplicate";
+            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
@@ -1368,12 +1377,12 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
-            // duplicateToolStripMenuItem
+            // bulkNameReplacement
             // 
-            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
-            this.duplicateToolStripMenuItem.Text = "Duplicate";
-            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
+            this.bulkNameReplacement.Name = "bulkNameReplacement";
+            this.bulkNameReplacement.Size = new System.Drawing.Size(251, 22);
+            this.bulkNameReplacement.Text = "Bulk Name Replacement";
+            this.bulkNameReplacement.Click += new System.EventHandler(this.bulkNameReplacement_Click);
             // 
             // MainWindow
             // 
@@ -1580,6 +1589,7 @@
         private ToolStripMenuItem textureToFaceMultiToolStripMenuItem;
         private ToolStripMenuItem textureToAsymFaceMultiToolStripMenuItem;
         private ToolStripMenuItem duplicateToolStripMenuItem;
+        private ToolStripMenuItem bulkNameReplacement;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

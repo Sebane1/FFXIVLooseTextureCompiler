@@ -1937,5 +1937,13 @@ namespace FFXIVLooseTextureCompiler {
             textureList.Items.Add(newTextureSet);
             textureList.SelectedIndex = textureList.Items.Count - 1;
         }
+
+        private void bulkNameReplacement_Click(object sender, EventArgs e) {
+            BulkNameReplacement bulkNameReplacement = new BulkNameReplacement(textureList.Items.Cast<TextureSet>().ToArray());
+            if (bulkNameReplacement.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Replacement Operation Succeeded!", VersionText);
+                RefreshList();
+            }
+        }
     }
 }

@@ -35,7 +35,7 @@
             // 
             // replaceAll
             // 
-            this.replaceAll.Location = new System.Drawing.Point(176, 164);
+            this.replaceAll.Location = new System.Drawing.Point(171, 150);
             this.replaceAll.Name = "replaceAll";
             this.replaceAll.Size = new System.Drawing.Size(75, 23);
             this.replaceAll.TabIndex = 15;
@@ -45,18 +45,19 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(256, 164);
+            this.cancel.Location = new System.Drawing.Point(252, 150);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(75, 23);
+            this.cancel.Size = new System.Drawing.Size(75, 24);
             this.cancel.TabIndex = 14;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
+            this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(4, 68);
+            this.label3.Location = new System.Drawing.Point(4, 60);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(158, 23);
             this.label3.TabIndex = 13;
@@ -72,7 +73,7 @@
             "Find In Group Then Change Whole Name",
             "Find In Name Then Replace Whole Name ",
             "Find In Group Then Change Whole Group"});
-            this.replacementTypeComboBox.Location = new System.Drawing.Point(4, 132);
+            this.replacementTypeComboBox.Location = new System.Drawing.Point(4, 124);
             this.replacementTypeComboBox.Name = "replacementTypeComboBox";
             this.replacementTypeComboBox.Size = new System.Drawing.Size(328, 22);
             this.replacementTypeComboBox.TabIndex = 12;
@@ -91,19 +92,18 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Location = new System.Drawing.Point(-1, -2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(155, 23);
+            this.label1.Size = new System.Drawing.Size(81, 23);
             this.label1.TabIndex = 10;
-            this.label1.Text = "Find this in name";
+            this.label1.Text = "Find this";
             // 
             // replaceBox
             // 
-            this.replaceBox.Location = new System.Drawing.Point(4, 100);
+            this.replaceBox.Location = new System.Drawing.Point(4, 92);
             this.replaceBox.Name = "replaceBox";
             this.replaceBox.Size = new System.Drawing.Size(328, 22);
             this.replaceBox.TabIndex = 9;
-            this.replaceBox.TextChanged += new System.EventHandler(this.replaceBox_TextChanged);
             // 
             // findBox
             // 
@@ -116,7 +116,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 186);
+            this.ClientSize = new System.Drawing.Size(331, 175);
             this.Controls.Add(this.replaceAll);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.label3);

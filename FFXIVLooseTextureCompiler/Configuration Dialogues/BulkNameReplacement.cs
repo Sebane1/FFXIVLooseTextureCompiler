@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class BulkNameReplacement : Form {
-        private List<TextureSet> _textureSets;
+        private TextureSet[] _textureSets;
 
-        public BulkNameReplacement(List<TextureSet> textureSets) {
+        public BulkNameReplacement(TextureSet[] textureSets) {
             _textureSets = textureSets;
             InitializeComponent();
         }
@@ -35,14 +35,14 @@ namespace FFXIVLooseTextureCompiler {
                 case 0:
                     foreach (TextureSet textureSet in _textureSets) {
                         if (textureSet.TextureSetName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName.Replace(findBox.Text, replaceBox.Text);
+                            textureSet.TextureSetName = textureSet.TextureSetName.Replace(findBox.Text, replaceBox.Text);
                         }
                     }
                     break;
                 case 1:
                     foreach (TextureSet textureSet in _textureSets) {
                         if (textureSet.GroupName.Contains(findBox.Text)) {
-                            textureSet.GroupName.Replace(findBox.Text, replaceBox.Text);
+                            textureSet.GroupName = textureSet.GroupName.Replace(findBox.Text, replaceBox.Text);
                         }
                     }
                     break;
@@ -56,14 +56,14 @@ namespace FFXIVLooseTextureCompiler {
                 case 3:
                     foreach (TextureSet textureSet in _textureSets) {
                         if (textureSet.GroupName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName = replaceBox.Text;
+                            textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
                         }
                     }
                     break;
                 case 4:
                     foreach (TextureSet textureSet in _textureSets) {
                         if (textureSet.TextureSetName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName = replaceBox.Text;
+                            textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
                         }
                     }
                     break;
@@ -75,6 +75,12 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
             }
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void cancel_Click(object sender, EventArgs e) {
+
         }
     }
 }
