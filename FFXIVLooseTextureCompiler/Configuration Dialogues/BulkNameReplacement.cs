@@ -1,14 +1,4 @@
 ﻿using FFXIVLooseTextureCompiler.PathOrganization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 namespace FFXIVLooseTextureCompiler {
     public partial class BulkNameReplacement : Form {
         private TextureSet[] _textureSets;
@@ -16,6 +6,7 @@ namespace FFXIVLooseTextureCompiler {
         public BulkNameReplacement(TextureSet[] textureSets) {
             _textureSets = textureSets;
             InitializeComponent();
+            AutoScaleDimensions = new SizeF(96, 96);
         }
 
         private void BulkNameReplacement_Load(object sender, EventArgs e) {
@@ -31,56 +22,60 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void replaceAll_Click(object sender, EventArgs e) {
-            switch (replacementTypeComboBox.SelectedIndex) {
-                case 0:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.TextureSetName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName = textureSet.TextureSetName.Replace(findBox.Text, replaceBox.Text);
+            if (!string.IsNullOrEmpty(findBox.Text)) {
+                switch (replacementTypeComboBox.SelectedIndex) {
+                    case 0:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.TextureSetName.Contains(findBox.Text)) {
+                                textureSet.TextureSetName = textureSet.TextureSetName.Replace(findBox.Text, replaceBox.Text);
+                            }
                         }
-                    }
-                    break;
-                case 1:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.GroupName.Contains(findBox.Text)) {
-                            textureSet.GroupName = textureSet.GroupName.Replace(findBox.Text, replaceBox.Text);
+                        break;
+                    case 1:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.GroupName.Contains(findBox.Text)) {
+                                textureSet.GroupName = textureSet.GroupName.Replace(findBox.Text, replaceBox.Text);
+                            }
                         }
-                    }
-                    break;
-                case 2:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.TextureSetName.Contains(findBox.Text)) {
-                            textureSet.GroupName = replaceBox.Text;
+                        break;
+                    case 2:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.TextureSetName.Contains(findBox.Text)) {
+                                textureSet.GroupName = replaceBox.Text;
+                            }
                         }
-                    }
-                    break;
-                case 3:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.GroupName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
+                        break;
+                    case 3:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.GroupName.Contains(findBox.Text)) {
+                                textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
+                            }
                         }
-                    }
-                    break;
-                case 4:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.TextureSetName.Contains(findBox.Text)) {
-                            textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
+                        break;
+                    case 4:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.TextureSetName.Contains(findBox.Text)) {
+                                textureSet.TextureSetName = textureSet.TextureSetName = replaceBox.Text;
+                            }
                         }
-                    }
-                    break;
-                case 5:
-                    foreach (TextureSet textureSet in _textureSets) {
-                        if (textureSet.GroupName.Contains(findBox.Text)) {
-                            textureSet.GroupName = replaceBox.Text;
+                        break;
+                    case 5:
+                        foreach (TextureSet textureSet in _textureSets) {
+                            if (textureSet.GroupName.Contains(findBox.Text)) {
+                                textureSet.GroupName = replaceBox.Text;
+                            }
                         }
-                    }
-                    break;
+                        break;
+                }
+                DialogResult = DialogResult.OK;
+                Close();
+            } else {
+                MessageBox.Show("You must enter a name or group to search and replace.", ProductName);
             }
-            DialogResult = DialogResult.OK;
-            Close();
         }
 
         private void cancel_Click(object sender, EventArgs e) {
-
+            Close();
         }
     }
 }

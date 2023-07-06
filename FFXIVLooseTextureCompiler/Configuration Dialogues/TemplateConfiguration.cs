@@ -4,6 +4,7 @@
 
         public TemplateConfiguration() {
             InitializeComponent();
+            AutoScaleDimensions = new SizeF(96, 96);
         }
 
         public string GroupName { get => groupName; set => groupName = value; }

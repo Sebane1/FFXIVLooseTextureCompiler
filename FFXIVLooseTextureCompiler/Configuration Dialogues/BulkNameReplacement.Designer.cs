@@ -127,6 +127,7 @@
             this.Controls.Add(this.findBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BulkNameReplacement";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BulkNameReplacement";
             this.Load += new System.EventHandler(this.BulkNameReplacement_Load);
             this.ResumeLayout(false);

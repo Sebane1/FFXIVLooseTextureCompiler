@@ -4,6 +4,7 @@ namespace FFXIVLooseTextureCompiler {
     public partial class FindAndReplace : Form {
         public FindAndReplace() {
             InitializeComponent();
+            AutoScaleDimensions = new SizeF(96, 96);
         }
         List<TextureSet> textureSet = new List<TextureSet>();
 
@@ -20,7 +21,7 @@ namespace FFXIVLooseTextureCompiler {
             if (!string.IsNullOrEmpty(replacementString.Text)) {
                 foreach (TextureSet textureSet in textureSet) {
                     if (textureSet.TextureSetName.ToLower().Contains(replacementString.Text.ToLower())
-                        && textureSet.TextureSetName.ToLower().Contains(groupTextBox.Text.ToLower())) {
+                        && textureSet.GroupName.ToLower().Contains(groupTextBox.Text.ToLower())) {
                         if (!string.IsNullOrEmpty(diffuse.FilePath.Text)) {
                             textureSet.Diffuse = diffuse.FilePath.Text;
                         }
