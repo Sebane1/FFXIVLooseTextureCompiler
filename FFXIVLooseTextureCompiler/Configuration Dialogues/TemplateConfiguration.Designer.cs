@@ -59,9 +59,9 @@
             // 
             // TemplateConfiguration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 99);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(359, 97);
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.label);
             this.Controls.Add(this.groupNameTextBox);

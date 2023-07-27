@@ -35,9 +35,9 @@
             // 
             // replaceAll
             // 
-            this.replaceAll.Location = new System.Drawing.Point(171, 150);
+            this.replaceAll.Location = new System.Drawing.Point(171, 161);
             this.replaceAll.Name = "replaceAll";
-            this.replaceAll.Size = new System.Drawing.Size(75, 23);
+            this.replaceAll.Size = new System.Drawing.Size(75, 25);
             this.replaceAll.TabIndex = 15;
             this.replaceAll.Text = "Replace All";
             this.replaceAll.UseVisualStyleBackColor = true;
@@ -45,9 +45,9 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(252, 150);
+            this.cancel.Location = new System.Drawing.Point(252, 161);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(75, 24);
+            this.cancel.Size = new System.Drawing.Size(75, 26);
             this.cancel.TabIndex = 14;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
@@ -56,10 +56,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(4, 60);
+            this.label3.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label3.Location = new System.Drawing.Point(4, 64);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(158, 23);
+            this.label3.Size = new System.Drawing.Size(256, 33);
             this.label3.TabIndex = 13;
             this.label3.Text = "Replace with this.";
             // 
@@ -73,9 +73,9 @@
             "Find In Group Then Change Whole Name",
             "Find In Name Then Replace Whole Name ",
             "Find In Group Then Change Whole Group"});
-            this.replacementTypeComboBox.Location = new System.Drawing.Point(4, 124);
+            this.replacementTypeComboBox.Location = new System.Drawing.Point(4, 133);
             this.replacementTypeComboBox.Name = "replacementTypeComboBox";
-            this.replacementTypeComboBox.Size = new System.Drawing.Size(328, 22);
+            this.replacementTypeComboBox.Size = new System.Drawing.Size(328, 23);
             this.replacementTypeComboBox.TabIndex = 12;
             this.replacementTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.replacementTypeComboBox_SelectedIndexChanged);
             // 
@@ -83,7 +83,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(4, 72);
+            this.label2.Location = new System.Drawing.Point(4, 77);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(0, 23);
             this.label2.TabIndex = 11;
@@ -91,32 +91,32 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(-1, -2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 23);
+            this.label1.Size = new System.Drawing.Size(131, 33);
             this.label1.TabIndex = 10;
             this.label1.Text = "Find this";
             // 
             // replaceBox
             // 
-            this.replaceBox.Location = new System.Drawing.Point(4, 92);
+            this.replaceBox.Location = new System.Drawing.Point(4, 99);
             this.replaceBox.Name = "replaceBox";
-            this.replaceBox.Size = new System.Drawing.Size(328, 22);
+            this.replaceBox.Size = new System.Drawing.Size(328, 23);
             this.replaceBox.TabIndex = 9;
             // 
             // findBox
             // 
-            this.findBox.Location = new System.Drawing.Point(4, 36);
+            this.findBox.Location = new System.Drawing.Point(4, 39);
             this.findBox.Name = "findBox";
-            this.findBox.Size = new System.Drawing.Size(328, 22);
+            this.findBox.Size = new System.Drawing.Size(328, 23);
             this.findBox.TabIndex = 8;
             // 
             // BulkNameReplacement
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 175);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(331, 188);
             this.Controls.Add(this.replaceAll);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.label3);
