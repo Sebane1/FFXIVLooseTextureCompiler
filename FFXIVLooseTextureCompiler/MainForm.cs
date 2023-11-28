@@ -6,6 +6,7 @@ using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator;
+using LooseTextureCompilerCore.Json;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -416,12 +417,9 @@ namespace FFXIVLooseTextureCompiler {
                 path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher\\pluginConfigs\\Penumbra.json");
                 if (File.Exists(path)) {
                     using (StreamReader reader = new StreamReader(path)) {
-                        for (int i = 0; i < 11; i++) {
-                            penumbraModPath = reader.ReadLine()
-                                .Replace("\"ModDirectory\": ", null)
-                                .Replace(",", null)
-                                .Replace(@"""", null)
-                                .Replace(@"\\", @"\").Trim();
+                        PenumbraModPath modPath = JsonConvert.DeserializeObject<PenumbraModPath>(reader.ReadToEnd());
+                        if (modPath != null) {
+                            penumbraModPath = modPath.ModDirectory;
                         }
                     }
                 }
