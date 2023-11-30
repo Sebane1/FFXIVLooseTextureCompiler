@@ -153,6 +153,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
             this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.hairToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -561,6 +563,7 @@
             this.extractAtramentumLuminisGlowMapToolStripMenuItem,
             this.convertStandaloneTextureToolStripMenuItem,
             this.eyeToolsToolStripMenuItem,
+            this.hairToolsToolStripMenuItem,
             this.colourChannelSplittingToolStripMenuItem,
             this.imageToTexConversionToolStripMenuItem,
             this.devToolsToolStripMenuItem});
@@ -1384,6 +1387,21 @@
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
             // 
+            // hairToolsToolStripMenuItem
+            // 
+            this.hairToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem});
+            this.hairToolsToolStripMenuItem.Name = "hairToolsToolStripMenuItem";
+            this.hairToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.hairToolsToolStripMenuItem.Text = "Hair Tools";
+            // 
+            // hairDiffuseToFFXIVHairMapsToolStripMenuItem
+            // 
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Name = "hairDiffuseToFFXIVHairMapsToolStripMenuItem";
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
+            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += new System.EventHandler(this.hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1590,6 +1608,8 @@
         private ToolStripMenuItem textureToAsymFaceMultiToolStripMenuItem;
         private ToolStripMenuItem duplicateToolStripMenuItem;
         private ToolStripMenuItem bulkNameReplacement;
+        private ToolStripMenuItem hairToolsToolStripMenuItem;
+        private ToolStripMenuItem hairDiffuseToFFXIVHairMapsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

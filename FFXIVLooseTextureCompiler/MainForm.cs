@@ -1943,5 +1943,29 @@ namespace FFXIVLooseTextureCompiler {
                 RefreshList();
             }
         }
+
+        private void hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                Bitmap rgb = ImageManipulation.ExtractRGB(image);
+                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
+                Bitmap hairNormalConversion = Normal.Calculate(rgb);
+                Bitmap hairNormalFinal = ImageManipulation.MergeAlphaToRGB(alpha, hairNormalConversion);
+
+                Bitmap hairSpecularGreyscale = ImageManipulation.BoostAboveThreshold(image, 127);
+                Bitmap hairSpecularGreyscale2 = ImageManipulation.BoostAboveThreshold(image, 90);
+                Bitmap blank = new Bitmap(hairSpecularGreyscale.Width, hairSpecularGreyscale.Height);
+                Graphics graphics = Graphics.FromImage(blank);
+                graphics.Clear(Color.White);
+                Bitmap hairSpecularConversion = ImageManipulation.MergeGrayscalesToARGB(hairSpecularGreyscale, hairSpecularGreyscale2, blank, alpha);
+
+                hairNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
+                hairSpecularConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                MessageBox.Show("Hair Diffuse Converted To FFXIV Maps!", VersionText);
+            }
+        }
     }
 }
