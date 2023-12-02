@@ -1967,5 +1967,30 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Hair Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }
+
+        private void convertDiffuseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                Bitmap rgb = ImageManipulation.ExtractRGB(image);
+                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
+                Bitmap clothingNormalConversion = Normal.Calculate(rgb);
+                Bitmap clothingNormalFinal = ImageManipulation.MergeAlphaToRGB(Grayscale.MakeGrayscale(image), clothingNormalConversion);
+
+                Bitmap clothingMultiGreyscale = ImageManipulation.BoostAboveThreshold(image, 160);
+                Bitmap clothingMultiGreyscale2 = ImageManipulation.BoostAboveThreshold(image, 140);
+                Bitmap blank = new Bitmap(clothingMultiGreyscale.Width, clothingMultiGreyscale.Height);
+                Bitmap blank2 = new Bitmap(blank);
+                Graphics graphics = Graphics.FromImage(blank);
+                graphics.Clear(Color.White);
+                Bitmap clthingMultiConversion = ImageManipulation.MergeGrayscalesToARGB(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
+
+                clothingNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
+                clthingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
+            }
+        }
     }
 }
