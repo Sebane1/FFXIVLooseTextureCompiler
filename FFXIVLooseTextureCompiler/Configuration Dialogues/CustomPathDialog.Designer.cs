@@ -227,8 +227,6 @@
             // skinTypeSelection
             // 
             this.skinTypeSelection.FormattingEnabled = true;
-            this.skinTypeSelection.Items.AddRange(new object[] {
-            "Use Global Setting"});
             this.skinTypeSelection.Location = new System.Drawing.Point(112, 176);
             this.skinTypeSelection.Name = "skinTypeSelection";
             this.skinTypeSelection.Size = new System.Drawing.Size(324, 23);

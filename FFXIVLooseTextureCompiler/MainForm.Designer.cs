@@ -76,6 +76,8 @@
             this.multiMapToGrayscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hairToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hairDiffuseToFFXIVHairMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clothingToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colourChannelSplittingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,8 +157,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.processGeneration = new System.ComponentModel.BackgroundWorker();
             this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.clothingToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.materialListContextMenu.SuspendLayout();
@@ -244,7 +244,7 @@
             // generateButton
             // 
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateButton.Location = new System.Drawing.Point(420, 608);
+            this.generateButton.Location = new System.Drawing.Point(412, 608);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(56, 24);
             this.generateButton.TabIndex = 7;
@@ -705,6 +705,21 @@
             this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
             this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += new System.EventHandler(this.hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click);
+            // 
+            // clothingToolsToolStripMenuItem
+            // 
+            this.clothingToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem});
+            this.clothingToolsToolStripMenuItem.Name = "clothingToolsToolStripMenuItem";
+            this.clothingToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
+            this.clothingToolsToolStripMenuItem.Text = "Clothing Tools";
+            // 
+            // convertDiffuseToNormalAndMultiToolStripMenuItem
+            // 
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new System.Drawing.Size(270, 22);
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Multi";
+            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Click += new System.EventHandler(this.convertDiffuseToNormalAndMultiToolStripMenuItem_Click);
             // 
             // colourChannelSplittingToolStripMenuItem
             // 
@@ -1234,7 +1249,7 @@
             // 
             this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(312, 611);
+            this.generateMultiCheckBox.Location = new System.Drawing.Point(308, 611);
             this.generateMultiCheckBox.Name = "generateMultiCheckBox";
             this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
             this.generateMultiCheckBox.TabIndex = 40;
@@ -1302,11 +1317,11 @@
             // finalizeButton
             // 
             this.finalizeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.finalizeButton.Location = new System.Drawing.Point(476, 608);
+            this.finalizeButton.Location = new System.Drawing.Point(468, 608);
             this.finalizeButton.Name = "finalizeButton";
-            this.finalizeButton.Size = new System.Drawing.Size(56, 24);
+            this.finalizeButton.Size = new System.Drawing.Size(64, 24);
             this.finalizeButton.TabIndex = 46;
-            this.finalizeButton.Text = "Finalize";
+            this.finalizeButton.Text = "Finished";
             this.finalizeButton.UseVisualStyleBackColor = true;
             this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
             // 
@@ -1404,21 +1419,6 @@
             this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
             this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
             this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
-            // 
-            // clothingToolsToolStripMenuItem
-            // 
-            this.clothingToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem});
-            this.clothingToolsToolStripMenuItem.Name = "clothingToolsToolStripMenuItem";
-            this.clothingToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.clothingToolsToolStripMenuItem.Text = "Clothing Tools";
-            // 
-            // convertDiffuseToNormalAndMultiToolStripMenuItem
-            // 
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new System.Drawing.Size(270, 22);
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Multi";
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Click += new System.EventHandler(this.convertDiffuseToNormalAndMultiToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
