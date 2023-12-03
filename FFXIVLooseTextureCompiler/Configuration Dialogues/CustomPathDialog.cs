@@ -23,8 +23,13 @@ namespace FFXIVLooseTextureCompiler {
                     ignoreMultiCheckbox.Checked = textureSet.IgnoreMultiGeneration;
                     invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
-                    skinTypeSelection.Items.AddRange(UniversalTextureSetCreator.GetSkinTypeNames(textureSet).ToArray());
-                    skinTypeSelection.SelectedIndex = textureSet.SkinType;
+                    var skinTypes = UniversalTextureSetCreator.GetSkinTypeNames(textureSet);
+                    if (skinTypes != null) {
+                        skinTypeSelection.Items.AddRange(skinTypes.ToArray());
+                        skinTypeSelection.SelectedIndex = textureSet.SkinType;
+                    } else {
+                        skinTypeSelection.Items.Clear();
+                    }
                 }
             }
         }
