@@ -43,6 +43,8 @@
             this.invertNormals = new System.Windows.Forms.CheckBox();
             this.groupChoiceType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.skinTypeLabel = new System.Windows.Forms.Label();
+            this.skinTypeSelection = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // materialSetNameTextBox
@@ -112,7 +114,7 @@
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(264, 200);
+            this.acceptChangesButton.Location = new System.Drawing.Point(264, 224);
             this.acceptChangesButton.Name = "acceptChangesButton";
             this.acceptChangesButton.Size = new System.Drawing.Size(111, 23);
             this.acceptChangesButton.TabIndex = 8;
@@ -122,7 +124,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(376, 200);
+            this.button1.Location = new System.Drawing.Point(376, 224);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(59, 23);
             this.button1.TabIndex = 9;
@@ -149,7 +151,7 @@
             // ignoreNormalsCheckbox
             // 
             this.ignoreNormalsCheckbox.AutoSize = true;
-            this.ignoreNormalsCheckbox.Location = new System.Drawing.Point(128, 180);
+            this.ignoreNormalsCheckbox.Location = new System.Drawing.Point(128, 204);
             this.ignoreNormalsCheckbox.Name = "ignoreNormalsCheckbox";
             this.ignoreNormalsCheckbox.Size = new System.Drawing.Size(150, 19);
             this.ignoreNormalsCheckbox.TabIndex = 12;
@@ -159,7 +161,7 @@
             // ignoreMultiCheckbox
             // 
             this.ignoreMultiCheckbox.AutoSize = true;
-            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(300, 180);
+            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(300, 204);
             this.ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
             this.ignoreMultiCheckbox.Size = new System.Drawing.Size(133, 19);
             this.ignoreMultiCheckbox.TabIndex = 13;
@@ -185,19 +187,20 @@
             // invertNormals
             // 
             this.invertNormals.AutoSize = true;
-            this.invertNormals.Location = new System.Drawing.Point(4, 180);
+            this.invertNormals.Location = new System.Drawing.Point(4, 204);
             this.invertNormals.Name = "invertNormals";
             this.invertNormals.Size = new System.Drawing.Size(104, 19);
             this.invertNormals.TabIndex = 16;
             this.invertNormals.Text = "Invert Normals";
             this.invertNormals.UseVisualStyleBackColor = true;
+            this.invertNormals.CheckedChanged += new System.EventHandler(this.invertNormals_CheckedChanged);
             // 
             // groupChoiceType
             // 
             this.groupChoiceType.FormattingEnabled = true;
             this.groupChoiceType.Items.AddRange(new object[] {
             "Use Global Setting"});
-            this.groupChoiceType.Location = new System.Drawing.Point(112, 200);
+            this.groupChoiceType.Location = new System.Drawing.Point(112, 224);
             this.groupChoiceType.Name = "groupChoiceType";
             this.groupChoiceType.Size = new System.Drawing.Size(148, 23);
             this.groupChoiceType.TabIndex = 17;
@@ -206,17 +209,38 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 204);
+            this.label3.Location = new System.Drawing.Point(4, 228);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 15);
             this.label3.TabIndex = 18;
             this.label3.Text = "Group Choice Type";
             // 
+            // skinTypeLabel
+            // 
+            this.skinTypeLabel.AutoSize = true;
+            this.skinTypeLabel.Location = new System.Drawing.Point(4, 180);
+            this.skinTypeLabel.Name = "skinTypeLabel";
+            this.skinTypeLabel.Size = new System.Drawing.Size(106, 15);
+            this.skinTypeLabel.TabIndex = 19;
+            this.skinTypeLabel.Text = "Skin Underlay Type";
+            // 
+            // skinTypeSelection
+            // 
+            this.skinTypeSelection.FormattingEnabled = true;
+            this.skinTypeSelection.Items.AddRange(new object[] {
+            "Use Global Setting"});
+            this.skinTypeSelection.Location = new System.Drawing.Point(112, 176);
+            this.skinTypeSelection.Name = "skinTypeSelection";
+            this.skinTypeSelection.Size = new System.Drawing.Size(324, 23);
+            this.skinTypeSelection.TabIndex = 20;
+            // 
             // CustomPathDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(442, 228);
+            this.ClientSize = new System.Drawing.Size(442, 256);
+            this.Controls.Add(this.skinTypeSelection);
+            this.Controls.Add(this.skinTypeLabel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.groupChoiceType);
             this.Controls.Add(this.label2);
@@ -269,5 +293,7 @@
         private CheckBox invertNormals;
         private ComboBox groupChoiceType;
         private Label label3;
+        private Label skinTypeLabel;
+        private ComboBox skinTypeSelection;
     }
 }

@@ -23,14 +23,16 @@ namespace FFXIVLooseTextureCompiler {
                     ignoreMultiCheckbox.Checked = textureSet.IgnoreMultiGeneration;
                     invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
+                    skinTypeSelection.Items.AddRange(UniversalTextureSetCreator.GetSkinTypeNames(textureSet).ToArray());
+                    skinTypeSelection.SelectedIndex = textureSet.SkinType;
                 }
             }
         }
 
         private void acceptChangesButton_Click(object sender, EventArgs e) {
             if (!string.IsNullOrWhiteSpace(materialSetNameTextBox.Text)) {
-                textureSet.MaterialGroupName = groupNameTextBox.Text;
-                textureSet.MaterialSetName = materialSetNameTextBox.Text;
+                textureSet.GroupName = groupNameTextBox.Text;
+                textureSet.TextureSetName = materialSetNameTextBox.Text;
                 int validationCount = 0;
                 if (IsValidGamePathFormat(internalDiffusePathTextBox.Text)) {
                     textureSet.InternalDiffusePath = internalDiffusePathTextBox.Text;
@@ -63,6 +65,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
                 textureSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
                 textureSet.InvertNormalGeneration = invertNormals.Checked;
+                textureSet.SkinType = skinTypeSelection.SelectedIndex;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
             }
@@ -97,6 +100,10 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void groupChoiceType_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
+        private void invertNormals_CheckedChanged(object sender, EventArgs e) {
 
         }
     }
