@@ -49,10 +49,10 @@ namespace FFXIVLooseTextureCompiler {
             get => hasSaved; set {
                 hasSaved = value;
                 if (!hasSaved) {
-                    Text = Application.ProductName + " " + Application.ProductVersion +
+                    Text = Application.ProductName + " " + Program.Version +
                         (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})*" : "*");
                 } else {
-                    Text = Application.ProductName + " " + Application.ProductVersion +
+                    Text = Application.ProductName + " " + Program.Version +
                         (!string.IsNullOrWhiteSpace(savePath) ? $" ({savePath})" : "");
                 }
             }
@@ -72,7 +72,7 @@ namespace FFXIVLooseTextureCompiler {
             GetAuthorWebsite();
             GetAuthorName();
             GetPenumbraPath();
-            Text += " " + Application.ProductVersion;
+            Text += " " + Program.Version;
             textureProcessor = new TextureProcessor();
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
@@ -215,7 +215,7 @@ namespace FFXIVLooseTextureCompiler {
             Console.WriteLine(exportProgress.Value + "% Complete");
         }
         private void MainForm_Load(object sender, EventArgs e) {
-            VersionText = Application.ProductName + " " + Application.ProductVersion;
+            VersionText = Application.ProductName + " " + Program.Version;
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
             diffuse.FilePath.Enabled = false;
@@ -420,6 +420,16 @@ namespace FFXIVLooseTextureCompiler {
                         PenumbraModPath modPath = JsonConvert.DeserializeObject<PenumbraModPath>(reader.ReadToEnd());
                         if (modPath != null) {
                             penumbraModPath = modPath.ModDirectory;
+                        }
+                    }
+                } else {
+                    path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncherCN\\pluginConfigs\\Penumbra.json");
+                    if (File.Exists(path)) {
+                        using (StreamReader reader = new StreamReader(path)) {
+                            PenumbraModPath modPath = JsonConvert.DeserializeObject<PenumbraModPath>(reader.ReadToEnd());
+                            if (modPath != null) {
+                                penumbraModPath = modPath.ModDirectory;
+                            }
                         }
                     }
                 }
@@ -988,7 +998,7 @@ namespace FFXIVLooseTextureCompiler {
                             saveFileDialog.AddExtension = true;
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                                 savePath = saveFileDialog.FileName;
-                                Text = Application.ProductName + " " + Application.ProductVersion + $" ({savePath})";
+                                Text = Application.ProductName + " " + Program.Version + $" ({savePath})";
                             }
                         }
                         if (!string.IsNullOrEmpty(savePath)) {
@@ -1007,7 +1017,7 @@ namespace FFXIVLooseTextureCompiler {
         private void NewProject() {
             lockDuplicateGeneration = true;
             hasDoneReload = false;
-            Text = Application.ProductName + " " + Application.ProductVersion;
+            Text = Application.ProductName + " " + Program.Version;
             savePath = null;
             textureList.Items.Clear();
             modNameTextBox.Text = "";
@@ -1979,13 +1989,16 @@ namespace FFXIVLooseTextureCompiler {
                 Bitmap clothingNormalConversion = Normal.Calculate(rgb);
                 Bitmap clothingNormalFinal = ImageManipulation.MergeAlphaToRGB(Grayscale.MakeGrayscale(image), clothingNormalConversion);
 
-                Bitmap clothingMultiGreyscale = ImageManipulation.BoostAboveThreshold(image, 160);
-                Bitmap clothingMultiGreyscale2 = ImageManipulation.BoostAboveThreshold(image, 140);
+                Bitmap clothingMultiGreyscale = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 160);
+                Bitmap clothingMultiGreyscale2 = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 140);
                 Bitmap blank = new Bitmap(clothingMultiGreyscale.Width, clothingMultiGreyscale.Height);
-                Bitmap blank2 = new Bitmap(blank);
                 Graphics graphics = Graphics.FromImage(blank);
                 graphics.Clear(Color.White);
+                Bitmap blank2 = new Bitmap(blank);
                 Bitmap clthingMultiConversion = ImageManipulation.MergeGrayscalesToARGB(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
+
+                clothingMultiGreyscale.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np1"), ImageFormat.Png);
+                clothingMultiGreyscale2.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np2"), ImageFormat.Png);
 
                 clothingNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
                 clthingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);

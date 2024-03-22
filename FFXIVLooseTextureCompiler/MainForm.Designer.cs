@@ -23,1477 +23,1334 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.Windows.Forms.Timer autoGenerateTImer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.genderList = new System.Windows.Forms.ComboBox();
-            this.raceList = new System.Windows.Forms.ComboBox();
-            this.tailList = new System.Windows.Forms.ComboBox();
-            this.baseBodyList = new System.Windows.Forms.ComboBox();
-            this.generateButton = new System.Windows.Forms.Button();
-            this.uniqueAuRa = new System.Windows.Forms.CheckBox();
-            this.multi = new FFXIVVoicePackCreator.FilePicker();
-            this.normal = new FFXIVVoicePackCreator.FilePicker();
-            this.diffuse = new FFXIVVoicePackCreator.FilePicker();
-            this.asymCheckbox = new System.Windows.Forms.CheckBox();
-            this.facePart = new System.Windows.Forms.ComboBox();
-            this.faceTypeList = new System.Windows.Forms.ComboBox();
-            this.subRaceList = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.modDescriptionTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.modWebsiteTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.modAuthorTextBox = new System.Windows.Forms.TextBox();
-            this.nameLabel = new System.Windows.Forms.Label();
-            this.modNameTextBox = new System.Windows.Forms.TextBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.templatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importCustomTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findAndBulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertStandaloneTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.biboToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.biboToGen2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gen3ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gen3ToGen2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.gen2ToGen3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gen2ToBiboToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.otopopToVanillaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vanillaToOtopopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eyeToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertImageToEyeMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertImagesToAsymEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertFolderToEyeMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multiMapToGrayscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hairToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clothingToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colourChannelSplittingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.diffuseMergerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multiCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mergeRGBAndAlphaImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imageToRGBChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitImageToRGBAndAlphaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureToBodyMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureToFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureToAsymFaceMultiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imageToTexConversionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkTexViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.recursiveBulkImageToTexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pNGToLTCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertLTCTToPNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changePenumbraPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.modShareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableModshareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendCurrentModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToGetTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howDoIUseThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howDoIMakeStuffBumpyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howDoIMakeStuffGlowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howDoIMakeEyesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateButton = new System.Windows.Forms.Button();
-            this.textureList = new System.Windows.Forms.ListBox();
-            this.materialListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.editPathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.omniExportModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkNameReplacement = new System.Windows.Forms.ToolStripMenuItem();
-            this.bulkReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addBodyButton = new System.Windows.Forms.Button();
-            this.addFaceButton = new System.Windows.Forms.Button();
-            this.currentEditLabel = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.removeSelection = new System.Windows.Forms.Button();
-            this.clearList = new System.Windows.Forms.Button();
-            this.addCustomPathButton = new System.Windows.Forms.Button();
-            this.moveUpButton = new System.Windows.Forms.Button();
-            this.moveDownButton = new System.Windows.Forms.Button();
-            this.ffxivRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.generationCooldown = new System.Windows.Forms.Timer(this.components);
-            this.generationType = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.exportProgress = new System.Windows.Forms.ProgressBar();
-            this.bakeNormals = new System.Windows.Forms.CheckBox();
-            this.generateMultiCheckBox = new System.Windows.Forms.CheckBox();
-            this.mask = new FFXIVVoicePackCreator.FilePicker();
-            this.discordButton = new System.Windows.Forms.Button();
-            this.faceExtraList = new System.Windows.Forms.ComboBox();
-            this.glow = new FFXIVVoicePackCreator.FilePicker();
-            this.finalizeButton = new System.Windows.Forms.Button();
-            this.auraFaceScalesDropdown = new System.Windows.Forms.ComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.exportLabel = new System.Windows.Forms.Label();
-            this.exportPanel = new System.Windows.Forms.Panel();
-            this.listenForFiles = new System.ComponentModel.BackgroundWorker();
-            this.modVersionTextBox = new System.Windows.Forms.TextBox();
-            this.ipBox = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.processGeneration = new System.ComponentModel.BackgroundWorker();
-            this.helperToolTip = new System.Windows.Forms.ToolTip(this.components);
-            autoGenerateTImer = new System.Windows.Forms.Timer(this.components);
-            this.menuStrip1.SuspendLayout();
-            this.materialListContextMenu.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.exportPanel.SuspendLayout();
-            this.SuspendLayout();
+            genderList = new ComboBox();
+            raceList = new ComboBox();
+            tailList = new ComboBox();
+            baseBodyList = new ComboBox();
+            generateButton = new Button();
+            uniqueAuRa = new CheckBox();
+            multi = new FFXIVVoicePackCreator.FilePicker();
+            normal = new FFXIVVoicePackCreator.FilePicker();
+            diffuse = new FFXIVVoicePackCreator.FilePicker();
+            asymCheckbox = new CheckBox();
+            facePart = new ComboBox();
+            faceTypeList = new ComboBox();
+            subRaceList = new ComboBox();
+            label4 = new Label();
+            modDescriptionTextBox = new TextBox();
+            label3 = new Label();
+            label2 = new Label();
+            modWebsiteTextBox = new TextBox();
+            label1 = new Label();
+            modAuthorTextBox = new TextBox();
+            nameLabel = new Label();
+            modNameTextBox = new TextBox();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
+            templatesToolStripMenuItem = new ToolStripMenuItem();
+            importCustomTemplateToolStripMenuItem = new ToolStripMenuItem();
+            editToolStripMenuItem = new ToolStripMenuItem();
+            findAndBulkReplaceToolStripMenuItem = new ToolStripMenuItem();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            extractAtramentumLuminisGlowMapToolStripMenuItem = new ToolStripMenuItem();
+            convertStandaloneTextureToolStripMenuItem = new ToolStripMenuItem();
+            biboToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            biboToGen2ToolStripMenuItem = new ToolStripMenuItem();
+            gen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            gen3ToGen2ToolStripMenuItem1 = new ToolStripMenuItem();
+            gen2ToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            gen2ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            otopopToVanillaToolStripMenuItem = new ToolStripMenuItem();
+            vanillaToOtopopToolStripMenuItem = new ToolStripMenuItem();
+            eyeToolsToolStripMenuItem = new ToolStripMenuItem();
+            convertImageToEyeMultiToolStripMenuItem = new ToolStripMenuItem();
+            convertImagesToAsymEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            multiMapToGrayscaleToolStripMenuItem = new ToolStripMenuItem();
+            hairToolsToolStripMenuItem = new ToolStripMenuItem();
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
+            clothingToolsToolStripMenuItem = new ToolStripMenuItem();
+            convertDiffuseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
+            colourChannelSplittingToolStripMenuItem = new ToolStripMenuItem();
+            diffuseMergerToolStripMenuItem = new ToolStripMenuItem();
+            multiCreatorToolStripMenuItem = new ToolStripMenuItem();
+            mergeRGBAndAlphaImagesToolStripMenuItem = new ToolStripMenuItem();
+            imageToRGBChannelsToolStripMenuItem = new ToolStripMenuItem();
+            splitImageToRGBAndAlphaToolStripMenuItem = new ToolStripMenuItem();
+            textureToBodyMultiToolStripMenuItem = new ToolStripMenuItem();
+            textureToFaceMultiToolStripMenuItem = new ToolStripMenuItem();
+            textureToAsymFaceMultiToolStripMenuItem = new ToolStripMenuItem();
+            xNormalToolStripMenuItem = new ToolStripMenuItem();
+            imageToTexConversionToolStripMenuItem = new ToolStripMenuItem();
+            bulkTexViewerToolStripMenuItem = new ToolStripMenuItem();
+            bulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
+            recursiveBulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
+            devToolsToolStripMenuItem = new ToolStripMenuItem();
+            textureToLTCTToolStripMenuItem = new ToolStripMenuItem();
+            pNGToLTCTToolStripMenuItem = new ToolStripMenuItem();
+            convertLTCTToPNGToolStripMenuItem = new ToolStripMenuItem();
+            configToolStripMenuItem = new ToolStripMenuItem();
+            changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
+            modShareToolStripMenuItem = new ToolStripMenuItem();
+            enableModshareToolStripMenuItem = new ToolStripMenuItem();
+            sendCurrentModToolStripMenuItem = new ToolStripMenuItem();
+            creditsToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            howToGetTexturesToolStripMenuItem = new ToolStripMenuItem();
+            howDoIUseThisToolStripMenuItem = new ToolStripMenuItem();
+            howDoIMakeStuffBumpyToolStripMenuItem = new ToolStripMenuItem();
+            howDoIMakeStuffGlowToolStripMenuItem = new ToolStripMenuItem();
+            howDoIMakeEyesToolStripMenuItem = new ToolStripMenuItem();
+            canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new ToolStripMenuItem();
+            canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new ToolStripMenuItem();
+            canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new ToolStripMenuItem();
+            whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new ToolStripMenuItem();
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new ToolStripMenuItem();
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem = new ToolStripMenuItem();
+            donateButton = new Button();
+            textureList = new ListBox();
+            materialListContextMenu = new ContextMenuStrip(components);
+            editPathsToolStripMenuItem = new ToolStripMenuItem();
+            omniExportModeToolStripMenuItem = new ToolStripMenuItem();
+            moveUpToolStripMenuItem = new ToolStripMenuItem();
+            moveDownToolStripMenuItem = new ToolStripMenuItem();
+            bulkNameReplacement = new ToolStripMenuItem();
+            bulkReplaceToolStripMenuItem = new ToolStripMenuItem();
+            duplicateToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
+            addBodyButton = new Button();
+            addFaceButton = new Button();
+            currentEditLabel = new Label();
+            label6 = new Label();
+            removeSelection = new Button();
+            clearList = new Button();
+            addCustomPathButton = new Button();
+            moveUpButton = new Button();
+            moveDownButton = new Button();
+            ffxivRefreshTimer = new System.Windows.Forms.Timer(components);
+            generationCooldown = new System.Windows.Forms.Timer(components);
+            generationType = new ComboBox();
+            label5 = new Label();
+            exportProgress = new ProgressBar();
+            bakeNormals = new CheckBox();
+            generateMultiCheckBox = new CheckBox();
+            mask = new FFXIVVoicePackCreator.FilePicker();
+            discordButton = new Button();
+            faceExtraList = new ComboBox();
+            glow = new FFXIVVoicePackCreator.FilePicker();
+            finalizeButton = new Button();
+            auraFaceScalesDropdown = new ComboBox();
+            panel1 = new Panel();
+            panel2 = new Panel();
+            exportLabel = new Label();
+            exportPanel = new Panel();
+            listenForFiles = new System.ComponentModel.BackgroundWorker();
+            modVersionTextBox = new TextBox();
+            ipBox = new TextBox();
+            label8 = new Label();
+            processGeneration = new System.ComponentModel.BackgroundWorker();
+            helperToolTip = new ToolTip(components);
+            autoGenerateTImer = new System.Windows.Forms.Timer(components);
+            menuStrip1.SuspendLayout();
+            materialListContextMenu.SuspendLayout();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            exportPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // autoGenerateTImer
             // 
             autoGenerateTImer.Interval = 200;
-            autoGenerateTImer.Tick += new System.EventHandler(this.autoGenerateTImer_Tick);
+            autoGenerateTImer.Tick += autoGenerateTImer_Tick;
             // 
             // genderList
             // 
-            this.genderList.FormattingEnabled = true;
-            this.genderList.Items.AddRange(new object[] {
-            "Masculine",
-            "Feminine"});
-            this.genderList.Location = new System.Drawing.Point(148, 112);
-            this.genderList.Name = "genderList";
-            this.genderList.Size = new System.Drawing.Size(80, 23);
-            this.genderList.TabIndex = 1;
-            this.genderList.Text = "Masculine";
+            genderList.FormattingEnabled = true;
+            genderList.Items.AddRange(new object[] { "Masculine", "Feminine" });
+            genderList.Location = new Point(148, 112);
+            genderList.Name = "genderList";
+            genderList.Size = new Size(80, 23);
+            genderList.TabIndex = 1;
+            genderList.Text = "Masculine";
             // 
             // raceList
             // 
-            this.raceList.FormattingEnabled = true;
-            this.raceList.Items.AddRange(new object[] {
-            "Midlander",
-            "Highlander",
-            "Elezen",
-            "Miqo\'te",
-            "Roegadyn",
-            "Lalafell",
-            "Raen",
-            "Xaela",
-            "Hrothgar",
-            "Viera"});
-            this.raceList.Location = new System.Drawing.Point(228, 112);
-            this.raceList.Name = "raceList";
-            this.raceList.Size = new System.Drawing.Size(84, 23);
-            this.raceList.TabIndex = 2;
-            this.raceList.Text = "Highlander";
-            this.raceList.SelectedIndexChanged += new System.EventHandler(this.raceList_SelectedIndexChanged);
+            raceList.FormattingEnabled = true;
+            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafell", "Raen", "Xaela", "Hrothgar", "Viera" });
+            raceList.Location = new Point(228, 112);
+            raceList.Name = "raceList";
+            raceList.Size = new Size(84, 23);
+            raceList.TabIndex = 2;
+            raceList.Text = "Highlander";
+            raceList.SelectedIndexChanged += raceList_SelectedIndexChanged;
             // 
             // tailList
             // 
-            this.tailList.Enabled = false;
-            this.tailList.FormattingEnabled = true;
-            this.tailList.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8"});
-            this.tailList.Location = new System.Drawing.Point(312, 112);
-            this.tailList.Name = "tailList";
-            this.tailList.Size = new System.Drawing.Size(32, 23);
-            this.tailList.TabIndex = 3;
-            this.tailList.Text = "8";
+            tailList.Enabled = false;
+            tailList.FormattingEnabled = true;
+            tailList.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8" });
+            tailList.Location = new Point(312, 112);
+            tailList.Name = "tailList";
+            tailList.Size = new Size(32, 23);
+            tailList.TabIndex = 3;
+            tailList.Text = "8";
             // 
             // baseBodyList
             // 
-            this.baseBodyList.FormattingEnabled = true;
-            this.baseBodyList.Items.AddRange(new object[] {
-            "Vanilla and Gen2",
-            "BIBO+",
-            "EVE",
-            "Gen3 and T&F3",
-            "SCALES+",
-            "TBSE and HRBODY",
-            "TAIL",
-            "Otopop"});
-            this.baseBodyList.Location = new System.Drawing.Point(4, 112);
-            this.baseBodyList.Name = "baseBodyList";
-            this.baseBodyList.Size = new System.Drawing.Size(144, 23);
-            this.baseBodyList.TabIndex = 4;
-            this.baseBodyList.Text = "Gen3 and T&F3";
-            this.baseBodyList.SelectedIndexChanged += new System.EventHandler(this.baseBodyList_SelectedIndexChanged);
+            baseBodyList.FormattingEnabled = true;
+            baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "EVE", "Gen3 and T&F3", "SCALES+", "TBSE and HRBODY", "TAIL", "Otopop" });
+            baseBodyList.Location = new Point(4, 112);
+            baseBodyList.Name = "baseBodyList";
+            baseBodyList.Size = new Size(144, 23);
+            baseBodyList.TabIndex = 4;
+            baseBodyList.Text = "Gen3 and T&F3";
+            baseBodyList.SelectedIndexChanged += baseBodyList_SelectedIndexChanged;
             // 
             // generateButton
             // 
-            this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateButton.Location = new System.Drawing.Point(412, 608);
-            this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(56, 24);
-            this.generateButton.TabIndex = 7;
-            this.generateButton.Text = "Preview";
-            this.generateButton.UseVisualStyleBackColor = true;
-            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            generateButton.Anchor = AnchorStyles.Bottom;
+            generateButton.Location = new Point(412, 608);
+            generateButton.Name = "generateButton";
+            generateButton.Size = new Size(56, 24);
+            generateButton.TabIndex = 7;
+            generateButton.Text = "Preview";
+            generateButton.UseVisualStyleBackColor = true;
+            generateButton.Click += generateButton_Click;
             // 
             // uniqueAuRa
             // 
-            this.uniqueAuRa.AutoSize = true;
-            this.uniqueAuRa.Location = new System.Drawing.Point(348, 8);
-            this.uniqueAuRa.Name = "uniqueAuRa";
-            this.uniqueAuRa.Size = new System.Drawing.Size(98, 19);
-            this.uniqueAuRa.TabIndex = 20;
-            this.uniqueAuRa.Text = "Unique Au Ra";
-            this.uniqueAuRa.UseVisualStyleBackColor = true;
+            uniqueAuRa.AutoSize = true;
+            uniqueAuRa.Location = new Point(348, 8);
+            uniqueAuRa.Name = "uniqueAuRa";
+            uniqueAuRa.Size = new Size(98, 19);
+            uniqueAuRa.TabIndex = 20;
+            uniqueAuRa.Text = "Unique Au Ra";
+            uniqueAuRa.UseVisualStyleBackColor = true;
             // 
             // multi
             // 
-            this.multi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.multi.CurrentPath = null;
-            this.multi.Enabled = false;
-            this.multi.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.multi.Index = -1;
-            this.multi.Location = new System.Drawing.Point(4, 512);
-            this.multi.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.multi.MinimumSize = new System.Drawing.Size(300, 28);
-            this.multi.Name = "multi";
-            this.multi.Size = new System.Drawing.Size(528, 28);
-            this.multi.TabIndex = 19;
-            this.helperToolTip.SetToolTip(this.multi, "The orange looking image goes here.");
-            this.multi.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.multi.Enter += new System.EventHandler(this.multi_Enter);
-            this.multi.Leave += new System.EventHandler(this.multi_Leave);
+            multi.BackColor = Color.FromArgb(255, 224, 192);
+            multi.CurrentPath = null;
+            multi.Enabled = false;
+            multi.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            multi.Index = -1;
+            multi.Location = new Point(4, 512);
+            multi.Margin = new Padding(4, 3, 4, 3);
+            multi.MinimumSize = new Size(300, 28);
+            multi.Name = "multi";
+            multi.Size = new Size(528, 28);
+            multi.TabIndex = 19;
+            helperToolTip.SetToolTip(multi, "The orange looking image goes here.");
+            multi.OnFileSelected += multi_OnFileSelected;
+            multi.Enter += multi_Enter;
+            multi.Leave += multi_Leave;
             // 
             // normal
             // 
-            this.normal.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.normal.CurrentPath = null;
-            this.normal.Enabled = false;
-            this.normal.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.normal.Index = -1;
-            this.normal.Location = new System.Drawing.Point(4, 480);
-            this.normal.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.normal.MinimumSize = new System.Drawing.Size(300, 28);
-            this.normal.Name = "normal";
-            this.normal.Size = new System.Drawing.Size(528, 28);
-            this.normal.TabIndex = 18;
-            this.helperToolTip.SetToolTip(this.normal, "The blue and red bump map goes here");
-            this.normal.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.normal.Enter += new System.EventHandler(this.multi_Enter);
-            this.normal.Leave += new System.EventHandler(this.multi_Leave);
+            normal.BackColor = SystemColors.GradientInactiveCaption;
+            normal.CurrentPath = null;
+            normal.Enabled = false;
+            normal.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            normal.Index = -1;
+            normal.Location = new Point(4, 480);
+            normal.Margin = new Padding(4, 3, 4, 3);
+            normal.MinimumSize = new Size(300, 28);
+            normal.Name = "normal";
+            normal.Size = new Size(528, 28);
+            normal.TabIndex = 18;
+            helperToolTip.SetToolTip(normal, "The blue and red bump map goes here");
+            normal.OnFileSelected += multi_OnFileSelected;
+            normal.Enter += multi_Enter;
+            normal.Leave += multi_Leave;
             // 
             // diffuse
             // 
-            this.diffuse.BackColor = System.Drawing.Color.LavenderBlush;
-            this.diffuse.CurrentPath = null;
-            this.diffuse.Enabled = false;
-            this.diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.diffuse.Index = -1;
-            this.diffuse.Location = new System.Drawing.Point(4, 448);
-            this.diffuse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.diffuse.MinimumSize = new System.Drawing.Size(300, 28);
-            this.diffuse.Name = "diffuse";
-            this.diffuse.Size = new System.Drawing.Size(528, 28);
-            this.diffuse.TabIndex = 17;
-            this.helperToolTip.SetToolTip(this.diffuse, "Skin, and tattoo overlays go here.");
-            this.diffuse.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.diffuse.Enter += new System.EventHandler(this.multi_Enter);
-            this.diffuse.Leave += new System.EventHandler(this.multi_Leave);
+            diffuse.BackColor = Color.LavenderBlush;
+            diffuse.CurrentPath = null;
+            diffuse.Enabled = false;
+            diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            diffuse.Index = -1;
+            diffuse.Location = new Point(4, 448);
+            diffuse.Margin = new Padding(4, 3, 4, 3);
+            diffuse.MinimumSize = new Size(300, 28);
+            diffuse.Name = "diffuse";
+            diffuse.Size = new Size(528, 28);
+            diffuse.TabIndex = 17;
+            helperToolTip.SetToolTip(diffuse, "Skin, and tattoo overlays go here.");
+            diffuse.OnFileSelected += multi_OnFileSelected;
+            diffuse.Enter += multi_Enter;
+            diffuse.Leave += multi_Leave;
             // 
             // asymCheckbox
             // 
-            this.asymCheckbox.AutoSize = true;
-            this.asymCheckbox.Location = new System.Drawing.Point(392, 8);
-            this.asymCheckbox.Name = "asymCheckbox";
-            this.asymCheckbox.Size = new System.Drawing.Size(56, 19);
-            this.asymCheckbox.TabIndex = 23;
-            this.asymCheckbox.Text = "Asym";
-            this.asymCheckbox.UseVisualStyleBackColor = true;
+            asymCheckbox.AutoSize = true;
+            asymCheckbox.Location = new Point(392, 8);
+            asymCheckbox.Name = "asymCheckbox";
+            asymCheckbox.Size = new Size(56, 19);
+            asymCheckbox.TabIndex = 23;
+            asymCheckbox.Text = "Asym";
+            asymCheckbox.UseVisualStyleBackColor = true;
             // 
             // facePart
             // 
-            this.facePart.FormattingEnabled = true;
-            this.facePart.Items.AddRange(new object[] {
-            "Face",
-            "Eyebrows",
-            "Eyes",
-            "Ears",
-            "Face Paint",
-            "Hair",
-            "Face B",
-            "Etc B"});
-            this.facePart.Location = new System.Drawing.Point(148, 140);
-            this.facePart.Name = "facePart";
-            this.facePart.Size = new System.Drawing.Size(80, 23);
-            this.facePart.TabIndex = 4;
-            this.facePart.Text = "Eyebrows";
-            this.facePart.SelectedIndexChanged += new System.EventHandler(this.facePart_SelectedIndexChanged);
+            facePart.FormattingEnabled = true;
+            facePart.Items.AddRange(new object[] { "Face", "Eyebrows", "Eyes", "Ears", "Face Paint", "Hair", "Face B", "Etc B" });
+            facePart.Location = new Point(148, 140);
+            facePart.Name = "facePart";
+            facePart.Size = new Size(80, 23);
+            facePart.TabIndex = 4;
+            facePart.Text = "Eyebrows";
+            facePart.SelectedIndexChanged += facePart_SelectedIndexChanged;
             // 
             // faceTypeList
             // 
-            this.faceTypeList.FormattingEnabled = true;
-            this.faceTypeList.Items.AddRange(new object[] {
-            "Face 1",
-            "Face 2",
-            "Face 3",
-            "Face 4",
-            "Face 5",
-            "Face 6",
-            "Face 7",
-            "Face 8",
-            "Face 9"});
-            this.faceTypeList.Location = new System.Drawing.Point(88, 140);
-            this.faceTypeList.Name = "faceTypeList";
-            this.faceTypeList.Size = new System.Drawing.Size(60, 23);
-            this.faceTypeList.TabIndex = 3;
-            this.faceTypeList.Text = "Face 4";
+            faceTypeList.FormattingEnabled = true;
+            faceTypeList.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7", "Face 8", "Face 9" });
+            faceTypeList.Location = new Point(88, 140);
+            faceTypeList.Name = "faceTypeList";
+            faceTypeList.Size = new Size(60, 23);
+            faceTypeList.TabIndex = 3;
+            faceTypeList.Text = "Face 4";
             // 
             // subRaceList
             // 
-            this.subRaceList.FormattingEnabled = true;
-            this.subRaceList.Items.AddRange(new object[] {
-            "Midlander",
-            "Highlander",
-            "Wildwood",
-            "Duskwight",
-            "Seeker",
-            "Keeper",
-            "Sea Wolf",
-            "Hellsguard",
-            "Plainsfolk",
-            "Dunesfolk",
-            "Raen",
-            "Xaela",
-            "Helions",
-            "The Lost",
-            "Rava",
-            "Veena"});
-            this.subRaceList.Location = new System.Drawing.Point(4, 140);
-            this.subRaceList.Name = "subRaceList";
-            this.subRaceList.Size = new System.Drawing.Size(84, 23);
-            this.subRaceList.TabIndex = 2;
-            this.subRaceList.Text = "Sea Wolves";
-            this.subRaceList.SelectedIndexChanged += new System.EventHandler(this.subRaceList_SelectedIndexChanged);
+            subRaceList.FormattingEnabled = true;
+            subRaceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
+            subRaceList.Location = new Point(4, 140);
+            subRaceList.Name = "subRaceList";
+            subRaceList.Size = new Size(84, 23);
+            subRaceList.TabIndex = 2;
+            subRaceList.Text = "Sea Wolves";
+            subRaceList.SelectedIndexChanged += subRaceList_SelectedIndexChanged;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 88);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 15);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "Description";
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 88);
+            label4.Name = "label4";
+            label4.Size = new Size(67, 15);
+            label4.TabIndex = 23;
+            label4.Text = "Description";
             // 
             // modDescriptionTextBox
             // 
-            this.modDescriptionTextBox.Location = new System.Drawing.Point(96, 84);
-            this.modDescriptionTextBox.Name = "modDescriptionTextBox";
-            this.modDescriptionTextBox.Size = new System.Drawing.Size(436, 23);
-            this.modDescriptionTextBox.TabIndex = 22;
-            this.modDescriptionTextBox.Text = "Exported by FFXIV Loose Texture Compiler";
-            this.modDescriptionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            modDescriptionTextBox.Location = new Point(96, 84);
+            modDescriptionTextBox.Name = "modDescriptionTextBox";
+            modDescriptionTextBox.Size = new Size(436, 23);
+            modDescriptionTextBox.TabIndex = 22;
+            modDescriptionTextBox.Text = "Exported by FFXIV Loose Texture Compiler";
+            modDescriptionTextBox.TextChanged += modDescriptionTextBox_TextChanged;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(256, 32);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 15);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Version";
+            label3.AutoSize = true;
+            label3.Location = new Point(256, 32);
+            label3.Name = "label3";
+            label3.Size = new Size(45, 15);
+            label3.TabIndex = 21;
+            label3.Text = "Version";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(256, 60);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 15);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "Website";
+            label2.AutoSize = true;
+            label2.Location = new Point(256, 60);
+            label2.Name = "label2";
+            label2.Size = new Size(49, 15);
+            label2.TabIndex = 16;
+            label2.Text = "Website";
             // 
             // modWebsiteTextBox
             // 
-            this.modWebsiteTextBox.Location = new System.Drawing.Point(328, 56);
-            this.modWebsiteTextBox.Name = "modWebsiteTextBox";
-            this.modWebsiteTextBox.Size = new System.Drawing.Size(204, 23);
-            this.modWebsiteTextBox.TabIndex = 15;
-            this.modWebsiteTextBox.Text = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
-            this.modWebsiteTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
-            this.modWebsiteTextBox.Leave += new System.EventHandler(this.modWebsiteTextBox_Leave);
+            modWebsiteTextBox.Location = new Point(328, 56);
+            modWebsiteTextBox.Name = "modWebsiteTextBox";
+            modWebsiteTextBox.Size = new Size(204, 23);
+            modWebsiteTextBox.TabIndex = 15;
+            modWebsiteTextBox.Text = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
+            modWebsiteTextBox.TextChanged += modDescriptionTextBox_TextChanged;
+            modWebsiteTextBox.Leave += modWebsiteTextBox_Leave;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 15);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Author";
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 60);
+            label1.Name = "label1";
+            label1.Size = new Size(44, 15);
+            label1.TabIndex = 14;
+            label1.Text = "Author";
             // 
             // modAuthorTextBox
             // 
-            this.modAuthorTextBox.Location = new System.Drawing.Point(96, 56);
-            this.modAuthorTextBox.Name = "modAuthorTextBox";
-            this.modAuthorTextBox.Size = new System.Drawing.Size(148, 23);
-            this.modAuthorTextBox.TabIndex = 13;
-            this.modAuthorTextBox.Text = "FFXIV Loose Texture Compiler";
-            this.modAuthorTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
-            this.modAuthorTextBox.Leave += new System.EventHandler(this.modAuthorTextBox_Leave);
+            modAuthorTextBox.Location = new Point(96, 56);
+            modAuthorTextBox.Name = "modAuthorTextBox";
+            modAuthorTextBox.Size = new Size(148, 23);
+            modAuthorTextBox.TabIndex = 13;
+            modAuthorTextBox.Text = "FFXIV Loose Texture Compiler";
+            modAuthorTextBox.TextChanged += modDescriptionTextBox_TextChanged;
+            modAuthorTextBox.Leave += modAuthorTextBox_Leave;
             // 
             // nameLabel
             // 
-            this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(12, 32);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.Size = new System.Drawing.Size(39, 15);
-            this.nameLabel.TabIndex = 12;
-            this.nameLabel.Text = "Name";
+            nameLabel.AutoSize = true;
+            nameLabel.Location = new Point(12, 32);
+            nameLabel.Name = "nameLabel";
+            nameLabel.Size = new Size(39, 15);
+            nameLabel.TabIndex = 12;
+            nameLabel.Text = "Name";
             // 
             // modNameTextBox
             // 
-            this.modNameTextBox.Location = new System.Drawing.Point(96, 28);
-            this.modNameTextBox.Name = "modNameTextBox";
-            this.modNameTextBox.Size = new System.Drawing.Size(148, 23);
-            this.modNameTextBox.TabIndex = 11;
-            this.modNameTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            modNameTextBox.Location = new Point(96, 28);
+            modNameTextBox.Name = "modNameTextBox";
+            modNameTextBox.Size = new Size(148, 23);
+            modNameTextBox.TabIndex = 11;
+            modNameTextBox.TextChanged += modDescriptionTextBox_TextChanged;
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
-            this.toolsToolStripMenuItem,
-            this.configToolStripMenuItem,
-            this.modShareToolStripMenuItem,
-            this.creditsToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
-            this.menuStrip1.TabIndex = 24;
-            this.menuStrip1.Text = "menuStrip1";
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, configToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(537, 24);
+            menuStrip1.TabIndex = 24;
+            menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
-            this.templatesToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, templatesToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(127, 22);
+            newToolStripMenuItem.Text = "New";
+            newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(127, 22);
+            openToolStripMenuItem.Text = "Open";
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(127, 22);
+            saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            saveAsToolStripMenuItem.Size = new Size(127, 22);
+            saveAsToolStripMenuItem.Text = "Save As";
+            saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
             // templatesToolStripMenuItem
             // 
-            this.templatesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importCustomTemplateToolStripMenuItem});
-            this.templatesToolStripMenuItem.Name = "templatesToolStripMenuItem";
-            this.templatesToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.templatesToolStripMenuItem.Text = "Templates";
+            templatesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { importCustomTemplateToolStripMenuItem });
+            templatesToolStripMenuItem.Name = "templatesToolStripMenuItem";
+            templatesToolStripMenuItem.Size = new Size(127, 22);
+            templatesToolStripMenuItem.Text = "Templates";
             // 
             // importCustomTemplateToolStripMenuItem
             // 
-            this.importCustomTemplateToolStripMenuItem.Name = "importCustomTemplateToolStripMenuItem";
-            this.importCustomTemplateToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.importCustomTemplateToolStripMenuItem.Text = "Import Project As Template";
-            this.importCustomTemplateToolStripMenuItem.Click += new System.EventHandler(this.importCustomTemplateToolStripMenuItem_Click);
+            importCustomTemplateToolStripMenuItem.Name = "importCustomTemplateToolStripMenuItem";
+            importCustomTemplateToolStripMenuItem.Size = new Size(217, 22);
+            importCustomTemplateToolStripMenuItem.Text = "Import Project As Template";
+            importCustomTemplateToolStripMenuItem.Click += importCustomTemplateToolStripMenuItem_Click;
             // 
             // editToolStripMenuItem
             // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findAndBulkReplaceToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
+            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { findAndBulkReplaceToolStripMenuItem });
+            editToolStripMenuItem.Name = "editToolStripMenuItem";
+            editToolStripMenuItem.Size = new Size(39, 20);
+            editToolStripMenuItem.Text = "Edit";
             // 
             // findAndBulkReplaceToolStripMenuItem
             // 
-            this.findAndBulkReplaceToolStripMenuItem.Name = "findAndBulkReplaceToolStripMenuItem";
-            this.findAndBulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.findAndBulkReplaceToolStripMenuItem.Text = "Find And Bulk Replace";
-            this.findAndBulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndBulkReplaceToolStripMenuItem_Click);
+            findAndBulkReplaceToolStripMenuItem.Name = "findAndBulkReplaceToolStripMenuItem";
+            findAndBulkReplaceToolStripMenuItem.Size = new Size(192, 22);
+            findAndBulkReplaceToolStripMenuItem.Text = "Find And Bulk Replace";
+            findAndBulkReplaceToolStripMenuItem.Click += findAndBulkReplaceToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem,
-            this.convertStandaloneTextureToolStripMenuItem,
-            this.eyeToolsToolStripMenuItem,
-            this.hairToolsToolStripMenuItem,
-            this.clothingToolsToolStripMenuItem,
-            this.colourChannelSplittingToolStripMenuItem,
-            this.imageToTexConversionToolStripMenuItem,
-            this.devToolsToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(46, 20);
+            toolsToolStripMenuItem.Text = "Tools";
             // 
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Text = "Atramentum Luminis Diffuse To Glow Map";
-            this.extractAtramentumLuminisGlowMapToolStripMenuItem.Click += new System.EventHandler(this.extractAtramentumLuminisGlowMapToolStripMenuItem_Click);
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Size = new Size(299, 22);
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Text = "Atramentum Luminis Diffuse To Glow Map";
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Click += extractAtramentumLuminisGlowMapToolStripMenuItem_Click;
             // 
             // convertStandaloneTextureToolStripMenuItem
             // 
-            this.convertStandaloneTextureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.biboToGen3ToolStripMenuItem,
-            this.biboToGen2ToolStripMenuItem,
-            this.gen3ToBiboToolStripMenuItem,
-            this.gen3ToGen2ToolStripMenuItem1,
-            this.gen2ToGen3ToolStripMenuItem,
-            this.gen2ToBiboToolStripMenuItem,
-            this.otopopToVanillaToolStripMenuItem,
-            this.vanillaToOtopopToolStripMenuItem});
-            this.convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
-            this.convertStandaloneTextureToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
+            convertStandaloneTextureToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { biboToGen3ToolStripMenuItem, biboToGen2ToolStripMenuItem, gen3ToBiboToolStripMenuItem, gen3ToGen2ToolStripMenuItem1, gen2ToGen3ToolStripMenuItem, gen2ToBiboToolStripMenuItem, otopopToVanillaToolStripMenuItem, vanillaToOtopopToolStripMenuItem });
+            convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
+            convertStandaloneTextureToolStripMenuItem.Size = new Size(299, 22);
+            convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
             // 
             // biboToGen3ToolStripMenuItem
             // 
-            this.biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            this.biboToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
-            this.biboToGen3ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen3ToolStripMenuItem_Click);
+            biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
+            biboToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
+            biboToGen3ToolStripMenuItem.Click += biboToGen3ToolStripMenuItem_Click;
             // 
             // biboToGen2ToolStripMenuItem
             // 
-            this.biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            this.biboToGen2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
-            this.biboToGen2ToolStripMenuItem.Click += new System.EventHandler(this.biboToGen2ToolStripMenuItem_Click);
+            biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
+            biboToGen2ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
+            biboToGen2ToolStripMenuItem.Click += biboToGen2ToolStripMenuItem_Click;
             // 
             // gen3ToBiboToolStripMenuItem
             // 
-            this.gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            this.gen3ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
-            this.gen3ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen3ToBiboToolStripMenuItem_Click);
+            gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
+            gen3ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
+            gen3ToBiboToolStripMenuItem.Click += gen3ToBiboToolStripMenuItem_Click;
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
-            this.gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            this.gen3ToGen2ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
-            this.gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
-            this.gen3ToGen2ToolStripMenuItem1.Click += new System.EventHandler(this.gen3ToGen2ToolStripMenuItem_Click);
+            gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
+            gen3ToGen2ToolStripMenuItem1.Size = new Size(166, 22);
+            gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
+            gen3ToGen2ToolStripMenuItem1.Click += gen3ToGen2ToolStripMenuItem_Click;
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
-            this.gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            this.gen2ToGen3ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
-            this.gen2ToGen3ToolStripMenuItem.Click += new System.EventHandler(this.gen2ToGen3ToolStripMenuItem_Click);
+            gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
+            gen2ToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
+            gen2ToGen3ToolStripMenuItem.Click += gen2ToGen3ToolStripMenuItem_Click;
             // 
             // gen2ToBiboToolStripMenuItem
             // 
-            this.gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            this.gen2ToBiboToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
-            this.gen2ToBiboToolStripMenuItem.Click += new System.EventHandler(this.gen2ToBiboToolStripMenuItem_Click);
+            gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
+            gen2ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
+            gen2ToBiboToolStripMenuItem.Click += gen2ToBiboToolStripMenuItem_Click;
             // 
             // otopopToVanillaToolStripMenuItem
             // 
-            this.otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            this.otopopToVanillaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
-            this.otopopToVanillaToolStripMenuItem.Click += new System.EventHandler(this.otopopToVanillaToolStripMenuItem_Click);
+            otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
+            otopopToVanillaToolStripMenuItem.Size = new Size(166, 22);
+            otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
+            otopopToVanillaToolStripMenuItem.Click += otopopToVanillaToolStripMenuItem_Click;
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
-            this.vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            this.vanillaToOtopopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
-            this.vanillaToOtopopToolStripMenuItem.Click += new System.EventHandler(this.vanillaToOtopopToolStripMenuItem_Click);
+            vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
+            vanillaToOtopopToolStripMenuItem.Size = new Size(166, 22);
+            vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
+            vanillaToOtopopToolStripMenuItem.Click += vanillaToOtopopToolStripMenuItem_Click;
             // 
             // eyeToolsToolStripMenuItem
             // 
-            this.eyeToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.convertImageToEyeMultiToolStripMenuItem,
-            this.convertImagesToAsymEyeMapsToolStripMenuItem,
-            this.convertFolderToEyeMapsToolStripMenuItem,
-            this.multiMapToGrayscaleToolStripMenuItem});
-            this.eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
-            this.eyeToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.eyeToolsToolStripMenuItem.Text = "Eye Tools";
+            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertImageToEyeMultiToolStripMenuItem, convertImagesToAsymEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, multiMapToGrayscaleToolStripMenuItem });
+            eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
+            eyeToolsToolStripMenuItem.Size = new Size(299, 22);
+            eyeToolsToolStripMenuItem.Text = "Eye Tools";
             // 
             // convertImageToEyeMultiToolStripMenuItem
             // 
-            this.convertImageToEyeMultiToolStripMenuItem.Name = "convertImageToEyeMultiToolStripMenuItem";
-            this.convertImageToEyeMultiToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.convertImageToEyeMultiToolStripMenuItem.Text = "Convert Image To Eye Maps";
-            this.convertImageToEyeMultiToolStripMenuItem.Click += new System.EventHandler(this.convertImageToEyeMultiToolStripMenuItem_Click);
+            convertImageToEyeMultiToolStripMenuItem.Name = "convertImageToEyeMultiToolStripMenuItem";
+            convertImageToEyeMultiToolStripMenuItem.Size = new Size(258, 22);
+            convertImageToEyeMultiToolStripMenuItem.Text = "Convert Image To Eye Maps";
+            convertImageToEyeMultiToolStripMenuItem.Click += convertImageToEyeMultiToolStripMenuItem_Click;
             // 
             // convertImagesToAsymEyeMapsToolStripMenuItem
             // 
-            this.convertImagesToAsymEyeMapsToolStripMenuItem.Name = "convertImagesToAsymEyeMapsToolStripMenuItem";
-            this.convertImagesToAsymEyeMapsToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.convertImagesToAsymEyeMapsToolStripMenuItem.Text = "Convert Images To Asym Eye Maps";
-            this.convertImagesToAsymEyeMapsToolStripMenuItem.Click += new System.EventHandler(this.convertImagesToAsymEyeMapsToolStripMenuItem_Click);
+            convertImagesToAsymEyeMapsToolStripMenuItem.Name = "convertImagesToAsymEyeMapsToolStripMenuItem";
+            convertImagesToAsymEyeMapsToolStripMenuItem.Size = new Size(258, 22);
+            convertImagesToAsymEyeMapsToolStripMenuItem.Text = "Convert Images To Asym Eye Maps";
+            convertImagesToAsymEyeMapsToolStripMenuItem.Click += convertImagesToAsymEyeMapsToolStripMenuItem_Click;
             // 
             // convertFolderToEyeMapsToolStripMenuItem
             // 
-            this.convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
-            this.convertFolderToEyeMapsToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
-            this.convertFolderToEyeMapsToolStripMenuItem.Click += new System.EventHandler(this.convertFolderToEyeMapsToolStripMenuItem_Click);
+            convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
+            convertFolderToEyeMapsToolStripMenuItem.Size = new Size(258, 22);
+            convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
+            convertFolderToEyeMapsToolStripMenuItem.Click += convertFolderToEyeMapsToolStripMenuItem_Click;
             // 
             // multiMapToGrayscaleToolStripMenuItem
             // 
-            this.multiMapToGrayscaleToolStripMenuItem.Name = "multiMapToGrayscaleToolStripMenuItem";
-            this.multiMapToGrayscaleToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.multiMapToGrayscaleToolStripMenuItem.Text = "Multi Map To Grayscale";
-            this.multiMapToGrayscaleToolStripMenuItem.Click += new System.EventHandler(this.multiMapToGrayscaleToolStripMenuItem_Click);
+            multiMapToGrayscaleToolStripMenuItem.Name = "multiMapToGrayscaleToolStripMenuItem";
+            multiMapToGrayscaleToolStripMenuItem.Size = new Size(258, 22);
+            multiMapToGrayscaleToolStripMenuItem.Text = "Multi Map To Grayscale";
+            multiMapToGrayscaleToolStripMenuItem.Click += multiMapToGrayscaleToolStripMenuItem_Click;
             // 
             // hairToolsToolStripMenuItem
             // 
-            this.hairToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem});
-            this.hairToolsToolStripMenuItem.Name = "hairToolsToolStripMenuItem";
-            this.hairToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.hairToolsToolStripMenuItem.Text = "Hair Tools";
+            hairToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hairDiffuseToFFXIVHairMapsToolStripMenuItem });
+            hairToolsToolStripMenuItem.Name = "hairToolsToolStripMenuItem";
+            hairToolsToolStripMenuItem.Size = new Size(299, 22);
+            hairToolsToolStripMenuItem.Text = "Hair Tools";
             // 
             // hairDiffuseToFFXIVHairMapsToolStripMenuItem
             // 
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Name = "hairDiffuseToFFXIVHairMapsToolStripMenuItem";
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
-            this.hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += new System.EventHandler(this.hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click);
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Name = "hairDiffuseToFFXIVHairMapsToolStripMenuItem";
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new Size(240, 22);
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click;
             // 
             // clothingToolsToolStripMenuItem
             // 
-            this.clothingToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem});
-            this.clothingToolsToolStripMenuItem.Name = "clothingToolsToolStripMenuItem";
-            this.clothingToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.clothingToolsToolStripMenuItem.Text = "Clothing Tools";
+            clothingToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertDiffuseToNormalAndMultiToolStripMenuItem });
+            clothingToolsToolStripMenuItem.Name = "clothingToolsToolStripMenuItem";
+            clothingToolsToolStripMenuItem.Size = new Size(299, 22);
+            clothingToolsToolStripMenuItem.Text = "Clothing Tools";
             // 
             // convertDiffuseToNormalAndMultiToolStripMenuItem
             // 
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new System.Drawing.Size(270, 22);
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Multi";
-            this.convertDiffuseToNormalAndMultiToolStripMenuItem.Click += new System.EventHandler(this.convertDiffuseToNormalAndMultiToolStripMenuItem_Click);
+            convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
+            convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new Size(270, 22);
+            convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Multi";
+            convertDiffuseToNormalAndMultiToolStripMenuItem.Click += convertDiffuseToNormalAndMultiToolStripMenuItem_Click;
             // 
             // colourChannelSplittingToolStripMenuItem
             // 
-            this.colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.diffuseMergerToolStripMenuItem,
-            this.multiCreatorToolStripMenuItem,
-            this.mergeRGBAndAlphaImagesToolStripMenuItem,
-            this.imageToRGBChannelsToolStripMenuItem,
-            this.splitImageToRGBAndAlphaToolStripMenuItem,
-            this.textureToBodyMultiToolStripMenuItem,
-            this.textureToFaceMultiToolStripMenuItem,
-            this.textureToAsymFaceMultiToolStripMenuItem,
-            this.xNormalToolStripMenuItem});
-            this.colourChannelSplittingToolStripMenuItem.Name = "colourChannelSplittingToolStripMenuItem";
-            this.colourChannelSplittingToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.colourChannelSplittingToolStripMenuItem.Text = "Texture Manipulation";
+            colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { diffuseMergerToolStripMenuItem, multiCreatorToolStripMenuItem, mergeRGBAndAlphaImagesToolStripMenuItem, imageToRGBChannelsToolStripMenuItem, splitImageToRGBAndAlphaToolStripMenuItem, textureToBodyMultiToolStripMenuItem, textureToFaceMultiToolStripMenuItem, textureToAsymFaceMultiToolStripMenuItem, xNormalToolStripMenuItem });
+            colourChannelSplittingToolStripMenuItem.Name = "colourChannelSplittingToolStripMenuItem";
+            colourChannelSplittingToolStripMenuItem.Size = new Size(299, 22);
+            colourChannelSplittingToolStripMenuItem.Text = "Texture Manipulation";
             // 
             // diffuseMergerToolStripMenuItem
             // 
-            this.diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
-            this.diffuseMergerToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
-            this.diffuseMergerToolStripMenuItem.Click += new System.EventHandler(this.diffuseMergerToolStripMenuItem_Click);
+            diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
+            diffuseMergerToolStripMenuItem.Size = new Size(233, 22);
+            diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
+            diffuseMergerToolStripMenuItem.Click += diffuseMergerToolStripMenuItem_Click;
             // 
             // multiCreatorToolStripMenuItem
             // 
-            this.multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
-            this.multiCreatorToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.multiCreatorToolStripMenuItem.Text = "RGBA Merger";
-            this.multiCreatorToolStripMenuItem.Click += new System.EventHandler(this.multiCreatorToolStripMenuItem_Click);
+            multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
+            multiCreatorToolStripMenuItem.Size = new Size(233, 22);
+            multiCreatorToolStripMenuItem.Text = "RGBA Merger";
+            multiCreatorToolStripMenuItem.Click += multiCreatorToolStripMenuItem_Click;
             // 
             // mergeRGBAndAlphaImagesToolStripMenuItem
             // 
-            this.mergeRGBAndAlphaImagesToolStripMenuItem.Name = "mergeRGBAndAlphaImagesToolStripMenuItem";
-            this.mergeRGBAndAlphaImagesToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.mergeRGBAndAlphaImagesToolStripMenuItem.Text = "Merge RGB and Alpha Images";
-            this.mergeRGBAndAlphaImagesToolStripMenuItem.Click += new System.EventHandler(this.mergeRGBAndAlphaImagesToolStripMenuItem_Click);
+            mergeRGBAndAlphaImagesToolStripMenuItem.Name = "mergeRGBAndAlphaImagesToolStripMenuItem";
+            mergeRGBAndAlphaImagesToolStripMenuItem.Size = new Size(233, 22);
+            mergeRGBAndAlphaImagesToolStripMenuItem.Text = "Merge RGB and Alpha Images";
+            mergeRGBAndAlphaImagesToolStripMenuItem.Click += mergeRGBAndAlphaImagesToolStripMenuItem_Click;
             // 
             // imageToRGBChannelsToolStripMenuItem
             // 
-            this.imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
-            this.imageToRGBChannelsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
-            this.imageToRGBChannelsToolStripMenuItem.Click += new System.EventHandler(this.imageToRGBChannelsToolStripMenuItem_Click);
+            imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
+            imageToRGBChannelsToolStripMenuItem.Size = new Size(233, 22);
+            imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
+            imageToRGBChannelsToolStripMenuItem.Click += imageToRGBChannelsToolStripMenuItem_Click;
             // 
             // splitImageToRGBAndAlphaToolStripMenuItem
             // 
-            this.splitImageToRGBAndAlphaToolStripMenuItem.Name = "splitImageToRGBAndAlphaToolStripMenuItem";
-            this.splitImageToRGBAndAlphaToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.splitImageToRGBAndAlphaToolStripMenuItem.Text = "Split Image to RGB and Alpha";
-            this.splitImageToRGBAndAlphaToolStripMenuItem.Click += new System.EventHandler(this.splitImageToRGBAndAlphaToolStripMenuItem_Click);
+            splitImageToRGBAndAlphaToolStripMenuItem.Name = "splitImageToRGBAndAlphaToolStripMenuItem";
+            splitImageToRGBAndAlphaToolStripMenuItem.Size = new Size(233, 22);
+            splitImageToRGBAndAlphaToolStripMenuItem.Text = "Split Image to RGB and Alpha";
+            splitImageToRGBAndAlphaToolStripMenuItem.Click += splitImageToRGBAndAlphaToolStripMenuItem_Click;
             // 
             // textureToBodyMultiToolStripMenuItem
             // 
-            this.textureToBodyMultiToolStripMenuItem.Name = "textureToBodyMultiToolStripMenuItem";
-            this.textureToBodyMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.textureToBodyMultiToolStripMenuItem.Text = "Texture To Body Multi";
-            this.textureToBodyMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToBodyMultiToolStripMenuItem_Click);
+            textureToBodyMultiToolStripMenuItem.Name = "textureToBodyMultiToolStripMenuItem";
+            textureToBodyMultiToolStripMenuItem.Size = new Size(233, 22);
+            textureToBodyMultiToolStripMenuItem.Text = "Texture To Body Multi";
+            textureToBodyMultiToolStripMenuItem.Click += textureToBodyMultiToolStripMenuItem_Click;
             // 
             // textureToFaceMultiToolStripMenuItem
             // 
-            this.textureToFaceMultiToolStripMenuItem.Name = "textureToFaceMultiToolStripMenuItem";
-            this.textureToFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.textureToFaceMultiToolStripMenuItem.Text = "Texture To Face Multi";
-            this.textureToFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToFaceMultiToolStripMenuItem_Click);
+            textureToFaceMultiToolStripMenuItem.Name = "textureToFaceMultiToolStripMenuItem";
+            textureToFaceMultiToolStripMenuItem.Size = new Size(233, 22);
+            textureToFaceMultiToolStripMenuItem.Text = "Texture To Face Multi";
+            textureToFaceMultiToolStripMenuItem.Click += textureToFaceMultiToolStripMenuItem_Click;
             // 
             // textureToAsymFaceMultiToolStripMenuItem
             // 
-            this.textureToAsymFaceMultiToolStripMenuItem.Name = "textureToAsymFaceMultiToolStripMenuItem";
-            this.textureToAsymFaceMultiToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.textureToAsymFaceMultiToolStripMenuItem.Text = "Texture To Asym Face Multi";
-            this.textureToAsymFaceMultiToolStripMenuItem.Click += new System.EventHandler(this.textureToAsymFaceMultiToolStripMenuItem_Click);
+            textureToAsymFaceMultiToolStripMenuItem.Name = "textureToAsymFaceMultiToolStripMenuItem";
+            textureToAsymFaceMultiToolStripMenuItem.Size = new Size(233, 22);
+            textureToAsymFaceMultiToolStripMenuItem.Text = "Texture To Asym Face Multi";
+            textureToAsymFaceMultiToolStripMenuItem.Click += textureToAsymFaceMultiToolStripMenuItem_Click;
             // 
             // xNormalToolStripMenuItem
             // 
-            this.xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
-            this.xNormalToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.xNormalToolStripMenuItem.Text = "XNormal";
-            this.xNormalToolStripMenuItem.Click += new System.EventHandler(this.xNormalToolStripMenuItem_Click);
+            xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
+            xNormalToolStripMenuItem.Size = new Size(233, 22);
+            xNormalToolStripMenuItem.Text = "XNormal";
+            xNormalToolStripMenuItem.Click += xNormalToolStripMenuItem_Click;
             // 
             // imageToTexConversionToolStripMenuItem
             // 
-            this.imageToTexConversionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bulkTexViewerToolStripMenuItem,
-            this.bulkImageToTexToolStripMenuItem,
-            this.recursiveBulkImageToTexToolStripMenuItem});
-            this.imageToTexConversionToolStripMenuItem.Name = "imageToTexConversionToolStripMenuItem";
-            this.imageToTexConversionToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.imageToTexConversionToolStripMenuItem.Text = "Tex File Management";
+            imageToTexConversionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { bulkTexViewerToolStripMenuItem, bulkImageToTexToolStripMenuItem, recursiveBulkImageToTexToolStripMenuItem });
+            imageToTexConversionToolStripMenuItem.Name = "imageToTexConversionToolStripMenuItem";
+            imageToTexConversionToolStripMenuItem.Size = new Size(299, 22);
+            imageToTexConversionToolStripMenuItem.Text = "Tex File Management";
             // 
             // bulkTexViewerToolStripMenuItem
             // 
-            this.bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
-            this.bulkTexViewerToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
-            this.bulkTexViewerToolStripMenuItem.Click += new System.EventHandler(this.bulkTexViewerToolStripMenuItem_Click);
+            bulkTexViewerToolStripMenuItem.Name = "bulkTexViewerToolStripMenuItem";
+            bulkTexViewerToolStripMenuItem.Size = new Size(221, 22);
+            bulkTexViewerToolStripMenuItem.Text = "Bulk Tex File Manager";
+            bulkTexViewerToolStripMenuItem.Click += bulkTexViewerToolStripMenuItem_Click;
             // 
             // bulkImageToTexToolStripMenuItem
             // 
-            this.bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
-            this.bulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
-            this.bulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.bulkImageToTexToolStripMenuItem_Click);
+            bulkImageToTexToolStripMenuItem.Name = "bulkImageToTexToolStripMenuItem";
+            bulkImageToTexToolStripMenuItem.Size = new Size(221, 22);
+            bulkImageToTexToolStripMenuItem.Text = "Bulk Image To Tex";
+            bulkImageToTexToolStripMenuItem.Click += bulkImageToTexToolStripMenuItem_Click;
             // 
             // recursiveBulkImageToTexToolStripMenuItem
             // 
-            this.recursiveBulkImageToTexToolStripMenuItem.Name = "recursiveBulkImageToTexToolStripMenuItem";
-            this.recursiveBulkImageToTexToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.recursiveBulkImageToTexToolStripMenuItem.Text = "Recursive Bulk Image To Tex";
-            this.recursiveBulkImageToTexToolStripMenuItem.Click += new System.EventHandler(this.recursiveBulkImageToTexToolStripMenuItem_Click);
+            recursiveBulkImageToTexToolStripMenuItem.Name = "recursiveBulkImageToTexToolStripMenuItem";
+            recursiveBulkImageToTexToolStripMenuItem.Size = new Size(221, 22);
+            recursiveBulkImageToTexToolStripMenuItem.Text = "Recursive Bulk Image To Tex";
+            recursiveBulkImageToTexToolStripMenuItem.Click += recursiveBulkImageToTexToolStripMenuItem_Click;
             // 
             // devToolsToolStripMenuItem
             // 
-            this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.textureToLTCTToolStripMenuItem,
-            this.pNGToLTCTToolStripMenuItem,
-            this.convertLTCTToPNGToolStripMenuItem});
-            this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
-            this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(299, 22);
-            this.devToolsToolStripMenuItem.Text = "Dev Tools";
+            devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem });
+            devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
+            devToolsToolStripMenuItem.Size = new Size(299, 22);
+            devToolsToolStripMenuItem.Text = "Dev Tools";
             // 
             // textureToLTCTToolStripMenuItem
             // 
-            this.textureToLTCTToolStripMenuItem.Name = "textureToLTCTToolStripMenuItem";
-            this.textureToLTCTToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.textureToLTCTToolStripMenuItem.Text = "Texture To LTCT";
-            this.textureToLTCTToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertImagesToLTCTToolStripMenuItem_Click);
+            textureToLTCTToolStripMenuItem.Name = "textureToLTCTToolStripMenuItem";
+            textureToLTCTToolStripMenuItem.Size = new Size(185, 22);
+            textureToLTCTToolStripMenuItem.Text = "Texture To LTCT";
+            textureToLTCTToolStripMenuItem.Click += bulkConvertImagesToLTCTToolStripMenuItem_Click;
             // 
             // pNGToLTCTToolStripMenuItem
             // 
-            this.pNGToLTCTToolStripMenuItem.Name = "pNGToLTCTToolStripMenuItem";
-            this.pNGToLTCTToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.pNGToLTCTToolStripMenuItem.Text = "PNG To LTCT";
-            this.pNGToLTCTToolStripMenuItem.Click += new System.EventHandler(this.convertPNGToLTCTToolStripMenuItem_Click);
+            pNGToLTCTToolStripMenuItem.Name = "pNGToLTCTToolStripMenuItem";
+            pNGToLTCTToolStripMenuItem.Size = new Size(185, 22);
+            pNGToLTCTToolStripMenuItem.Text = "PNG To LTCT";
+            pNGToLTCTToolStripMenuItem.Click += convertPNGToLTCTToolStripMenuItem_Click;
             // 
             // convertLTCTToPNGToolStripMenuItem
             // 
-            this.convertLTCTToPNGToolStripMenuItem.Name = "convertLTCTToPNGToolStripMenuItem";
-            this.convertLTCTToPNGToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
-            this.convertLTCTToPNGToolStripMenuItem.Click += new System.EventHandler(this.bulkConvertLTCTToPNGToolStripMenuItem_Click);
+            convertLTCTToPNGToolStripMenuItem.Name = "convertLTCTToPNGToolStripMenuItem";
+            convertLTCTToPNGToolStripMenuItem.Size = new Size(185, 22);
+            convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
+            convertLTCTToPNGToolStripMenuItem.Click += bulkConvertLTCTToPNGToolStripMenuItem_Click;
             // 
             // configToolStripMenuItem
             // 
-            this.configToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changePenumbraPathToolStripMenuItem});
-            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
-            this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.configToolStripMenuItem.Text = "Config";
+            configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem });
+            configToolStripMenuItem.Name = "configToolStripMenuItem";
+            configToolStripMenuItem.Size = new Size(55, 20);
+            configToolStripMenuItem.Text = "Config";
             // 
             // changePenumbraPathToolStripMenuItem
             // 
-            this.changePenumbraPathToolStripMenuItem.Name = "changePenumbraPathToolStripMenuItem";
-            this.changePenumbraPathToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
-            this.changePenumbraPathToolStripMenuItem.Click += new System.EventHandler(this.changePenumbraPathToolStripMenuItem_Click);
+            changePenumbraPathToolStripMenuItem.Name = "changePenumbraPathToolStripMenuItem";
+            changePenumbraPathToolStripMenuItem.Size = new Size(200, 22);
+            changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
+            changePenumbraPathToolStripMenuItem.Click += changePenumbraPathToolStripMenuItem_Click;
             // 
             // modShareToolStripMenuItem
             // 
-            this.modShareToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enableModshareToolStripMenuItem,
-            this.sendCurrentModToolStripMenuItem});
-            this.modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
-            this.modShareToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-            this.modShareToolStripMenuItem.Text = "Mod Share";
+            modShareToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableModshareToolStripMenuItem, sendCurrentModToolStripMenuItem });
+            modShareToolStripMenuItem.Name = "modShareToolStripMenuItem";
+            modShareToolStripMenuItem.Size = new Size(76, 20);
+            modShareToolStripMenuItem.Text = "Mod Share";
             // 
             // enableModshareToolStripMenuItem
             // 
-            this.enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            this.enableModshareToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.enableModshareToolStripMenuItem.Text = "Enable Modshare";
-            this.enableModshareToolStripMenuItem.Click += new System.EventHandler(this.enableModshareToolStripMenuItem_Click);
+            enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
+            enableModshareToolStripMenuItem.Size = new Size(171, 22);
+            enableModshareToolStripMenuItem.Text = "Enable Modshare";
+            enableModshareToolStripMenuItem.Click += enableModshareToolStripMenuItem_Click;
             // 
             // sendCurrentModToolStripMenuItem
             // 
-            this.sendCurrentModToolStripMenuItem.Enabled = false;
-            this.sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            this.sendCurrentModToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
-            this.sendCurrentModToolStripMenuItem.Click += new System.EventHandler(this.sendCurrentModToolStripMenuItem_Click);
+            sendCurrentModToolStripMenuItem.Enabled = false;
+            sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
+            sendCurrentModToolStripMenuItem.Size = new Size(171, 22);
+            sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
+            sendCurrentModToolStripMenuItem.Click += sendCurrentModToolStripMenuItem_Click;
             // 
             // creditsToolStripMenuItem
             // 
-            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.creditsToolStripMenuItem.Text = "Credits";
-            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
+            creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            creditsToolStripMenuItem.Size = new Size(56, 20);
+            creditsToolStripMenuItem.Text = "Credits";
+            creditsToolStripMenuItem.Click += creditsToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.howToGetTexturesToolStripMenuItem,
-            this.howDoIUseThisToolStripMenuItem,
-            this.howDoIMakeStuffBumpyToolStripMenuItem,
-            this.howDoIMakeStuffGlowToolStripMenuItem,
-            this.howDoIMakeEyesToolStripMenuItem,
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem,
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem,
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem,
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem,
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem,
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToGetTexturesToolStripMenuItem, howDoIUseThisToolStripMenuItem, howDoIMakeStuffBumpyToolStripMenuItem, howDoIMakeStuffGlowToolStripMenuItem, howDoIMakeEyesToolStripMenuItem, canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem, canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem, canIReplaceABunchOfStuffAtOnceToolStripMenuItem, whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem, whatAreTemplatesAndHowDoIUseThemToolStripMenuItem, thisToolIsTooHardMakeItSimplerToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
             // 
             // howToGetTexturesToolStripMenuItem
             // 
-            this.howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
-            this.howToGetTexturesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howToGetTexturesToolStripMenuItem.Text = "How do I get textures?";
-            this.howToGetTexturesToolStripMenuItem.Click += new System.EventHandler(this.howToGetTexturesToolStripMenuItem_Click);
+            howToGetTexturesToolStripMenuItem.Name = "howToGetTexturesToolStripMenuItem";
+            howToGetTexturesToolStripMenuItem.Size = new Size(430, 22);
+            howToGetTexturesToolStripMenuItem.Text = "How do I get textures?";
+            howToGetTexturesToolStripMenuItem.Click += howToGetTexturesToolStripMenuItem_Click;
             // 
             // howDoIUseThisToolStripMenuItem
             // 
-            this.howDoIUseThisToolStripMenuItem.Name = "howDoIUseThisToolStripMenuItem";
-            this.howDoIUseThisToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howDoIUseThisToolStripMenuItem.Text = "How do I use this?";
-            this.howDoIUseThisToolStripMenuItem.Click += new System.EventHandler(this.howDoIUseThisToolStripMenuItem_Click);
+            howDoIUseThisToolStripMenuItem.Name = "howDoIUseThisToolStripMenuItem";
+            howDoIUseThisToolStripMenuItem.Size = new Size(430, 22);
+            howDoIUseThisToolStripMenuItem.Text = "How do I use this?";
+            howDoIUseThisToolStripMenuItem.Click += howDoIUseThisToolStripMenuItem_Click;
             // 
             // howDoIMakeStuffBumpyToolStripMenuItem
             // 
-            this.howDoIMakeStuffBumpyToolStripMenuItem.Name = "howDoIMakeStuffBumpyToolStripMenuItem";
-            this.howDoIMakeStuffBumpyToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howDoIMakeStuffBumpyToolStripMenuItem.Text = "How do I make stuff bumpy?";
-            this.howDoIMakeStuffBumpyToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeStuffBumpyToolStripMenuItem_Click);
+            howDoIMakeStuffBumpyToolStripMenuItem.Name = "howDoIMakeStuffBumpyToolStripMenuItem";
+            howDoIMakeStuffBumpyToolStripMenuItem.Size = new Size(430, 22);
+            howDoIMakeStuffBumpyToolStripMenuItem.Text = "How do I make stuff bumpy?";
+            howDoIMakeStuffBumpyToolStripMenuItem.Click += howDoIMakeStuffBumpyToolStripMenuItem_Click;
             // 
             // howDoIMakeStuffGlowToolStripMenuItem
             // 
-            this.howDoIMakeStuffGlowToolStripMenuItem.Name = "howDoIMakeStuffGlowToolStripMenuItem";
-            this.howDoIMakeStuffGlowToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howDoIMakeStuffGlowToolStripMenuItem.Text = "How do I make stuff glow?";
-            this.howDoIMakeStuffGlowToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeStuffGlowToolStripMenuItem_Click);
+            howDoIMakeStuffGlowToolStripMenuItem.Name = "howDoIMakeStuffGlowToolStripMenuItem";
+            howDoIMakeStuffGlowToolStripMenuItem.Size = new Size(430, 22);
+            howDoIMakeStuffGlowToolStripMenuItem.Text = "How do I make stuff glow?";
+            howDoIMakeStuffGlowToolStripMenuItem.Click += howDoIMakeStuffGlowToolStripMenuItem_Click;
             // 
             // howDoIMakeEyesToolStripMenuItem
             // 
-            this.howDoIMakeEyesToolStripMenuItem.Name = "howDoIMakeEyesToolStripMenuItem";
-            this.howDoIMakeEyesToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
-            this.howDoIMakeEyesToolStripMenuItem.Click += new System.EventHandler(this.howDoIMakeEyesToolStripMenuItem_Click);
+            howDoIMakeEyesToolStripMenuItem.Name = "howDoIMakeEyesToolStripMenuItem";
+            howDoIMakeEyesToolStripMenuItem.Size = new Size(430, 22);
+            howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
+            howDoIMakeEyesToolStripMenuItem.Click += howDoIMakeEyesToolStripMenuItem_Click;
             // 
             // canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem
             // 
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Name = "canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem";
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Text = "Can I make my Bibo+ or Gen3 body texture work on another body?";
-            this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Click += new System.EventHandler(this.canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem_Click);
+            canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Name = "canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem";
+            canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Size = new Size(430, 22);
+            canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Text = "Can I make my Bibo+ or Gen3 body texture work on another body?";
+            canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem.Click += canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem_Click;
             // 
             // canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem
             // 
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Name = "canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem";
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Text = "Can I customize the groups this tool exporrts";
-            this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Click += new System.EventHandler(this.canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem_Click);
+            canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Name = "canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem";
+            canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Size = new Size(430, 22);
+            canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Text = "Can I customize the groups this tool exporrts";
+            canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem.Click += canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem_Click;
             // 
             // canIReplaceABunchOfStuffAtOnceToolStripMenuItem
             // 
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Name = "canIReplaceABunchOfStuffAtOnceToolStripMenuItem";
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
-            this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += new System.EventHandler(this.canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click);
+            canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Name = "canIReplaceABunchOfStuffAtOnceToolStripMenuItem";
+            canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Size = new Size(430, 22);
+            canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Text = "Can I replace a bunch of stuff at once?";
+            canIReplaceABunchOfStuffAtOnceToolStripMenuItem.Click += canIReplaceABunchOfStuffAtOnceToolStripMenuItem_Click;
             // 
             // whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem
             // 
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Name = "whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem";
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
-            this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += new System.EventHandler(this.whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click);
+            whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Name = "whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem";
+            whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Size = new Size(430, 22);
+            whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
+            whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click;
             // 
             // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
             // 
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
-            this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += new System.EventHandler(this.whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click);
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new Size(430, 22);
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click;
             // 
             // thisToolIsTooHardMakeItSimplerToolStripMenuItem
             // 
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem.Name = "thisToolIsTooHardMakeItSimplerToolStripMenuItem";
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem.Size = new System.Drawing.Size(430, 22);
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem.Text = "This tool is too hard, make it simpler.";
-            this.thisToolIsTooHardMakeItSimplerToolStripMenuItem.Click += new System.EventHandler(this.thisToolIsTooHardMakeItSimplerToolStripMenuItem_Click);
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Name = "thisToolIsTooHardMakeItSimplerToolStripMenuItem";
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Size = new Size(430, 22);
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Text = "This tool is too hard, make it simpler.";
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Click += thisToolIsTooHardMakeItSimplerToolStripMenuItem_Click;
             // 
             // donateButton
             // 
-            this.donateButton.BackColor = System.Drawing.Color.IndianRed;
-            this.donateButton.ForeColor = System.Drawing.Color.White;
-            this.donateButton.Location = new System.Drawing.Point(464, 0);
-            this.donateButton.Name = "donateButton";
-            this.donateButton.Size = new System.Drawing.Size(75, 23);
-            this.donateButton.TabIndex = 25;
-            this.donateButton.Text = "Donate";
-            this.donateButton.UseVisualStyleBackColor = false;
-            this.donateButton.Click += new System.EventHandler(this.donateButton_Click);
+            donateButton.BackColor = Color.IndianRed;
+            donateButton.ForeColor = Color.White;
+            donateButton.Location = new Point(464, 0);
+            donateButton.Name = "donateButton";
+            donateButton.Size = new Size(75, 23);
+            donateButton.TabIndex = 25;
+            donateButton.Text = "Donate";
+            donateButton.UseVisualStyleBackColor = false;
+            donateButton.Click += donateButton_Click;
             // 
             // textureList
             // 
-            this.textureList.ContextMenuStrip = this.materialListContextMenu;
-            this.textureList.FormattingEnabled = true;
-            this.textureList.ItemHeight = 15;
-            this.textureList.Location = new System.Drawing.Point(4, 204);
-            this.textureList.Name = "textureList";
-            this.textureList.Size = new System.Drawing.Size(528, 184);
-            this.textureList.TabIndex = 26;
-            this.textureList.SelectedIndexChanged += new System.EventHandler(this.materialList_SelectedIndexChanged);
+            textureList.ContextMenuStrip = materialListContextMenu;
+            textureList.FormattingEnabled = true;
+            textureList.ItemHeight = 15;
+            textureList.Location = new Point(4, 204);
+            textureList.Name = "textureList";
+            textureList.Size = new Size(528, 184);
+            textureList.TabIndex = 26;
+            textureList.SelectedIndexChanged += materialList_SelectedIndexChanged;
             // 
             // materialListContextMenu
             // 
-            this.materialListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editPathsToolStripMenuItem,
-            this.omniExportModeToolStripMenuItem,
-            this.moveUpToolStripMenuItem,
-            this.moveDownToolStripMenuItem,
-            this.bulkNameReplacement,
-            this.bulkReplaceToolStripMenuItem,
-            this.duplicateToolStripMenuItem,
-            this.deleteToolStripMenuItem});
-            this.materialListContextMenu.Name = "materialListContextMenu";
-            this.materialListContextMenu.Size = new System.Drawing.Size(236, 180);
-            this.materialListContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.materialListContextMenu_Opening);
+            materialListContextMenu.Items.AddRange(new ToolStripItem[] { editPathsToolStripMenuItem, omniExportModeToolStripMenuItem, moveUpToolStripMenuItem, moveDownToolStripMenuItem, bulkNameReplacement, bulkReplaceToolStripMenuItem, duplicateToolStripMenuItem, deleteToolStripMenuItem });
+            materialListContextMenu.Name = "materialListContextMenu";
+            materialListContextMenu.Size = new Size(236, 180);
+            materialListContextMenu.Opening += materialListContextMenu_Opening;
             // 
             // editPathsToolStripMenuItem
             // 
-            this.editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
-            this.editPathsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.editPathsToolStripMenuItem.Text = "Edit Internal Texture Set Values";
-            this.editPathsToolStripMenuItem.Click += new System.EventHandler(this.editPathsToolStripMenuItem_Click);
+            editPathsToolStripMenuItem.Name = "editPathsToolStripMenuItem";
+            editPathsToolStripMenuItem.Size = new Size(235, 22);
+            editPathsToolStripMenuItem.Text = "Edit Internal Texture Set Values";
+            editPathsToolStripMenuItem.Click += editPathsToolStripMenuItem_Click;
             // 
             // omniExportModeToolStripMenuItem
             // 
-            this.omniExportModeToolStripMenuItem.Name = "omniExportModeToolStripMenuItem";
-            this.omniExportModeToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.omniExportModeToolStripMenuItem.Text = "Enable Universal Compatibility";
-            this.omniExportModeToolStripMenuItem.Click += new System.EventHandler(this.omniExportModeToolStripMenuItem_Click);
+            omniExportModeToolStripMenuItem.Name = "omniExportModeToolStripMenuItem";
+            omniExportModeToolStripMenuItem.Size = new Size(235, 22);
+            omniExportModeToolStripMenuItem.Text = "Enable Universal Compatibility";
+            omniExportModeToolStripMenuItem.Click += omniExportModeToolStripMenuItem_Click;
             // 
             // moveUpToolStripMenuItem
             // 
-            this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.moveUpToolStripMenuItem.Text = "Move Up";
-            this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpButton_Click);
+            moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
+            moveUpToolStripMenuItem.Size = new Size(235, 22);
+            moveUpToolStripMenuItem.Text = "Move Up";
+            moveUpToolStripMenuItem.Click += moveUpButton_Click;
             // 
             // moveDownToolStripMenuItem
             // 
-            this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.moveDownToolStripMenuItem.Text = "Move Down";
-            this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownButton_Click);
+            moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
+            moveDownToolStripMenuItem.Size = new Size(235, 22);
+            moveDownToolStripMenuItem.Text = "Move Down";
+            moveDownToolStripMenuItem.Click += moveDownButton_Click;
             // 
             // bulkNameReplacement
             // 
-            this.bulkNameReplacement.Name = "bulkNameReplacement";
-            this.bulkNameReplacement.Size = new System.Drawing.Size(235, 22);
-            this.bulkNameReplacement.Text = "Bulk Name Replacement";
-            this.bulkNameReplacement.Click += new System.EventHandler(this.bulkNameReplacement_Click);
+            bulkNameReplacement.Name = "bulkNameReplacement";
+            bulkNameReplacement.Size = new Size(235, 22);
+            bulkNameReplacement.Text = "Bulk Name Replacement";
+            bulkNameReplacement.Click += bulkNameReplacement_Click;
             // 
             // bulkReplaceToolStripMenuItem
             // 
-            this.bulkReplaceToolStripMenuItem.Name = "bulkReplaceToolStripMenuItem";
-            this.bulkReplaceToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
-            this.bulkReplaceToolStripMenuItem.Click += new System.EventHandler(this.bulkReplaceToolStripMenuItem_Click);
+            bulkReplaceToolStripMenuItem.Name = "bulkReplaceToolStripMenuItem";
+            bulkReplaceToolStripMenuItem.Size = new Size(235, 22);
+            bulkReplaceToolStripMenuItem.Text = "Bulk Replace Values";
+            bulkReplaceToolStripMenuItem.Click += bulkReplaceToolStripMenuItem_Click;
             // 
             // duplicateToolStripMenuItem
             // 
-            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.duplicateToolStripMenuItem.Text = "Duplicate";
-            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
+            duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            duplicateToolStripMenuItem.Size = new Size(235, 22);
+            duplicateToolStripMenuItem.Text = "Duplicate";
+            duplicateToolStripMenuItem.Click += duplicateToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
             // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.removeSelectionButton_Click);
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(235, 22);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += removeSelectionButton_Click;
             // 
             // addBodyButton
             // 
-            this.addBodyButton.Location = new System.Drawing.Point(448, 112);
-            this.addBodyButton.Name = "addBodyButton";
-            this.addBodyButton.Size = new System.Drawing.Size(84, 23);
-            this.addBodyButton.TabIndex = 27;
-            this.addBodyButton.Text = "Add Body";
-            this.addBodyButton.UseVisualStyleBackColor = true;
-            this.addBodyButton.Click += new System.EventHandler(this.addBodyEditButton_Click);
+            addBodyButton.Location = new Point(448, 112);
+            addBodyButton.Name = "addBodyButton";
+            addBodyButton.Size = new Size(84, 23);
+            addBodyButton.TabIndex = 27;
+            addBodyButton.Text = "Add Body";
+            addBodyButton.UseVisualStyleBackColor = true;
+            addBodyButton.Click += addBodyEditButton_Click;
             // 
             // addFaceButton
             // 
-            this.addFaceButton.Location = new System.Drawing.Point(448, 140);
-            this.addFaceButton.Name = "addFaceButton";
-            this.addFaceButton.Size = new System.Drawing.Size(84, 23);
-            this.addFaceButton.TabIndex = 28;
-            this.addFaceButton.Text = "Add Face";
-            this.addFaceButton.UseVisualStyleBackColor = true;
-            this.addFaceButton.Click += new System.EventHandler(this.addFaceButton_Click);
+            addFaceButton.Location = new Point(448, 140);
+            addFaceButton.Name = "addFaceButton";
+            addFaceButton.Size = new Size(84, 23);
+            addFaceButton.TabIndex = 28;
+            addFaceButton.Text = "Add Face";
+            addFaceButton.UseVisualStyleBackColor = true;
+            addFaceButton.Click += addFaceButton_Click;
             // 
             // currentEditLabel
             // 
-            this.currentEditLabel.AutoSize = true;
-            this.currentEditLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.currentEditLabel.Location = new System.Drawing.Point(4, 412);
-            this.currentEditLabel.Name = "currentEditLabel";
-            this.currentEditLabel.Size = new System.Drawing.Size(447, 30);
-            this.currentEditLabel.TabIndex = 29;
-            this.currentEditLabel.Text = "Please select a texture set to start importing";
+            currentEditLabel.AutoSize = true;
+            currentEditLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            currentEditLabel.Location = new Point(4, 412);
+            currentEditLabel.Name = "currentEditLabel";
+            currentEditLabel.Size = new Size(447, 30);
+            currentEditLabel.TabIndex = 29;
+            currentEditLabel.Text = "Please select a texture set to start importing";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(4, 172);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(155, 30);
-            this.label6.TabIndex = 30;
-            this.label6.Text = "Texture set list";
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            label6.Location = new Point(4, 172);
+            label6.Name = "label6";
+            label6.Size = new Size(155, 30);
+            label6.TabIndex = 30;
+            label6.Text = "Texture set list";
             // 
             // removeSelection
             // 
-            this.removeSelection.Location = new System.Drawing.Point(4, 388);
-            this.removeSelection.Name = "removeSelection";
-            this.removeSelection.Size = new System.Drawing.Size(112, 23);
-            this.removeSelection.TabIndex = 31;
-            this.removeSelection.Text = "Remove Selection From List";
-            this.removeSelection.UseVisualStyleBackColor = true;
-            this.removeSelection.Click += new System.EventHandler(this.removeSelectionButton_Click);
+            removeSelection.Location = new Point(4, 388);
+            removeSelection.Name = "removeSelection";
+            removeSelection.Size = new Size(112, 23);
+            removeSelection.TabIndex = 31;
+            removeSelection.Text = "Remove Selection From List";
+            removeSelection.UseVisualStyleBackColor = true;
+            removeSelection.Click += removeSelectionButton_Click;
             // 
             // clearList
             // 
-            this.clearList.Location = new System.Drawing.Point(116, 388);
-            this.clearList.Name = "clearList";
-            this.clearList.Size = new System.Drawing.Size(72, 23);
-            this.clearList.TabIndex = 32;
-            this.clearList.Text = "Clear List";
-            this.clearList.UseVisualStyleBackColor = true;
-            this.clearList.Click += new System.EventHandler(this.clearList_Click);
+            clearList.Location = new Point(116, 388);
+            clearList.Name = "clearList";
+            clearList.Size = new Size(72, 23);
+            clearList.TabIndex = 32;
+            clearList.Text = "Clear List";
+            clearList.UseVisualStyleBackColor = true;
+            clearList.Click += clearList_Click;
             // 
             // addCustomPathButton
             // 
-            this.addCustomPathButton.Location = new System.Drawing.Point(448, 168);
-            this.addCustomPathButton.Name = "addCustomPathButton";
-            this.addCustomPathButton.Size = new System.Drawing.Size(84, 23);
-            this.addCustomPathButton.TabIndex = 33;
-            this.addCustomPathButton.Text = "Custom Path";
-            this.addCustomPathButton.UseVisualStyleBackColor = true;
-            this.addCustomPathButton.Click += new System.EventHandler(this.addCustomPathButton_Click);
+            addCustomPathButton.Location = new Point(448, 168);
+            addCustomPathButton.Name = "addCustomPathButton";
+            addCustomPathButton.Size = new Size(84, 23);
+            addCustomPathButton.TabIndex = 33;
+            addCustomPathButton.Text = "Custom Path";
+            addCustomPathButton.UseVisualStyleBackColor = true;
+            addCustomPathButton.Click += addCustomPathButton_Click;
             // 
             // moveUpButton
             // 
-            this.moveUpButton.Location = new System.Drawing.Point(188, 388);
-            this.moveUpButton.Name = "moveUpButton";
-            this.moveUpButton.Size = new System.Drawing.Size(68, 23);
-            this.moveUpButton.TabIndex = 34;
-            this.moveUpButton.Text = "Move Up";
-            this.moveUpButton.UseVisualStyleBackColor = true;
-            this.moveUpButton.Click += new System.EventHandler(this.moveUpButton_Click);
+            moveUpButton.Location = new Point(188, 388);
+            moveUpButton.Name = "moveUpButton";
+            moveUpButton.Size = new Size(68, 23);
+            moveUpButton.TabIndex = 34;
+            moveUpButton.Text = "Move Up";
+            moveUpButton.UseVisualStyleBackColor = true;
+            moveUpButton.Click += moveUpButton_Click;
             // 
             // moveDownButton
             // 
-            this.moveDownButton.Location = new System.Drawing.Point(256, 388);
-            this.moveDownButton.Name = "moveDownButton";
-            this.moveDownButton.Size = new System.Drawing.Size(80, 23);
-            this.moveDownButton.TabIndex = 35;
-            this.moveDownButton.Text = "Move Down";
-            this.moveDownButton.UseVisualStyleBackColor = true;
-            this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
+            moveDownButton.Location = new Point(256, 388);
+            moveDownButton.Name = "moveDownButton";
+            moveDownButton.Size = new Size(80, 23);
+            moveDownButton.TabIndex = 35;
+            moveDownButton.Text = "Move Down";
+            moveDownButton.UseVisualStyleBackColor = true;
+            moveDownButton.Click += moveDownButton_Click;
             // 
             // ffxivRefreshTimer
             // 
-            this.ffxivRefreshTimer.Enabled = true;
-            this.ffxivRefreshTimer.Interval = 10000;
-            this.ffxivRefreshTimer.Tick += new System.EventHandler(this.ffxivRefreshTimer_Tick);
+            ffxivRefreshTimer.Enabled = true;
+            ffxivRefreshTimer.Interval = 10000;
+            ffxivRefreshTimer.Tick += ffxivRefreshTimer_Tick;
             // 
             // generationCooldown
             // 
-            this.generationCooldown.Interval = 1000;
-            this.generationCooldown.Tick += new System.EventHandler(this.generationCooldown_Tick);
+            generationCooldown.Interval = 1000;
+            generationCooldown.Tick += generationCooldown_Tick;
             // 
             // generationType
             // 
-            this.generationType.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generationType.FormattingEnabled = true;
-            this.generationType.Items.AddRange(new object[] {
-            "Detailed",
-            "Simple",
-            "Dropdown",
-            "Group Is Checkbox"});
-            this.generationType.Location = new System.Drawing.Point(82, 607);
-            this.generationType.Name = "generationType";
-            this.generationType.Size = new System.Drawing.Size(106, 23);
-            this.generationType.TabIndex = 36;
-            this.generationType.Text = "Detailed";
-            this.generationType.SelectedIndexChanged += new System.EventHandler(this.generationType_SelectedIndexChanged);
+            generationType.Anchor = AnchorStyles.Bottom;
+            generationType.FormattingEnabled = true;
+            generationType.Items.AddRange(new object[] { "Detailed", "Simple", "Dropdown", "Group Is Checkbox" });
+            generationType.Location = new Point(82, 607);
+            generationType.Name = "generationType";
+            generationType.Size = new Size(106, 23);
+            generationType.TabIndex = 36;
+            generationType.Text = "Detailed";
+            generationType.SelectedIndexChanged += generationType_SelectedIndexChanged;
             // 
             // label5
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 611);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(71, 15);
-            this.label5.TabIndex = 37;
-            this.label5.Text = "Choice Type";
+            label5.Anchor = AnchorStyles.Bottom;
+            label5.AutoSize = true;
+            label5.Location = new Point(4, 611);
+            label5.Name = "label5";
+            label5.Size = new Size(71, 15);
+            label5.TabIndex = 37;
+            label5.Text = "Choice Type";
             // 
             // exportProgress
             // 
-            this.exportProgress.Location = new System.Drawing.Point(0, 604);
-            this.exportProgress.Name = "exportProgress";
-            this.exportProgress.Size = new System.Drawing.Size(536, 32);
-            this.exportProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.exportProgress.TabIndex = 38;
-            this.exportProgress.Visible = false;
+            exportProgress.Location = new Point(0, 604);
+            exportProgress.Name = "exportProgress";
+            exportProgress.Size = new Size(536, 32);
+            exportProgress.Style = ProgressBarStyle.Continuous;
+            exportProgress.TabIndex = 38;
+            exportProgress.Visible = false;
             // 
             // bakeNormals
             // 
-            this.bakeNormals.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.bakeNormals.AutoSize = true;
-            this.bakeNormals.Location = new System.Drawing.Point(192, 611);
-            this.bakeNormals.Name = "bakeNormals";
-            this.bakeNormals.Size = new System.Drawing.Size(116, 19);
-            this.bakeNormals.TabIndex = 39;
-            this.bakeNormals.Text = "Generate Normal";
-            this.bakeNormals.UseVisualStyleBackColor = true;
-            this.bakeNormals.CheckedChanged += new System.EventHandler(this.bakeMissingNormalsCheckbox_CheckedChanged);
+            bakeNormals.Anchor = AnchorStyles.Bottom;
+            bakeNormals.AutoSize = true;
+            bakeNormals.Location = new Point(192, 611);
+            bakeNormals.Name = "bakeNormals";
+            bakeNormals.Size = new Size(116, 19);
+            bakeNormals.TabIndex = 39;
+            bakeNormals.Text = "Generate Normal";
+            bakeNormals.UseVisualStyleBackColor = true;
+            bakeNormals.CheckedChanged += bakeMissingNormalsCheckbox_CheckedChanged;
             // 
             // generateMultiCheckBox
             // 
-            this.generateMultiCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.generateMultiCheckBox.AutoSize = true;
-            this.generateMultiCheckBox.Location = new System.Drawing.Point(308, 611);
-            this.generateMultiCheckBox.Name = "generateMultiCheckBox";
-            this.generateMultiCheckBox.Size = new System.Drawing.Size(104, 19);
-            this.generateMultiCheckBox.TabIndex = 40;
-            this.generateMultiCheckBox.Text = "Generate Multi";
-            this.generateMultiCheckBox.UseVisualStyleBackColor = true;
-            this.generateMultiCheckBox.CheckedChanged += new System.EventHandler(this.generateMultiCheckBox_CheckedChanged);
+            generateMultiCheckBox.Anchor = AnchorStyles.Bottom;
+            generateMultiCheckBox.AutoSize = true;
+            generateMultiCheckBox.Location = new Point(308, 611);
+            generateMultiCheckBox.Name = "generateMultiCheckBox";
+            generateMultiCheckBox.Size = new Size(104, 19);
+            generateMultiCheckBox.TabIndex = 40;
+            generateMultiCheckBox.Text = "Generate Multi";
+            generateMultiCheckBox.UseVisualStyleBackColor = true;
+            generateMultiCheckBox.CheckedChanged += generateMultiCheckBox_CheckedChanged;
             // 
             // mask
             // 
-            this.mask.CurrentPath = null;
-            this.mask.Enabled = false;
-            this.mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.mask.Index = -1;
-            this.mask.Location = new System.Drawing.Point(4, 576);
-            this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.mask.MinimumSize = new System.Drawing.Size(300, 28);
-            this.mask.Name = "mask";
-            this.mask.Size = new System.Drawing.Size(528, 28);
-            this.mask.TabIndex = 41;
-            this.helperToolTip.SetToolTip(this.mask, "Used to restrict where generated normal maps actually use generated normals.");
-            this.mask.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.mask.Enter += new System.EventHandler(this.multi_Enter);
-            this.mask.Leave += new System.EventHandler(this.multi_Leave);
+            mask.CurrentPath = null;
+            mask.Enabled = false;
+            mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            mask.Index = -1;
+            mask.Location = new Point(4, 576);
+            mask.Margin = new Padding(4, 3, 4, 3);
+            mask.MinimumSize = new Size(300, 28);
+            mask.Name = "mask";
+            mask.Size = new Size(528, 28);
+            mask.TabIndex = 41;
+            helperToolTip.SetToolTip(mask, "Used to restrict where generated normal maps actually use generated normals.");
+            mask.OnFileSelected += multi_OnFileSelected;
+            mask.Enter += multi_Enter;
+            mask.Leave += multi_Leave;
             // 
             // discordButton
             // 
-            this.discordButton.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.discordButton.ForeColor = System.Drawing.Color.White;
-            this.discordButton.Location = new System.Drawing.Point(388, 0);
-            this.discordButton.Name = "discordButton";
-            this.discordButton.Size = new System.Drawing.Size(75, 23);
-            this.discordButton.TabIndex = 42;
-            this.discordButton.Text = "Discord";
-            this.discordButton.UseVisualStyleBackColor = false;
-            this.discordButton.Click += new System.EventHandler(this.discordButton_Click);
+            discordButton.BackColor = Color.MediumSlateBlue;
+            discordButton.ForeColor = Color.White;
+            discordButton.Location = new Point(388, 0);
+            discordButton.Name = "discordButton";
+            discordButton.Size = new Size(75, 23);
+            discordButton.TabIndex = 42;
+            discordButton.Text = "Discord";
+            discordButton.UseVisualStyleBackColor = false;
+            discordButton.Click += discordButton_Click;
             // 
             // faceExtraList
             // 
-            this.faceExtraList.Enabled = false;
-            this.faceExtraList.FormattingEnabled = true;
-            this.faceExtraList.Location = new System.Drawing.Point(228, 140);
-            this.faceExtraList.Name = "faceExtraList";
-            this.faceExtraList.Size = new System.Drawing.Size(48, 23);
-            this.faceExtraList.TabIndex = 43;
-            this.faceExtraList.Text = "999";
+            faceExtraList.Enabled = false;
+            faceExtraList.FormattingEnabled = true;
+            faceExtraList.Location = new Point(228, 140);
+            faceExtraList.Name = "faceExtraList";
+            faceExtraList.Size = new Size(48, 23);
+            faceExtraList.TabIndex = 43;
+            faceExtraList.Text = "999";
             // 
             // glow
             // 
-            this.glow.CurrentPath = null;
-            this.glow.Enabled = false;
-            this.glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            this.glow.Index = -1;
-            this.glow.Location = new System.Drawing.Point(4, 544);
-            this.glow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.glow.MinimumSize = new System.Drawing.Size(300, 28);
-            this.glow.Name = "glow";
-            this.glow.Size = new System.Drawing.Size(528, 28);
-            this.glow.TabIndex = 45;
-            this.helperToolTip.SetToolTip(this.glow, "Used to make the character glow. Use a transparent overlay where you want glow to" +
-        " happen. Similar to a using an overlay.");
-            this.glow.OnFileSelected += new System.EventHandler(this.multi_OnFileSelected);
-            this.glow.Enter += new System.EventHandler(this.multi_Enter);
-            this.glow.Leave += new System.EventHandler(this.multi_Leave);
+            glow.CurrentPath = null;
+            glow.Enabled = false;
+            glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            glow.Index = -1;
+            glow.Location = new Point(4, 544);
+            glow.Margin = new Padding(4, 3, 4, 3);
+            glow.MinimumSize = new Size(300, 28);
+            glow.Name = "glow";
+            glow.Size = new Size(528, 28);
+            glow.TabIndex = 45;
+            helperToolTip.SetToolTip(glow, "Used to make the character glow. Use a transparent overlay where you want glow to happen. Similar to a using an overlay.");
+            glow.OnFileSelected += multi_OnFileSelected;
+            glow.Enter += multi_Enter;
+            glow.Leave += multi_Leave;
             // 
             // finalizeButton
             // 
-            this.finalizeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.finalizeButton.Location = new System.Drawing.Point(468, 608);
-            this.finalizeButton.Name = "finalizeButton";
-            this.finalizeButton.Size = new System.Drawing.Size(64, 24);
-            this.finalizeButton.TabIndex = 46;
-            this.finalizeButton.Text = "Finished";
-            this.finalizeButton.UseVisualStyleBackColor = true;
-            this.finalizeButton.Click += new System.EventHandler(this.finalizeButton_Click);
+            finalizeButton.Anchor = AnchorStyles.Bottom;
+            finalizeButton.Location = new Point(468, 608);
+            finalizeButton.Name = "finalizeButton";
+            finalizeButton.Size = new Size(64, 24);
+            finalizeButton.TabIndex = 46;
+            finalizeButton.Text = "Finished";
+            finalizeButton.UseVisualStyleBackColor = true;
+            finalizeButton.Click += finalizeButton_Click;
             // 
             // auraFaceScalesDropdown
             // 
-            this.auraFaceScalesDropdown.FormattingEnabled = true;
-            this.auraFaceScalesDropdown.Items.AddRange(new object[] {
-            "Vanilla Scales",
-            "Scaleless Vanilla",
-            "Scaleless Varied"});
-            this.auraFaceScalesDropdown.Location = new System.Drawing.Point(276, 140);
-            this.auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
-            this.auraFaceScalesDropdown.Size = new System.Drawing.Size(108, 23);
-            this.auraFaceScalesDropdown.TabIndex = 48;
-            this.auraFaceScalesDropdown.Text = "Vanilla Scales";
+            auraFaceScalesDropdown.FormattingEnabled = true;
+            auraFaceScalesDropdown.Items.AddRange(new object[] { "Vanilla Scales", "Scaleless Vanilla", "Scaleless Varied" });
+            auraFaceScalesDropdown.Location = new Point(276, 140);
+            auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
+            auraFaceScalesDropdown.Size = new Size(108, 23);
+            auraFaceScalesDropdown.TabIndex = 48;
+            auraFaceScalesDropdown.Text = "Vanilla Scales";
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.Lavender;
-            this.panel1.Controls.Add(this.uniqueAuRa);
-            this.panel1.Location = new System.Drawing.Point(0, 108);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(540, 30);
-            this.panel1.TabIndex = 49;
+            panel1.BackColor = Color.Lavender;
+            panel1.Controls.Add(uniqueAuRa);
+            panel1.Location = new Point(0, 108);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(540, 30);
+            panel1.TabIndex = 49;
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.Honeydew;
-            this.panel2.Controls.Add(this.asymCheckbox);
-            this.panel2.Location = new System.Drawing.Point(-4, 136);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(540, 30);
-            this.panel2.TabIndex = 50;
+            panel2.BackColor = Color.Honeydew;
+            panel2.Controls.Add(asymCheckbox);
+            panel2.Location = new Point(-4, 136);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(540, 30);
+            panel2.TabIndex = 50;
             // 
             // exportLabel
             // 
-            this.exportLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.exportLabel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportLabel.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.exportLabel.ForeColor = System.Drawing.Color.Snow;
-            this.exportLabel.Location = new System.Drawing.Point(0, 264);
-            this.exportLabel.Name = "exportLabel";
-            this.exportLabel.Size = new System.Drawing.Size(536, 65);
-            this.exportLabel.TabIndex = 0;
-            this.exportLabel.Text = "Exporting";
-            this.exportLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            exportLabel.Anchor = AnchorStyles.None;
+            exportLabel.BackColor = SystemColors.GrayText;
+            exportLabel.Font = new Font("Segoe UI", 36F, FontStyle.Bold);
+            exportLabel.ForeColor = Color.Snow;
+            exportLabel.Location = new Point(0, 264);
+            exportLabel.Name = "exportLabel";
+            exportLabel.Size = new Size(536, 65);
+            exportLabel.TabIndex = 0;
+            exportLabel.Text = "Exporting";
+            exportLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // exportPanel
             // 
-            this.exportPanel.BackColor = System.Drawing.SystemColors.GrayText;
-            this.exportPanel.Controls.Add(this.exportLabel);
-            this.exportPanel.Location = new System.Drawing.Point(0, 0);
-            this.exportPanel.Name = "exportPanel";
-            this.exportPanel.Size = new System.Drawing.Size(536, 608);
-            this.exportPanel.TabIndex = 44;
-            this.exportPanel.Visible = false;
+            exportPanel.BackColor = SystemColors.GrayText;
+            exportPanel.Controls.Add(exportLabel);
+            exportPanel.Location = new Point(0, 0);
+            exportPanel.Name = "exportPanel";
+            exportPanel.Size = new Size(536, 608);
+            exportPanel.TabIndex = 44;
+            exportPanel.Visible = false;
             // 
             // listenForFiles
             // 
-            this.listenForFiles.WorkerSupportsCancellation = true;
-            this.listenForFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.listenForFiles_DoWork);
+            listenForFiles.WorkerSupportsCancellation = true;
+            listenForFiles.DoWork += listenForFiles_DoWork;
             // 
             // modVersionTextBox
             // 
-            this.modVersionTextBox.Location = new System.Drawing.Point(328, 28);
-            this.modVersionTextBox.Name = "modVersionTextBox";
-            this.modVersionTextBox.Size = new System.Drawing.Size(40, 23);
-            this.modVersionTextBox.TabIndex = 20;
-            this.modVersionTextBox.Text = "1.0.0";
-            this.modVersionTextBox.TextChanged += new System.EventHandler(this.modDescriptionTextBox_TextChanged);
+            modVersionTextBox.Location = new Point(328, 28);
+            modVersionTextBox.Name = "modVersionTextBox";
+            modVersionTextBox.Size = new Size(40, 23);
+            modVersionTextBox.TabIndex = 20;
+            modVersionTextBox.Text = "1.0.0";
+            modVersionTextBox.TextChanged += modDescriptionTextBox_TextChanged;
             // 
             // ipBox
             // 
-            this.ipBox.Location = new System.Drawing.Point(444, 28);
-            this.ipBox.Name = "ipBox";
-            this.ipBox.Size = new System.Drawing.Size(88, 23);
-            this.ipBox.TabIndex = 51;
-            this.ipBox.Text = "0.0.0.0";
-            this.ipBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ipBox_KeyUp);
-            this.ipBox.Leave += new System.EventHandler(this.ipBox_TextChanged);
+            ipBox.Location = new Point(444, 28);
+            ipBox.Name = "ipBox";
+            ipBox.Size = new Size(88, 23);
+            ipBox.TabIndex = 51;
+            ipBox.Text = "0.0.0.0";
+            ipBox.KeyUp += ipBox_KeyUp;
+            ipBox.Leave += ipBox_TextChanged;
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(376, 32);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(61, 15);
-            this.label8.TabIndex = 52;
-            this.label8.Text = "Remote IP";
+            label8.AutoSize = true;
+            label8.Location = new Point(376, 32);
+            label8.Name = "label8";
+            label8.Size = new Size(61, 15);
+            label8.TabIndex = 52;
+            label8.Text = "Remote IP";
             // 
             // processGeneration
             // 
-            this.processGeneration.WorkerReportsProgress = true;
-            this.processGeneration.WorkerSupportsCancellation = true;
-            this.processGeneration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.processGeneration_DoWork);
-            this.processGeneration.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.processGeneration_ProgressChanged);
-            this.processGeneration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.processGeneration_RunWorkerCompleted);
+            processGeneration.WorkerReportsProgress = true;
+            processGeneration.WorkerSupportsCancellation = true;
+            processGeneration.DoWork += processGeneration_DoWork;
+            processGeneration.ProgressChanged += processGeneration_ProgressChanged;
+            processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(537, 636);
-            this.Controls.Add(this.generateButton);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.ipBox);
-            this.Controls.Add(this.addFaceButton);
-            this.Controls.Add(this.auraFaceScalesDropdown);
-            this.Controls.Add(this.finalizeButton);
-            this.Controls.Add(this.glow);
-            this.Controls.Add(this.faceExtraList);
-            this.Controls.Add(this.discordButton);
-            this.Controls.Add(this.mask);
-            this.Controls.Add(this.generateMultiCheckBox);
-            this.Controls.Add(this.bakeNormals);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.generationType);
-            this.Controls.Add(this.moveDownButton);
-            this.Controls.Add(this.moveUpButton);
-            this.Controls.Add(this.addCustomPathButton);
-            this.Controls.Add(this.clearList);
-            this.Controls.Add(this.removeSelection);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.currentEditLabel);
-            this.Controls.Add(this.addBodyButton);
-            this.Controls.Add(this.multi);
-            this.Controls.Add(this.normal);
-            this.Controls.Add(this.diffuse);
-            this.Controls.Add(this.textureList);
-            this.Controls.Add(this.facePart);
-            this.Controls.Add(this.donateButton);
-            this.Controls.Add(this.faceTypeList);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.subRaceList);
-            this.Controls.Add(this.genderList);
-            this.Controls.Add(this.modDescriptionTextBox);
-            this.Controls.Add(this.raceList);
-            this.Controls.Add(this.tailList);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.baseBodyList);
-            this.Controls.Add(this.modNameTextBox);
-            this.Controls.Add(this.modVersionTextBox);
-            this.Controls.Add(this.nameLabel);
-            this.Controls.Add(this.modAuthorTextBox);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.modWebsiteTextBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.exportProgress);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.exportPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
-            this.MaximizeBox = false;
-            this.Name = "MainWindow";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FFXIV Loose Texture Compiler";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.materialListContextMenu.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.exportPanel.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(537, 636);
+            Controls.Add(generateButton);
+            Controls.Add(label8);
+            Controls.Add(ipBox);
+            Controls.Add(addFaceButton);
+            Controls.Add(auraFaceScalesDropdown);
+            Controls.Add(finalizeButton);
+            Controls.Add(glow);
+            Controls.Add(faceExtraList);
+            Controls.Add(discordButton);
+            Controls.Add(mask);
+            Controls.Add(generateMultiCheckBox);
+            Controls.Add(bakeNormals);
+            Controls.Add(label5);
+            Controls.Add(generationType);
+            Controls.Add(moveDownButton);
+            Controls.Add(moveUpButton);
+            Controls.Add(addCustomPathButton);
+            Controls.Add(clearList);
+            Controls.Add(removeSelection);
+            Controls.Add(label6);
+            Controls.Add(currentEditLabel);
+            Controls.Add(addBodyButton);
+            Controls.Add(multi);
+            Controls.Add(normal);
+            Controls.Add(diffuse);
+            Controls.Add(textureList);
+            Controls.Add(facePart);
+            Controls.Add(donateButton);
+            Controls.Add(faceTypeList);
+            Controls.Add(label4);
+            Controls.Add(subRaceList);
+            Controls.Add(genderList);
+            Controls.Add(modDescriptionTextBox);
+            Controls.Add(raceList);
+            Controls.Add(tailList);
+            Controls.Add(label3);
+            Controls.Add(baseBodyList);
+            Controls.Add(modNameTextBox);
+            Controls.Add(modVersionTextBox);
+            Controls.Add(nameLabel);
+            Controls.Add(modAuthorTextBox);
+            Controls.Add(label1);
+            Controls.Add(modWebsiteTextBox);
+            Controls.Add(label2);
+            Controls.Add(menuStrip1);
+            Controls.Add(exportProgress);
+            Controls.Add(panel1);
+            Controls.Add(panel2);
+            Controls.Add(exportPanel);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip1;
+            MaximizeBox = false;
+            Name = "MainWindow";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "FFXIV Loose Texture Compiler";
+            FormClosing += MainWindow_FormClosing;
+            Load += MainForm_Load;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            materialListContextMenu.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            exportPanel.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
