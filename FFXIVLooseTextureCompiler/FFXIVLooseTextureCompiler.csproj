@@ -41,7 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LooseTextureCompilerCore\LooseTextureCompilerCore.csproj" />
+    <ProjectReference Include="..\LooseTextureCompilerCore\LooseTextureCompilerCore.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

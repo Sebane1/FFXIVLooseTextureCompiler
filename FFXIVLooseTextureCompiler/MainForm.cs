@@ -1479,7 +1479,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale"));
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale"), ImageFormat.Png);
                 MessageBox.Show("Multi successfully converted to grayscale", VersionText);
             }
         }
@@ -1496,11 +1496,34 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void convertImageToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+
+        private void convertImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMaps(openFileDialog.FileName);
+                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
+        private void convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.ConvertOldEyeMapToDawntrailEyeMaps(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1543,7 +1566,24 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+        private void convertImageToDawntrailEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
 
+                }
+            }
+        }
         private void convertFolderToEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
@@ -1570,10 +1610,10 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."));
-                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."));
-                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."));
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."));
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ImageFormat.Png);
+                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ImageFormat.Png);
+                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ImageFormat.Png);
+                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ImageFormat.Png);
                 MessageBox.Show("Image successfully split into seperate channels", VersionText);
             }
         }
@@ -1589,8 +1629,8 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."));
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."));
+                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ImageFormat.Png);
+                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ImageFormat.Png);
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
@@ -1609,7 +1649,7 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show("Please select where you want to save the conversion", VersionText);
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                         ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
-                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName);
+                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                     }
                 }
             }
@@ -1894,7 +1934,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
                 ImageManipulation.GenerateSkinMulti(image)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -1906,7 +1946,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
                 ImageManipulation.GenerateFaceMulti(image, false)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -1918,7 +1958,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
                 ImageManipulation.GenerateFaceMulti(image, true)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -1995,13 +2035,13 @@ namespace FFXIVLooseTextureCompiler {
                 Graphics graphics = Graphics.FromImage(blank);
                 graphics.Clear(Color.White);
                 Bitmap blank2 = new Bitmap(blank);
-                Bitmap clthingMultiConversion = ImageManipulation.MergeGrayscalesToARGB(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
+                Bitmap clothingMultiConversion = ImageManipulation.MergeGrayscalesToARGB(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
 
                 clothingMultiGreyscale.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np1"), ImageFormat.Png);
                 clothingMultiGreyscale2.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np2"), ImageFormat.Png);
 
                 clothingNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
-                clthingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                clothingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
                 MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }

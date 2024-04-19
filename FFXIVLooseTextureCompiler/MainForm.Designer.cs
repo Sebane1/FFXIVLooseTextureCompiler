@@ -73,6 +73,8 @@
             convertImageToEyeMultiToolStripMenuItem = new ToolStripMenuItem();
             convertImagesToAsymEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
             multiMapToGrayscaleToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
             hairDiffuseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
@@ -96,6 +98,7 @@
             textureToLTCTToolStripMenuItem = new ToolStripMenuItem();
             pNGToLTCTToolStripMenuItem = new ToolStripMenuItem();
             convertLTCTToPNGToolStripMenuItem = new ToolStripMenuItem();
+            convertStandaloneTextureToolStripMenuItem1 = new ToolStripMenuItem();
             configToolStripMenuItem = new ToolStripMenuItem();
             changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
@@ -486,7 +489,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, devToolsToolStripMenuItem, convertStandaloneTextureToolStripMenuItem1 });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -508,62 +511,62 @@
             // biboToGen3ToolStripMenuItem
             // 
             biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            biboToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen3ToolStripMenuItem.Size = new Size(180, 22);
             biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             biboToGen3ToolStripMenuItem.Click += biboToGen3ToolStripMenuItem_Click;
             // 
             // biboToGen2ToolStripMenuItem
             // 
             biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            biboToGen2ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen2ToolStripMenuItem.Size = new Size(180, 22);
             biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             biboToGen2ToolStripMenuItem.Click += biboToGen2ToolStripMenuItem_Click;
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            gen3ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen3ToBiboToolStripMenuItem.Size = new Size(180, 22);
             gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             gen3ToBiboToolStripMenuItem.Click += gen3ToBiboToolStripMenuItem_Click;
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            gen3ToGen2ToolStripMenuItem1.Size = new Size(166, 22);
+            gen3ToGen2ToolStripMenuItem1.Size = new Size(180, 22);
             gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             gen3ToGen2ToolStripMenuItem1.Click += gen3ToGen2ToolStripMenuItem_Click;
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            gen2ToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToGen3ToolStripMenuItem.Size = new Size(180, 22);
             gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             gen2ToGen3ToolStripMenuItem.Click += gen2ToGen3ToolStripMenuItem_Click;
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            gen2ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToBiboToolStripMenuItem.Size = new Size(180, 22);
             gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             gen2ToBiboToolStripMenuItem.Click += gen2ToBiboToolStripMenuItem_Click;
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            otopopToVanillaToolStripMenuItem.Size = new Size(166, 22);
+            otopopToVanillaToolStripMenuItem.Size = new Size(180, 22);
             otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             otopopToVanillaToolStripMenuItem.Click += otopopToVanillaToolStripMenuItem_Click;
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            vanillaToOtopopToolStripMenuItem.Size = new Size(166, 22);
+            vanillaToOtopopToolStripMenuItem.Size = new Size(180, 22);
             vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             vanillaToOtopopToolStripMenuItem.Click += vanillaToOtopopToolStripMenuItem_Click;
             // 
             // eyeToolsToolStripMenuItem
             // 
-            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertImageToEyeMultiToolStripMenuItem, convertImagesToAsymEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, multiMapToGrayscaleToolStripMenuItem });
+            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertImageToEyeMultiToolStripMenuItem, convertImagesToAsymEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertLegacyEyeMapToDawntrailMapToolStripMenuItem, multiMapToGrayscaleToolStripMenuItem });
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
             eyeToolsToolStripMenuItem.Size = new Size(299, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
@@ -571,28 +574,42 @@
             // convertImageToEyeMultiToolStripMenuItem
             // 
             convertImageToEyeMultiToolStripMenuItem.Name = "convertImageToEyeMultiToolStripMenuItem";
-            convertImageToEyeMultiToolStripMenuItem.Size = new Size(258, 22);
+            convertImageToEyeMultiToolStripMenuItem.Size = new Size(299, 22);
             convertImageToEyeMultiToolStripMenuItem.Text = "Convert Image To Eye Maps";
             convertImageToEyeMultiToolStripMenuItem.Click += convertImageToEyeMultiToolStripMenuItem_Click;
             // 
             // convertImagesToAsymEyeMapsToolStripMenuItem
             // 
             convertImagesToAsymEyeMapsToolStripMenuItem.Name = "convertImagesToAsymEyeMapsToolStripMenuItem";
-            convertImagesToAsymEyeMapsToolStripMenuItem.Size = new Size(258, 22);
+            convertImagesToAsymEyeMapsToolStripMenuItem.Size = new Size(299, 22);
             convertImagesToAsymEyeMapsToolStripMenuItem.Text = "Convert Images To Asym Eye Maps";
             convertImagesToAsymEyeMapsToolStripMenuItem.Click += convertImagesToAsymEyeMapsToolStripMenuItem_Click;
             // 
             // convertFolderToEyeMapsToolStripMenuItem
             // 
             convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
-            convertFolderToEyeMapsToolStripMenuItem.Size = new Size(258, 22);
+            convertFolderToEyeMapsToolStripMenuItem.Size = new Size(299, 22);
             convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
             convertFolderToEyeMapsToolStripMenuItem.Click += convertFolderToEyeMapsToolStripMenuItem_Click;
+            // 
+            // convertImageToDawntrailEyeMapsToolStripMenuItem
+            // 
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Name = "convertImageToDawntrailEyeMapsToolStripMenuItem";
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Size = new Size(299, 22);
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Text = "Convert Image To Dawntrail Eye Maps";
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Click += convertImageToDawntrailEyeMapsToolStripMenuItem_Click;
+            // 
+            // convertLegacyEyeMapToDawntrailMapToolStripMenuItem
+            // 
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Name = "convertLegacyEyeMapToDawntrailMapToolStripMenuItem";
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Size = new Size(299, 22);
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Text = "Convert Legacy Eye Map To Dawntrail Map";
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Click += convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click;
             // 
             // multiMapToGrayscaleToolStripMenuItem
             // 
             multiMapToGrayscaleToolStripMenuItem.Name = "multiMapToGrayscaleToolStripMenuItem";
-            multiMapToGrayscaleToolStripMenuItem.Size = new Size(258, 22);
+            multiMapToGrayscaleToolStripMenuItem.Size = new Size(299, 22);
             multiMapToGrayscaleToolStripMenuItem.Text = "Multi Map To Grayscale";
             multiMapToGrayscaleToolStripMenuItem.Click += multiMapToGrayscaleToolStripMenuItem_Click;
             // 
@@ -749,6 +766,12 @@
             convertLTCTToPNGToolStripMenuItem.Size = new Size(185, 22);
             convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
             convertLTCTToPNGToolStripMenuItem.Click += bulkConvertLTCTToPNGToolStripMenuItem_Click;
+            // 
+            // convertStandaloneTextureToolStripMenuItem1
+            // 
+            convertStandaloneTextureToolStripMenuItem1.Name = "convertStandaloneTextureToolStripMenuItem1";
+            convertStandaloneTextureToolStripMenuItem1.Size = new Size(299, 22);
+            convertStandaloneTextureToolStripMenuItem1.Text = "Convert Standalone Texture";
             // 
             // configToolStripMenuItem
             // 
@@ -1487,6 +1510,9 @@
         private ToolStripMenuItem hairDiffuseToFFXIVHairMapsToolStripMenuItem;
         private ToolStripMenuItem clothingToolsToolStripMenuItem;
         private ToolStripMenuItem convertDiffuseToNormalAndMultiToolStripMenuItem;
+        private ToolStripMenuItem convertImageToDawntrailEyeMapsToolStripMenuItem;
+        private ToolStripMenuItem convertStandaloneTextureToolStripMenuItem1;
+        private ToolStripMenuItem convertLegacyEyeMapToDawntrailMapToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

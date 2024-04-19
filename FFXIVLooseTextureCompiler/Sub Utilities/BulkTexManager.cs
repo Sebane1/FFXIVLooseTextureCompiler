@@ -110,31 +110,8 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             if (folderBrowserDialog.ShowDialog(this) == DialogResult.OK) {
                 foreach (string item in textureList.Items) {
-                    using (var stream = new FileStream(item.ToString(), FileMode.Open, FileAccess.Read)) {
-                        var scratch = PenumbraTexFileParser.Parse(stream);
-                        var rgba = scratch.GetRGBA(out var f).ThrowIfError(f);
-                        RGBAPixels = rgba.Pixels[..(f.Meta.Width * f.Meta.Height * f.Meta.Format.BitsPerPixel() / 8)].ToArray();
-
-                        Bitmap output = new Bitmap(scratch.Meta.Width, scratch.Meta.Height);
-                        Rectangle rect = new Rectangle(0, 0, output.Width, output.Height);
-                        BitmapData bmpData = output.LockBits(rect, ImageLockMode.ReadWrite, output.PixelFormat);
-                        IntPtr ptr = bmpData.Scan0;
-                        for (int i = 0; i < RGBAPixels.Length; i += 4) {
-                            byte R = RGBAPixels[i];
-                            byte G = RGBAPixels[i + 1];
-                            byte B = RGBAPixels[i + 2];
-                            byte A = RGBAPixels[i + 3];
-
-                            RGBAPixels[i] = B;
-                            RGBAPixels[i + 1] = G;
-                            RGBAPixels[i + 2] = R;
-                            RGBAPixels[i + 3] = A;
-
-                        }
-                        System.Runtime.InteropServices.Marshal.Copy(RGBAPixels, 0, ptr, RGBAPixels.Length);
-                        output.UnlockBits(bmpData);
-                        output.Save(Path.Combine(folderBrowserDialog.SelectedPath, Path.GetFileNameWithoutExtension(item) + ".png"));
-                    }
+                    var output = TexLoader.TexToBitmap(item.ToString());
+                    output.Save(Path.Combine(folderBrowserDialog.SelectedPath, Path.GetFileNameWithoutExtension(item) + ".png"), ImageFormat.Png);
                 }
             }
             MessageBox.Show("Bulk Export Complete", Text);

@@ -1,4 +1,5 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class MultiCreator : Form {
@@ -146,7 +147,7 @@ namespace FFXIVLooseTextureCompiler {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Texture Files|*.png;";
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                result.BackgroundImage.Save(saveFileDialog.FileName);
+                result.BackgroundImage.Save(saveFileDialog.FileName, ImageFormat.Png);
                 MessageBox.Show("Texture saved!", Text);
             }
         }
