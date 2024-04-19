@@ -93,15 +93,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
-            if (textureSet.InternalMultiPath != null && textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
-                diffuseLabel.Text = "Internal Normal";
-                normalLabel.Text = "Internal Multi";
-                multiLabel.Text = "Internal Catchlight";
-            } else {
-                diffuseLabel.Text = "Internal Diffuse";
-                normalLabel.Text = "Internal Normal";
-                multiLabel.Text = "Internal Multi";
-            }
+            diffuseLabel.Text = "Internal Diffuse";
+            normalLabel.Text = "Internal Normal";
+            multiLabel.Text = "Internal Multi";
         }
 
         private void groupChoiceType_SelectedIndexChanged(object sender, EventArgs e) {

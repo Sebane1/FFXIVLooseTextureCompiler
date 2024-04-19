@@ -36,7 +36,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (redImage.BackgroundImage != null && greenImage.BackgroundImage != null
                 && blueImage.BackgroundImage != null && alphaImage.BackgroundImage != null) {
-                result.BackgroundImage = ImageManipulation.MergeGrayscalesToARGB(
+                result.BackgroundImage = ImageManipulation.MergeGrayscalesToRGBA(
                    (Bitmap)redImage.BackgroundImage, (Bitmap)greenImage.BackgroundImage,
                    (Bitmap)blueImage.BackgroundImage, (Bitmap)alphaImage.BackgroundImage);
             }
