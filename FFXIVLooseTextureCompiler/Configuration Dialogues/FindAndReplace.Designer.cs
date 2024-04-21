@@ -26,175 +26,175 @@ namespace FFXIVLooseTextureCompiler {
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FindAndReplace));
-            this.acceptChangesButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.replacementString = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.normal = new FFXIVVoicePackCreator.FilePicker();
-            this.multi = new FFXIVVoicePackCreator.FilePicker();
-            this.diffuse = new FFXIVVoicePackCreator.FilePicker();
-            this.mask = new FFXIVVoicePackCreator.FilePicker();
-            this.glow = new FFXIVVoicePackCreator.FilePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.groupTextBox = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
+            acceptChangesButton = new Button();
+            button1 = new Button();
+            label5 = new Label();
+            replacementString = new TextBox();
+            label1 = new Label();
+            normal = new FilePicker();
+            multi = new FilePicker();
+            diffuse = new FilePicker();
+            mask = new FilePicker();
+            glow = new FilePicker();
+            label2 = new Label();
+            groupTextBox = new TextBox();
+            SuspendLayout();
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptChangesButton.Location = new System.Drawing.Point(200, 320);
-            this.acceptChangesButton.Name = "acceptChangesButton";
-            this.acceptChangesButton.Size = new System.Drawing.Size(143, 24);
-            this.acceptChangesButton.TabIndex = 8;
-            this.acceptChangesButton.Text = "Confirm Replaceement";
-            this.acceptChangesButton.UseVisualStyleBackColor = true;
-            this.acceptChangesButton.Click += new System.EventHandler(this.acceptChangesButton_Click);
+            acceptChangesButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            acceptChangesButton.Location = new Point(200, 320);
+            acceptChangesButton.Name = "acceptChangesButton";
+            acceptChangesButton.Size = new Size(143, 24);
+            acceptChangesButton.TabIndex = 8;
+            acceptChangesButton.Text = "Confirm Replaceement";
+            acceptChangesButton.UseVisualStyleBackColor = true;
+            acceptChangesButton.Click += acceptChangesButton_Click;
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(344, 320);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(59, 24);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button1.Location = new Point(344, 320);
+            button1.Name = "button1";
+            button1.Size = new Size(59, 24);
+            button1.TabIndex = 9;
+            button1.Text = "Cancel";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(307, 30);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Find Containing This In Name";
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            label5.Location = new Point(4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(307, 30);
+            label5.TabIndex = 11;
+            label5.Text = "Find Containing This In Name";
             // 
             // replacementString
             // 
-            this.replacementString.Location = new System.Drawing.Point(4, 36);
-            this.replacementString.Name = "replacementString";
-            this.replacementString.Size = new System.Drawing.Size(400, 23);
-            this.replacementString.TabIndex = 10;
-            this.replacementString.TextChanged += new System.EventHandler(this.replacementString_TextChanged);
+            replacementString.Location = new Point(4, 36);
+            replacementString.Name = "replacementString";
+            replacementString.Size = new Size(400, 23);
+            replacementString.TabIndex = 10;
+            replacementString.TextChanged += replacementString_TextChanged;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(4, 120);
-            this.label1.Name = "label1";
-            this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label1.Size = new System.Drawing.Size(371, 30);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Then Replace Desired Files With This";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            label1.Location = new Point(4, 120);
+            label1.Name = "label1";
+            label1.RightToLeft = RightToLeft.Yes;
+            label1.Size = new Size(371, 30);
+            label1.TabIndex = 12;
+            label1.Text = "Then Replace Desired Files With This";
             // 
             // normal
             // 
-            this.normal.CurrentPath = null;
-            this.normal.Filter = null;
-            this.normal.Index = -1;
-            this.normal.Location = new System.Drawing.Point(5, 190);
-            this.normal.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.normal.MinimumSize = new System.Drawing.Size(300, 28);
-            this.normal.Name = "normal";
-            this.normal.Size = new System.Drawing.Size(404, 28);
-            this.normal.TabIndex = 14;
+            normal.CurrentPath = null;
+            normal.Filter = null;
+            normal.Index = -1;
+            normal.Location = new Point(5, 190);
+            normal.Margin = new Padding(4, 3, 4, 3);
+            normal.MinimumSize = new Size(300, 28);
+            normal.Name = "normal";
+            normal.Size = new Size(404, 28);
+            normal.TabIndex = 14;
             // 
             // multi
             // 
-            this.multi.CurrentPath = null;
-            this.multi.Filter = null;
-            this.multi.Index = -1;
-            this.multi.Location = new System.Drawing.Point(5, 222);
-            this.multi.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.multi.MinimumSize = new System.Drawing.Size(300, 28);
-            this.multi.Name = "multi";
-            this.multi.Size = new System.Drawing.Size(404, 28);
-            this.multi.TabIndex = 15;
+            multi.CurrentPath = null;
+            multi.Filter = null;
+            multi.Index = -1;
+            multi.Location = new Point(5, 222);
+            multi.Margin = new Padding(4, 3, 4, 3);
+            multi.MinimumSize = new Size(300, 28);
+            multi.Name = "multi";
+            multi.Size = new Size(404, 28);
+            multi.TabIndex = 15;
             // 
             // diffuse
             // 
-            this.diffuse.CurrentPath = null;
-            this.diffuse.Filter = null;
-            this.diffuse.Index = -1;
-            this.diffuse.Location = new System.Drawing.Point(5, 156);
-            this.diffuse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.diffuse.MinimumSize = new System.Drawing.Size(300, 28);
-            this.diffuse.Name = "diffuse";
-            this.diffuse.Size = new System.Drawing.Size(404, 28);
-            this.diffuse.TabIndex = 16;
+            diffuse.CurrentPath = null;
+            diffuse.Filter = null;
+            diffuse.Index = -1;
+            diffuse.Location = new Point(5, 156);
+            diffuse.Margin = new Padding(4, 3, 4, 3);
+            diffuse.MinimumSize = new Size(300, 28);
+            diffuse.Name = "diffuse";
+            diffuse.Size = new Size(404, 28);
+            diffuse.TabIndex = 16;
             // 
             // mask
             // 
-            this.mask.CurrentPath = null;
-            this.mask.Filter = null;
-            this.mask.Index = -1;
-            this.mask.Location = new System.Drawing.Point(5, 254);
-            this.mask.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.mask.MinimumSize = new System.Drawing.Size(300, 28);
-            this.mask.Name = "mask";
-            this.mask.Size = new System.Drawing.Size(404, 28);
-            this.mask.TabIndex = 17;
+            mask.CurrentPath = null;
+            mask.Filter = null;
+            mask.Index = -1;
+            mask.Location = new Point(5, 254);
+            mask.Margin = new Padding(4, 3, 4, 3);
+            mask.MinimumSize = new Size(300, 28);
+            mask.Name = "mask";
+            mask.Size = new Size(404, 28);
+            mask.TabIndex = 17;
             // 
             // glow
             // 
-            this.glow.CurrentPath = null;
-            this.glow.Filter = null;
-            this.glow.Index = -1;
-            this.glow.Location = new System.Drawing.Point(5, 286);
-            this.glow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.glow.MinimumSize = new System.Drawing.Size(300, 28);
-            this.glow.Name = "glow";
-            this.glow.Size = new System.Drawing.Size(404, 28);
-            this.glow.TabIndex = 18;
+            glow.CurrentPath = null;
+            glow.Filter = null;
+            glow.Index = -1;
+            glow.Location = new Point(5, 286);
+            glow.Margin = new Padding(4, 3, 4, 3);
+            glow.MinimumSize = new Size(300, 28);
+            glow.Name = "glow";
+            glow.Size = new Size(404, 28);
+            glow.TabIndex = 18;
+            glow.Visible = false;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(4, 60);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(194, 30);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "And In This Group";
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            label2.Location = new Point(4, 60);
+            label2.Name = "label2";
+            label2.Size = new Size(194, 30);
+            label2.TabIndex = 19;
+            label2.Text = "And In This Group";
             // 
             // groupTextBox
             // 
-            this.groupTextBox.Location = new System.Drawing.Point(4, 92);
-            this.groupTextBox.Name = "groupTextBox";
-            this.groupTextBox.Size = new System.Drawing.Size(400, 23);
-            this.groupTextBox.TabIndex = 20;
+            groupTextBox.Location = new Point(4, 92);
+            groupTextBox.Name = "groupTextBox";
+            groupTextBox.Size = new Size(400, 23);
+            groupTextBox.TabIndex = 20;
             // 
             // FindAndReplace
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(414, 346);
-            this.Controls.Add(this.groupTextBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.glow);
-            this.Controls.Add(this.mask);
-            this.Controls.Add(this.diffuse);
-            this.Controls.Add(this.multi);
-            this.Controls.Add(this.normal);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.replacementString);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.acceptChangesButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.Name = "FindAndReplace";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Find And Bulk Replace";
-            this.Load += new System.EventHandler(this.CustomPathDialog_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(414, 346);
+            Controls.Add(groupTextBox);
+            Controls.Add(label2);
+            Controls.Add(glow);
+            Controls.Add(mask);
+            Controls.Add(diffuse);
+            Controls.Add(multi);
+            Controls.Add(normal);
+            Controls.Add(label1);
+            Controls.Add(label5);
+            Controls.Add(replacementString);
+            Controls.Add(button1);
+            Controls.Add(acceptChangesButton);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            Name = "FindAndReplace";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Find And Bulk Replace";
+            Load += CustomPathDialog_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

@@ -7,6 +7,7 @@ using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator;
 using LooseTextureCompilerCore.Json;
+using LooseTextureCompilerCore.Racial;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -562,6 +563,8 @@ namespace FFXIVLooseTextureCompiler {
             if (facePart.SelectedIndex == 4) {
                 auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceTypeList.Enabled = subRaceList.Enabled = false;
                 faceExtraList.Enabled = true;
+            } else if (facePart.SelectedIndex == 2) {
+                auraFaceScalesDropdown.Enabled = faceTypeList.Enabled = false;
             } else if (facePart.SelectedIndex == 5) {
                 auraFaceScalesDropdown.Enabled = false;
                 asymCheckbox.Enabled = faceTypeList.Enabled;
@@ -689,7 +692,7 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
                 + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
+                + (facePart.SelectedIndex != 4 && facePart.SelectedIndex != 2 ? faceTypeList.Text : "Multi Face");
             switch (facePart.SelectedIndex) {
                 default:
                     AddFacePaths(textureSet);
@@ -727,6 +730,19 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void AddEyePaths(TextureSet textureSet) {
+            if (asymCheckbox.Checked) {
+                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+                textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+                textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            } else {
+                RaceEyePaths.GetEyeTextureSet(subRaceList.SelectedIndex, Convert.ToBoolean(genderList.SelectedIndex), textureSet);
+            }
+        }
+
+        public void AddEyePathsLegacy(TextureSet textureSet) {
             textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
@@ -1121,7 +1137,7 @@ namespace FFXIVLooseTextureCompiler {
                                 textureSet.InternalNormalPath = textureSet.InternalDiffusePath;
                                 textureSet.InternalDiffusePath = textureSet.InternalDiffusePath.Replace("_n.tex", "_d.tex");
                                 if (File.Exists(textureSet.Normal)) {
-                                    var strings = ImageManipulation.ConvertToEyeMapsDawntrail(textureSet.Normal, null, true);
+                                    var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
                                     textureSet.Diffuse = strings[0];
                                     textureSet.Normal = strings[1];
                                     textureSet.Multi = strings[2];
@@ -1573,7 +1589,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1592,7 +1608,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertOldEyeMapToDawntrailEyeMaps(openFileDialog.FileName);
+                ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1620,7 +1636,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (openFileDialog2.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Please pick a file name for the merged result");
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                        ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName, saveFileDialog.FileName);
+                        ImageManipulation.ConvertImageToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName, saveFileDialog.FileName);
                         MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
                         try {
                             Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1640,7 +1656,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1658,7 +1674,7 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
-                    ImageManipulation.ConvertOldEyeMapToDawntrailEyeMaps(file);
+                    ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file);
                 }
                 MessageBox.Show("Images successfully converted to eye maps", VersionText);
                 try {
@@ -2013,7 +2029,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ConvertToDawntrailSkinMulti(image)
+                ImageManipulation.ConvertDiffuseToDawntrailSkinMulti(image)
                     .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Texture converted to skin multi", VersionText);
             }
@@ -2090,12 +2106,12 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 string multiPath = openFileDialog.FileName;
                 ImageManipulation.LegacyHairMultiToDawntrailMulti(TexLoader.ResolveBitmap(multiPath, true))
-                    .Save(ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ImageFormat.Png); ;
+                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ".png"), ImageFormat.Png); ;
                 MessageBox.Show("Please select legacy hair normal.");
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     ImageManipulation.LegacyHairNormalToDawntrailNormal(TexLoader.ResolveBitmap(multiPath),
                         TexLoader.ResolveBitmap(openFileDialog.FileName))
-                        .Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ImageFormat.Png); ;
+                        .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ".png"), ImageFormat.Png);
                     MessageBox.Show("Hair Maps Converted To FFXIV Maps!", VersionText);
                 }
             }
@@ -2107,7 +2123,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.GenerateClothingMaps(openFileDialog.FileName);
+                ImageManipulation.ClothingDiffuseToClothingMultiAndNormalMaps(openFileDialog.FileName);
                 MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }
