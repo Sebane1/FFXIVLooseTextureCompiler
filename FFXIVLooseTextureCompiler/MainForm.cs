@@ -252,7 +252,7 @@ namespace FFXIVLooseTextureCompiler {
             mainFormSimplified.MainWindow = this;
             GetDefaultMode();
             CheckForCommandArguments();
-            MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n"+
+            MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n" +
                 "You will need a copy of CursedTools from the FFXIV Textools discords 'dev_room' to manually import the exports made by this tool into the benchmark.\r\n\r\n" +
                 "Exports made by this version of Loose Texture Compiler are not compatible with Endwalker or any current version of Penumbra.\r\n\r\n" + "Exports will be done as .png for easy import into CursedTools.", VersionText);
         }
@@ -1132,7 +1132,31 @@ namespace FFXIVLooseTextureCompiler {
                                     missingFiles++;
                                 }
                             }
-                            if (textureSet.InternalMultiPath.Contains("fac")) {
+                            if (textureSet.InternalMultiPath.Contains("hair")) {
+                                if (File.Exists(textureSet.Multi)) {
+                                    string newMultiPath = ImageManipulation.AddSuffix(textureSet.Multi.Replace(".dds", ".png"), "_dawntrail");
+                                    if (!File.Exists(newMultiPath)) {
+                                        ImageManipulation.LegacyHairMultiToDawntrailMulti(
+                                        TexLoader.ResolveBitmap(textureSet.Multi, true)).Save(newMultiPath, ImageFormat.Png);
+                                    }
+                                    textureSet.Multi = newMultiPath;
+                                    if (File.Exists(textureSet.Normal)) {
+                                        string newNormalPath = ImageManipulation.AddSuffix(textureSet.Normal.Replace(".dds", ".png"), "_dawntrail");
+                                        if (!File.Exists(newNormalPath)) {
+                                            ImageManipulation.LegacyHairNormalToDawntrailNormal(
+                                        TexLoader.ResolveBitmap(textureSet.Multi),
+                                        TexLoader.ResolveBitmap(textureSet.Normal, true)).Save(newNormalPath, ImageFormat.Png);
+                                        }
+                                        textureSet.Normal = newMultiPath;
+                                    }
+                                } else {
+                                    textureSet.Multi = textureSet.Normal;
+                                    textureSet.Normal = textureSet.Diffuse;
+                                    textureSet.Diffuse = "";
+                                    missingFiles++;
+                                }
+                            }
+                            if (textureSet.InternalMultiPath.Contains("fac_d")) {
                                 foundFaceMod = true;
                             }
                         }
@@ -1173,7 +1197,7 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show($"{missingFiles} texture sets are missing files. Please update the file paths", VersionText);
                 }
                 if (foundFaceMod) {
-                    MessageBox.Show($"Face mods created before Dawntrail are no longer compatible with the game. You will need to remake your face textures.", VersionText);
+                    MessageBox.Show($"Face mods created before Dawntrail are no longer compatible with the game due to UV changes. You will need to remake your face textures.", VersionText);
                 }
             }
             HasSaved = true;
@@ -1186,9 +1210,17 @@ namespace FFXIVLooseTextureCompiler {
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
                 if (templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
+
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
                         if (!templateConfiguration.GroupName.Contains("Default")) {
                             textureSet.GroupName = templateConfiguration.GroupName;
+                        }
+                        if (projectFile.ProjectVersion == 0) {
+                            if (textureSet.InternalMultiPath.Contains("catchlight")) {
+                                textureSet.InternalMultiPath = textureSet.InternalNormalPath;
+                                textureSet.InternalNormalPath = textureSet.InternalDiffusePath;
+                                textureSet.InternalDiffusePath = textureSet.InternalDiffusePath.Replace("_n.tex", "_d.tex");
+                            }
                         }
                         AddWatcher(textureSet.Diffuse);
                         AddWatcher(textureSet.Normal);
@@ -1481,7 +1513,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    AtramentumLuminisGlow.ExtractGlowMapFromDiffuse(
+                    MapWriting.ExtractGlowMapFromDiffuse(
                         TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
                 }
             }
@@ -2046,53 +2078,38 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                Bitmap rgb = ImageManipulation.ExtractRGB(image);
-                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
-                Bitmap hairNormalConversion = Normal.Calculate(rgb);
-                Bitmap hairNormalFinal = ImageManipulation.MergeAlphaToRGB(alpha, hairNormalConversion);
-
-                Bitmap hairSpecularGreyscale = ImageManipulation.BoostAboveThreshold(image, 127);
-                Bitmap hairSpecularGreyscale2 = ImageManipulation.BoostAboveThreshold(image, 90);
-                Bitmap blank = new Bitmap(hairSpecularGreyscale.Width, hairSpecularGreyscale.Height);
-                Graphics graphics = Graphics.FromImage(blank);
-                graphics.Clear(Color.White);
-                Bitmap hairSpecularConversion = ImageManipulation.MergeGrayscalesToRGBA(hairSpecularGreyscale, hairSpecularGreyscale2, blank, alpha);
-
-                hairNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
-                hairSpecularConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                ImageManipulation.HairDiffuseToHairMaps(openFileDialog.FileName);
                 MessageBox.Show("Hair Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }
+
+        private void legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select legacy hair multi.");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                string multiPath = openFileDialog.FileName;
+                ImageManipulation.LegacyHairMultiToDawntrailMulti(TexLoader.ResolveBitmap(multiPath, true))
+                    .Save(ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ImageFormat.Png); ;
+                MessageBox.Show("Please select legacy hair normal.");
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    ImageManipulation.LegacyHairNormalToDawntrailNormal(TexLoader.ResolveBitmap(multiPath),
+                        TexLoader.ResolveBitmap(openFileDialog.FileName))
+                        .Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ImageFormat.Png); ;
+                    MessageBox.Show("Hair Maps Converted To FFXIV Maps!", VersionText);
+                }
+            }
+        }
+
 
         private void convertDiffuseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                Bitmap rgb = ImageManipulation.ExtractRGB(image);
-                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
-                Bitmap clothingNormalConversion = Normal.Calculate(rgb);
-                Bitmap clothingNormalFinal = ImageManipulation.MergeAlphaToRGB(Grayscale.MakeGrayscale(image), clothingNormalConversion);
-
-                Bitmap clothingMultiGreyscale = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 160);
-                Bitmap clothingMultiGreyscale2 = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 140);
-                Bitmap blank = new Bitmap(clothingMultiGreyscale.Width, clothingMultiGreyscale.Height);
-                Graphics graphics = Graphics.FromImage(blank);
-                graphics.Clear(Color.White);
-                Bitmap blank2 = new Bitmap(blank);
-                Bitmap clothingMultiConversion = ImageManipulation.MergeGrayscalesToRGBA(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
-
-                clothingMultiGreyscale.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np1"), ImageFormat.Png);
-                clothingMultiGreyscale2.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np2"), ImageFormat.Png);
-
-                clothingNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
-                clothingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                ImageManipulation.GenerateClothingMaps(openFileDialog.FileName);
                 MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }
-
-
     }
 }

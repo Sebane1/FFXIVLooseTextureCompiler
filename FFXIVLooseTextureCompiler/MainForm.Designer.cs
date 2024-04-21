@@ -154,6 +154,7 @@
             label8 = new Label();
             processGeneration = new System.ComponentModel.BackgroundWorker();
             helperToolTip = new ToolTip(components);
+            legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -527,7 +528,7 @@
             // 
             // hairToolsToolStripMenuItem
             // 
-            hairToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hairDiffuseToFFXIVHairMapsToolStripMenuItem });
+            hairToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hairDiffuseToFFXIVHairMapsToolStripMenuItem, legacyHairMapsToDawntrailMaps });
             hairToolsToolStripMenuItem.Name = "hairToolsToolStripMenuItem";
             hairToolsToolStripMenuItem.Size = new Size(299, 22);
             hairToolsToolStripMenuItem.Text = "Hair Tools";
@@ -535,7 +536,7 @@
             // hairDiffuseToFFXIVHairMapsToolStripMenuItem
             // 
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Name = "hairDiffuseToFFXIVHairMapsToolStripMenuItem";
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new Size(240, 22);
+            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new Size(268, 22);
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click;
             // 
@@ -1257,6 +1258,13 @@
             processGeneration.ProgressChanged += processGeneration_ProgressChanged;
             processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
+            // legacyHairMapsToDawntrailMaps
+            // 
+            legacyHairMapsToDawntrailMaps.Name = "legacyHairMapsToDawntrailMaps";
+            legacyHairMapsToDawntrailMaps.Size = new Size(268, 22);
+            legacyHairMapsToDawntrailMaps.Text = "Legacy Hair Maps To Dawntrail Maps";
+            legacyHairMapsToDawntrailMaps.Click += legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -1463,6 +1471,7 @@
         private ToolStripMenuItem diffuseToDawntrailSkinMultiToolStripMenuItem;
         private ToolStripMenuItem convertImageToDawntrailEyeMapsToolStripMenuItem;
         private ToolStripMenuItem convertFolderToEyeMapsToolStripMenuItem;
+        private ToolStripMenuItem legacyHairMapsToDawntrailMaps;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
