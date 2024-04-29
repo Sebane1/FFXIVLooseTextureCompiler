@@ -27,100 +27,99 @@ namespace FFXIVVoicePackCreator {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.filePath = new System.Windows.Forms.TextBox();
-            this.openButton = new System.Windows.Forms.Button();
-            this.labelName = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.clearButton = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.SuspendLayout();
+            filePath = new TextBox();
+            openButton = new Button();
+            labelName = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            clearButton = new Button();
+            tableLayoutPanel1.SuspendLayout();
+            SuspendLayout();
             // 
             // filePath
             // 
-            this.filePath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filePath.Location = new System.Drawing.Point(78, 3);
-            this.filePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.filePath.Name = "filePath";
-            this.filePath.Size = new System.Drawing.Size(471, 23);
-            this.filePath.TabIndex = 0;
-            this.filePath.TextChanged += new System.EventHandler(this.filePath_TextChanged);
-            this.filePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.filePath_DragDrop);
-            this.filePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.filePath_DragEnter);
-            this.filePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.filePath_KeyPress);
-            this.filePath.Leave += new System.EventHandler(this.filePath_Leave);
-            this.filePath.MouseDown += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseDown);
-            this.filePath.MouseMove += new System.Windows.Forms.MouseEventHandler(this.filePicker_MouseMove);
+            filePath.Dock = DockStyle.Fill;
+            filePath.Location = new Point(78, 3);
+            filePath.Margin = new Padding(4, 3, 4, 3);
+            filePath.Name = "filePath";
+            filePath.Size = new Size(471, 23);
+            filePath.TabIndex = 0;
+            filePath.TextChanged += filePath_TextChanged;
+            filePath.DragDrop += filePath_DragDrop;
+            filePath.DragEnter += filePath_DragEnter;
+            filePath.KeyPress += filePath_KeyPress;
+            filePath.Leave += filePath_Leave;
+            filePath.MouseDown += filePicker_MouseDown;
+            filePath.MouseMove += filePicker_MouseMove;
             // 
             // openButton
             // 
-            this.openButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.openButton.Location = new System.Drawing.Point(586, 3);
-            this.openButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(58, 22);
-            this.openButton.TabIndex = 1;
-            this.openButton.Text = "Select";
-            this.openButton.UseVisualStyleBackColor = true;
-            this.openButton.Click += new System.EventHandler(this.openButton_Click);
+            openButton.Dock = DockStyle.Fill;
+            openButton.Location = new Point(586, 3);
+            openButton.Margin = new Padding(4, 3, 4, 3);
+            openButton.Name = "openButton";
+            openButton.Size = new Size(58, 22);
+            openButton.TabIndex = 1;
+            openButton.Text = "Select";
+            openButton.UseVisualStyleBackColor = true;
+            openButton.Click += openButton_Click;
             // 
             // labelName
             // 
-            this.labelName.AutoSize = true;
-            this.labelName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelName.Location = new System.Drawing.Point(4, 0);
-            this.labelName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(66, 28);
-            this.labelName.TabIndex = 2;
-            this.labelName.Text = "surprised";
-            this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelName.Click += new System.EventHandler(this.labelName_Click);
+            labelName.AutoSize = true;
+            labelName.Dock = DockStyle.Fill;
+            labelName.Location = new Point(4, 0);
+            labelName.Margin = new Padding(4, 0, 4, 0);
+            labelName.Name = "labelName";
+            labelName.Size = new Size(66, 28);
+            labelName.TabIndex = 2;
+            labelName.Text = "surprised";
+            labelName.TextAlign = ContentAlignment.MiddleLeft;
+            labelName.Click += labelName_Click;
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
-            this.tableLayoutPanel1.Controls.Add(this.openButton, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.filePath, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.labelName, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.clearButton, 2, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(648, 28);
-            this.tableLayoutPanel1.TabIndex = 5;
+            tableLayoutPanel1.ColumnCount = 4;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 74F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 29F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.Controls.Add(openButton, 3, 0);
+            tableLayoutPanel1.Controls.Add(filePath, 1, 0);
+            tableLayoutPanel1.Controls.Add(labelName, 0, 0);
+            tableLayoutPanel1.Controls.Add(clearButton, 2, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(648, 28);
+            tableLayoutPanel1.TabIndex = 5;
             // 
             // clearButton
             // 
-            this.clearButton.BackColor = System.Drawing.Color.IndianRed;
-            this.clearButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.clearButton.Location = new System.Drawing.Point(556, 3);
-            this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(23, 22);
-            this.clearButton.TabIndex = 3;
-            this.clearButton.Text = "X";
-            this.clearButton.UseVisualStyleBackColor = false;
-            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
+            clearButton.BackColor = Color.IndianRed;
+            clearButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            clearButton.Location = new Point(556, 3);
+            clearButton.Name = "clearButton";
+            clearButton.Size = new Size(23, 22);
+            clearButton.TabIndex = 3;
+            clearButton.Text = "X";
+            clearButton.UseVisualStyleBackColor = false;
+            clearButton.Click += clearButton_Click;
             // 
             // FilePicker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.MinimumSize = new System.Drawing.Size(300, 28);
-            this.Name = "FilePicker";
-            this.Size = new System.Drawing.Size(648, 28);
-            this.Load += new System.EventHandler(this.filePicker_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            Controls.Add(tableLayoutPanel1);
+            Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(300, 28);
+            Name = "FilePicker";
+            Size = new Size(648, 28);
+            Load += filePicker_Load;
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

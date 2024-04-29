@@ -5,6 +5,7 @@ using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
+using FFXIVLooseTextureCompiler.Sub_Utilities;
 using FFXIVVoicePackCreator;
 using LooseTextureCompilerCore.Json;
 using LooseTextureCompilerCore.Racial;
@@ -2105,13 +2106,17 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select legacy hair multi.");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 string multiPath = openFileDialog.FileName;
-                ImageManipulation.LegacyHairMultiToDawntrailMulti(TexLoader.ResolveBitmap(multiPath, true))
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ".png"), ImageFormat.Png); ;
+                ImageManipulation.LegacyHairMultiToDawntrailMulti(TexLoader.ResolveBitmap(multiPath, true)).Save(
+                ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ".png"), ImageFormat.Png);
+
                 MessageBox.Show("Please select legacy hair normal.");
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                    ImageManipulation.LegacyHairNormalToDawntrailNormal(TexLoader.ResolveBitmap(multiPath),
-                        TexLoader.ResolveBitmap(openFileDialog.FileName))
-                        .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ".png"), ImageFormat.Png);
+                    ImageManipulation.LegacyHairNormalToDawntrailNormal(
+                    TexLoader.ResolveBitmap(multiPath),
+                    TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(
+                    ImageManipulation.ReplaceExtension(
+                    ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ".png"), ImageFormat.Png);
                     MessageBox.Show("Hair Maps Converted To FFXIV Maps!", VersionText);
                 }
             }
@@ -2126,6 +2131,10 @@ namespace FFXIVLooseTextureCompiler {
                 ImageManipulation.ClothingDiffuseToClothingMultiAndNormalMaps(openFileDialog.FileName);
                 MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
             }
+        }
+
+        private void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new LegacyMakeupSalvager().Show();
         }
     }
 }

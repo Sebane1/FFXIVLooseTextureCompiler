@@ -66,6 +66,7 @@
             convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
             hairDiffuseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
+            legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
             clothingToolsToolStripMenuItem = new ToolStripMenuItem();
             convertDiffuseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
             colourChannelSplittingToolStripMenuItem = new ToolStripMenuItem();
@@ -154,7 +155,8 @@
             label8 = new Label();
             processGeneration = new System.ComponentModel.BackgroundWorker();
             helperToolTip = new ToolTip(components);
-            legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
+            faceToolsToolStripMenuItem = new ToolStripMenuItem();
+            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -485,7 +487,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, faceToolsToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -539,6 +541,13 @@
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new Size(268, 22);
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
             hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click;
+            // 
+            // legacyHairMapsToDawntrailMaps
+            // 
+            legacyHairMapsToDawntrailMaps.Name = "legacyHairMapsToDawntrailMaps";
+            legacyHairMapsToDawntrailMaps.Size = new Size(268, 22);
+            legacyHairMapsToDawntrailMaps.Text = "Legacy Hair Maps To Dawntrail Maps";
+            legacyHairMapsToDawntrailMaps.Click += legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click;
             // 
             // clothingToolsToolStripMenuItem
             // 
@@ -1258,12 +1267,19 @@
             processGeneration.ProgressChanged += processGeneration_ProgressChanged;
             processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
-            // legacyHairMapsToDawntrailMaps
+            // faceToolsToolStripMenuItem
             // 
-            legacyHairMapsToDawntrailMaps.Name = "legacyHairMapsToDawntrailMaps";
-            legacyHairMapsToDawntrailMaps.Size = new Size(268, 22);
-            legacyHairMapsToDawntrailMaps.Text = "Legacy Hair Maps To Dawntrail Maps";
-            legacyHairMapsToDawntrailMaps.Click += legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click;
+            faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
+            faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
+            faceToolsToolStripMenuItem.Size = new Size(299, 22);
+            faceToolsToolStripMenuItem.Text = "Face Tools";
+            // 
+            // legacyMakeupSalvagerToolStripMenuItem
+            // 
+            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
+            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(204, 22);
+            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
+            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
             // 
             // MainWindow
             // 
@@ -1472,6 +1488,8 @@
         private ToolStripMenuItem convertImageToDawntrailEyeMapsToolStripMenuItem;
         private ToolStripMenuItem convertFolderToEyeMapsToolStripMenuItem;
         private ToolStripMenuItem legacyHairMapsToDawntrailMaps;
+        private ToolStripMenuItem faceToolsToolStripMenuItem;
+        private ToolStripMenuItem legacyMakeupSalvagerToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
