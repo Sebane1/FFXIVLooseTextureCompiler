@@ -24,6 +24,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
         private void ConvertMakeup(string makeupPath = null) {
             convertMakeupButton.Enabled = false;
             string lipCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\correction.png");
+            string eyeCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\eyecorrection.png");
             string inputModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\input\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
@@ -31,10 +32,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\"
+            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
             + ((subRaceListBox.SelectedIndex == 5 || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
             string outputTextureAlpha = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\alpha\"
+            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\alpha\"
             + ((subRaceListBox.SelectedIndex == 5 || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
@@ -61,6 +62,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     Graphics graphics = Graphics.FromImage(bitmap);
                     Bitmap makeup = TexLoader.ResolveBitmap(path);
                     Bitmap lipCorrectionBitmap = TexLoader.ResolveBitmap(lipCorrectionMap);
+                    Bitmap eyeCorrectionBitmap = TexLoader.ResolveBitmap(eyeCorrectionMap);
                     if (!skipUnderlayCheckBox.Checked) {
                         Bitmap teeth = bitmap.Clone(new Rectangle(0, 0, 509, 280), bitmap.PixelFormat);
                         //graphics.DrawImage(ImageManipulation.LipCorrection(lipCorrectionBitmap, new Bitmap(makeup), false), new Point(0, 0));
@@ -73,6 +75,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                         Bitmap lips = ImageManipulation.LipCorrection(lipCorrectionBitmap, new Bitmap(bitmap), true);
                         for (int i = 0; i < 4; i++) {
                             graphics.DrawImage(lips, new Point(0, 0));
+                        }
+                        Bitmap eyes = ImageManipulation.EyeCorrection(eyeCorrectionBitmap, new Bitmap(bitmap), true);
+                        for (int i = 0; i < 4; i++) {
+                            graphics.DrawImage(eyes, new Point(0, 0));
                         }
                     }
                     bitmap.Save(lastItem = ImageManipulation.AddSuffix(path, "_final"));
