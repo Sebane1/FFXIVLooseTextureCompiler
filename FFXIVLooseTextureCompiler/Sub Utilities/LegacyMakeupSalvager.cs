@@ -65,7 +65,9 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     Bitmap eyeCorrectionBitmap = TexLoader.ResolveBitmap(eyeCorrectionMap);
                     if (!skipUnderlayCheckBox.Checked) {
                         Bitmap teeth = bitmap.Clone(new Rectangle(0, 0, 509, 280), bitmap.PixelFormat);
-                        //graphics.DrawImage(ImageManipulation.LipCorrection(lipCorrectionBitmap, new Bitmap(makeup), false), new Point(0, 0));
+                        if ((subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10)) {
+                            ImageManipulation.ClearOldHorns(makeup);
+                        }
                         graphics.DrawImage(makeup, new Point(0, 0));
                         graphics.DrawImage(teeth, new Point(0, 0));
                     } else {
