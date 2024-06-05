@@ -33,10 +33,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
-            + ((subRaceListBox.SelectedIndex == 5 || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
+            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
             string outputTextureAlpha = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\alpha\"
-            + ((subRaceListBox.SelectedIndex == 5 || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
+            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
                     OpenFileDialog openFileDialog = new OpenFileDialog();

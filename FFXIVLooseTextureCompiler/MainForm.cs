@@ -227,6 +227,9 @@ namespace FFXIVLooseTextureCompiler {
             Console.WriteLine(exportProgress.Value + "% Complete");
         }
         private void MainForm_Load(object sender, EventArgs e) {
+            MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n" +
+    "You will need a copy of CursedTools from the FFXIV Textools discords 'dev_room' to manually import the exports made by this tool into the benchmark.\r\n\r\n" +
+    "Exports made by this version of Loose Texture Compiler are not compatible with Endwalker or any current version of Penumbra.\r\n\r\n" + "Exports will be done as .png for easy import into CursedTools.", VersionText);
             VersionText = Application.ProductName + " " + Program.Version;
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
@@ -254,9 +257,6 @@ namespace FFXIVLooseTextureCompiler {
             mainFormSimplified.MainWindow = this;
             GetDefaultMode();
             CheckForCommandArguments();
-            MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n" +
-                "You will need a copy of CursedTools from the FFXIV Textools discords 'dev_room' to manually import the exports made by this tool into the benchmark.\r\n\r\n" +
-                "Exports made by this version of Loose Texture Compiler are not compatible with Endwalker or any current version of Penumbra.\r\n\r\n" + "Exports will be done as .png for easy import into CursedTools.", VersionText);
         }
         public void generateButton_Click(object sender, EventArgs e) {
             exportLabel.Text = "Exporting";
@@ -467,6 +467,7 @@ namespace FFXIVLooseTextureCompiler {
             if (isSimpleMode) {
                 Hide();
                 mainFormSimplified.Show();
+                Hide();
             }
         }
         public void WriteDefaultMode() {
@@ -2133,8 +2134,17 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
+        public void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
             new LegacyMakeupSalvager().Show();
+        }
+
+        private void bulkDDSToPNGToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Please select a folder with .dds images");
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.BulkDDSToPng(Directory.EnumerateFiles(folderBrowserDialog.SelectedPath));
+                MessageBox.Show("DDS converted to PNG.");
+            }
         }
     }
 }

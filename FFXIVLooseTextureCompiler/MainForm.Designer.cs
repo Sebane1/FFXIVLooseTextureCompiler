@@ -60,6 +60,8 @@
             findAndBulkReplaceToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             extractAtramentumLuminisGlowMapToolStripMenuItem = new ToolStripMenuItem();
+            faceToolsToolStripMenuItem = new ToolStripMenuItem();
+            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             eyeToolsToolStripMenuItem = new ToolStripMenuItem();
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
             convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
@@ -155,8 +157,7 @@
             label8 = new Label();
             processGeneration = new System.ComponentModel.BackgroundWorker();
             helperToolTip = new ToolTip(components);
-            faceToolsToolStripMenuItem = new ToolStripMenuItem();
-            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
+            bulkDDSToPNGToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -500,6 +501,20 @@
             extractAtramentumLuminisGlowMapToolStripMenuItem.Visible = false;
             extractAtramentumLuminisGlowMapToolStripMenuItem.Click += extractAtramentumLuminisGlowMapToolStripMenuItem_Click;
             // 
+            // faceToolsToolStripMenuItem
+            // 
+            faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
+            faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
+            faceToolsToolStripMenuItem.Size = new Size(299, 22);
+            faceToolsToolStripMenuItem.Text = "Face Tools";
+            // 
+            // legacyMakeupSalvagerToolStripMenuItem
+            // 
+            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
+            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(204, 22);
+            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
+            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
+            // 
             // eyeToolsToolStripMenuItem
             // 
             eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem });
@@ -657,62 +672,62 @@
             // biboToGen3ToolStripMenuItem
             // 
             biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            biboToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen3ToolStripMenuItem.Size = new Size(180, 22);
             biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             biboToGen3ToolStripMenuItem.Click += biboToGen3ToolStripMenuItem_Click;
             // 
             // biboToGen2ToolStripMenuItem
             // 
             biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            biboToGen2ToolStripMenuItem.Size = new Size(166, 22);
+            biboToGen2ToolStripMenuItem.Size = new Size(180, 22);
             biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             biboToGen2ToolStripMenuItem.Click += biboToGen2ToolStripMenuItem_Click;
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            gen3ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen3ToBiboToolStripMenuItem.Size = new Size(180, 22);
             gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             gen3ToBiboToolStripMenuItem.Click += gen3ToBiboToolStripMenuItem_Click;
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            gen3ToGen2ToolStripMenuItem1.Size = new Size(166, 22);
+            gen3ToGen2ToolStripMenuItem1.Size = new Size(180, 22);
             gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             gen3ToGen2ToolStripMenuItem1.Click += gen3ToGen2ToolStripMenuItem_Click;
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            gen2ToGen3ToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToGen3ToolStripMenuItem.Size = new Size(180, 22);
             gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             gen2ToGen3ToolStripMenuItem.Click += gen2ToGen3ToolStripMenuItem_Click;
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            gen2ToBiboToolStripMenuItem.Size = new Size(166, 22);
+            gen2ToBiboToolStripMenuItem.Size = new Size(180, 22);
             gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             gen2ToBiboToolStripMenuItem.Click += gen2ToBiboToolStripMenuItem_Click;
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            otopopToVanillaToolStripMenuItem.Size = new Size(166, 22);
+            otopopToVanillaToolStripMenuItem.Size = new Size(180, 22);
             otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             otopopToVanillaToolStripMenuItem.Click += otopopToVanillaToolStripMenuItem_Click;
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            vanillaToOtopopToolStripMenuItem.Size = new Size(166, 22);
+            vanillaToOtopopToolStripMenuItem.Size = new Size(180, 22);
             vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             vanillaToOtopopToolStripMenuItem.Click += vanillaToOtopopToolStripMenuItem_Click;
             // 
             // devToolsToolStripMenuItem
             // 
-            devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem });
+            devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem, bulkDDSToPNGToolStripMenuItem });
             devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
             devToolsToolStripMenuItem.Size = new Size(299, 22);
             devToolsToolStripMenuItem.Text = "Dev Tools";
@@ -1267,19 +1282,12 @@
             processGeneration.ProgressChanged += processGeneration_ProgressChanged;
             processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
-            // faceToolsToolStripMenuItem
+            // bulkDDSToPNGToolStripMenuItem
             // 
-            faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
-            faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
-            faceToolsToolStripMenuItem.Size = new Size(299, 22);
-            faceToolsToolStripMenuItem.Text = "Face Tools";
-            // 
-            // legacyMakeupSalvagerToolStripMenuItem
-            // 
-            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
-            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(204, 22);
-            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
-            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
+            bulkDDSToPNGToolStripMenuItem.Name = "bulkDDSToPNGToolStripMenuItem";
+            bulkDDSToPNGToolStripMenuItem.Size = new Size(185, 22);
+            bulkDDSToPNGToolStripMenuItem.Text = "Bulk DDS To PNG";
+            bulkDDSToPNGToolStripMenuItem.Click += bulkDDSToPNGToolStripMenuItem_Click;
             // 
             // MainWindow
             // 
@@ -1490,6 +1498,7 @@
         private ToolStripMenuItem legacyHairMapsToDawntrailMaps;
         private ToolStripMenuItem faceToolsToolStripMenuItem;
         private ToolStripMenuItem legacyMakeupSalvagerToolStripMenuItem;
+        private ToolStripMenuItem bulkDDSToPNGToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

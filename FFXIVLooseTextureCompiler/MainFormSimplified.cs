@@ -281,5 +281,9 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
+        private void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
+            mainWindow.legacyMakeupSalvagerToolStripMenuItem_Click(sender, e);
+        }
     }
 }
