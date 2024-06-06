@@ -2143,7 +2143,17 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.BulkDDSToPng(Directory.EnumerateFiles(folderBrowserDialog.SelectedPath));
-                MessageBox.Show("DDS converted to PNG.");
+                MessageBox.Show("DDS converted to PNG.", VersionText);
+            }
+        }
+
+        private void textureToTexToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture to convert to .tex");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                textureProcessor.ExportTex(openFileDialog.FileName, ImageManipulation.ReplaceExtension(openFileDialog.FileName, ".tex"));
+                MessageBox.Show("Texture Converter To Tex", VersionText);
             }
         }
     }

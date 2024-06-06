@@ -96,6 +96,7 @@
             textureToLTCTToolStripMenuItem = new ToolStripMenuItem();
             pNGToLTCTToolStripMenuItem = new ToolStripMenuItem();
             convertLTCTToPNGToolStripMenuItem = new ToolStripMenuItem();
+            bulkDDSToPNGToolStripMenuItem = new ToolStripMenuItem();
             configToolStripMenuItem = new ToolStripMenuItem();
             changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
@@ -157,7 +158,7 @@
             label8 = new Label();
             processGeneration = new System.ComponentModel.BackgroundWorker();
             helperToolTip = new ToolTip(components);
-            bulkDDSToPNGToolStripMenuItem = new ToolStripMenuItem();
+            textureToTexToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -727,7 +728,7 @@
             // 
             // devToolsToolStripMenuItem
             // 
-            devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem, bulkDDSToPNGToolStripMenuItem });
+            devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem, bulkDDSToPNGToolStripMenuItem, textureToTexToolStripMenuItem });
             devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
             devToolsToolStripMenuItem.Size = new Size(299, 22);
             devToolsToolStripMenuItem.Text = "Dev Tools";
@@ -752,6 +753,13 @@
             convertLTCTToPNGToolStripMenuItem.Size = new Size(185, 22);
             convertLTCTToPNGToolStripMenuItem.Text = "Convert LTCT To PNG";
             convertLTCTToPNGToolStripMenuItem.Click += bulkConvertLTCTToPNGToolStripMenuItem_Click;
+            // 
+            // bulkDDSToPNGToolStripMenuItem
+            // 
+            bulkDDSToPNGToolStripMenuItem.Name = "bulkDDSToPNGToolStripMenuItem";
+            bulkDDSToPNGToolStripMenuItem.Size = new Size(185, 22);
+            bulkDDSToPNGToolStripMenuItem.Text = "Bulk DDS To PNG";
+            bulkDDSToPNGToolStripMenuItem.Click += bulkDDSToPNGToolStripMenuItem_Click;
             // 
             // configToolStripMenuItem
             // 
@@ -1282,12 +1290,12 @@
             processGeneration.ProgressChanged += processGeneration_ProgressChanged;
             processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
-            // bulkDDSToPNGToolStripMenuItem
+            // textureToTexToolStripMenuItem
             // 
-            bulkDDSToPNGToolStripMenuItem.Name = "bulkDDSToPNGToolStripMenuItem";
-            bulkDDSToPNGToolStripMenuItem.Size = new Size(185, 22);
-            bulkDDSToPNGToolStripMenuItem.Text = "Bulk DDS To PNG";
-            bulkDDSToPNGToolStripMenuItem.Click += bulkDDSToPNGToolStripMenuItem_Click;
+            textureToTexToolStripMenuItem.Name = "textureToTexToolStripMenuItem";
+            textureToTexToolStripMenuItem.Size = new Size(185, 22);
+            textureToTexToolStripMenuItem.Text = "Texture To Tex";
+            textureToTexToolStripMenuItem.Click += textureToTexToolStripMenuItem_Click;
             // 
             // MainWindow
             // 
@@ -1499,6 +1507,7 @@
         private ToolStripMenuItem faceToolsToolStripMenuItem;
         private ToolStripMenuItem legacyMakeupSalvagerToolStripMenuItem;
         private ToolStripMenuItem bulkDDSToPNGToolStripMenuItem;
+        private ToolStripMenuItem textureToTexToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
