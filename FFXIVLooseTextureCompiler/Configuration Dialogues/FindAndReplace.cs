@@ -28,11 +28,11 @@ namespace FFXIVLooseTextureCompiler {
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
                             textureSet.Normal = normal.FilePath.Text;
                         }
-                        if (!string.IsNullOrEmpty(multi.FilePath.Text)) {
-                            textureSet.Multi = multi.FilePath.Text;
-                        }
                         if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
-                            textureSet.NormalMask = mask.FilePath.Text;
+                            textureSet.Mask = mask.FilePath.Text;
+                        }
+                        if (!string.IsNullOrEmpty(bounds.FilePath.Text)) {
+                            textureSet.NormalMask = bounds.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(glow.FilePath.Text)) {
                             textureSet.Glow = glow.FilePath.Text;
@@ -57,7 +57,7 @@ namespace FFXIVLooseTextureCompiler {
             AutoScaleDimensions = new SizeF(96, 96);
             diffuse.LabelName.Text = "Diffuse";
             normal.LabelName.Text = "Normal";
-            multi.LabelName.Text = "Multi";
+            mask.LabelName.Text = "Mask";
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -67,7 +67,11 @@ namespace FFXIVLooseTextureCompiler {
         private void replacementString_TextChanged(object sender, EventArgs e) {
             diffuse.LabelName.Text = "Diffuse";
             normal.LabelName.Text = "Normal";
-            multi.LabelName.Text = "Multi";
+            mask.LabelName.Text = "Mask";
+        }
+
+        private void multi_Load(object sender, EventArgs e) {
+
         }
     }
 }

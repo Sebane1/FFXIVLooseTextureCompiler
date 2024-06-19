@@ -1,5 +1,5 @@
 ﻿namespace FFXIVLooseTextureCompiler {
-    partial class MultiCreator {
+    partial class MaskCreator {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MultiCreator));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MaskCreator));
             this.redImage = new System.Windows.Forms.PictureBox();
             this.result = new System.Windows.Forms.PictureBox();
             this.importButton1 = new System.Windows.Forms.Button();
@@ -197,7 +197,7 @@
             this.alphaImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.import4_DragEnter);
             this.alphaImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.import4_DragDrop);
             // 
-            // MultiCreator
+            // MaskCreator
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);

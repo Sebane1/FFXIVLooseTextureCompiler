@@ -32,7 +32,7 @@
             baseBodyList = new ComboBox();
             generateButton = new Button();
             uniqueAuRa = new CheckBox();
-            multi = new FFXIVVoicePackCreator.FilePicker();
+            mask = new FFXIVVoicePackCreator.FilePicker();
             normal = new FFXIVVoicePackCreator.FilePicker();
             diffuse = new FFXIVVoicePackCreator.FilePicker();
             asymCheckbox = new CheckBox();
@@ -97,6 +97,7 @@
             pNGToLTCTToolStripMenuItem = new ToolStripMenuItem();
             convertLTCTToPNGToolStripMenuItem = new ToolStripMenuItem();
             bulkDDSToPNGToolStripMenuItem = new ToolStripMenuItem();
+            textureToTexToolStripMenuItem = new ToolStripMenuItem();
             configToolStripMenuItem = new ToolStripMenuItem();
             changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
@@ -141,8 +142,8 @@
             label5 = new Label();
             exportProgress = new ProgressBar();
             bakeNormals = new CheckBox();
-            generateMultiCheckBox = new CheckBox();
-            mask = new FFXIVVoicePackCreator.FilePicker();
+            generatMaskCheckBox = new CheckBox();
+            bounds = new FFXIVVoicePackCreator.FilePicker();
             discordButton = new Button();
             faceExtraList = new ComboBox();
             glow = new FFXIVVoicePackCreator.FilePicker();
@@ -158,7 +159,8 @@
             label8 = new Label();
             processGeneration = new System.ComponentModel.BackgroundWorker();
             helperToolTip = new ToolTip(components);
-            textureToTexToolStripMenuItem = new ToolStripMenuItem();
+            textureSetName = new TextBox();
+            textureSetNameRefreshTimer = new System.Windows.Forms.Timer(components);
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -185,7 +187,7 @@
             // raceList
             // 
             raceList.FormattingEnabled = true;
-            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafell", "Raen", "Xaela", "Hrothgar", "Viera" });
+            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafel", "Raen", "Xaela", "Hrothgar", "Viera" });
             raceList.Location = new Point(228, 112);
             raceList.Name = "raceList";
             raceList.Size = new Size(84, 23);
@@ -231,28 +233,28 @@
             uniqueAuRa.AutoSize = true;
             uniqueAuRa.Location = new Point(348, 8);
             uniqueAuRa.Name = "uniqueAuRa";
-            uniqueAuRa.Size = new Size(98, 19);
+            uniqueAuRa.Size = new Size(64, 19);
             uniqueAuRa.TabIndex = 20;
-            uniqueAuRa.Text = "Unique Au Ra";
+            uniqueAuRa.Text = "Unique";
             uniqueAuRa.UseVisualStyleBackColor = true;
             // 
-            // multi
+            // mask
             // 
-            multi.BackColor = Color.FromArgb(255, 192, 255);
-            multi.CurrentPath = null;
-            multi.Enabled = false;
-            multi.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            multi.Index = -1;
-            multi.Location = new Point(4, 512);
-            multi.Margin = new Padding(4, 3, 4, 3);
-            multi.MinimumSize = new Size(300, 28);
-            multi.Name = "multi";
-            multi.Size = new Size(528, 28);
-            multi.TabIndex = 19;
-            helperToolTip.SetToolTip(multi, "The orange looking image goes here.");
-            multi.OnFileSelected += multi_OnFileSelected;
-            multi.Enter += multi_Enter;
-            multi.Leave += multi_Leave;
+            mask.BackColor = Color.FromArgb(255, 192, 255);
+            mask.CurrentPath = null;
+            mask.Enabled = false;
+            mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            mask.Index = -1;
+            mask.Location = new Point(4, 512);
+            mask.Margin = new Padding(4, 3, 4, 3);
+            mask.MinimumSize = new Size(300, 28);
+            mask.Name = "mask";
+            mask.Size = new Size(528, 28);
+            mask.TabIndex = 19;
+            helperToolTip.SetToolTip(mask, "The orange looking image goes here.");
+            mask.OnFileSelected += multi_OnFileSelected;
+            mask.Enter += multi_Enter;
+            mask.Leave += multi_Leave;
             // 
             // normal
             // 
@@ -293,7 +295,7 @@
             // asymCheckbox
             // 
             asymCheckbox.AutoSize = true;
-            asymCheckbox.Location = new Point(392, 8);
+            asymCheckbox.Location = new Point(388, 8);
             asymCheckbox.Name = "asymCheckbox";
             asymCheckbox.Size = new Size(56, 19);
             asymCheckbox.TabIndex = 23;
@@ -527,7 +529,7 @@
             // 
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Name = "convertLegacyEyeMapToDawntrailMapToolStripMenuItem";
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Size = new Size(329, 22);
-            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Text = "Convert Legacy Eye Multi To Dawntrail Eye Maps";
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Text = "Convert Legacy Eye Mask To Dawntrail Eye Maps";
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Click += convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click;
             // 
             // convertImageToDawntrailEyeMapsToolStripMenuItem
@@ -576,7 +578,7 @@
             // 
             convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
             convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new Size(270, 22);
-            convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Multi";
+            convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Mask";
             convertDiffuseToNormalAndMultiToolStripMenuItem.Click += convertDiffuseToNormalAndMultiToolStripMenuItem_Click;
             // 
             // colourChannelSplittingToolStripMenuItem
@@ -625,7 +627,7 @@
             // 
             diffuseToDawntrailSkinMultiToolStripMenuItem.Name = "diffuseToDawntrailSkinMultiToolStripMenuItem";
             diffuseToDawntrailSkinMultiToolStripMenuItem.Size = new Size(235, 22);
-            diffuseToDawntrailSkinMultiToolStripMenuItem.Text = "Diffuse To Dawntrail Skin Multi";
+            diffuseToDawntrailSkinMultiToolStripMenuItem.Text = "Diffuse To Dawntrail Skin Mask";
             diffuseToDawntrailSkinMultiToolStripMenuItem.Click += diffuseToDawntrailSkinMultiToolStripMenuItem_Click;
             // 
             // xNormalToolStripMenuItem
@@ -673,56 +675,56 @@
             // biboToGen3ToolStripMenuItem
             // 
             biboToGen3ToolStripMenuItem.Name = "biboToGen3ToolStripMenuItem";
-            biboToGen3ToolStripMenuItem.Size = new Size(180, 22);
+            biboToGen3ToolStripMenuItem.Size = new Size(166, 22);
             biboToGen3ToolStripMenuItem.Text = "Bibo+ to Gen3";
             biboToGen3ToolStripMenuItem.Click += biboToGen3ToolStripMenuItem_Click;
             // 
             // biboToGen2ToolStripMenuItem
             // 
             biboToGen2ToolStripMenuItem.Name = "biboToGen2ToolStripMenuItem";
-            biboToGen2ToolStripMenuItem.Size = new Size(180, 22);
+            biboToGen2ToolStripMenuItem.Size = new Size(166, 22);
             biboToGen2ToolStripMenuItem.Text = "Bibo+ to Gen2";
             biboToGen2ToolStripMenuItem.Click += biboToGen2ToolStripMenuItem_Click;
             // 
             // gen3ToBiboToolStripMenuItem
             // 
             gen3ToBiboToolStripMenuItem.Name = "gen3ToBiboToolStripMenuItem";
-            gen3ToBiboToolStripMenuItem.Size = new Size(180, 22);
+            gen3ToBiboToolStripMenuItem.Size = new Size(166, 22);
             gen3ToBiboToolStripMenuItem.Text = "Gen3 to Bibo+";
             gen3ToBiboToolStripMenuItem.Click += gen3ToBiboToolStripMenuItem_Click;
             // 
             // gen3ToGen2ToolStripMenuItem1
             // 
             gen3ToGen2ToolStripMenuItem1.Name = "gen3ToGen2ToolStripMenuItem1";
-            gen3ToGen2ToolStripMenuItem1.Size = new Size(180, 22);
+            gen3ToGen2ToolStripMenuItem1.Size = new Size(166, 22);
             gen3ToGen2ToolStripMenuItem1.Text = "Gen3 to Gen2";
             gen3ToGen2ToolStripMenuItem1.Click += gen3ToGen2ToolStripMenuItem_Click;
             // 
             // gen2ToGen3ToolStripMenuItem
             // 
             gen2ToGen3ToolStripMenuItem.Name = "gen2ToGen3ToolStripMenuItem";
-            gen2ToGen3ToolStripMenuItem.Size = new Size(180, 22);
+            gen2ToGen3ToolStripMenuItem.Size = new Size(166, 22);
             gen2ToGen3ToolStripMenuItem.Text = "Gen2 to Gen3";
             gen2ToGen3ToolStripMenuItem.Click += gen2ToGen3ToolStripMenuItem_Click;
             // 
             // gen2ToBiboToolStripMenuItem
             // 
             gen2ToBiboToolStripMenuItem.Name = "gen2ToBiboToolStripMenuItem";
-            gen2ToBiboToolStripMenuItem.Size = new Size(180, 22);
+            gen2ToBiboToolStripMenuItem.Size = new Size(166, 22);
             gen2ToBiboToolStripMenuItem.Text = "Gen2 to Bibo+";
             gen2ToBiboToolStripMenuItem.Click += gen2ToBiboToolStripMenuItem_Click;
             // 
             // otopopToVanillaToolStripMenuItem
             // 
             otopopToVanillaToolStripMenuItem.Name = "otopopToVanillaToolStripMenuItem";
-            otopopToVanillaToolStripMenuItem.Size = new Size(180, 22);
+            otopopToVanillaToolStripMenuItem.Size = new Size(166, 22);
             otopopToVanillaToolStripMenuItem.Text = "Otopop to Vanilla";
             otopopToVanillaToolStripMenuItem.Click += otopopToVanillaToolStripMenuItem_Click;
             // 
             // vanillaToOtopopToolStripMenuItem
             // 
             vanillaToOtopopToolStripMenuItem.Name = "vanillaToOtopopToolStripMenuItem";
-            vanillaToOtopopToolStripMenuItem.Size = new Size(180, 22);
+            vanillaToOtopopToolStripMenuItem.Size = new Size(166, 22);
             vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             vanillaToOtopopToolStripMenuItem.Click += vanillaToOtopopToolStripMenuItem_Click;
             // 
@@ -760,6 +762,13 @@
             bulkDDSToPNGToolStripMenuItem.Size = new Size(185, 22);
             bulkDDSToPNGToolStripMenuItem.Text = "Bulk DDS To PNG";
             bulkDDSToPNGToolStripMenuItem.Click += bulkDDSToPNGToolStripMenuItem_Click;
+            // 
+            // textureToTexToolStripMenuItem
+            // 
+            textureToTexToolStripMenuItem.Name = "textureToTexToolStripMenuItem";
+            textureToTexToolStripMenuItem.Size = new Size(185, 22);
+            textureToTexToolStripMenuItem.Text = "Texture To Tex";
+            textureToTexToolStripMenuItem.Click += textureToTexToolStripMenuItem_Click;
             // 
             // configToolStripMenuItem
             // 
@@ -909,7 +918,7 @@
             textureList.Name = "textureList";
             textureList.Size = new Size(528, 184);
             textureList.TabIndex = 26;
-            textureList.SelectedIndexChanged += materialList_SelectedIndexChanged;
+            textureList.SelectedIndexChanged += textureSetList_SelectedIndexChanged;
             // 
             // materialListContextMenu
             // 
@@ -976,9 +985,9 @@
             // 
             // addBodyButton
             // 
-            addBodyButton.Location = new Point(448, 112);
+            addBodyButton.Location = new Point(436, 112);
             addBodyButton.Name = "addBodyButton";
-            addBodyButton.Size = new Size(84, 23);
+            addBodyButton.Size = new Size(96, 23);
             addBodyButton.TabIndex = 27;
             addBodyButton.Text = "Add Body";
             addBodyButton.UseVisualStyleBackColor = true;
@@ -986,23 +995,24 @@
             // 
             // addFaceButton
             // 
-            addFaceButton.Location = new Point(448, 140);
+            addFaceButton.Location = new Point(436, 140);
             addFaceButton.Name = "addFaceButton";
-            addFaceButton.Size = new Size(84, 23);
+            addFaceButton.Size = new Size(96, 23);
             addFaceButton.TabIndex = 28;
-            addFaceButton.Text = "Add Face";
+            addFaceButton.Text = "Add Face Paint";
             addFaceButton.UseVisualStyleBackColor = true;
             addFaceButton.Click += addFaceButton_Click;
             // 
             // currentEditLabel
             // 
             currentEditLabel.AutoSize = true;
-            currentEditLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold);
+            currentEditLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             currentEditLabel.Location = new Point(4, 412);
             currentEditLabel.Name = "currentEditLabel";
-            currentEditLabel.Size = new Size(447, 30);
+            currentEditLabel.Size = new Size(89, 30);
             currentEditLabel.TabIndex = 29;
-            currentEditLabel.Text = "Please select a texture set to start importing";
+            currentEditLabel.Text = "Locked:";
+            currentEditLabel.Click += currentEditLabel_Click;
             // 
             // label6
             // 
@@ -1036,9 +1046,9 @@
             // 
             // addCustomPathButton
             // 
-            addCustomPathButton.Location = new Point(448, 168);
+            addCustomPathButton.Location = new Point(436, 168);
             addCustomPathButton.Name = "addCustomPathButton";
-            addCustomPathButton.Size = new Size(84, 23);
+            addCustomPathButton.Size = new Size(96, 23);
             addCustomPathButton.TabIndex = 33;
             addCustomPathButton.Text = "Custom Path";
             addCustomPathButton.UseVisualStyleBackColor = true;
@@ -1099,7 +1109,7 @@
             // 
             // exportProgress
             // 
-            exportProgress.Location = new Point(0, 604);
+            exportProgress.Location = new Point(0, 572);
             exportProgress.Name = "exportProgress";
             exportProgress.Size = new Size(536, 32);
             exportProgress.Style = ProgressBarStyle.Continuous;
@@ -1118,34 +1128,34 @@
             bakeNormals.UseVisualStyleBackColor = true;
             bakeNormals.CheckedChanged += bakeMissingNormalsCheckbox_CheckedChanged;
             // 
-            // generateMultiCheckBox
+            // generatMaskCheckBox
             // 
-            generateMultiCheckBox.Anchor = AnchorStyles.Bottom;
-            generateMultiCheckBox.AutoSize = true;
-            generateMultiCheckBox.Location = new Point(308, 580);
-            generateMultiCheckBox.Name = "generateMultiCheckBox";
-            generateMultiCheckBox.Size = new Size(104, 19);
-            generateMultiCheckBox.TabIndex = 40;
-            generateMultiCheckBox.Text = "Generate Multi";
-            generateMultiCheckBox.UseVisualStyleBackColor = true;
-            generateMultiCheckBox.CheckedChanged += generateMultiCheckBox_CheckedChanged;
+            generatMaskCheckBox.Anchor = AnchorStyles.Bottom;
+            generatMaskCheckBox.AutoSize = true;
+            generatMaskCheckBox.Location = new Point(308, 580);
+            generatMaskCheckBox.Name = "generatMaskCheckBox";
+            generatMaskCheckBox.Size = new Size(104, 19);
+            generatMaskCheckBox.TabIndex = 40;
+            generatMaskCheckBox.Text = "Generate Mask";
+            generatMaskCheckBox.UseVisualStyleBackColor = true;
+            generatMaskCheckBox.CheckedChanged += generateMultiCheckBox_CheckedChanged;
             // 
-            // mask
+            // bounds
             // 
-            mask.CurrentPath = null;
-            mask.Enabled = false;
-            mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            mask.Index = -1;
-            mask.Location = new Point(4, 544);
-            mask.Margin = new Padding(4, 3, 4, 3);
-            mask.MinimumSize = new Size(300, 28);
-            mask.Name = "mask";
-            mask.Size = new Size(528, 28);
-            mask.TabIndex = 41;
-            helperToolTip.SetToolTip(mask, "Used to restrict where generated normal maps actually use generated normals.");
-            mask.OnFileSelected += multi_OnFileSelected;
-            mask.Enter += multi_Enter;
-            mask.Leave += multi_Leave;
+            bounds.CurrentPath = null;
+            bounds.Enabled = false;
+            bounds.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            bounds.Index = -1;
+            bounds.Location = new Point(4, 544);
+            bounds.Margin = new Padding(4, 3, 4, 3);
+            bounds.MinimumSize = new Size(300, 28);
+            bounds.Name = "bounds";
+            bounds.Size = new Size(528, 28);
+            bounds.TabIndex = 41;
+            helperToolTip.SetToolTip(bounds, "Used to restrict where generated normal maps actually use generated normals.");
+            bounds.OnFileSelected += multi_OnFileSelected;
+            bounds.Enter += multi_Enter;
+            bounds.Leave += multi_Leave;
             // 
             // discordButton
             // 
@@ -1175,7 +1185,7 @@
             glow.Enabled = false;
             glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             glow.Index = -1;
-            glow.Location = new Point(4, 576);
+            glow.Location = new Point(4, 544);
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
@@ -1207,6 +1217,7 @@
             auraFaceScalesDropdown.Size = new Size(104, 23);
             auraFaceScalesDropdown.TabIndex = 48;
             auraFaceScalesDropdown.Text = "Vanilla Scales";
+            auraFaceScalesDropdown.Visible = false;
             // 
             // panel1
             // 
@@ -1290,18 +1301,30 @@
             processGeneration.ProgressChanged += processGeneration_ProgressChanged;
             processGeneration.RunWorkerCompleted += processGeneration_RunWorkerCompleted;
             // 
-            // textureToTexToolStripMenuItem
+            // textureSetName
             // 
-            textureToTexToolStripMenuItem.Name = "textureToTexToolStripMenuItem";
-            textureToTexToolStripMenuItem.Size = new Size(185, 22);
-            textureToTexToolStripMenuItem.Text = "Texture To Tex";
-            textureToTexToolStripMenuItem.Click += textureToTexToolStripMenuItem_Click;
+            textureSetName.Enabled = false;
+            textureSetName.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            textureSetName.Location = new Point(92, 412);
+            textureSetName.Name = "textureSetName";
+            textureSetName.Size = new Size(440, 33);
+            textureSetName.TabIndex = 53;
+            textureSetName.Text = "Please select a texture set to start importing.";
+            textureSetName.TextChanged += textureSetName_TextChanged;
+            textureSetName.Leave += textureSetName_Leave;
+            textureSetName.MouseMove += textureSetName_MouseMove;
+            // 
+            // textureSetNameRefreshTimer
+            // 
+            textureSetNameRefreshTimer.Interval = 1000;
+            textureSetNameRefreshTimer.Tick += textureSetNameRefreshTimer_Tick;
             // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(537, 605);
+            Controls.Add(textureSetName);
             Controls.Add(generateButton);
             Controls.Add(label8);
             Controls.Add(ipBox);
@@ -1311,8 +1334,8 @@
             Controls.Add(glow);
             Controls.Add(faceExtraList);
             Controls.Add(discordButton);
-            Controls.Add(mask);
-            Controls.Add(generateMultiCheckBox);
+            Controls.Add(bounds);
+            Controls.Add(generatMaskCheckBox);
             Controls.Add(bakeNormals);
             Controls.Add(label5);
             Controls.Add(generationType);
@@ -1324,7 +1347,7 @@
             Controls.Add(label6);
             Controls.Add(currentEditLabel);
             Controls.Add(addBodyButton);
-            Controls.Add(multi);
+            Controls.Add(mask);
             Controls.Add(normal);
             Controls.Add(diffuse);
             Controls.Add(textureList);
@@ -1384,7 +1407,7 @@
         private TextBox modNameTextBox;
         private Label label2;
         private TextBox modWebsiteTextBox;
-        private FFXIVVoicePackCreator.FilePicker multi;
+        private FFXIVVoicePackCreator.FilePicker mask;
         private FFXIVVoicePackCreator.FilePicker normal;
         private FFXIVVoicePackCreator.FilePicker diffuse;
         private Label label4;
@@ -1425,11 +1448,11 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ProgressBar exportProgress;
         private CheckBox bakeNormals;
-        private CheckBox generateMultiCheckBox;
+        private CheckBox generatMaskCheckBox;
         private ToolStripMenuItem bulkReplaceToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem findAndBulkReplaceToolStripMenuItem;
-        private FFXIVVoicePackCreator.FilePicker mask;
+        private FFXIVVoicePackCreator.FilePicker bounds;
         private Button discordButton;
         private ComboBox faceExtraList;
         private ToolStripMenuItem helpToolStripMenuItem;
@@ -1508,6 +1531,8 @@
         private ToolStripMenuItem legacyMakeupSalvagerToolStripMenuItem;
         private ToolStripMenuItem bulkDDSToPNGToolStripMenuItem;
         private ToolStripMenuItem textureToTexToolStripMenuItem;
+        private TextBox textureSetName;
+        private System.Windows.Forms.Timer textureSetNameRefreshTimer;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

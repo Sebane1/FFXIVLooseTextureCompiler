@@ -2,8 +2,8 @@
 using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
-    public partial class MultiCreator : Form {
-        public MultiCreator() {
+    public partial class MaskCreator : Form {
+        public MaskCreator() {
             InitializeComponent();
             AutoScaleDimensions = new SizeF(96, 96);
             ((Control)redImage).AllowDrop = true;

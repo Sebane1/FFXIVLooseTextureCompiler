@@ -36,7 +36,7 @@
             // 
             subRaceListBox.FormattingEnabled = true;
             subRaceListBox.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
-            subRaceListBox.Location = new Point(0, 68);
+            subRaceListBox.Location = new Point(0, 0);
             subRaceListBox.Name = "subRaceListBox";
             subRaceListBox.Size = new Size(120, 23);
             subRaceListBox.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             faceNumberListBox.FormattingEnabled = true;
             faceNumberListBox.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7" });
-            faceNumberListBox.Location = new Point(120, 68);
+            faceNumberListBox.Location = new Point(120, 0);
             faceNumberListBox.Name = "faceNumberListBox";
             faceNumberListBox.Size = new Size(121, 23);
             faceNumberListBox.TabIndex = 1;
@@ -53,7 +53,7 @@
             // convertMakeupButton
             // 
             convertMakeupButton.AllowDrop = true;
-            convertMakeupButton.Location = new Point(0, 120);
+            convertMakeupButton.Location = new Point(0, 52);
             convertMakeupButton.Name = "convertMakeupButton";
             convertMakeupButton.Size = new Size(364, 37);
             convertMakeupButton.TabIndex = 2;
@@ -66,7 +66,7 @@
             // skipUnderlayCheckBox
             // 
             skipUnderlayCheckBox.AutoSize = true;
-            skipUnderlayCheckBox.Location = new Point(4, 96);
+            skipUnderlayCheckBox.Location = new Point(4, 28);
             skipUnderlayCheckBox.Name = "skipUnderlayCheckBox";
             skipUnderlayCheckBox.Size = new Size(139, 19);
             skipUnderlayCheckBox.TabIndex = 3;
@@ -77,7 +77,7 @@
             // 
             racialGender.FormattingEnabled = true;
             racialGender.Items.AddRange(new object[] { "Feminine", "Masculine" });
-            racialGender.Location = new Point(240, 68);
+            racialGender.Location = new Point(240, 0);
             racialGender.Name = "racialGender";
             racialGender.Size = new Size(121, 23);
             racialGender.TabIndex = 4;
@@ -85,7 +85,7 @@
             // skipLipCorrection
             // 
             skipLipCorrection.AutoSize = true;
-            skipLipCorrection.Location = new Point(144, 96);
+            skipLipCorrection.Location = new Point(144, 28);
             skipLipCorrection.Name = "skipLipCorrection";
             skipLipCorrection.Size = new Size(140, 19);
             skipLipCorrection.TabIndex = 5;
@@ -100,12 +100,14 @@
             textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             textBox1.ForeColor = SystemColors.InfoText;
             textBox1.HideSelection = false;
-            textBox1.Location = new Point(4, 4);
+            textBox1.Location = new Point(4, 92);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(356, 64);
+            textBox1.Size = new Size(356, 96);
             textBox1.TabIndex = 6;
-            textBox1.Text = "Select the makeup race, face, and gender and then drag and drop your makeups onto this window! Makes things Dawntrail compatible.";
+            textBox1.Text = "Select the makeup race, face, and gender and then drag and drop your makeups onto this window! Attempts to makes things Dawntrail compatible.";
+            textBox1.TextAlign = HorizontalAlignment.Center;
+            textBox1.TextChanged += textBox1_TextChanged;
             textBox1.DragDrop += filePath_DragDrop;
             textBox1.DragEnter += filePath_DragEnter;
             // 
@@ -114,7 +116,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(363, 156);
+            ClientSize = new Size(363, 192);
             Controls.Add(textBox1);
             Controls.Add(skipLipCorrection);
             Controls.Add(racialGender);

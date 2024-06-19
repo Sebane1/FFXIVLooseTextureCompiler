@@ -59,12 +59,16 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
-            if (textureList.SelectedIndex != -1) {
-                if (File.Exists(textureList.SelectedItem.ToString())) {
-                    texturePreview.BackgroundImage = TexLoader.TexToBitmap(textureList.SelectedItem.ToString());
-                } else {
-                    textureList.Items.Remove(textureList.SelectedItem);
+            try {
+                if (textureList.SelectedIndex != -1) {
+                    if (File.Exists(textureList.SelectedItem.ToString())) {
+                        texturePreview.BackgroundImage = TexLoader.TexToBitmap(textureList.SelectedItem.ToString());
+                    } else {
+                        textureList.Items.Remove(textureList.SelectedItem);
+                    }
                 }
+            } catch {
+
             }
         }
 
@@ -75,15 +79,19 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void AddFilesRecursively(string path, int recursionCount, int recursionLimit) {
-            foreach (string file in Directory.GetFiles(path, "*.tex")) {
-                if (File.Exists(file)) {
-                    if (!textureList.Items.Contains(file)) {
-                        textureList.Items.Add(file);
+            try {
+                foreach (string file in Directory.GetFiles(path, "*.tex")) {
+                    if (File.Exists(file)) {
+                        if (!textureList.Items.Contains(file)) {
+                            textureList.Items.Add(file);
+                        }
                     }
                 }
-            }
-            foreach (string newPath in Directory.GetDirectories(path)) {
-                AddFilesRecursively(newPath, recursionCount++, recursionLimit);
+                foreach (string newPath in Directory.GetDirectories(path)) {
+                    AddFilesRecursively(newPath, recursionCount++, recursionLimit);
+                }
+            } catch {
+
             }
         }
         private void texList_MouseDown(object sender, MouseEventArgs e) {
@@ -119,6 +127,13 @@ namespace FFXIVLooseTextureCompiler {
 
         private void textureList_Click(object sender, EventArgs e) {
             textureList.Items.Clear();
+        }
+        public void ClearList() {
+            try {
+                textureList.Items.Clear();
+            } catch {
+
+            }
         }
     }
 }

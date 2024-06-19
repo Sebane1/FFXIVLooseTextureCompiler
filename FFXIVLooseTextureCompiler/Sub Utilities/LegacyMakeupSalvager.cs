@@ -34,9 +34,6 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
             + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
-            string outputTextureAlpha = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\alpha\"
-            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -54,8 +51,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     Bitmap bitmap = null;
                     if (!skipUnderlayCheckBox.Checked) {
                         Bitmap rgb = TexLoader.ResolveBitmap(outputTexture);
-                        Bitmap alpha = TexLoader.ResolveBitmap(outputTextureAlpha);
-                        bitmap = ImageManipulation.MergeAlphaToRGB(new Bitmap(ImageManipulation.ExtractAlpha(alpha), rgb.Size), rgb);
+                        bitmap = rgb;
                     } else {
                         bitmap = TexLoader.ResolveBitmap(path);
                     }
@@ -88,7 +84,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
 
                 }
             } else {
-                MessageBox.Show("Assets for the current selection do no exist.");
+                MessageBox.Show("Assets for the current selection do no exist. Likely missing files from the base installation of Loose Texture Compiler");
             }
             convertMakeupButton.Enabled = true;
         }
@@ -140,6 +136,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             ProcessInfo.UseShellExecute = true;
             Process = Process.Start(ProcessInfo);
             lastItem = null;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e) {
+
         }
     }
 }
