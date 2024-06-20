@@ -1168,54 +1168,11 @@ namespace FFXIVLooseTextureCompiler {
                 if (projectFile.GroupOptionTypes != null) {
                     groupOptionTypes = projectFile.GroupOptionTypes;
                 }
-                if (projectFile.ProjectVersion == 0) {
+                if (projectFile.ProjectVersion < 2) {
                     if (MessageBox.Show("This project is not compatible with Dawntrail. Convert this project to work with Dawntrail?",
-                        VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        foreach (TextureSet textureSet in projectFile.TextureSets) {
-                            if (textureSet.InternalMaskPath.Contains("catchlight")) {
-                                textureSet.InternalMaskPath = RacePaths.OldEyePathToNewEyeMultiPath(textureSet.InternalNormalPath);
-                                textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalDiffusePath);
-                                textureSet.InternalDiffusePath = RacePaths.OldEyePathToNewEyeDiffusePath(textureSet.InternalDiffusePath);
-                                if (File.Exists(textureSet.Normal)) {
-                                    var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
-                                    textureSet.Diffuse = strings[0];
-                                    textureSet.Normal = strings[1];
-                                    textureSet.Mask = strings[2];
-                                } else {
-                                    textureSet.Mask = textureSet.Normal;
-                                    textureSet.Normal = textureSet.Diffuse;
-                                    textureSet.Diffuse = "";
-                                    missingFiles++;
-                                }
-                            }
-                            if (textureSet.InternalMaskPath.Contains("hair")) {
-                                if (File.Exists(textureSet.Mask)) {
-                                    string newMultiPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Mask, ".png"), "_dawntrail");
-                                    if (!File.Exists(newMultiPath)) {
-                                        ImageManipulation.LegacyHairMultiToDawntrailMulti(
-                                        TexLoader.ResolveBitmap(textureSet.Mask, true)).Save(newMultiPath, ImageFormat.Png);
-                                    }
-                                    textureSet.Mask = newMultiPath;
-                                    if (File.Exists(textureSet.Normal)) {
-                                        string newNormalPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Normal, ".png"), "_dawntrail");
-                                        if (!File.Exists(newNormalPath)) {
-                                            ImageManipulation.LegacyHairNormalToDawntrailNormal(
-                                        TexLoader.ResolveBitmap(textureSet.Mask),
-                                        TexLoader.ResolveBitmap(textureSet.Normal, true)).Save(newNormalPath, ImageFormat.Png);
-                                        }
-                                        textureSet.Normal = newMultiPath;
-                                    }
-                                } else {
-                                    textureSet.Mask = textureSet.Normal;
-                                    textureSet.Normal = textureSet.Diffuse;
-                                    textureSet.Diffuse = "";
-                                    missingFiles++;
-                                }
-                            }
-                            if (textureSet.InternalMaskPath.Contains("fac_d")) {
-                                foundFaceMod = true;
-                            }
-                        }
+                        VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                        ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
+                    }
                 }
                 textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 if (projectFile.SimpleMode) {
@@ -1258,6 +1215,57 @@ namespace FFXIVLooseTextureCompiler {
             HasSaved = true;
         }
 
+        private void ProjectUpgrade(ProjectFile projectFile, ref int missingFiles, ref bool foundFaceMod) {
+            foreach (TextureSet textureSet in projectFile.TextureSets) {
+                if (textureSet.InternalMaskPath.Contains("catchlight")) {
+                    textureSet.InternalMaskPath = RacePaths.OldEyePathToNewEyeMultiPath(textureSet.InternalNormalPath);
+                    textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalDiffusePath);
+                    textureSet.InternalDiffusePath = RacePaths.OldEyePathToNewEyeDiffusePath(textureSet.InternalDiffusePath);
+                    if (File.Exists(textureSet.Normal)) {
+                        var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
+                        textureSet.Diffuse = strings[0];
+                        textureSet.Normal = strings[1];
+                        textureSet.Mask = strings[2];
+                    } else {
+                        textureSet.Mask = textureSet.Normal;
+                        textureSet.Normal = textureSet.Diffuse;
+                        textureSet.Diffuse = "";
+                        missingFiles++;
+                    }
+                }
+                if (textureSet.InternalMaskPath.Contains("hair")) {
+                    if (File.Exists(textureSet.Mask)) {
+                        string newMultiPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Mask, ".png"), "_dawntrail");
+                        if (!File.Exists(newMultiPath)) {
+                            ImageManipulation.LegacyHairMultiToDawntrailMulti(
+                            TexLoader.ResolveBitmap(textureSet.Mask, true)).Save(newMultiPath, ImageFormat.Png);
+                        }
+                        textureSet.Mask = newMultiPath;
+                        if (File.Exists(textureSet.Normal)) {
+                            string newNormalPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Normal, ".png"), "_dawntrail");
+                            if (!File.Exists(newNormalPath)) {
+                                ImageManipulation.LegacyHairNormalToDawntrailNormal(
+                            TexLoader.ResolveBitmap(textureSet.Mask),
+                            TexLoader.ResolveBitmap(textureSet.Normal, true)).Save(newNormalPath, ImageFormat.Png);
+                            }
+                            textureSet.Normal = newMultiPath;
+                        }
+                    } else {
+                        textureSet.Mask = textureSet.Normal;
+                        textureSet.Normal = textureSet.Diffuse;
+                        textureSet.Diffuse = "";
+                        missingFiles++;
+                    }
+                }
+                textureSet.InternalMaskPath = RacePaths.PathCorrector(textureSet.InternalMaskPath);
+                textureSet.InternalNormalPath = RacePaths.PathCorrector(textureSet.InternalNormalPath);
+                textureSet.InternalDiffusePath = RacePaths.PathCorrector(textureSet.InternalDiffusePath);
+                if (textureSet.InternalMaskPath.Contains("fac_d")) {
+                    foundFaceMod = true;
+                }
+            }
+        }
+
         public void OpenTemplate(string path) {
             using (StreamReader file = File.OpenText(path)) {
                 JsonSerializer serializer = new JsonSerializer();
@@ -1265,17 +1273,14 @@ namespace FFXIVLooseTextureCompiler {
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
                 if (templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
-
+                    int missingFiles = 0;
+                    bool foundFaceMod = false;
+                    if (projectFile.ProjectVersion < 2) {
+                        ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
+                    }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
                         if (!templateConfiguration.GroupName.Contains("Default")) {
                             textureSet.GroupName = templateConfiguration.GroupName;
-                        }
-                        if (projectFile.ProjectVersion == 0) {
-                            if (textureSet.InternalMaskPath.Contains("catchlight")) {
-                                textureSet.InternalMaskPath = textureSet.InternalNormalPath;
-                                textureSet.InternalNormalPath = textureSet.InternalDiffusePath;
-                                textureSet.InternalDiffusePath = textureSet.InternalDiffusePath.Replace("_n.tex", "_d.tex");
-                            }
                         }
                         AddWatcher(textureSet.Diffuse);
                         AddWatcher(textureSet.Normal);
@@ -1295,7 +1300,7 @@ namespace FFXIVLooseTextureCompiler {
             using (StreamWriter writer = new StreamWriter(path)) {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = new ProjectFile();
-                projectFile.ProjectVersion = 1;
+                projectFile.ProjectVersion = 2;
                 projectFile.Name = modNameTextBox.Text;
                 projectFile.Author = modAuthorTextBox.Text;
                 projectFile.Version = modVersionTextBox.Text;

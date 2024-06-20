@@ -187,7 +187,7 @@
             // raceList
             // 
             raceList.FormattingEnabled = true;
-            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafel", "Raen", "Xaela", "Hrothgar", "Viera" });
+            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafell", "Raen", "Xaela", "Hrothgar", "Viera" });
             raceList.Location = new Point(228, 112);
             raceList.Name = "raceList";
             raceList.Size = new Size(84, 23);
@@ -240,6 +240,7 @@
             // 
             // mask
             // 
+            mask.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             mask.BackColor = Color.FromArgb(255, 192, 255);
             mask.CurrentPath = null;
             mask.Enabled = false;
@@ -258,6 +259,7 @@
             // 
             // normal
             // 
+            normal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             normal.BackColor = SystemColors.GradientInactiveCaption;
             normal.CurrentPath = null;
             normal.Enabled = false;
@@ -276,6 +278,7 @@
             // 
             // diffuse
             // 
+            diffuse.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             diffuse.BackColor = Color.LavenderBlush;
             diffuse.CurrentPath = null;
             diffuse.Enabled = false;
@@ -1005,6 +1008,7 @@
             // 
             // currentEditLabel
             // 
+            currentEditLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             currentEditLabel.AutoSize = true;
             currentEditLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             currentEditLabel.Location = new Point(4, 412);
@@ -1142,6 +1146,7 @@
             // 
             // bounds
             // 
+            bounds.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             bounds.CurrentPath = null;
             bounds.Enabled = false;
             bounds.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
@@ -1181,6 +1186,7 @@
             // 
             // glow
             // 
+            glow.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             glow.CurrentPath = null;
             glow.Enabled = false;
             glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
@@ -1303,6 +1309,7 @@
             // 
             // textureSetName
             // 
+            textureSetName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             textureSetName.Enabled = false;
             textureSetName.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             textureSetName.Location = new Point(92, 412);
