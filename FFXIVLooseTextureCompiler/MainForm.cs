@@ -239,7 +239,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void MainForm_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Program.Version;
-            if (DateTime.Now < DateTime.Parse(@"06/28/2024")) {
+            if (DateTime.Now < new DateTime(2024, 06, 28)) {
                 MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n" +
         "You will need a copy of CursedTools from the FFXIV Textools discords 'dev_room' to manually import the exports made by this tool into the benchmark.\r\n\r\n" +
         "Exports made by this version of Loose Texture Compiler are not compatible with Endwalker or any current version of Penumbra.", VersionText);
