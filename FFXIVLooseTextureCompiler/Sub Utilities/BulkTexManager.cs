@@ -7,7 +7,7 @@ namespace FFXIVLooseTextureCompiler {
     public partial class BulkTexManager : Form {
         private Point startPos;
         private bool canDoDragDrop;
-
+        Dictionary<string, FileSystemWatcher> watcherList = new Dictionary<string, FileSystemWatcher>();
         public byte[] RGBAPixels { get; private set; }
 
         public BulkTexManager() {
@@ -57,7 +57,24 @@ namespace FFXIVLooseTextureCompiler {
             }
             return false;
         }
-
+        public void AddWatcher(string path) {
+            string directory = Path.GetDirectoryName(path);
+            if (Directory.Exists(directory) && !string.IsNullOrWhiteSpace(path)) {
+                FileSystemWatcher fileSystemWatcher = watcherList.ContainsKey(path) ? watcherList[path] : new FileSystemWatcher();
+                fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                if (!watcherList.ContainsKey(path)) {
+                    fileSystemWatcher.Changed += delegate (object sender, FileSystemEventArgs e) {
+                        AddFilesRecursively(path,0,10);
+                    };
+                    fileSystemWatcher.Created += delegate (object sender, FileSystemEventArgs e) {
+                        AddFilesRecursively(path, 0, 10);
+                    };
+                }
+                fileSystemWatcher.Path = directory;
+                fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(path);
+                watcherList[path] = fileSystemWatcher;
+            }
+        }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
             try {
                 if (textureList.SelectedIndex != -1) {
@@ -79,6 +96,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void AddFilesRecursively(string path, int recursionCount, int recursionLimit) {
+            AddWatcher(path);
             try {
                 foreach (string file in Directory.GetFiles(path, "*.tex")) {
                     if (File.Exists(file)) {

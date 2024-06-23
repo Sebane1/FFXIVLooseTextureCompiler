@@ -201,7 +201,6 @@ namespace FFXIVLooseTextureCompiler {
                 } else {
                     _exportTexManager.ClearList();
                 }
-                Thread.Sleep(5000);
                 _exportTexManager.Show();
                 _exportTexManager.AddFilesRecursively(path, 0, 10);
             }
@@ -620,7 +619,7 @@ namespace FFXIVLooseTextureCompiler {
         private void baseBodyList_SelectedIndexChanged(object sender, EventArgs e) {
             switch (baseBodyList.SelectedIndex) {
                 case 0:
-                    genderList.Enabled = true;
+                    //genderList.Enabled = true;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
@@ -628,7 +627,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 2:
                 case 3:
                     genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -638,13 +637,13 @@ namespace FFXIVLooseTextureCompiler {
                 case 4:
                     raceList.SelectedIndex = 6;
                     genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 5:
                     genderList.SelectedIndex = 0;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -653,12 +652,12 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 6:
                     raceList.SelectedIndex = 6;
-                    genderList.Enabled = true;
+                    //genderList.Enabled = true;
                     tailList.Enabled = true;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 7:
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     raceList.SelectedIndex = 5;
                     tailList.Enabled = false;
                     break;
@@ -1168,11 +1167,8 @@ namespace FFXIVLooseTextureCompiler {
                 if (projectFile.GroupOptionTypes != null) {
                     groupOptionTypes = projectFile.GroupOptionTypes;
                 }
-                if (projectFile.ProjectVersion < 2) {
-                    if (MessageBox.Show("This project is not compatible with Dawntrail. Convert this project to work with Dawntrail?",
-                        VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
-                        ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
-                    }
+                if (projectFile.ProjectVersion < 3) {
+                    ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                 }
                 textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 if (projectFile.SimpleMode) {
@@ -1275,7 +1271,7 @@ namespace FFXIVLooseTextureCompiler {
                     BringToFront();
                     int missingFiles = 0;
                     bool foundFaceMod = false;
-                    if (projectFile.ProjectVersion < 2) {
+                    if (projectFile.ProjectVersion < 3) {
                         ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                     }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
@@ -1573,7 +1569,7 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     MapWriting.ExtractGlowMapFromDiffuse(
-                        TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
+                        TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"), ImageFormat.Png);
                 }
             }
         }
@@ -1737,11 +1733,12 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ImageFormat.Png);
-                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ImageFormat.Png);
-                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ImageFormat.Png);
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ImageFormat.Png);
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName, true);
+                Bitmap alpha = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractRed(image).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ".png"), ImageFormat.Png);
+                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ".png"), ImageFormat.Png);
+                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ".png"), ImageFormat.Png);
+                ImageManipulation.ExtractAlpha(alpha).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Image successfully split into seperate channels", VersionText);
             }
         }
@@ -1752,13 +1749,13 @@ namespace FFXIVLooseTextureCompiler {
 
         private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ImageFormat.Png);
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ImageFormat.Png);
+                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName, true);
+                Bitmap alpha = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ".png"), ImageFormat.Png);
+                ImageManipulation.ExtractAlpha(alpha).Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ".png"), ImageFormat.Png);
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
@@ -1777,7 +1774,7 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show("Please select where you want to save the conversion", VersionText);
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                         ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
-                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
+                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"), ImageFormat.Png);
                     }
                 }
             }
@@ -1819,7 +1816,7 @@ namespace FFXIVLooseTextureCompiler {
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select where you want to save the result", VersionText);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.GenerateXNormalTranslationMap().Save(saveFileDialog.FileName, ImageFormat.Png);
+                ImageManipulation.GenerateXNormalTranslationMap().Save(ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"), ImageFormat.Png);
             }
         }
         #endregion
@@ -1936,7 +1933,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creator of Pythia\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -2194,7 +2191,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture to convert to .tex");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 textureProcessor.ExportTex(openFileDialog.FileName, ImageManipulation.ReplaceExtension(openFileDialog.FileName, ".tex"));
-                MessageBox.Show("Texture Converter To Tex", VersionText);
+                MessageBox.Show("Texture converted to TEX.", VersionText);
             }
         }
 
@@ -2228,6 +2225,111 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void textureSetName_MouseMove(object sender, MouseEventArgs e) {
+        }
+
+        private void autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem_Click(object sender, EventArgs e) {
+            string paths = "";
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string directory in Directory.EnumerateDirectories(folderBrowserDialog.SelectedPath)) {
+                    string directoryName = Path.GetFileNameWithoutExtension(directory).Replace("Hyur_", null);
+                    string[] splitString = directoryName.Split("_");
+                    string race = splitString[0];
+                    string gender = splitString[1].Replace("Female", "feminine").Replace("Male", "masculine");
+                    foreach (string subDirectory in Directory.EnumerateDirectories(directory)) {
+                        foreach (string file in Directory.EnumerateFiles(subDirectory)) {
+                            if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
+                                try {
+                                    string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
+                                    string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                    + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
+                                    Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
+                                    TexLoader.ResolveBitmap(file).Save(outputTexture, ImageFormat.Png);
+                                    paths += outputTexture + "\r\n";
+                                } catch { }
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("Operation Completed Successfully");
+            }
+        }
+
+        private void autoFinalizeNormalMapsFromTexToolsDumpToolStripMenuItem_Click(object sender, EventArgs e) {
+            string paths = "";
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string directory in Directory.EnumerateDirectories(folderBrowserDialog.SelectedPath)) {
+                    string directoryName = Path.GetFileNameWithoutExtension(directory);
+                    string[] splitString = directoryName.Split("_");
+                    string race = splitString[0];
+                    string gender = splitString[1].Replace("Female", "feminine").Replace("Male", "masculine");
+                    foreach (string subDirectory in Directory.EnumerateDirectories(directory)) {
+                        foreach (string faceDirectory in Directory.EnumerateDirectories(subDirectory)) {
+                            foreach (string file in Directory.EnumerateFiles(faceDirectory)) {
+                                if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
+                                    try {
+                                        string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
+                                        string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                        + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
+                                        Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
+                                        ImageManipulation.MergeAlphaToRGB(ImageManipulation.ExtractAlpha(TexLoader.ResolveBitmap(file)),
+                                        TexLoader.ResolveBitmap(outputTexture)).Save(outputTexture, ImageFormat.Png);
+                                        paths += outputTexture + "\r\n";
+                                    } catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show(paths);
+            }
+        }
+
+        private void genderList_SelectedIndexChanged(object sender, EventArgs e) {
+            switch (baseBodyList.SelectedIndex) {
+                case 1:
+                case 2:
+                case 3:
+                    if (genderList.SelectedIndex != 1) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+                case 4:
+                    if (genderList.SelectedIndex != 1) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+                case 5:
+                    if (genderList.SelectedIndex != 0) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+            }
+        }
+
+        private void diffuseToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.DiffuseToNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Diffuse converted to normal map!", VersionText);
+            }
+        }
+
+        private void diffuseToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.DiffuseToInvertedNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Diffuse converted to inverted normal map!", VersionText);
+            }
+        }
+
+        private void colourChannelSplittingToolStripMenuItem_Click(object sender, EventArgs e) {
+
         }
     }
 }

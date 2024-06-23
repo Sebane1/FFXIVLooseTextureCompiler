@@ -33,7 +33,8 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
-            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1) + faceNumberListBox.SelectedIndex) + ".png");
+            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1)
+            + faceNumberListBox.SelectedIndex) + (textureIsNormalMap.Checked ? "n" : "") + ".png");
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -46,21 +47,29 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                 }
                 if (!string.IsNullOrEmpty(makeupPath)) {
                     string path = ImageManipulation.AddSuffix(makeupPath, "_bake");
-                    XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
-                    (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 2048 : 1024, 2048);
+                    if (!textureIsNormalMap.Checked) {
+                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
+                        (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 2048 : 1024, 2048);
+                    } else {
+                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
+                       (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 1024 : 512, 1024);
+                    }
+
                     Bitmap bitmap = null;
+                    Bitmap alpha = null;
                     if (!skipUnderlayCheckBox.Checked) {
-                        Bitmap rgb = TexLoader.ResolveBitmap(outputTexture);
-                        bitmap = rgb;
+                        bitmap = TexLoader.ResolveBitmap(outputTexture, textureIsNormalMap.Checked);
+                        alpha = ImageManipulation.ExtractAlpha(TexLoader.ResolveBitmap(outputTexture));
                     } else {
                         bitmap = TexLoader.ResolveBitmap(path);
                     }
+
                     Graphics graphics = Graphics.FromImage(bitmap);
-                    Bitmap makeup = TexLoader.ResolveBitmap(path);
+                    Bitmap makeup = new Bitmap(TexLoader.ResolveBitmap(path), bitmap.Width, bitmap.Height);
                     Bitmap lipCorrectionBitmap = TexLoader.ResolveBitmap(lipCorrectionMap);
                     Bitmap eyeCorrectionBitmap = TexLoader.ResolveBitmap(eyeCorrectionMap);
                     if (!skipUnderlayCheckBox.Checked) {
-                        Bitmap teeth = bitmap.Clone(new Rectangle(0, 0, 509, 280), bitmap.PixelFormat);
+                        Bitmap teeth = bitmap.Clone(new Rectangle(0, 0, (int)((float)bitmap.Height * 0.24853515625f), (int)((float)bitmap.Height * 0.1372549019607843f)), bitmap.PixelFormat);
                         if ((subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10)) {
                             ImageManipulation.ClearOldHorns(makeup);
                         }
@@ -69,7 +78,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     } else {
                         ImageManipulation.EraseTeeth(bitmap);
                     }
-                    if (!skipLipCorrection.Checked) {
+                    if (!skipLipCorrection.Checked && !textureIsNormalMap.Checked) {
                         Bitmap lips = ImageManipulation.LipCorrection(lipCorrectionBitmap, new Bitmap(bitmap), true);
                         for (int i = 0; i < 4; i++) {
                             graphics.DrawImage(lips, new Point(0, 0));
@@ -79,7 +88,11 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                             graphics.DrawImage(eyes, new Point(0, 0));
                         }
                     }
-                    bitmap.Save(lastItem = ImageManipulation.AddSuffix(path, "_final"));
+                    if (textureIsNormalMap.Checked) {
+                        ImageManipulation.MergeAlphaToRGB(alpha, bitmap).Save(lastItem = ImageManipulation.AddSuffix(path, "_final_normal"));
+                    } else {
+                        ImageManipulation.MergeAlphaToRGB(alpha, bitmap).Save(lastItem = ImageManipulation.AddSuffix(path, "_final"));
+                    }
                     File.Delete(path);
 
                 }

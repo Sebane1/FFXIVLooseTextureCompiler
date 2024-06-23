@@ -39,13 +39,13 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 mainWindow.Hide();
                 skinTextureSet.OmniExportMode = true;
-                skinTextureSet.MaterialSetName = "Skin";
-                faceTextureSet.MaterialSetName = "Face";
-                eyesTextureSet.MaterialSetName = "Eyes";
+                skinTextureSet.TextureSetName = "Skin";
+                faceTextureSet.TextureSetName = "Face";
+                eyesTextureSet.TextureSetName = "Eyes";
 
-                skinTextureSet.MaterialGroupName = "Character Customization";
-                faceTextureSet.MaterialGroupName = "Character Customization";
-                eyesTextureSet.MaterialGroupName = "Character Customization";
+                skinTextureSet.GroupName = "Character Customization";
+                faceTextureSet.GroupName = "Character Customization";
+                eyesTextureSet.GroupName = "Character Customization";
 
                 skin.FilePath.Text = skinTextureSet.Diffuse;
                 face.FilePath.Text = faceTextureSet.Diffuse;
