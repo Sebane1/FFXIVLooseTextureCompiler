@@ -24,100 +24,134 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BulkTexManager));
-            this.textureList = new System.Windows.Forms.ListBox();
-            this.texturePreview = new System.Windows.Forms.PictureBox();
-            this.exportPNG = new System.Windows.Forms.Button();
-            this.bulkImport = new System.Windows.Forms.Button();
-            this.exportAllButton = new System.Windows.Forms.Button();
-            this.clearListButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.texturePreview)).BeginInit();
-            this.SuspendLayout();
+            textureList = new ListBox();
+            texturePreview = new PictureBox();
+            exportPNG = new Button();
+            bulkImport = new Button();
+            exportAllButton = new Button();
+            clearListButton = new Button();
+            pathTextBox = new TextBox();
+            openPathButton = new Button();
+            label1 = new Label();
+            ((System.ComponentModel.ISupportInitialize)texturePreview).BeginInit();
+            SuspendLayout();
             // 
             // textureList
             // 
-            this.textureList.AllowDrop = true;
-            this.textureList.FormattingEnabled = true;
-            this.textureList.ItemHeight = 15;
-            this.textureList.Location = new System.Drawing.Point(4, 4);
-            this.textureList.Name = "textureList";
-            this.textureList.Size = new System.Drawing.Size(168, 304);
-            this.textureList.TabIndex = 0;
-            this.textureList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            this.textureList.DragDrop += new System.Windows.Forms.DragEventHandler(this.texList_DragDrop);
-            this.textureList.DragEnter += new System.Windows.Forms.DragEventHandler(this.texList_DragEnter);
-            this.textureList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.texList_MouseDown);
-            this.textureList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.texList_MouseMove);
+            textureList.AllowDrop = true;
+            textureList.FormattingEnabled = true;
+            textureList.ItemHeight = 15;
+            textureList.Location = new Point(4, 4);
+            textureList.Name = "textureList";
+            textureList.Size = new Size(168, 394);
+            textureList.TabIndex = 0;
+            textureList.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            textureList.DragDrop += texList_DragDrop;
+            textureList.DragEnter += texList_DragEnter;
+            textureList.MouseDown += texList_MouseDown;
+            textureList.MouseMove += texList_MouseMove;
             // 
             // texturePreview
             // 
-            this.texturePreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.texturePreview.Location = new System.Drawing.Point(176, 0);
-            this.texturePreview.Name = "texturePreview";
-            this.texturePreview.Size = new System.Drawing.Size(308, 308);
-            this.texturePreview.TabIndex = 1;
-            this.texturePreview.TabStop = false;
-            this.texturePreview.Click += new System.EventHandler(this.pictureBox1_Click);
+            texturePreview.BackgroundImageLayout = ImageLayout.Zoom;
+            texturePreview.Location = new Point(176, 0);
+            texturePreview.Name = "texturePreview";
+            texturePreview.Size = new Size(400, 400);
+            texturePreview.TabIndex = 1;
+            texturePreview.TabStop = false;
+            texturePreview.Click += pictureBox1_Click;
             // 
             // exportPNG
             // 
-            this.exportPNG.Location = new System.Drawing.Point(400, 312);
-            this.exportPNG.Name = "exportPNG";
-            this.exportPNG.Size = new System.Drawing.Size(80, 24);
-            this.exportPNG.TabIndex = 3;
-            this.exportPNG.Text = "Export PNG";
-            this.exportPNG.UseVisualStyleBackColor = true;
-            this.exportPNG.Click += new System.EventHandler(this.exportPNGButton_Click);
+            exportPNG.Location = new Point(400, 404);
+            exportPNG.Name = "exportPNG";
+            exportPNG.Size = new Size(80, 24);
+            exportPNG.TabIndex = 3;
+            exportPNG.Text = "Export PNG";
+            exportPNG.UseVisualStyleBackColor = true;
+            exportPNG.Click += exportPNGButton_Click;
             // 
             // bulkImport
             // 
-            this.bulkImport.Location = new System.Drawing.Point(4, 312);
-            this.bulkImport.Name = "bulkImport";
-            this.bulkImport.Size = new System.Drawing.Size(168, 23);
-            this.bulkImport.TabIndex = 4;
-            this.bulkImport.Text = "Recursive Bulk Import";
-            this.bulkImport.UseVisualStyleBackColor = true;
-            this.bulkImport.Click += new System.EventHandler(this.bulkImport_Click);
+            bulkImport.Location = new Point(4, 404);
+            bulkImport.Name = "bulkImport";
+            bulkImport.Size = new Size(168, 23);
+            bulkImport.TabIndex = 4;
+            bulkImport.Text = "Recursive Bulk Import";
+            bulkImport.UseVisualStyleBackColor = true;
+            bulkImport.Click += bulkImport_Click;
             // 
             // exportAllButton
             // 
-            this.exportAllButton.Location = new System.Drawing.Point(264, 312);
-            this.exportAllButton.Name = "exportAllButton";
-            this.exportAllButton.Size = new System.Drawing.Size(132, 24);
-            this.exportAllButton.TabIndex = 5;
-            this.exportAllButton.Text = "Bulk Export To PNG";
-            this.exportAllButton.UseVisualStyleBackColor = true;
-            this.exportAllButton.Click += new System.EventHandler(this.exportAllButton_Click);
+            exportAllButton.Location = new Point(264, 404);
+            exportAllButton.Name = "exportAllButton";
+            exportAllButton.Size = new Size(132, 24);
+            exportAllButton.TabIndex = 5;
+            exportAllButton.Text = "Bulk Export To PNG";
+            exportAllButton.UseVisualStyleBackColor = true;
+            exportAllButton.Click += exportAllButton_Click;
             // 
             // clearListButton
             // 
-            this.clearListButton.Location = new System.Drawing.Point(176, 312);
-            this.clearListButton.Name = "clearListButton";
-            this.clearListButton.Size = new System.Drawing.Size(88, 24);
-            this.clearListButton.TabIndex = 6;
-            this.clearListButton.Text = "Clear List";
-            this.clearListButton.UseVisualStyleBackColor = true;
-            this.clearListButton.Click += new System.EventHandler(this.textureList_Click);
+            clearListButton.Location = new Point(176, 404);
+            clearListButton.Name = "clearListButton";
+            clearListButton.Size = new Size(88, 24);
+            clearListButton.TabIndex = 6;
+            clearListButton.Text = "Clear List";
+            clearListButton.UseVisualStyleBackColor = true;
+            clearListButton.Click += textureList_Click;
+            // 
+            // pathTextBox
+            // 
+            pathTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pathTextBox.Location = new Point(72, 428);
+            pathTextBox.Name = "pathTextBox";
+            pathTextBox.Size = new Size(504, 23);
+            pathTextBox.TabIndex = 7;
+            pathTextBox.TextChanged += pathTextBox_TextChanged;
+            // 
+            // openPathButton
+            // 
+            openPathButton.Location = new Point(484, 404);
+            openPathButton.Name = "openPathButton";
+            openPathButton.Size = new Size(92, 24);
+            openPathButton.TabIndex = 8;
+            openPathButton.Text = "Open Path";
+            openPathButton.UseVisualStyleBackColor = true;
+            openPathButton.Click += openPathButton_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(8, 432);
+            label1.Name = "label1";
+            label1.Size = new Size(58, 15);
+            label1.TabIndex = 9;
+            label1.Text = "Base Path";
             // 
             // BulkTexManager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 341);
-            this.Controls.Add(this.clearListButton);
-            this.Controls.Add(this.exportAllButton);
-            this.Controls.Add(this.bulkImport);
-            this.Controls.Add(this.exportPNG);
-            this.Controls.Add(this.texturePreview);
-            this.Controls.Add(this.textureList);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.Name = "BulkTexManager";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Bulk Tex Manager";
-            ((System.ComponentModel.ISupportInitialize)(this.texturePreview)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(580, 455);
+            Controls.Add(label1);
+            Controls.Add(openPathButton);
+            Controls.Add(pathTextBox);
+            Controls.Add(clearListButton);
+            Controls.Add(exportAllButton);
+            Controls.Add(bulkImport);
+            Controls.Add(exportPNG);
+            Controls.Add(texturePreview);
+            Controls.Add(textureList);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            Name = "BulkTexManager";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Bulk Tex Manager";
+            ((System.ComponentModel.ISupportInitialize)texturePreview).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -128,5 +162,8 @@
         private Button bulkImport;
         private Button exportAllButton;
         private Button clearListButton;
+        private TextBox pathTextBox;
+        private Button openPathButton;
+        private Label label1;
     }
 }

@@ -2,6 +2,7 @@
 using FFXIVLooseTextureCompiler.Racial;
 using KVImage;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Windows.Documents;
 
 
@@ -23,17 +24,22 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
 
         private void ConvertMakeup(string makeupPath = null) {
             convertMakeupButton.Enabled = false;
-            string lipCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\correction.png");
-            string eyeCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\eyecorrection.png");
+            string lipCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\correction.png");
+            string eyeCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\eyecorrection.png");
             string inputModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\input\"
+            @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
+            RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\input\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
             string outputModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\"
+            @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
+            RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" + RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
-            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? 101 : 1)
+            @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
+            RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
+            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? (textureIsNormalMap.Checked ? 1 : 101) : 1)
             + faceNumberListBox.SelectedIndex) + (textureIsNormalMap.Checked ? "n" : "") + ".png");
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
@@ -54,50 +60,50 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                         XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
                        (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 1024 : 512, 1024);
                     }
-
                     Bitmap bitmap = null;
                     Bitmap alpha = null;
                     if (!skipUnderlayCheckBox.Checked) {
-                        bitmap = TexLoader.ResolveBitmap(outputTexture, textureIsNormalMap.Checked);
-                        alpha = ImageManipulation.ExtractAlpha(TexLoader.ResolveBitmap(outputTexture));
+                        bitmap = TexIO.ResolveBitmap(outputTexture, textureIsNormalMap.Checked);
+                        alpha = ImageManipulation.ExtractAlpha(TexIO.ResolveBitmap(outputTexture));
                     } else {
-                        bitmap = TexLoader.ResolveBitmap(path);
+                        bitmap = TexIO.ResolveBitmap(path);
                     }
-
-                    Graphics graphics = Graphics.FromImage(bitmap);
-                    Bitmap makeup = new Bitmap(TexLoader.ResolveBitmap(path), bitmap.Width, bitmap.Height);
-                    Bitmap lipCorrectionBitmap = TexLoader.ResolveBitmap(lipCorrectionMap);
-                    Bitmap eyeCorrectionBitmap = TexLoader.ResolveBitmap(eyeCorrectionMap);
+                    Bitmap canvas = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
+                    Graphics graphics = Graphics.FromImage(canvas);
+                    graphics.Clear(Color.Transparent);
+                    graphics.DrawImage(bitmap, new Point(0, 0));
+                    Bitmap makeup = ImageManipulation.Resize(TexIO.ResolveBitmap(path), bitmap.Width, bitmap.Height);
+                    Bitmap lipCorrectionBitmap = TexIO.ResolveBitmap(lipCorrectionMap);
+                    Bitmap eyeCorrectionBitmap = TexIO.ResolveBitmap(eyeCorrectionMap);
                     if (!skipUnderlayCheckBox.Checked) {
-                        Bitmap teeth = bitmap.Clone(new Rectangle(0, 0, (int)((float)bitmap.Height * 0.24853515625f), (int)((float)bitmap.Height * 0.1372549019607843f)), bitmap.PixelFormat);
+                        Bitmap teeth = TexIO.Clone(bitmap, new Rectangle(0, 0, (int)((float)bitmap.Height * 0.24853515625f), (int)((float)bitmap.Height * 0.1372549019607843f)));
                         if ((subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10)) {
-                            ImageManipulation.ClearOldHorns(makeup);
+                            makeup = ImageManipulation.ClearOldHorns(makeup);
                         }
                         graphics.DrawImage(makeup, new Point(0, 0));
                         graphics.DrawImage(teeth, new Point(0, 0));
                     } else {
-                        ImageManipulation.EraseTeeth(bitmap);
+                        ImageManipulation.EraseTeeth(canvas);
                     }
                     if (!skipLipCorrection.Checked && !textureIsNormalMap.Checked) {
-                        Bitmap lips = ImageManipulation.LipCorrection(lipCorrectionBitmap, new Bitmap(bitmap), true);
+                        Bitmap lips = ImageManipulation.LipCorrection(lipCorrectionBitmap, TexIO.NewBitmap(canvas), true);
                         for (int i = 0; i < 4; i++) {
                             graphics.DrawImage(lips, new Point(0, 0));
                         }
-                        Bitmap eyes = ImageManipulation.EyeCorrection(eyeCorrectionBitmap, new Bitmap(bitmap), true);
+                        Bitmap eyes = ImageManipulation.EyeCorrection(eyeCorrectionBitmap, TexIO.NewBitmap(canvas), true);
                         for (int i = 0; i < 4; i++) {
                             graphics.DrawImage(eyes, new Point(0, 0));
                         }
                     }
-                    if (textureIsNormalMap.Checked) {
-                        ImageManipulation.MergeAlphaToRGB(alpha, bitmap).Save(lastItem = ImageManipulation.AddSuffix(path, "_final_normal"));
+                    if (!textureIsNormalMap.Checked) {
+                        TexIO.SaveBitmap(ImageManipulation.MergeAlphaToRGB(alpha, canvas), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
                     } else {
-                        ImageManipulation.MergeAlphaToRGB(alpha, bitmap).Save(lastItem = ImageManipulation.AddSuffix(path, "_final"));
+                        TexIO.SaveBitmap(ImageManipulation.MergeGrayscalesToRGBA(TexIO.NewBitmap(canvas), TexIO.NewBitmap(canvas), TexIO.NewBitmap(bitmap), alpha), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
                     }
                     File.Delete(path);
-
                 }
             } else {
-                MessageBox.Show("Assets for the current selection do no exist. Likely missing files from the base installation of Loose Texture Compiler");
+                MessageBox.Show("Assets for the current selection do no exist. If this is a valid selection, its possible Loose Texture Compiler needs to be re-installed.");
             }
             convertMakeupButton.Enabled = true;
         }
