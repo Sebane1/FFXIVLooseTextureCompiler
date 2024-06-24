@@ -103,7 +103,7 @@
             this.multiLabel.Name = "multiLabel";
             this.multiLabel.Size = new System.Drawing.Size(78, 15);
             this.multiLabel.TabIndex = 7;
-            this.multiLabel.Text = "Internal Multi";
+            this.multiLabel.Text = "Internal Mask";
             // 
             // internalMultiPathTextbox
             // 
@@ -165,7 +165,7 @@
             this.ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
             this.ignoreMultiCheckbox.Size = new System.Drawing.Size(133, 19);
             this.ignoreMultiCheckbox.TabIndex = 13;
-            this.ignoreMultiCheckbox.Text = "Dont Generate Multi";
+            this.ignoreMultiCheckbox.Text = "Dont Generate Mask";
             this.ignoreMultiCheckbox.UseVisualStyleBackColor = true;
             // 
             // label2

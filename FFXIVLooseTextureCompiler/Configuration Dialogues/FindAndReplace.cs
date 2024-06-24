@@ -28,11 +28,11 @@ namespace FFXIVLooseTextureCompiler {
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
                             textureSet.Normal = normal.FilePath.Text;
                         }
-                        if (!string.IsNullOrEmpty(multi.FilePath.Text)) {
-                            textureSet.Multi = multi.FilePath.Text;
-                        }
                         if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
-                            textureSet.NormalMask = mask.FilePath.Text;
+                            textureSet.Mask = mask.FilePath.Text;
+                        }
+                        if (!string.IsNullOrEmpty(bounds.FilePath.Text)) {
+                            textureSet.NormalMask = bounds.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(glow.FilePath.Text)) {
                             textureSet.Glow = glow.FilePath.Text;
@@ -55,15 +55,9 @@ namespace FFXIVLooseTextureCompiler {
 
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
-            if (IsForEyes) {
-                diffuse.LabelName.Text = "Normal";
-                normal.LabelName.Text = "Multi";
-                multi.LabelName.Text = "Catchlight";
-            } else {
-                diffuse.LabelName.Text = "Diffuse";
-                normal.LabelName.Text = "Normal";
-                multi.LabelName.Text = "Multi";
-            }
+            diffuse.LabelName.Text = "Diffuse";
+            normal.LabelName.Text = "Normal";
+            mask.LabelName.Text = "Mask";
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -71,15 +65,13 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void replacementString_TextChanged(object sender, EventArgs e) {
-            if (IsForEyes) {
-                diffuse.LabelName.Text = "Normal";
-                normal.LabelName.Text = "Multi";
-                multi.LabelName.Text = "Catchlight";
-            } else {
-                diffuse.LabelName.Text = "Diffuse";
-                normal.LabelName.Text = "Normal";
-                multi.LabelName.Text = "Multi";
-            }
+            diffuse.LabelName.Text = "Diffuse";
+            normal.LabelName.Text = "Normal";
+            mask.LabelName.Text = "Mask";
+        }
+
+        private void multi_Load(object sender, EventArgs e) {
+
         }
     }
 }

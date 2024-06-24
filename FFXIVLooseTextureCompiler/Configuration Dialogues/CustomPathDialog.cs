@@ -18,9 +18,9 @@ namespace FFXIVLooseTextureCompiler {
                     materialSetNameTextBox.Text = textureSet.TextureSetName;
                     internalDiffusePathTextBox.Text = textureSet.InternalDiffusePath;
                     internalNormalPathTextBox.Text = textureSet.InternalNormalPath;
-                    internalMultiPathTextbox.Text = textureSet.InternalMultiPath;
+                    internalMultiPathTextbox.Text = textureSet.InternalMaskPath;
                     ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
-                    ignoreMultiCheckbox.Checked = textureSet.IgnoreMultiGeneration;
+                    ignoreMultiCheckbox.Checked = textureSet.IgnoreMaskGeneration;
                     invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
                     var skinTypes = UniversalTextureSetCreator.GetSkinTypeNames(textureSet);
@@ -52,7 +52,7 @@ namespace FFXIVLooseTextureCompiler {
                     MessageBox.Show("Internal normal path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
                 if (IsValidGamePathFormat(internalMultiPathTextbox.Text)) {
-                    textureSet.InternalMultiPath = internalMultiPathTextbox.Text;
+                    textureSet.InternalMaskPath = internalMultiPathTextbox.Text;
                     validationCount++;
                 } else {
                     MessageBox.Show("Internal multi path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
@@ -68,7 +68,7 @@ namespace FFXIVLooseTextureCompiler {
                     Close();
                 }
                 textureSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
-                textureSet.IgnoreMultiGeneration = ignoreMultiCheckbox.Checked;
+                textureSet.IgnoreMaskGeneration = ignoreMultiCheckbox.Checked;
                 textureSet.InvertNormalGeneration = invertNormals.Checked;
                 textureSet.SkinType = skinTypeSelection.SelectedIndex;
             } else {
@@ -93,15 +93,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
-            if (textureSet.InternalMultiPath != null && textureSet.InternalMultiPath.ToLower().Contains("catchlight")) {
-                diffuseLabel.Text = "Internal Normal";
-                normalLabel.Text = "Internal Multi";
-                multiLabel.Text = "Internal Catchlight";
-            } else {
-                diffuseLabel.Text = "Internal Diffuse";
-                normalLabel.Text = "Internal Normal";
-                multiLabel.Text = "Internal Multi";
-            }
+            diffuseLabel.Text = "Internal Diffuse";
+            normalLabel.Text = "Internal Normal";
+            multiLabel.Text = "Internal Mask";
         }
 
         private void groupChoiceType_SelectedIndexChanged(object sender, EventArgs e) {

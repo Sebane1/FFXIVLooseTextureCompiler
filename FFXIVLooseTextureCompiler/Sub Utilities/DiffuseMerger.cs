@@ -23,7 +23,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     break;
                 case ".dds":
-                    using (Bitmap source = TexLoader.DDSToBitmap(path)) {
+                    using (Bitmap source = TexIO.DDSToBitmap(path)) {
                         Bitmap target = new Bitmap(source.Size.Width, source.Size.Height);
                         Graphics g = Graphics.FromImage(target);
                         g.Clear(Color.White);
@@ -99,7 +99,7 @@ namespace FFXIVLooseTextureCompiler {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Texture Files|*.png;";
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                result.BackgroundImage.Save(saveFileDialog.FileName);
+                TexIO.SaveBitmap(result.BackgroundImage as Bitmap, saveFileDialog.FileName);
                 MessageBox.Show("Texture saved!", Text);
             }
         }

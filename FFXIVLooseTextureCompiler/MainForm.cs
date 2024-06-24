@@ -5,8 +5,10 @@ using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Networking;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
+using FFXIVLooseTextureCompiler.Sub_Utilities;
 using FFXIVVoicePackCreator;
 using LooseTextureCompilerCore.Json;
+using LooseTextureCompilerCore.Racial;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -60,6 +62,8 @@ namespace FFXIVLooseTextureCompiler {
 
         private MainFormSimplified mainFormSimplified;
         private bool isSimpleMode = true;
+        private BulkTexManager _exportTexManager;
+        private string _lastGroupName;
 
         public string VersionText { get; private set; }
         public bool LockDuplicateGeneration { get => lockDuplicateGeneration; set => lockDuplicateGeneration = value; }
@@ -161,7 +165,7 @@ namespace FFXIVLooseTextureCompiler {
             PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
             PenumbraHttpApi.Redraw(0);
             hasDoneReload = true;
-            materialList_SelectedIndexChanged(this, EventArgs.Empty);
+            textureSetList_SelectedIndexChanged(this, EventArgs.Empty);
             finalizeButton.Enabled = generateButton.Enabled = false;
             generationCooldown.Start();
             exportProgress.Visible = false;
@@ -178,9 +182,28 @@ namespace FFXIVLooseTextureCompiler {
             } else if (finalizeResults) {
                 MessageBox.Show("Export completed in " + stopwatch.Elapsed + "!");
             }
+            string path = Path.Combine(modPath, @"do_not_edit\textures\");
+            //ProcessStartInfo ProcessInfo;
+            //Process Process; ;
+            //try {
+            //    Directory.CreateDirectory(path);
+            //} catch {
+            //}
+            //ProcessInfo = new ProcessStartInfo("explorer.exe", @"""" + path + @"""");
+            //ProcessInfo.UseShellExecute = true;
+            //Process = Process.Start(ProcessInfo);
             stopwatch.Reset();
             if (isNetworkSync) {
                 SendModOverNetwork();
+            }
+            if (!isSimpleMode) {
+                if (_exportTexManager == null || _exportTexManager.IsDisposed) {
+                    _exportTexManager = new BulkTexManager();
+                } else {
+                    _exportTexManager.ClearList();
+                }
+                _exportTexManager.Show();
+                _exportTexManager.AddFilesRecursively(path, 0, 10);
             }
         }
 
@@ -216,12 +239,17 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void MainForm_Load(object sender, EventArgs e) {
             VersionText = Application.ProductName + " " + Program.Version;
+            if (DateTime.Now < new DateTime(2024, 06, 28)) {
+                MessageBox.Show("This version of Loose texture Compiler is designed to generate early texture previews for the Dawntrail Benchmark and test automated map conversions.\r\n\r\n" +
+        "You will need a copy of CursedTools from the FFXIV Textools discords 'dev_room' to manually import the exports made by this tool into the benchmark.\r\n\r\n" +
+        "Exports made by this version of Loose Texture Compiler are not compatible with Endwalker or any current version of Penumbra.", VersionText);
+            }
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
             diffuse.FilePath.Enabled = false;
             normal.FilePath.Enabled = false;
-            multi.FilePath.Enabled = false;
             mask.FilePath.Enabled = false;
+            bounds.FilePath.Enabled = false;
             glow.FilePath.Enabled = false;
             for (int i = 0; i < 300; i++) {
                 faceExtraList.Items.Add((i + 1) + "");
@@ -235,7 +263,7 @@ namespace FFXIVLooseTextureCompiler {
             GetLastUsedOptions();
             originalDiffuseBoxColour = diffuse.BackColor;
             originalNormalBoxColour = normal.BackColor;
-            originalMultiBoxColour = multi.BackColor;
+            originalMultiBoxColour = mask.BackColor;
             GetLastIP();
             LoadTemplates();
             mainFormSimplified = new MainFormSimplified();
@@ -286,7 +314,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         choiceTypeIndex = generationType.SelectedIndex;
                         bakeNormalsChecked = bakeNormals.Checked;
-                        generatingMulti = generateMultiCheckBox.Checked;
+                        generatingMulti = generatMaskCheckBox.Checked;
                         stopwatch.Start();
                         processGeneration.RunWorkerAsync();
                     } else {
@@ -308,7 +336,7 @@ namespace FFXIVLooseTextureCompiler {
                 foreach (TextureSet textureSet in textureList.Items) {
                     AddWatcher(textureSet.Diffuse);
                     AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
                     AddWatcher(textureSet.Glow);
                 }
@@ -326,17 +354,16 @@ namespace FFXIVLooseTextureCompiler {
                 != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
             findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
-            findAndReplace.Multi.CurrentPath = multi.CurrentPath;
             findAndReplace.Mask.CurrentPath = mask.CurrentPath;
+            findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
             findAndReplace.Glow.CurrentPath = glow.CurrentPath;
-            findAndReplace.IsForEyes = sourceTextureSet.InternalMultiPath.ToLower().Contains("catchlight");
 
             findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
                     AddWatcher(textureSet.Diffuse);
                     AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
                     AddWatcher(textureSet.Glow);
                 }
@@ -392,6 +419,35 @@ namespace FFXIVLooseTextureCompiler {
                     menuItem.Click += (s, e) => {
                         string value = file;
                         OpenTemplate(value);
+                        MessageBox.Show("You can now select textures to bulk replace in the template.", VersionText);
+                        FindAndReplace findAndReplace = new FindAndReplace();
+                        textureList.SelectedIndex = textureList.Items.Count - 1;
+                        TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+                        Tokenizer tokenizer = new Tokenizer(sourceTextureSet.TextureSetName);
+                        findAndReplace.ReplacementString.Text = tokenizer.GetToken();
+                        findAndReplace.ReplacementGroup.Text = "";
+                        findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
+                        findAndReplace.Normal.CurrentPath = normal.CurrentPath;
+                        findAndReplace.Mask.CurrentPath = mask.CurrentPath;
+                        findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
+                        findAndReplace.Glow.CurrentPath = glow.CurrentPath;
+
+                        findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
+                        if (_lastGroupName != "Default") {
+                            findAndReplace.ReplacementGroup.Text = sourceTextureSet.GroupName
+                            != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
+                        }
+                        if (findAndReplace.ShowDialog() == DialogResult.OK) {
+                            foreach (TextureSet textureSet in textureList.Items) {
+                                AddWatcher(textureSet.Diffuse);
+                                AddWatcher(textureSet.Normal);
+                                AddWatcher(textureSet.Mask);
+                                AddWatcher(textureSet.NormalMask);
+                                AddWatcher(textureSet.Glow);
+                            }
+                            textureList.SelectedIndex = -1;
+                            MessageBox.Show("Replacement succeeded.", VersionText);
+                        }
                     };
                     templatesToolStripMenuItem.DropDownItems.Add(menuItem);
                 }
@@ -452,6 +508,7 @@ namespace FFXIVLooseTextureCompiler {
             if (isSimpleMode) {
                 Hide();
                 mainFormSimplified.Show();
+                Hide();
             }
         }
         public void WriteDefaultMode() {
@@ -549,6 +606,8 @@ namespace FFXIVLooseTextureCompiler {
             if (facePart.SelectedIndex == 4) {
                 auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceTypeList.Enabled = subRaceList.Enabled = false;
                 faceExtraList.Enabled = true;
+            } else if (facePart.SelectedIndex == 2) {
+                auraFaceScalesDropdown.Enabled = faceTypeList.Enabled = false;
             } else if (facePart.SelectedIndex == 5) {
                 auraFaceScalesDropdown.Enabled = false;
                 asymCheckbox.Enabled = faceTypeList.Enabled;
@@ -560,11 +619,12 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 faceExtraList.Enabled = false;
             }
+            addFaceButton.Text = "Add " + (facePart.SelectedItem as string);
         }
         private void baseBodyList_SelectedIndexChanged(object sender, EventArgs e) {
             switch (baseBodyList.SelectedIndex) {
                 case 0:
-                    genderList.Enabled = true;
+                    //genderList.Enabled = true;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
@@ -572,7 +632,7 @@ namespace FFXIVLooseTextureCompiler {
                 case 2:
                 case 3:
                     genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -582,13 +642,13 @@ namespace FFXIVLooseTextureCompiler {
                 case 4:
                     raceList.SelectedIndex = 6;
                     genderList.SelectedIndex = 1;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 5:
                     genderList.SelectedIndex = 0;
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     tailList.Enabled = false;
                     if (raceList.SelectedIndex == 5) {
                         raceList.SelectedIndex = 0;
@@ -597,12 +657,12 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 6:
                     raceList.SelectedIndex = 6;
-                    genderList.Enabled = true;
+                    //genderList.Enabled = true;
                     tailList.Enabled = true;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 7:
-                    genderList.Enabled = false;
+                    //genderList.Enabled = false;
                     raceList.SelectedIndex = 5;
                     tailList.Enabled = false;
                     break;
@@ -612,23 +672,27 @@ namespace FFXIVLooseTextureCompiler {
         private void raceList_SelectedIndexChanged(object sender, EventArgs e) {
             if (baseBodyList.SelectedIndex == 6) {
                 if (raceList.SelectedIndex != 3 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
-                    raceList.SelectedIndex = 3;
-                    MessageBox.Show("Tail is only compatible with Miqo'te Xaela, and Raen", VersionText);
+                    baseBodyList.SelectedIndex = 0;
                 }
             } else if (baseBodyList.SelectedIndex == 4) {
                 if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
-                    raceList.SelectedIndex = 6;
-                    MessageBox.Show("Scales+ is only compatible with Xaela, and Raen", VersionText);
+                    if (genderList.SelectedIndex == 0) {
+                        baseBodyList.SelectedIndex = 5;
+                    } else {
+                        baseBodyList.SelectedIndex = 1;
+                    }
                 }
             } else if (baseBodyList.SelectedIndex > 0 && baseBodyList.SelectedIndex < 7) {
                 if (raceList.SelectedIndex == 5) {
-                    raceList.SelectedIndex = lastRaceIndex;
-                    MessageBox.Show("Lalafells are not compatible with the selected body", VersionText);
+                    baseBodyList.SelectedIndex = 7;
                 }
             } else if (baseBodyList.SelectedIndex > 6) {
                 if (raceList.SelectedIndex != 5) {
-                    raceList.SelectedIndex = 5;
-                    MessageBox.Show("Only Lalafells are compatible with the selected body", VersionText);
+                    if (genderList.SelectedIndex == 0) {
+                        baseBodyList.SelectedIndex = 5;
+                    } else {
+                        baseBodyList.SelectedIndex = 1;
+                    }
                 }
             }
             lastRaceIndex = raceList.SelectedIndex;
@@ -654,6 +718,7 @@ namespace FFXIVLooseTextureCompiler {
                 + ", " + raceList.Text;
             AddBodyPaths(textureSet);
             textureList.Items.Add(textureSet);
+            textureList.SelectedIndex = textureList.Items.Count - 1;
             HasSaved = false;
         }
 
@@ -665,9 +730,9 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.InternalNormalPath = RacePaths.GetBodyTexturePath(1, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetBodyTexturePath(2, genderList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetBodyTexturePath(2, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
-            BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
+            BackupTexturePaths.AddBodyBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
@@ -676,10 +741,12 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
                 + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
+                + (facePart.SelectedIndex != 4 && facePart.SelectedIndex != 2 ? faceTypeList.Text : "Multi Face");
+            textureSet.BackupTexturePaths = null;
             switch (facePart.SelectedIndex) {
                 default:
                     AddFacePaths(textureSet);
+                    BackupTexturePaths.AddFaceBackupPaths(genderList.SelectedIndex, subRaceList.SelectedIndex, faceTypeList.SelectedIndex, textureSet);
                     break;
                 case 2:
                     AddEyePaths(textureSet);
@@ -692,9 +759,9 @@ namespace FFXIVLooseTextureCompiler {
                     break;
 
             }
-            textureSet.IgnoreMultiGeneration = true;
-            textureSet.BackupTexturePaths = null;
+            textureSet.IgnoreMaskGeneration = true;
             textureList.Items.Add(textureSet);
+            textureList.SelectedIndex = textureList.Items.Count - 1;
             HasSaved = false;
         }
 
@@ -709,18 +776,31 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.InternalNormalPath = RacePaths.GetHairTexturePath(1, faceExtraList.SelectedIndex,
                 genderList.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
 
-            textureSet.InternalMultiPath = RacePaths.GetHairTexturePath(2, faceExtraList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetHairTexturePath(2, faceExtraList.SelectedIndex,
                 genderList.SelectedIndex, raceList.SelectedIndex, subRaceList.SelectedIndex);
         }
 
         public void AddEyePaths(TextureSet textureSet) {
-            textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            if (asymCheckbox.Checked) {
+                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+                textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+                textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
+            } else {
+                RaceEyePaths.GetEyeTextureSet(subRaceList.SelectedIndex, Convert.ToBoolean(genderList.SelectedIndex), textureSet);
+            }
+        }
+
+        public void AddEyePathsLegacy(TextureSet textureSet) {
+            textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(3, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
         }
 
@@ -733,36 +813,24 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
             facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMultiPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
             facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
-
-            if (facePart.SelectedIndex == 0) {
-                if (subRaceList.SelectedIndex == 10 || subRaceList.SelectedIndex == 11) {
-                    if (auraFaceScalesDropdown.SelectedIndex > 0) {
-                        if (faceTypeList.SelectedIndex < 4) {
-                            if (asymCheckbox.Checked) {
-                                textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                      @"res\textures\s" + (genderList.SelectedIndex == 0 ? "m" : "f") + faceTypeList.SelectedIndex + "a.png");
-                            } else {
-                                textureSet.NormalCorrection = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                    @"res\textures\s" + (genderList.SelectedIndex == 0 ? "m" : "f") + faceTypeList.SelectedIndex + ".png");
-                            }
-                        }
-                    }
-                }
-            }
         }
 
-        private void materialList_SelectedIndexChanged(object sender, EventArgs e) {
+        private void textureSetList_SelectedIndexChanged(object sender, EventArgs e) {
             if (textureList.SelectedIndex == -1) {
-                currentEditLabel.Text = "Please select a texture set to start importing";
+                currentEditLabel.Text = "Locked:";
+                textureSetName.Text = "Please select a texture set to start importing";
+                textureSetName.Enabled = false;
                 SetControlsEnabled(false);
             } else {
-                TextureSet materialSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
-                currentEditLabel.Text = "Editing: " + materialSet.TextureSetName;
-                SetControlsEnabled(true, materialSet);
-                SetControlsPaths(materialSet);
-                SetControlsColors(materialSet);
+                TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
+                currentEditLabel.Text = "Editing:";
+                textureSetName.Text = textureSet.TextureSetName;
+                SetControlsEnabled(true, textureSet);
+                SetControlsPaths(textureSet);
+                SetControlsColors(textureSet);
+                textureSetName.Enabled = true;
             }
         }
 
@@ -772,8 +840,8 @@ namespace FFXIVLooseTextureCompiler {
             }
             diffuse.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalDiffusePath);
             normal.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalNormalPath);
-            multi.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMultiPath);
-            mask.Enabled = enabled && bakeNormals.Checked;
+            mask.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMaskPath);
+            bounds.Enabled = enabled && bakeNormals.Checked;
             glow.Enabled = enabled && !textureSet.TextureSetName.ToLower().Contains("face paint")
                     && !textureSet.TextureSetName.ToLower().Contains("hair") && diffuse.Enabled;
         }
@@ -781,48 +849,39 @@ namespace FFXIVLooseTextureCompiler {
         private void SetControlsPaths(TextureSet textureSet) {
             diffuse.CurrentPath = textureSet.Diffuse;
             normal.CurrentPath = textureSet.Normal;
-            multi.CurrentPath = textureSet.Multi;
-            mask.CurrentPath = textureSet.NormalMask;
+            mask.CurrentPath = textureSet.Mask;
+            bounds.CurrentPath = textureSet.NormalMask;
             glow.CurrentPath = textureSet.Glow;
         }
 
         private void SetControlsColors(TextureSet texturelSet) {
-            if (texturelSet.InternalMultiPath != null && texturelSet.InternalMultiPath.ToLower().Contains("catchlight")) {
-                diffuse.LabelName.Text = "Normal";
-                normal.LabelName.Text = "Multi";
-                multi.LabelName.Text = "Catchlight";
-                diffuse.BackColor = originalNormalBoxColour;
-                normal.BackColor = Color.Lavender;
-                multi.BackColor = Color.LightGray;
-            } else {
-                diffuse.LabelName.Text = "Diffuse";
-                normal.LabelName.Text = "Normal";
-                multi.LabelName.Text = "Multi";
-                diffuse.BackColor = originalDiffuseBoxColour;
-                normal.BackColor = originalNormalBoxColour;
-                multi.BackColor = originalMultiBoxColour;
-            }
+            diffuse.LabelName.Text = "Diffuse";
+            normal.LabelName.Text = "Normal";
+            mask.LabelName.Text = "Mask";
+            diffuse.BackColor = originalDiffuseBoxColour;
+            normal.BackColor = originalNormalBoxColour;
+            mask.BackColor = originalMultiBoxColour;
         }
         public void SetPaths() {
             if (textureList.SelectedIndex != -1) {
                 TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
                 DisposeWatcher(textureSet.Diffuse, diffuse);
                 DisposeWatcher(textureSet.Normal, normal);
-                DisposeWatcher(textureSet.Multi, multi);
-                DisposeWatcher(textureSet.NormalMask, mask);
+                DisposeWatcher(textureSet.Mask, mask);
+                DisposeWatcher(textureSet.NormalMask, bounds);
                 DisposeWatcher(textureSet.Glow, glow);
                 if (!string.IsNullOrWhiteSpace(textureSet.Glow)) {
-                    generateMultiCheckBox.Checked = true;
+                    generatMaskCheckBox.Checked = true;
                 }
                 textureSet.Diffuse = diffuse.CurrentPath;
                 textureSet.Normal = normal.CurrentPath;
-                textureSet.Multi = multi.CurrentPath;
-                textureSet.NormalMask = mask.CurrentPath;
+                textureSet.Mask = mask.CurrentPath;
+                textureSet.NormalMask = bounds.CurrentPath;
                 textureSet.Glow = glow.CurrentPath;
 
                 AddWatcher(textureSet.Diffuse);
                 AddWatcher(textureSet.Normal);
-                AddWatcher(textureSet.Multi);
+                AddWatcher(textureSet.Mask);
                 AddWatcher(textureSet.NormalMask);
                 AddWatcher(textureSet.Glow);
             }
@@ -867,9 +926,11 @@ namespace FFXIVLooseTextureCompiler {
                 textureList.Items.RemoveAt(textureList.SelectedIndex);
                 diffuse.CurrentPath = "";
                 normal.CurrentPath = "";
-                multi.CurrentPath = "";
+                mask.CurrentPath = "";
                 glow.CurrentPath = "";
-                currentEditLabel.Text = "Please select a texture set to start importing";
+                textureSetName.Text = "Please select a texture set to start importing";
+                currentEditLabel.Text = "Locked:";
+                textureSetName.Enabled = false;
             }
         }
 
@@ -883,14 +944,14 @@ namespace FFXIVLooseTextureCompiler {
             }
             diffuse.CurrentPath = "";
             normal.CurrentPath = "";
-            multi.CurrentPath = "";
             mask.CurrentPath = "";
+            bounds.CurrentPath = "";
             glow.CurrentPath = "";
 
             diffuse.Enabled = false;
             normal.Enabled = false;
-            multi.Enabled = false;
             mask.Enabled = false;
+            bounds.Enabled = false;
             glow.Enabled = false;
 
         }
@@ -908,6 +969,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (customPathDialog.ShowDialog() == DialogResult.OK) {
                 textureList.Items.Add(customPathDialog.TextureSet);
+                textureList.SelectedIndex = textureList.Items.Count - 1;
             }
         }
 
@@ -1027,20 +1089,22 @@ namespace FFXIVLooseTextureCompiler {
             modWebsiteTextBox.Text = _defaultWebsite;
             diffuse.CurrentPath = "";
             normal.CurrentPath = "";
-            multi.CurrentPath = "";
+            mask.CurrentPath = "";
             glow.CurrentPath = "";
 
             diffuse.Enabled = false;
             normal.Enabled = false;
-            multi.Enabled = false;
             mask.Enabled = false;
+            bounds.Enabled = false;
             glow.Enabled = false;
             HasSaved = true;
             foreach (FileSystemWatcher watcher in watchers.Values) {
                 watcher.Dispose();
             }
             watchers.Clear();
-            currentEditLabel.Text = "Please select a texture set to start importing";
+            currentEditLabel.Text = "Locked:";
+            textureSetName.Text = "Please select a texture set to start importing";
+            textureSetName.Enabled = false;
             lockDuplicateGeneration = false;
             mainFormSimplified.ClearForm();
             if (IsSimpleMode) {
@@ -1092,6 +1156,8 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void OpenProject(string path) {
             using (StreamReader file = File.OpenText(path)) {
+                int missingFiles = 0;
+                bool foundFaceMod = false;
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = (ProjectFile)serializer.Deserialize(file, typeof(ProjectFile));
                 textureList.Items.Clear();
@@ -1102,9 +1168,12 @@ namespace FFXIVLooseTextureCompiler {
                 modWebsiteTextBox.Text = projectFile.Website;
                 generationType.SelectedIndex = projectFile.ExportType;
                 bakeNormals.Checked = projectFile.BakeMissingNormals;
-                generateMultiCheckBox.Checked = projectFile.GenerateMulti;
+                generatMaskCheckBox.Checked = projectFile.GenerateMulti;
                 if (projectFile.GroupOptionTypes != null) {
                     groupOptionTypes = projectFile.GroupOptionTypes;
+                }
+                if (projectFile.ProjectVersion < 3) {
+                    ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                 }
                 textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 if (projectFile.SimpleMode) {
@@ -1130,17 +1199,72 @@ namespace FFXIVLooseTextureCompiler {
                         this.Show();
                     }
                 }
-
                 foreach (TextureSet textureSet in projectFile.TextureSets) {
                     AddWatcher(textureSet.Diffuse);
                     AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Multi);
+                    AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
                     AddWatcher(textureSet.Glow);
-                    BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
+                }
+                if (missingFiles > 0) {
+                    MessageBox.Show($"{missingFiles} texture sets are missing files. Please update the file paths", VersionText);
+                }
+                if (foundFaceMod) {
+                    MessageBox.Show($"Face mods created before Dawntrail are no longer compatible with the game due to UV changes. You will need to remake your face textures.", VersionText);
                 }
             }
             HasSaved = true;
+        }
+
+        private void ProjectUpgrade(ProjectFile projectFile, ref int missingFiles, ref bool foundFaceMod) {
+            foreach (TextureSet textureSet in projectFile.TextureSets) {
+                if (textureSet.InternalMaskPath.Contains("catchlight")) {
+                    textureSet.InternalMaskPath = RacePaths.OldEyePathToNewEyeMultiPath(textureSet.InternalNormalPath);
+                    textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalDiffusePath);
+                    textureSet.InternalDiffusePath = RacePaths.OldEyePathToNewEyeDiffusePath(textureSet.InternalDiffusePath);
+                    if (File.Exists(textureSet.Normal)) {
+                        var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
+                        textureSet.Diffuse = strings[0];
+                        textureSet.Normal = strings[1];
+                        textureSet.Mask = strings[2];
+                    } else {
+                        textureSet.Mask = textureSet.Normal;
+                        textureSet.Normal = textureSet.Diffuse;
+                        textureSet.Diffuse = "";
+                        missingFiles++;
+                    }
+                }
+                if (textureSet.InternalMaskPath.Contains("hair")) {
+                    if (File.Exists(textureSet.Mask)) {
+                        string newMultiPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Mask, ".png"), "_dawntrail");
+                        if (!File.Exists(newMultiPath)) {
+                            TexIO.SaveBitmap(ImageManipulation.LegacyHairMultiToDawntrailMulti(
+                           TexIO.ResolveBitmap(textureSet.Mask)), newMultiPath);
+                        }
+                        textureSet.Mask = newMultiPath;
+                        if (File.Exists(textureSet.Normal)) {
+                            string newNormalPath = ImageManipulation.AddSuffix(ImageManipulation.ReplaceExtension(textureSet.Normal, ".png"), "_dawntrail");
+                            if (!File.Exists(newNormalPath)) {
+                                TexIO.SaveBitmap(ImageManipulation.LegacyHairNormalToDawntrailNormal(
+                            TexIO.ResolveBitmap(textureSet.Mask),
+                            TexIO.ResolveBitmap(textureSet.Normal)), newNormalPath);
+                            }
+                            textureSet.Normal = newMultiPath;
+                        }
+                    } else {
+                        textureSet.Mask = textureSet.Normal;
+                        textureSet.Normal = textureSet.Diffuse;
+                        textureSet.Diffuse = "";
+                        missingFiles++;
+                    }
+                }
+                textureSet.InternalMaskPath = RacePaths.PathCorrector(textureSet.InternalMaskPath);
+                textureSet.InternalNormalPath = RacePaths.PathCorrector(textureSet.InternalNormalPath);
+                textureSet.InternalDiffusePath = RacePaths.PathCorrector(textureSet.InternalDiffusePath);
+                if (textureSet.InternalMaskPath.Contains("fac_d")) {
+                    foundFaceMod = true;
+                }
+            }
         }
 
         public void OpenTemplate(string path) {
@@ -1150,16 +1274,21 @@ namespace FFXIVLooseTextureCompiler {
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
                 if (templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
+                    int missingFiles = 0;
+                    bool foundFaceMod = false;
+                    if (projectFile.ProjectVersion < 3) {
+                        ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
+                    }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
+                        _lastGroupName = templateConfiguration.GroupName;
                         if (!templateConfiguration.GroupName.Contains("Default")) {
                             textureSet.GroupName = templateConfiguration.GroupName;
                         }
                         AddWatcher(textureSet.Diffuse);
                         AddWatcher(textureSet.Normal);
-                        AddWatcher(textureSet.Multi);
+                        AddWatcher(textureSet.Mask);
                         AddWatcher(textureSet.NormalMask);
                         AddWatcher(textureSet.Glow);
-                        BackupTexturePaths.AddBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
                     }
                     textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 }
@@ -1173,6 +1302,7 @@ namespace FFXIVLooseTextureCompiler {
             using (StreamWriter writer = new StreamWriter(path)) {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = new ProjectFile();
+                projectFile.ProjectVersion = 2;
                 projectFile.Name = modNameTextBox.Text;
                 projectFile.Author = modAuthorTextBox.Text;
                 projectFile.Version = modVersionTextBox.Text;
@@ -1182,7 +1312,7 @@ namespace FFXIVLooseTextureCompiler {
                 projectFile.TextureSets = new List<TextureSet>();
                 projectFile.ExportType = generationType.SelectedIndex;
                 projectFile.BakeMissingNormals = bakeNormals.Checked;
-                projectFile.GenerateMulti = generateMultiCheckBox.Checked;
+                projectFile.GenerateMulti = generatMaskCheckBox.Checked;
                 projectFile.SimpleMode = isSimpleMode;
                 projectFile.SimpleBodyType = mainFormSimplified.BodyType.SelectedIndex;
                 projectFile.SimpleFaceType = mainFormSimplified.FaceType.SelectedIndex;
@@ -1232,7 +1362,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void bakeMissingNormalsCheckbox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
-            mask.Enabled = bakeNormals.Checked && textureList.SelectedIndex > -1;
+            bounds.Enabled = bakeNormals.Checked && textureList.SelectedIndex > -1;
         }
         private void generateMultiCheckBox_CheckedChanged(object sender, EventArgs e) {
             hasDoneReload = false;
@@ -1444,8 +1574,8 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    AtramentumLuminisGlow.ExtractGlowMapFromDiffuse(
-                        TexLoader.ResolveBitmap(openFileDialog.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
+                    TexIO.SaveBitmap(MapWriting.ExtractGlowMapFromDiffuse(
+                        TexIO.ResolveBitmap(openFileDialog.FileName)), ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
                 }
             }
         }
@@ -1478,8 +1608,8 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale"), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.ExtractRed(image), ImageManipulation.AddSuffix(openFileDialog.FileName, "_grayscale"));
                 MessageBox.Show("Multi successfully converted to grayscale", VersionText);
             }
         }
@@ -1504,7 +1634,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1523,7 +1653,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertOldEyeMapToDawntrailEyeMaps(openFileDialog.FileName);
+                ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1551,7 +1681,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (openFileDialog2.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Please pick a file name for the merged result");
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                        ImageManipulation.ConvertToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName, saveFileDialog.FileName);
+                        ImageManipulation.ConvertImageToAsymEyeMaps(openFileDialog.FileName, openFileDialog2.FileName, saveFileDialog.FileName);
                         MessageBox.Show("Image successfully converted to asym eye multi", VersionText);
                         try {
                             Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1571,7 +1701,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1589,7 +1719,7 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
-                    ImageManipulation.ConvertToEyeMaps(file);
+                    ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file);
                 }
                 MessageBox.Show("Images successfully converted to eye maps", VersionText);
                 try {
@@ -1609,28 +1739,27 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRed(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ImageFormat.Png);
-                ImageManipulation.ExtractGreen(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ImageFormat.Png);
-                ImageManipulation.ExtractBlue(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ImageFormat.Png);
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.ExtractRed(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ".png"));
+                TexIO.SaveBitmap(ImageManipulation.ExtractGreen(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ".png"));
+                TexIO.SaveBitmap(ImageManipulation.ExtractBlue(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ".png"));
+                TexIO.SaveBitmap(ImageManipulation.ExtractAlpha(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ".png"));
                 MessageBox.Show("Image successfully split into seperate channels", VersionText);
             }
         }
 
         private void multiCreatorToolStripMenuItem_Click(object sender, EventArgs e) {
-            new MultiCreator().Show();
+            new MaskCreator().Show();
         }
 
         private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.ExtractRGB(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ImageFormat.Png);
-                ImageManipulation.ExtractAlpha(image).Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.ExtractRGB(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ".png"));
+                TexIO.SaveBitmap(ImageManipulation.ExtractAlpha(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ".png"));
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
@@ -1648,8 +1777,8 @@ namespace FFXIVLooseTextureCompiler {
                 if (openFileDialogAlpha.ShowDialog() == DialogResult.OK) {
                     MessageBox.Show("Please select where you want to save the conversion", VersionText);
                     if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                        ImageManipulation.MergeAlphaToRGB(TexLoader.ResolveBitmap(openFileDialogAlpha.FileName),
-                            TexLoader.ResolveBitmap(openFileDialogRGB.FileName)).Save(saveFileDialog.FileName, ImageFormat.Png);
+                        TexIO.SaveBitmap(ImageManipulation.MergeAlphaToRGB(TexIO.ResolveBitmap(openFileDialogAlpha.FileName),
+                            TexIO.ResolveBitmap(openFileDialogRGB.FileName)), ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
                     }
                 }
             }
@@ -1659,7 +1788,7 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select input folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertToLtct(openFileDialog.SelectedPath);
+                TexIO.ConvertToLtct(openFileDialog.SelectedPath);
             }
         }
 
@@ -1667,7 +1796,7 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select input folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertLtctToPng(openFileDialog.SelectedPath);
+                TexIO.ConvertLtctToPng(openFileDialog.SelectedPath);
             }
         }
 
@@ -1675,7 +1804,7 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select input folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.RunOptiPNG(openFileDialog.SelectedPath);
+                TexIO.RunOptiPNG(openFileDialog.SelectedPath);
             }
         }
 
@@ -1683,7 +1812,7 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select input folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexLoader.ConvertPngToLtct(openFileDialog.SelectedPath);
+                TexIO.ConvertPngToLtct(openFileDialog.SelectedPath);
             }
         }
         private void generateXNormalTranslationMapToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1691,7 +1820,7 @@ namespace FFXIVLooseTextureCompiler {
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select where you want to save the result", VersionText);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.GenerateXNormalTranslationMap().Save(saveFileDialog.FileName, ImageFormat.Png);
+                TexIO.SaveBitmap(ImageManipulation.GenerateXNormalTranslationMap(), ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
             }
         }
         #endregion
@@ -1808,7 +1937,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creator of Pythia\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -1932,21 +2061,31 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.GenerateSkinMulti(image)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.GenerateSkinMulti(image),
+                    ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
-
+        private void diffuseToDawntrailSkinMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.ConvertDiffuseToDawntrailSkinMulti(image)
+                    , ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                MessageBox.Show("Texture converted to skin multi", VersionText);
+            }
+        }
         private void textureToFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.GenerateFaceMulti(image, false)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.GenerateFaceMulti(image, false)
+                    ,ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -1956,9 +2095,9 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                ImageManipulation.GenerateFaceMulti(image, true)
-                    .Save(ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"), ImageFormat.Png);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
+                TexIO.SaveBitmap(ImageManipulation.GenerateFaceMulti(image, true)
+                    ,ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -1968,19 +2107,19 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet textureSet = (textureList.SelectedItem as TextureSet);
             newTextureSet.Diffuse = textureSet.Diffuse;
             newTextureSet.Normal = textureSet.Normal;
-            newTextureSet.Multi = textureSet.Multi;
+            newTextureSet.Mask = textureSet.Mask;
             newTextureSet.Glow = newTextureSet.Glow;
             newTextureSet.NormalCorrection = newTextureSet.NormalCorrection;
             newTextureSet.InternalDiffusePath = textureSet.InternalDiffusePath;
             newTextureSet.InternalNormalPath = textureSet.InternalNormalPath;
-            newTextureSet.InternalMultiPath = textureSet.InternalMultiPath;
+            newTextureSet.InternalMaskPath = textureSet.InternalMaskPath;
             newTextureSet.BackupTexturePaths = textureSet.BackupTexturePaths;
             newTextureSet.ChildSets = textureSet.ChildSets;
             newTextureSet.GroupName = textureSet.GroupName;
             newTextureSet.TextureSetName = textureSet.GroupName;
             newTextureSet.InvertNormalGeneration = textureSet.InvertNormalGeneration;
             newTextureSet.IgnoreNormalGeneration = textureSet.IgnoreNormalGeneration;
-            newTextureSet.IgnoreMultiGeneration = textureSet.IgnoreMultiGeneration;
+            newTextureSet.IgnoreMaskGeneration = textureSet.IgnoreMaskGeneration;
             newTextureSet.OmniExportMode = textureSet.OmniExportMode;
             textureList.Items.Add(newTextureSet);
             textureList.SelectedIndex = textureList.Items.Count - 1;
@@ -1999,51 +2138,201 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                Bitmap rgb = ImageManipulation.ExtractRGB(image);
-                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
-                Bitmap hairNormalConversion = Normal.Calculate(rgb);
-                Bitmap hairNormalFinal = ImageManipulation.MergeAlphaToRGB(alpha, hairNormalConversion);
-
-                Bitmap hairSpecularGreyscale = ImageManipulation.BoostAboveThreshold(image, 127);
-                Bitmap hairSpecularGreyscale2 = ImageManipulation.BoostAboveThreshold(image, 90);
-                Bitmap blank = new Bitmap(hairSpecularGreyscale.Width, hairSpecularGreyscale.Height);
-                Graphics graphics = Graphics.FromImage(blank);
-                graphics.Clear(Color.White);
-                Bitmap hairSpecularConversion = ImageManipulation.MergeGrayscalesToARGB(hairSpecularGreyscale, hairSpecularGreyscale2, blank, alpha);
-
-                hairNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
-                hairSpecularConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                ImageManipulation.HairDiffuseToHairMaps(openFileDialog.FileName);
                 MessageBox.Show("Hair Diffuse Converted To FFXIV Maps!", VersionText);
             }
         }
+
+        private void legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select legacy hair multi.");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                string multiPath = openFileDialog.FileName;
+                TexIO.SaveBitmap(ImageManipulation.LegacyHairMultiToDawntrailMulti(TexIO.ResolveBitmap(multiPath)),
+                ImageManipulation.ReplaceExtension(
+                ImageManipulation.AddSuffix(multiPath, "_dawntrail"), ".png"));
+
+                MessageBox.Show("Please select legacy hair normal.");
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    TexIO.SaveBitmap(ImageManipulation.LegacyHairNormalToDawntrailNormal(
+                    TexIO.ResolveBitmap(multiPath),
+                    TexIO.ResolveBitmap(openFileDialog.FileName)),
+                    ImageManipulation.ReplaceExtension(
+                    ImageManipulation.AddSuffix(openFileDialog.FileName, "_dawntrail"), ".png"));
+                    MessageBox.Show("Hair Maps Converted To FFXIV Maps!", VersionText);
+                }
+            }
+        }
+
 
         private void convertDiffuseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
-                Bitmap rgb = ImageManipulation.ExtractRGB(image);
-                Bitmap alpha = ImageManipulation.ExtractAlpha(image);
-                Bitmap clothingNormalConversion = Normal.Calculate(rgb);
-                Bitmap clothingNormalFinal = ImageManipulation.MergeAlphaToRGB(Grayscale.MakeGrayscale(image), clothingNormalConversion);
-
-                Bitmap clothingMultiGreyscale = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 160);
-                Bitmap clothingMultiGreyscale2 = ImageManipulation.BoostAboveThreshold(Grayscale.MakeGrayscale(image), 140);
-                Bitmap blank = new Bitmap(clothingMultiGreyscale.Width, clothingMultiGreyscale.Height);
-                Graphics graphics = Graphics.FromImage(blank);
-                graphics.Clear(Color.White);
-                Bitmap blank2 = new Bitmap(blank);
-                Bitmap clothingMultiConversion = ImageManipulation.MergeGrayscalesToARGB(clothingMultiGreyscale, blank, clothingMultiGreyscale2, blank2);
-
-                clothingMultiGreyscale.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np1"), ImageFormat.Png);
-                clothingMultiGreyscale2.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_np2"), ImageFormat.Png);
-
-                clothingNormalFinal.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_n"), ImageFormat.Png);
-                clothingMultiConversion.Save(ImageManipulation.AddSuffix(openFileDialog.FileName, "_m"), ImageFormat.Png);
+                ImageManipulation.ClothingDiffuseToClothingMultiAndNormalMaps(openFileDialog.FileName);
                 MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
             }
+        }
+
+        public void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new LegacyMakeupSalvager().Show();
+        }
+
+        private void bulkDDSToPNGToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Please select a folder with .dds images");
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.BulkDDSToPng(Directory.EnumerateFiles(folderBrowserDialog.SelectedPath));
+                MessageBox.Show("DDS converted to PNG.", VersionText);
+            }
+        }
+
+        private void textureToTexToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture to convert to .tex");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                textureProcessor.ExportTex(openFileDialog.FileName, ImageManipulation.ReplaceExtension(openFileDialog.FileName, ".tex"));
+                MessageBox.Show("Texture converted to TEX.", VersionText);
+            }
+        }
+
+        private void currentEditLabel_Click(object sender, EventArgs e) {
+
+        }
+
+        private void textureSetName_TextChanged(object sender, EventArgs e) {
+            if (textureList.SelectedIndex > -1) {
+                TextureSet item = textureList.Items[textureList.SelectedIndex] as TextureSet;
+                if (item != null) {
+                    item.TextureSetName = textureSetName.Text;
+                }
+                textureSetNameRefreshTimer.Stop();
+                textureSetNameRefreshTimer.Start();
+            }
+        }
+
+        private void textureSetName_Leave(object sender, EventArgs e) {
+            int index = textureList.SelectedIndex;
+            RefreshList();
+        }
+
+        private void textureSetName_KeyUp(object sender, KeyEventArgs e) {
+
+        }
+
+        private void textureSetNameRefreshTimer_Tick(object sender, EventArgs e) {
+            textureSetNameRefreshTimer.Stop();
+            textureList.Focus();
+        }
+
+        private void textureSetName_MouseMove(object sender, MouseEventArgs e) {
+        }
+
+        private void autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem_Click(object sender, EventArgs e) {
+            string paths = "";
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string directory in Directory.EnumerateDirectories(folderBrowserDialog.SelectedPath)) {
+                    string directoryName = Path.GetFileNameWithoutExtension(directory).Replace("Hyur_", null);
+                    string[] splitString = directoryName.Split("_");
+                    string race = splitString[0];
+                    string gender = splitString[1].Replace("Female", "feminine").Replace("Male", "masculine");
+                    foreach (string subDirectory in Directory.EnumerateDirectories(directory)) {
+                        foreach (string file in Directory.EnumerateFiles(subDirectory)) {
+                            if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
+                                //try {
+                                string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
+                                string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
+                                Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
+                                TexIO.SaveBitmap(TexIO.ResolveBitmap(file), outputTexture);
+                                paths += outputTexture + "\r\n";
+                                //} catch { }
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("Operation Completed Successfully");
+            }
+        }
+
+        private void autoFinalizeNormalMapsFromTexToolsDumpToolStripMenuItem_Click(object sender, EventArgs e) {
+            string paths = "";
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string directory in Directory.EnumerateDirectories(folderBrowserDialog.SelectedPath)) {
+                    string directoryName = Path.GetFileNameWithoutExtension(directory);
+                    string[] splitString = directoryName.Split("_");
+                    string race = splitString[0];
+                    string gender = splitString[1].Replace("Female", "feminine").Replace("Male", "masculine");
+                    foreach (string subDirectory in Directory.EnumerateDirectories(directory)) {
+                        foreach (string faceDirectory in Directory.EnumerateDirectories(subDirectory)) {
+                            foreach (string file in Directory.EnumerateFiles(faceDirectory)) {
+                                if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
+                                    try {
+                                        string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
+                                        string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                        + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
+                                        Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
+                                        TexIO.SaveBitmap(TexIO.ResolveBitmap(file), outputTexture);
+                                        paths += outputTexture + "\r\n";
+                                    } catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show(paths);
+            }
+        }
+
+        private void genderList_SelectedIndexChanged(object sender, EventArgs e) {
+            switch (baseBodyList.SelectedIndex) {
+                case 1:
+                case 2:
+                case 3:
+                    if (genderList.SelectedIndex != 1) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+                case 4:
+                    if (genderList.SelectedIndex != 1) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+                case 5:
+                    if (genderList.SelectedIndex != 0) {
+                        baseBodyList.SelectedIndex = 0;
+                    }
+                    break;
+            }
+        }
+
+        private void diffuseToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.DiffuseToNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Diffuse converted to normal map!", VersionText);
+            }
+        }
+
+        private void diffuseToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.DiffuseToInvertedNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Diffuse converted to inverted normal map!", VersionText);
+            }
+        }
+
+        private void colourChannelSplittingToolStripMenuItem_Click(object sender, EventArgs e) {
+
         }
     }
 }

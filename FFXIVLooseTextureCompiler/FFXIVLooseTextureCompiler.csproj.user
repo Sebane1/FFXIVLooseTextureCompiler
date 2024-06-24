@@ -34,5 +34,8 @@
     <Compile Update="Configuration Dialogues\TemplateConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Sub Utilities\LegacyMakeupSalvager.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

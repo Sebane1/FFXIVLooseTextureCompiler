@@ -39,13 +39,13 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 mainWindow.Hide();
                 skinTextureSet.OmniExportMode = true;
-                skinTextureSet.MaterialSetName = "Skin";
-                faceTextureSet.MaterialSetName = "Face";
-                eyesTextureSet.MaterialSetName = "Eyes";
+                skinTextureSet.TextureSetName = "Skin";
+                faceTextureSet.TextureSetName = "Face";
+                eyesTextureSet.TextureSetName = "Eyes";
 
-                skinTextureSet.MaterialGroupName = "Character Customization";
-                faceTextureSet.MaterialGroupName = "Character Customization";
-                eyesTextureSet.MaterialGroupName = "Character Customization";
+                skinTextureSet.GroupName = "Character Customization";
+                faceTextureSet.GroupName = "Character Customization";
+                eyesTextureSet.GroupName = "Character Customization";
 
                 skin.FilePath.Text = skinTextureSet.Diffuse;
                 face.FilePath.Text = faceTextureSet.Diffuse;
@@ -266,9 +266,9 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexLoader.ResolveBitmap(openFileDialog.FileName);
+                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
                 Bitmap eyeMulti = ImageManipulation.BitmapToEyeMulti(image);
-                eyeMulti.Save(openFileDialog.FileName.Replace(".", "_eye_texture."));
+                TexIO.SaveBitmap(eyeMulti, openFileDialog.FileName.Replace(".", "_eye_texture."));
                 MessageBox.Show("Image successfully converted to eye multi", mainWindow.VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -280,6 +280,10 @@ namespace FFXIVLooseTextureCompiler {
 
                 }
             }
+        }
+
+        private void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
+            mainWindow.legacyMakeupSalvagerToolStripMenuItem_Click(sender, e);
         }
     }
 }

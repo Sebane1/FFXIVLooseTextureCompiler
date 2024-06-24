@@ -1,12 +1,15 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using OtterTex;
 using Penumbra.LTCImport.Textures;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class BulkTexManager : Form {
         private Point startPos;
         private bool canDoDragDrop;
+        Dictionary<string, FileSystemWatcher> watcherList = new Dictionary<string, FileSystemWatcher>();
+        private string _lastPath;
 
         public byte[] RGBAPixels { get; private set; }
 
@@ -24,7 +27,7 @@ namespace FFXIVLooseTextureCompiler {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = ".png files|*.png";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    texturePreview.BackgroundImage.Save(saveFileDialog.FileName);
+                    TexIO.SaveBitmap(texturePreview.BackgroundImage as Bitmap, saveFileDialog.FileName);
                     MessageBox.Show("Texture saved to .png", Text);
                 }
             } else {
@@ -57,14 +60,35 @@ namespace FFXIVLooseTextureCompiler {
             }
             return false;
         }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
-            if (textureList.SelectedIndex != -1) {
-                if (File.Exists(textureList.SelectedItem.ToString())) {
-                    texturePreview.BackgroundImage = TexLoader.TexToBitmap(textureList.SelectedItem.ToString());
-                } else {
-                    textureList.Items.Remove(textureList.SelectedItem);
+        public void AddWatcher(string path) {
+            string directory = Path.GetDirectoryName(path);
+            if (Directory.Exists(directory) && !string.IsNullOrWhiteSpace(path)) {
+                FileSystemWatcher fileSystemWatcher = watcherList.ContainsKey(path) ? watcherList[path] : new FileSystemWatcher();
+                fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                if (!watcherList.ContainsKey(path)) {
+                    fileSystemWatcher.Changed += delegate (object sender, FileSystemEventArgs e) {
+                        AddFilesRecursively(path, 0, 10);
+                    };
+                    fileSystemWatcher.Created += delegate (object sender, FileSystemEventArgs e) {
+                        AddFilesRecursively(path, 0, 10);
+                    };
                 }
+                fileSystemWatcher.Path = directory;
+                fileSystemWatcher.EnableRaisingEvents = !string.IsNullOrEmpty(path);
+                watcherList[path] = fileSystemWatcher;
+            }
+        }
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
+            try {
+                if (textureList.SelectedIndex != -1) {
+                    if (File.Exists(textureList.SelectedItem.ToString())) {
+                        texturePreview.BackgroundImage = TexIO.TexToBitmap(textureList.SelectedItem.ToString());
+                    } else {
+                        textureList.Items.Remove(textureList.SelectedItem);
+                    }
+                }
+            } catch {
+
             }
         }
 
@@ -75,15 +99,24 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void AddFilesRecursively(string path, int recursionCount, int recursionLimit) {
-            foreach (string file in Directory.GetFiles(path, "*.tex")) {
-                if (File.Exists(file)) {
-                    if (!textureList.Items.Contains(file)) {
-                        textureList.Items.Add(file);
+            if (recursionCount == 0) {
+                _lastPath = path;
+                pathTextBox.Text = _lastPath;
+            }
+            AddWatcher(path);
+            try {
+                foreach (string file in Directory.GetFiles(path, "*.tex")) {
+                    if (File.Exists(file)) {
+                        if (!textureList.Items.Contains(file)) {
+                            textureList.Items.Add(file);
+                        }
                     }
                 }
-            }
-            foreach (string newPath in Directory.GetDirectories(path)) {
-                AddFilesRecursively(newPath, recursionCount++, recursionLimit);
+                foreach (string newPath in Directory.GetDirectories(path)) {
+                    AddFilesRecursively(newPath, recursionCount++, recursionLimit);
+                }
+            } catch {
+
             }
         }
         private void texList_MouseDown(object sender, MouseEventArgs e) {
@@ -110,8 +143,8 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             if (folderBrowserDialog.ShowDialog(this) == DialogResult.OK) {
                 foreach (string item in textureList.Items) {
-                    var output = TexLoader.TexToBitmap(item.ToString());
-                    output.Save(Path.Combine(folderBrowserDialog.SelectedPath, Path.GetFileNameWithoutExtension(item) + ".png"), ImageFormat.Png);
+                    var output = TexIO.TexToBitmap(item.ToString());
+                    TexIO.SaveBitmap(output, Path.Combine(folderBrowserDialog.SelectedPath, Path.GetFileNameWithoutExtension(item) + ".png"));
                 }
             }
             MessageBox.Show("Bulk Export Complete", Text);
@@ -119,6 +152,31 @@ namespace FFXIVLooseTextureCompiler {
 
         private void textureList_Click(object sender, EventArgs e) {
             textureList.Items.Clear();
+        }
+        public void ClearList() {
+            try {
+                textureList.Items.Clear();
+            } catch {
+
+            }
+        }
+
+        private void pathTextBox_TextChanged(object sender, EventArgs e) {
+            pathTextBox.Text = _lastPath;
+        }
+
+        private void openPathButton_Click(object sender, EventArgs e) {
+            if (!string.IsNullOrEmpty(_lastPath)) {
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(_lastPath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
         }
     }
 }
