@@ -96,7 +96,11 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                         }
                     }
                     if (!textureIsNormalMap.Checked) {
-                        TexIO.SaveBitmap(ImageManipulation.MergeAlphaToRGB(alpha, canvas), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
+                        if (alpha != null) {
+                            TexIO.SaveBitmap(ImageManipulation.MergeAlphaToRGB(alpha, canvas), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
+                        } else {
+                            TexIO.SaveBitmap(canvas, lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
+                        }
                     } else {
                         TexIO.SaveBitmap(ImageManipulation.MergeGrayscalesToRGBA(TexIO.NewBitmap(canvas), TexIO.NewBitmap(canvas), TexIO.NewBitmap(bitmap), alpha), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
                     }
