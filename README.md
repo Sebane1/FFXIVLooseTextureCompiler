@@ -39,7 +39,7 @@ Core features:
 - Automatic redraw/reload on mod generation
 - Can automatically generate normals, if only a diffuse is provided, or alternatively merge the generated normal data with existing normals.
 - Can be used to convert one body texture to other body textures with automated use of XNormal
-- Can generate valid eye maps (Normal, Multi, Catchlight, Glow) based on any singular picture.
+- Can generate valid eye maps (Diffuse, Normal, Mask) based on any singular picture.
 - Automatic underlay support when providing transparent overlays.
 - Atramentum Luminis support.
 - Share your authored mods directly to other users via Mod Share. Edit each others characters after exchanging temporary pairing codes, and help debug mod issues.
