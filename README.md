@@ -30,6 +30,9 @@ Just hit rediscover in penumbra and use.
 Requires Penumbra to use.
 
 Core features:
+- Universal exports with a single overlay texture.
+- Face salvager to help porting Endwalker faces to Dawntrail.
+- Can generate valid eye maps (Diffuse, Normal, Mask) based on any singular picture or make old eye texture Dawntrail compatible.
 - Near instant visual feedback thanks to using penumbra
 - Drag and drop texture assignment
 - Automatic path generation
@@ -39,12 +42,10 @@ Core features:
 - Automatic redraw/reload on mod generation
 - Can automatically generate normals, if only a diffuse is provided, or alternatively merge the generated normal data with existing normals.
 - Can be used to convert one body texture to other body textures with automated use of XNormal
-- Can generate valid eye maps (Diffuse, Normal, Mask) based on any singular picture.
 - Automatic underlay support when providing transparent overlays.
 - Atramentum Luminis support.
 - Share your authored mods directly to other users via Mod Share. Edit each others characters after exchanging temporary pairing codes, and help debug mod issues.
 - Low learning curve.
-
 
 Support Discord: 
 
