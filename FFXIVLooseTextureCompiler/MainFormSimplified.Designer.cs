@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormSimplified));
-            skin = new FFXIVVoicePackCreator.FilePicker();
+            body = new FFXIVVoicePackCreator.FilePicker();
             face = new FFXIVVoicePackCreator.FilePicker();
             eyes = new FFXIVVoicePackCreator.FilePicker();
             bodyType = new ComboBox();
@@ -48,6 +48,7 @@
             saveAsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             convertPictureToEyeMultiToolStripMenuItem = new ToolStripMenuItem();
+            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
             enableModShareToolStripMenuItem = new ToolStripMenuItem();
             creditsToolStripMenuItem = new ToolStripMenuItem();
@@ -55,50 +56,55 @@
             discordButton = new Button();
             exportPanel = new Panel();
             exportLabel = new Label();
-            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
+            easyModeButton = new Button();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
             menuStrip1.SuspendLayout();
             exportPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // skin
+            // body
             // 
-            skin.BackColor = Color.LavenderBlush;
-            skin.CurrentPath = null;
-            skin.Filter = null;
-            skin.Index = -1;
-            skin.Location = new Point(4, 100);
-            skin.Margin = new Padding(4, 3, 4, 3);
-            skin.MinimumSize = new Size(300, 28);
-            skin.Name = "skin";
-            skin.Size = new Size(348, 28);
-            skin.TabIndex = 0;
-            skin.OnFileSelected += skin_OnFileSelected;
+            body.BackColor = Color.FromArgb(255, 192, 192);
+            body.CurrentPath = null;
+            body.Filter = null;
+            body.Index = -1;
+            body.Location = new Point(4, 216);
+            body.Margin = new Padding(4, 3, 4, 3);
+            body.MinimumSize = new Size(300, 28);
+            body.Name = "body";
+            body.Size = new Size(445, 28);
+            body.TabIndex = 0;
+            body.OnFileSelected += skin_OnFileSelected;
             // 
             // face
             // 
-            face.BackColor = Color.LavenderBlush;
+            face.BackColor = Color.FromArgb(255, 192, 192);
             face.CurrentPath = null;
             face.Filter = null;
             face.Index = -1;
-            face.Location = new Point(4, 128);
+            face.Location = new Point(4, 160);
             face.Margin = new Padding(4, 3, 4, 3);
             face.MinimumSize = new Size(300, 28);
             face.Name = "face";
-            face.Size = new Size(348, 28);
+            face.Size = new Size(445, 28);
             face.TabIndex = 1;
             face.OnFileSelected += face_OnFileSelected;
+            face.Load += face_Load;
             // 
             // eyes
             // 
-            eyes.BackColor = Color.Lavender;
+            eyes.BackColor = Color.FromArgb(224, 224, 224);
             eyes.CurrentPath = null;
             eyes.Filter = null;
             eyes.Index = -1;
-            eyes.Location = new Point(4, 156);
+            eyes.Location = new Point(4, 130);
             eyes.Margin = new Padding(4, 3, 4, 3);
             eyes.MinimumSize = new Size(300, 28);
             eyes.Name = "eyes";
-            eyes.Size = new Size(348, 28);
+            eyes.Size = new Size(445, 28);
             eyes.TabIndex = 2;
             eyes.OnFileSelected += eyes_OnFileSelected;
             // 
@@ -106,9 +112,9 @@
             // 
             bodyType.FormattingEnabled = true;
             bodyType.Items.AddRange(new object[] { "Bibo+", "Gen3", "TBSE/HRBODY", "Otopop" });
-            bodyType.Location = new Point(4, 76);
+            bodyType.Location = new Point(82, 189);
             bodyType.Name = "bodyType";
-            bodyType.Size = new Size(108, 23);
+            bodyType.Size = new Size(368, 23);
             bodyType.TabIndex = 3;
             bodyType.Text = "Bibo+";
             bodyType.SelectedIndexChanged += bodyType_SelectedIndexChanged;
@@ -117,9 +123,9 @@
             // 
             subRace.FormattingEnabled = true;
             subRace.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helions", "The Lost", "Rava", "Veena" });
-            subRace.Location = new Point(116, 76);
+            subRace.Location = new Point(81, 80);
             subRace.Name = "subRace";
-            subRace.Size = new Size(132, 23);
+            subRace.Size = new Size(369, 23);
             subRace.TabIndex = 4;
             subRace.Text = "Midlander";
             subRace.SelectedIndexChanged += subRace_SelectedIndexChanged;
@@ -128,25 +134,25 @@
             // 
             faceType.FormattingEnabled = true;
             faceType.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7", "Face 8" });
-            faceType.Location = new Point(252, 76);
+            faceType.Location = new Point(81, 106);
             faceType.Name = "faceType";
-            faceType.Size = new Size(97, 23);
+            faceType.Size = new Size(369, 23);
             faceType.TabIndex = 5;
             faceType.Text = "Face 1";
             faceType.SelectedIndexChanged += faceType_SelectedIndexChanged;
             // 
             // modNameTextBox
             // 
-            modNameTextBox.Location = new Point(4, 48);
+            modNameTextBox.Location = new Point(82, 53);
             modNameTextBox.Name = "modNameTextBox";
-            modNameTextBox.Size = new Size(344, 23);
+            modNameTextBox.Size = new Size(367, 23);
             modNameTextBox.TabIndex = 6;
             modNameTextBox.TextChanged += modNameTextBox_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(4, 28);
+            label1.Location = new Point(5, 57);
             label1.Name = "label1";
             label1.Size = new Size(67, 15);
             label1.TabIndex = 7;
@@ -154,7 +160,7 @@
             // 
             // generateButton
             // 
-            generateButton.Location = new Point(172, 216);
+            generateButton.Location = new Point(277, 276);
             generateButton.Name = "generateButton";
             generateButton.Size = new Size(176, 23);
             generateButton.TabIndex = 8;
@@ -166,7 +172,7 @@
             // 
             advancedModeButton.BackColor = Color.IndianRed;
             advancedModeButton.ForeColor = Color.White;
-            advancedModeButton.Location = new Point(232, 24);
+            advancedModeButton.Location = new Point(331, 24);
             advancedModeButton.Name = "advancedModeButton";
             advancedModeButton.Size = new Size(119, 23);
             advancedModeButton.TabIndex = 9;
@@ -176,7 +182,7 @@
             // 
             // previewButton
             // 
-            previewButton.Location = new Point(4, 216);
+            previewButton.Location = new Point(109, 276);
             previewButton.Name = "previewButton";
             previewButton.Size = new Size(168, 23);
             previewButton.TabIndex = 10;
@@ -188,9 +194,9 @@
             // 
             normalGeneration.FormattingEnabled = true;
             normalGeneration.Items.AddRange(new object[] { "No Bumps On Skin", "Bumps On Skin", "Inverted Bumps On Skin" });
-            normalGeneration.Location = new Point(82, 188);
+            normalGeneration.Location = new Point(82, 247);
             normalGeneration.Name = "normalGeneration";
-            normalGeneration.Size = new Size(265, 23);
+            normalGeneration.Size = new Size(368, 23);
             normalGeneration.TabIndex = 11;
             normalGeneration.Text = "No Bumps On Skin";
             normalGeneration.SelectedIndexChanged += normalGeneration_SelectedIndexChanged;
@@ -198,7 +204,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(8, 192);
+            label2.Location = new Point(8, 251);
             label2.Name = "label2";
             label2.Size = new Size(69, 15);
             label2.TabIndex = 12;
@@ -206,11 +212,12 @@
             // 
             // exportProgress
             // 
-            exportProgress.Location = new Point(4, 216);
+            exportProgress.Location = new Point(-2, 270);
             exportProgress.Name = "exportProgress";
-            exportProgress.Size = new Size(344, 24);
+            exportProgress.Size = new Size(455, 31);
             exportProgress.TabIndex = 13;
             exportProgress.Visible = false;
+            exportProgress.Click += exportProgress_Click;
             // 
             // progressChecker
             // 
@@ -223,7 +230,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(351, 24);
+            menuStrip1.Size = new Size(453, 24);
             menuStrip1.TabIndex = 14;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -276,6 +283,13 @@
             convertPictureToEyeMultiToolStripMenuItem.Text = "Convert Picture To Eye Texture";
             convertPictureToEyeMultiToolStripMenuItem.Click += convertPictureToEyeMultiToolStripMenuItem_Click;
             // 
+            // legacyMakeupSalvagerToolStripMenuItem
+            // 
+            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
+            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(233, 22);
+            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
+            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
+            // 
             // modShareToolStripMenuItem
             // 
             modShareToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableModShareToolStripMenuItem });
@@ -301,7 +315,7 @@
             // 
             donateButton.BackColor = Color.LightCoral;
             donateButton.ForeColor = Color.White;
-            donateButton.Location = new Point(292, 0);
+            donateButton.Location = new Point(391, 0);
             donateButton.Name = "donateButton";
             donateButton.Size = new Size(59, 23);
             donateButton.TabIndex = 15;
@@ -313,7 +327,7 @@
             // 
             discordButton.BackColor = Color.SlateBlue;
             discordButton.ForeColor = Color.White;
-            discordButton.Location = new Point(232, 0);
+            discordButton.Location = new Point(331, 0);
             discordButton.Name = "discordButton";
             discordButton.Size = new Size(59, 23);
             discordButton.TabIndex = 16;
@@ -327,33 +341,82 @@
             exportPanel.Controls.Add(exportLabel);
             exportPanel.Location = new Point(0, 0);
             exportPanel.Name = "exportPanel";
-            exportPanel.Size = new Size(352, 212);
+            exportPanel.Size = new Size(453, 270);
             exportPanel.TabIndex = 17;
             exportPanel.Visible = false;
+            exportPanel.Paint += exportPanel_Paint;
             // 
             // exportLabel
             // 
             exportLabel.AutoSize = true;
             exportLabel.Font = new Font("Segoe UI", 26.25F, FontStyle.Bold);
             exportLabel.ForeColor = SystemColors.ButtonHighlight;
-            exportLabel.Location = new Point(72, 76);
+            exportLabel.Location = new Point(120, 126);
             exportLabel.Name = "exportLabel";
             exportLabel.Size = new Size(210, 47);
             exportLabel.TabIndex = 0;
             exportLabel.Text = "Exporting...";
+            exportLabel.Click += exportLabel_Click;
             // 
-            // legacyMakeupSalvagerToolStripMenuItem
+            // easyModeButton
             // 
-            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
-            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(233, 22);
-            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
-            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
+            easyModeButton.BackColor = Color.FromArgb(128, 255, 128);
+            easyModeButton.ForeColor = Color.Black;
+            easyModeButton.Location = new Point(258, 24);
+            easyModeButton.Name = "easyModeButton";
+            easyModeButton.Size = new Size(73, 23);
+            easyModeButton.TabIndex = 22;
+            easyModeButton.Text = "Easy Mode";
+            easyModeButton.UseVisualStyleBackColor = false;
+            easyModeButton.Click += easyModeButton_Click;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(7, 194);
+            label3.Name = "label3";
+            label3.Size = new Size(61, 15);
+            label3.TabIndex = 18;
+            label3.Text = "Body Type";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(6, 109);
+            label4.Name = "label4";
+            label4.Size = new Size(58, 15);
+            label4.TabIndex = 19;
+            label4.Text = "Face Type";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(6, 83);
+            label5.Name = "label5";
+            label5.Size = new Size(31, 15);
+            label5.TabIndex = 20;
+            label5.Text = "Clan";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(6, 31);
+            label6.Name = "label6";
+            label6.Size = new Size(199, 15);
+            label6.TabIndex = 21;
+            label6.Text = "Note: Not all boxes need to be filled.";
             // 
             // MainFormSimplified
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(351, 241);
+            ClientSize = new Size(453, 300);
+            Controls.Add(easyModeButton);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(exportProgress);
             Controls.Add(discordButton);
             Controls.Add(donateButton);
             Controls.Add(label2);
@@ -368,10 +431,9 @@
             Controls.Add(bodyType);
             Controls.Add(eyes);
             Controls.Add(face);
-            Controls.Add(skin);
+            Controls.Add(body);
             Controls.Add(menuStrip1);
             Controls.Add(exportPanel);
-            Controls.Add(exportProgress);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
@@ -393,7 +455,7 @@
 
         #endregion
 
-        private FFXIVVoicePackCreator.FilePicker skin;
+        private FFXIVVoicePackCreator.FilePicker body;
         private FFXIVVoicePackCreator.FilePicker face;
         private FFXIVVoicePackCreator.FilePicker eyes;
         private ComboBox bodyType;
@@ -424,6 +486,11 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem convertPictureToEyeMultiToolStripMenuItem;
         private ToolStripMenuItem legacyMakeupSalvagerToolStripMenuItem;
+        private Label label3;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private Button easyModeButton;
 
         public ComboBox BodyType { get => bodyType; set => bodyType = value; }
         public ComboBox SubRace { get => subRace; set => subRace = value; }

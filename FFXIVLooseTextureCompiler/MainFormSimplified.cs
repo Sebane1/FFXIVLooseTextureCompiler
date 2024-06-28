@@ -1,6 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
+using FFXIVVoicePackCreator;
 using System.Diagnostics;
 
 namespace FFXIVLooseTextureCompiler {
@@ -13,12 +14,33 @@ namespace FFXIVLooseTextureCompiler {
         TextureSet skinTextureSet = new TextureSet();
         TextureSet faceTextureSet = new TextureSet();
         TextureSet eyesTextureSet = new TextureSet();
+
         private bool ignoreTitleChange;
+        private FilePicker _skin;
+        private FilePicker _face;
+        private FilePicker _eyes;
+        private TextBox _modName;
+        private ComboBox _faceType;
+        private ComboBox _bodyType;
+        private ComboBox _clanType;
 
         public MainWindow MainWindow { get => mainWindow; set => mainWindow = value; }
+        public FilePicker Skin { get => _skin; set => _skin = value; }
+        public FilePicker Face { get => _face; set => _face = value; }
+        public FilePicker Eyes { get => _eyes; set => _eyes = value; }
+        public TextBox ModName { get => _modName; set => _modName = value; }
+        public ComboBox ClanType { get => _clanType; set => _clanType = value; }
 
         private void MainWindowSimplified_Load(object sender, EventArgs e) {
             RefreshValues();
+
+            _skin = body;
+            _face = face;
+            _eyes = eyes;
+            _modName = modNameTextBox;
+            _faceType = faceType;
+            _bodyType = bodyType;
+            _clanType = subRace;
         }
 
         public void RefreshValues() {
@@ -47,7 +69,7 @@ namespace FFXIVLooseTextureCompiler {
                 faceTextureSet.GroupName = "Character Customization";
                 eyesTextureSet.GroupName = "Character Customization";
 
-                skin.FilePath.Text = skinTextureSet.Diffuse;
+                body.FilePath.Text = skinTextureSet.Diffuse;
                 face.FilePath.Text = faceTextureSet.Diffuse;
                 eyes.FilePath.Text = eyesTextureSet.Normal;
 
@@ -78,13 +100,13 @@ namespace FFXIVLooseTextureCompiler {
                 case "tbse":
                     bodyType.SelectedIndex = 2;
                     break;
-                case "otopoo":
+                case "otopo":
                     bodyType.SelectedIndex = 3;
                     break;
             }
         }
 
-        private void generateButton_Click(object sender, EventArgs e) {
+        public void generateButton_Click(object sender, EventArgs e) {
             MainWindow.finalizeButton_Click(sender, e);
         }
 
@@ -93,7 +115,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void skin_OnFileSelected(object sender, EventArgs e) {
-            skinTextureSet.Diffuse = skin.FilePath.Text;
+            skinTextureSet.Diffuse = body.FilePath.Text;
             mainWindow.AddWatcher(skinTextureSet.Diffuse);
             mainWindow.HasSaved = false;
         }
@@ -191,11 +213,11 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void ClearForm() {
             modNameTextBox.Text = "";
-            skin.FilePath.Text = "";
+            body.FilePath.Text = "";
             face.FilePath.Text = "";
             eyes.FilePath.Text = "";
 
-            skin.ClearValue();
+            body.ClearValue();
             face.ClearValue();
             eyes.ClearValue();
             normalGeneration.SelectedIndex = 0;
@@ -237,11 +259,11 @@ namespace FFXIVLooseTextureCompiler {
             mainWindow.Close();
         }
 
-        private void discordButton_Click(object sender, EventArgs e) {
+        public void discordButton_Click(object sender, EventArgs e) {
             mainWindow.discordButton_Click(sender, e);
         }
 
-        private void donateButton_Click(object sender, EventArgs e) {
+        public void donateButton_Click(object sender, EventArgs e) {
             mainWindow.donateButton_Click(sender, e);
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
@@ -284,6 +306,29 @@ namespace FFXIVLooseTextureCompiler {
 
         private void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
             mainWindow.legacyMakeupSalvagerToolStripMenuItem_Click(sender, e);
+        }
+
+        private void exportPanel_Paint(object sender, PaintEventArgs e) {
+
+        }
+
+        private void face_Load(object sender, EventArgs e) {
+
+        }
+
+        private void exportProgress_Click(object sender, EventArgs e) {
+
+        }
+
+        private void easyModeButton_Click(object sender, EventArgs e) {
+            Hide();
+            var mainFormMoreSimplified = new MainFormMoreSimplified();
+            mainFormMoreSimplified.MainFormSimplified = this;
+            mainFormMoreSimplified.Show();
+        }
+
+        private void exportLabel_Click(object sender, EventArgs e) {
+
         }
     }
 }

@@ -108,17 +108,17 @@
             sendCurrentModToolStripMenuItem = new ToolStripMenuItem();
             creditsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem = new ToolStripMenuItem();
             howToGetTexturesToolStripMenuItem = new ToolStripMenuItem();
             howDoIUseThisToolStripMenuItem = new ToolStripMenuItem();
             howDoIMakeStuffBumpyToolStripMenuItem = new ToolStripMenuItem();
             howDoIMakeStuffGlowToolStripMenuItem = new ToolStripMenuItem();
             howDoIMakeEyesToolStripMenuItem = new ToolStripMenuItem();
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new ToolStripMenuItem();
             canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem = new ToolStripMenuItem();
             canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new ToolStripMenuItem();
             canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new ToolStripMenuItem();
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new ToolStripMenuItem();
-            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem = new ToolStripMenuItem();
-            thisToolIsTooHardMakeItSimplerToolStripMenuItem = new ToolStripMenuItem();
             donateButton = new Button();
             textureList = new ListBox();
             materialListContextMenu = new ContextMenuStrip(components);
@@ -856,10 +856,18 @@
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToGetTexturesToolStripMenuItem, howDoIUseThisToolStripMenuItem, howDoIMakeStuffBumpyToolStripMenuItem, howDoIMakeStuffGlowToolStripMenuItem, howDoIMakeEyesToolStripMenuItem, canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem, canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem, canIReplaceABunchOfStuffAtOnceToolStripMenuItem, whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem, whatAreTemplatesAndHowDoIUseThemToolStripMenuItem, thisToolIsTooHardMakeItSimplerToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thisToolIsTooHardMakeItSimplerToolStripMenuItem, howToGetTexturesToolStripMenuItem, howDoIUseThisToolStripMenuItem, howDoIMakeStuffBumpyToolStripMenuItem, howDoIMakeStuffGlowToolStripMenuItem, howDoIMakeEyesToolStripMenuItem, whatAreTemplatesAndHowDoIUseThemToolStripMenuItem, canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem, canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem, canIReplaceABunchOfStuffAtOnceToolStripMenuItem, whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem });
+            helpToolStripMenuItem.Enabled = false;
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "Help";
+            // 
+            // thisToolIsTooHardMakeItSimplerToolStripMenuItem
+            // 
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Name = "thisToolIsTooHardMakeItSimplerToolStripMenuItem";
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Size = new Size(430, 22);
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Text = "This tool is too hard, make it simpler.";
+            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Click += thisToolIsTooHardMakeItSimplerToolStripMenuItem_Click;
             // 
             // howToGetTexturesToolStripMenuItem
             // 
@@ -887,6 +895,7 @@
             howDoIMakeStuffGlowToolStripMenuItem.Name = "howDoIMakeStuffGlowToolStripMenuItem";
             howDoIMakeStuffGlowToolStripMenuItem.Size = new Size(430, 22);
             howDoIMakeStuffGlowToolStripMenuItem.Text = "How do I make stuff glow?";
+            howDoIMakeStuffGlowToolStripMenuItem.Visible = false;
             howDoIMakeStuffGlowToolStripMenuItem.Click += howDoIMakeStuffGlowToolStripMenuItem_Click;
             // 
             // howDoIMakeEyesToolStripMenuItem
@@ -895,6 +904,13 @@
             howDoIMakeEyesToolStripMenuItem.Size = new Size(430, 22);
             howDoIMakeEyesToolStripMenuItem.Text = "How do I make eyes?";
             howDoIMakeEyesToolStripMenuItem.Click += howDoIMakeEyesToolStripMenuItem_Click;
+            // 
+            // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
+            // 
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new Size(430, 22);
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
+            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click;
             // 
             // canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem
             // 
@@ -924,25 +940,11 @@
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click;
             // 
-            // whatAreTemplatesAndHowDoIUseThemToolStripMenuItem
-            // 
-            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Name = "whatAreTemplatesAndHowDoIUseThemToolStripMenuItem";
-            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Size = new Size(430, 22);
-            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Text = "What are templates, and how do I use them?";
-            whatAreTemplatesAndHowDoIUseThemToolStripMenuItem.Click += whatAreTemplatesAndHowDoIUseThemToolStripMenuItem_Click;
-            // 
-            // thisToolIsTooHardMakeItSimplerToolStripMenuItem
-            // 
-            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Name = "thisToolIsTooHardMakeItSimplerToolStripMenuItem";
-            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Size = new Size(430, 22);
-            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Text = "This tool is too hard, make it simpler.";
-            thisToolIsTooHardMakeItSimplerToolStripMenuItem.Click += thisToolIsTooHardMakeItSimplerToolStripMenuItem_Click;
-            // 
             // donateButton
             // 
             donateButton.BackColor = Color.IndianRed;
             donateButton.ForeColor = Color.White;
-            donateButton.Location = new Point(464, 0);
+            donateButton.Location = new Point(478, 0);
             donateButton.Name = "donateButton";
             donateButton.Size = new Size(75, 23);
             donateButton.TabIndex = 25;
@@ -1027,7 +1029,7 @@
             // 
             // addBodyButton
             // 
-            addBodyButton.Location = new Point(460, 4);
+            addBodyButton.Location = new Point(459, 4);
             addBodyButton.Name = "addBodyButton";
             addBodyButton.Size = new Size(96, 23);
             addBodyButton.TabIndex = 27;
@@ -1037,7 +1039,7 @@
             // 
             // addFaceButton
             // 
-            addFaceButton.Location = new Point(464, 4);
+            addFaceButton.Location = new Point(463, 4);
             addFaceButton.Name = "addFaceButton";
             addFaceButton.Size = new Size(96, 23);
             addFaceButton.TabIndex = 28;
@@ -1091,7 +1093,7 @@
             // 
             // addCustomPathButton
             // 
-            addCustomPathButton.Location = new Point(460, 4);
+            addCustomPathButton.Location = new Point(459, 4);
             addCustomPathButton.Name = "addCustomPathButton";
             addCustomPathButton.Size = new Size(96, 23);
             addCustomPathButton.TabIndex = 33;
@@ -1210,7 +1212,7 @@
             // 
             discordButton.BackColor = Color.MediumSlateBlue;
             discordButton.ForeColor = Color.White;
-            discordButton.Location = new Point(388, 0);
+            discordButton.Location = new Point(402, 0);
             discordButton.Name = "discordButton";
             discordButton.Size = new Size(75, 23);
             discordButton.TabIndex = 42;
@@ -1696,6 +1698,7 @@
         public ComboBox FaceType { get => faceTypeList; set => faceTypeList = value; }
         public ComboBox FacePart { get => facePart; set => facePart = value; }
         public ComboBox BaseBodyList { get => baseBodyList; set => baseBodyList = value; }
+        public ComboBox Gender { get => genderList; set => genderList = value; }
         public TextBox ModNameTextBox { get => modNameTextBox; set => modNameTextBox = value; }
         public ProgressBar ExportProgress { get => exportProgress; set => exportProgress = value; }
         public ComboBox GenerationType { get => generationType; set => generationType = value; }

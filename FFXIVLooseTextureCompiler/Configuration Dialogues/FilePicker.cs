@@ -29,7 +29,14 @@ namespace FFXIVVoicePackCreator {
             }
         }
 
-        public string CurrentPath { get => currentPath; set { currentPath = value; filePath.Text = value; } }
+        public string CurrentPath {
+            get => currentPath;
+            set {
+                currentPath = value;
+                filePath.Text = value;
+                OnFileSelected?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         private void filePicker_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
@@ -81,7 +88,7 @@ namespace FFXIVVoicePackCreator {
                 }
             }
             if (OnFileSelected != null) {
-                OnFileSelected.Invoke(this, EventArgs.Empty);
+                OnFileSelected?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -156,7 +163,7 @@ namespace FFXIVVoicePackCreator {
                 filePath.Text = filePath.Text;
                 currentPath = filePath.Text;
                 if (OnFileSelected != null) {
-                    OnFileSelected.Invoke(this, EventArgs.Empty);
+                    OnFileSelected?.Invoke(this, EventArgs.Empty);
                 }
             } else {
                 filePath.Text = CurrentPath;
