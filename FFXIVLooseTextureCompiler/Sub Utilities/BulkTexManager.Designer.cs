@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BulkTexManager));
             textureList = new ListBox();
             texturePreview = new PictureBox();
@@ -33,6 +34,7 @@
             pathTextBox = new TextBox();
             openPathButton = new Button();
             label1 = new Label();
+            newFileCheck = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)texturePreview).BeginInit();
             SuspendLayout();
             // 
@@ -129,6 +131,12 @@
             label1.TabIndex = 9;
             label1.Text = "Base Path";
             // 
+            // newFileCheck
+            // 
+            newFileCheck.Enabled = true;
+            newFileCheck.Interval = 5000;
+            newFileCheck.Tick += newFileCheck_Tick;
+            // 
             // BulkTexManager
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -165,5 +173,6 @@
         private TextBox pathTextBox;
         private Button openPathButton;
         private Label label1;
+        private System.Windows.Forms.Timer newFileCheck;
     }
 }
