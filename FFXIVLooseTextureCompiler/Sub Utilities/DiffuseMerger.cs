@@ -2,8 +2,8 @@
 using KVImage;
 
 namespace FFXIVLooseTextureCompiler {
-    public partial class DiffuseMerger : Form {
-        public DiffuseMerger() {
+    public partial class BaseMerger : Form {
+        public BaseMerger() {
             InitializeComponent();
             AutoScaleDimensions = new SizeF(96, 96);
             ((Control)image1).AllowDrop = true;

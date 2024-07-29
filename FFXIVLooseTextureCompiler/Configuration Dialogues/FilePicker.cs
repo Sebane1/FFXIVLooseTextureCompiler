@@ -34,7 +34,6 @@ namespace FFXIVVoicePackCreator {
             set {
                 currentPath = value;
                 filePath.Text = value;
-                OnFileSelected?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -70,6 +69,9 @@ namespace FFXIVVoicePackCreator {
                 this.ParentForm.BringToFront();
             }
             this.ParentForm.TopMost = false;
+        }
+        public void TriggerFileSelected() {
+            OnFileSelected?.Invoke(this, EventArgs.Empty);
         }
         private void openButton_Click(object sender, EventArgs e) {
             if (!isSaveMode) {

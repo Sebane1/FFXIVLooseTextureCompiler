@@ -16,7 +16,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (textureSet != null) {
                     groupNameTextBox.Text = textureSet.GroupName;
                     materialSetNameTextBox.Text = textureSet.TextureSetName;
-                    internalDiffusePathTextBox.Text = textureSet.InternalDiffusePath;
+                    internalBasePathTextBox.Text = textureSet.InternalBasePath;
                     internalNormalPathTextBox.Text = textureSet.InternalNormalPath;
                     internalMultiPathTextbox.Text = textureSet.InternalMaskPath;
                     ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
@@ -39,11 +39,11 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.GroupName = groupNameTextBox.Text;
                 textureSet.TextureSetName = materialSetNameTextBox.Text;
                 int validationCount = 0;
-                if (IsValidGamePathFormat(internalDiffusePathTextBox.Text)) {
-                    textureSet.InternalDiffusePath = internalDiffusePathTextBox.Text;
+                if (IsValidGamePathFormat(internalBasePathTextBox.Text)) {
+                    textureSet.InternalBasePath = internalBasePathTextBox.Text;
                     validationCount++;
                 } else {
-                    MessageBox.Show("Internal diffuse path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
+                    MessageBox.Show("Internal baseTexture path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
                 if (IsValidGamePathFormat(internalNormalPathTextBox.Text)) {
                     textureSet.InternalNormalPath = internalNormalPathTextBox.Text;
@@ -93,7 +93,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void materialSetNameTextBox_TextChanged(object sender, EventArgs e) {
-            diffuseLabel.Text = "Internal Diffuse";
+            baseTextureLabel.Text = "Internal Base";
             normalLabel.Text = "Internal Normal";
             multiLabel.Text = "Internal Mask";
         }

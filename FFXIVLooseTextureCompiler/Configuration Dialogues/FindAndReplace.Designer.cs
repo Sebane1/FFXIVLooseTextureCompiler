@@ -33,7 +33,7 @@ namespace FFXIVLooseTextureCompiler {
             label1 = new Label();
             normal = new FilePicker();
             mask = new FilePicker();
-            diffuse = new FilePicker();
+            baseTexture = new FilePicker();
             bounds = new FilePicker();
             glow = new FilePicker();
             label2 = new Label();
@@ -118,18 +118,18 @@ namespace FFXIVLooseTextureCompiler {
             mask.TabIndex = 15;
             mask.Load += multi_Load;
             // 
-            // diffuse
+            // baseTexture
             // 
-            diffuse.BackColor = Color.LavenderBlush;
-            diffuse.CurrentPath = null;
-            diffuse.Filter = null;
-            diffuse.Index = -1;
-            diffuse.Location = new Point(5, 156);
-            diffuse.Margin = new Padding(4, 3, 4, 3);
-            diffuse.MinimumSize = new Size(300, 28);
-            diffuse.Name = "diffuse";
-            diffuse.Size = new Size(404, 28);
-            diffuse.TabIndex = 16;
+            baseTexture.BackColor = Color.LavenderBlush;
+            baseTexture.CurrentPath = null;
+            baseTexture.Filter = null;
+            baseTexture.Index = -1;
+            baseTexture.Location = new Point(5, 156);
+            baseTexture.Margin = new Padding(4, 3, 4, 3);
+            baseTexture.MinimumSize = new Size(300, 28);
+            baseTexture.Name = "baseTexture";
+            baseTexture.Size = new Size(404, 28);
+            baseTexture.TabIndex = 16;
             // 
             // mask
             // 
@@ -182,7 +182,7 @@ namespace FFXIVLooseTextureCompiler {
             Controls.Add(label2);
             Controls.Add(glow);
             Controls.Add(bounds);
-            Controls.Add(diffuse);
+            Controls.Add(baseTexture);
             Controls.Add(mask);
             Controls.Add(normal);
             Controls.Add(label1);
@@ -209,13 +209,13 @@ namespace FFXIVLooseTextureCompiler {
         private Label label1;
         private FFXIVVoicePackCreator.FilePicker normal;
         private FFXIVVoicePackCreator.FilePicker mask;
-        private FFXIVVoicePackCreator.FilePicker diffuse;
+        private FFXIVVoicePackCreator.FilePicker baseTexture;
         private FilePicker bounds;
         private FilePicker glow;
         private Label label2;
         private TextBox groupTextBox;
 
-        public FilePicker Diffuse { get => diffuse; set => diffuse = value; }
+        public FilePicker Base { get => baseTexture; set => baseTexture = value; }
         public FilePicker Mask { get => mask; set => mask = value; }
         public FilePicker Normal { get => normal; set => normal = value; }
         public TextBox ReplacementString { get => replacementString; set => replacementString = value; }

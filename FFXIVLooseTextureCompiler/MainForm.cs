@@ -31,7 +31,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool lockDuplicateGeneration;
         private bool finalizeResults;
         private TextureProcessor textureProcessor;
-        private Color originalDiffuseBoxColour;
+        private Color originalBaseBoxColour;
         private Color originalNormalBoxColour;
         private Color originalMultiBoxColour;
         private bool isNetworkSync;
@@ -246,7 +246,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
-            diffuse.FilePath.Enabled = false;
+            Base.FilePath.Enabled = false;
             normal.FilePath.Enabled = false;
             mask.FilePath.Enabled = false;
             bounds.FilePath.Enabled = false;
@@ -261,7 +261,7 @@ namespace FFXIVLooseTextureCompiler {
                  faceExtraList.SelectedIndex = generationType.SelectedIndex = 0;
             CleanDirectory();
             GetLastUsedOptions();
-            originalDiffuseBoxColour = diffuse.BackColor;
+            originalBaseBoxColour = Base.BackColor;
             originalNormalBoxColour = normal.BackColor;
             originalMultiBoxColour = mask.BackColor;
             GetLastIP();
@@ -334,7 +334,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Base);
                     AddWatcher(textureSet.Normal);
                     AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
@@ -352,7 +352,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.ReplacementString.Text = tokenizer.GetToken();
             findAndReplace.ReplacementGroup.Text = sourceTextureSet.GroupName
                 != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
-            findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
+            findAndReplace.Base.CurrentPath = Base.CurrentPath;
             findAndReplace.Normal.CurrentPath = normal.CurrentPath;
             findAndReplace.Mask.CurrentPath = mask.CurrentPath;
             findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
@@ -361,7 +361,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Base);
                     AddWatcher(textureSet.Normal);
                     AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
@@ -426,7 +426,7 @@ namespace FFXIVLooseTextureCompiler {
                         Tokenizer tokenizer = new Tokenizer(sourceTextureSet.TextureSetName);
                         findAndReplace.ReplacementString.Text = tokenizer.GetToken();
                         findAndReplace.ReplacementGroup.Text = "";
-                        findAndReplace.Diffuse.CurrentPath = diffuse.CurrentPath;
+                        findAndReplace.Base.CurrentPath = Base.CurrentPath;
                         findAndReplace.Normal.CurrentPath = normal.CurrentPath;
                         findAndReplace.Mask.CurrentPath = mask.CurrentPath;
                         findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
@@ -439,7 +439,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         if (findAndReplace.ShowDialog() == DialogResult.OK) {
                             foreach (TextureSet textureSet in textureList.Items) {
-                                AddWatcher(textureSet.Diffuse);
+                                AddWatcher(textureSet.Base);
                                 AddWatcher(textureSet.Normal);
                                 AddWatcher(textureSet.Mask);
                                 AddWatcher(textureSet.NormalMask);
@@ -724,7 +724,7 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddBodyPaths(TextureSet textureSet) {
             if (raceList.SelectedIndex != 3 || baseBodyList.SelectedIndex != 6) {
-                textureSet.InternalDiffusePath = RacePaths.GetBodyTexturePath(0, genderList.SelectedIndex,
+                textureSet.InternalBasePath = RacePaths.GetBodyTexturePath(0, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
             }
             textureSet.InternalNormalPath = RacePaths.GetBodyTexturePath(1, genderList.SelectedIndex,
@@ -746,7 +746,9 @@ namespace FFXIVLooseTextureCompiler {
             switch (facePart.SelectedIndex) {
                 default:
                     AddFacePaths(textureSet);
-                    BackupTexturePaths.AddFaceBackupPaths(genderList.SelectedIndex, subRaceList.SelectedIndex, faceTypeList.SelectedIndex, textureSet);
+                    if (facePart.SelectedIndex == 0) {
+                        BackupTexturePaths.AddFaceBackupPaths(genderList.SelectedIndex, subRaceList.SelectedIndex, faceTypeList.SelectedIndex, textureSet);
+                    }
                     break;
                 case 2:
                     AddEyePaths(textureSet);
@@ -766,7 +768,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void AddDecalPath(TextureSet textureSet) {
-            textureSet.InternalDiffusePath = "chara/common/texture/decal_face/_decal_" + (faceExtraList.SelectedIndex + 1) + ".tex";
+            textureSet.InternalBasePath = "chara/common/texture/decal_face/_decal_" + (faceExtraList.SelectedIndex + 1) + ".tex";
         }
 
         public void AddHairPaths(TextureSet textureSet) {
@@ -782,7 +784,7 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddEyePaths(TextureSet textureSet) {
             if (asymCheckbox.Checked) {
-                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
                 2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
                 textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
                 2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
@@ -794,7 +796,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public void AddEyePathsLegacy(TextureSet textureSet) {
-            textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
             textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
@@ -806,7 +808,7 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddFacePaths(TextureSet textureSet) {
             if (facePart.SelectedIndex != 1) {
-                textureSet.InternalDiffusePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
                     facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
             }
 
@@ -838,16 +840,16 @@ namespace FFXIVLooseTextureCompiler {
             if (textureSet == null) {
                 enabled = false;
             }
-            diffuse.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalDiffusePath);
+            Base.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalBasePath);
             normal.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalNormalPath);
             mask.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMaskPath);
             bounds.Enabled = enabled && bakeNormals.Checked;
             glow.Enabled = enabled && !textureSet.TextureSetName.ToLower().Contains("face paint")
-                    && !textureSet.TextureSetName.ToLower().Contains("hair") && diffuse.Enabled;
+                    && !textureSet.TextureSetName.ToLower().Contains("hair") && Base.Enabled;
         }
 
         private void SetControlsPaths(TextureSet textureSet) {
-            diffuse.CurrentPath = textureSet.Diffuse;
+            Base.CurrentPath = textureSet.Base;
             normal.CurrentPath = textureSet.Normal;
             mask.CurrentPath = textureSet.Mask;
             bounds.CurrentPath = textureSet.NormalMask;
@@ -855,17 +857,17 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void SetControlsColors(TextureSet texturelSet) {
-            diffuse.LabelName.Text = "Diffuse";
+            Base.LabelName.Text = "Base";
             normal.LabelName.Text = "Normal";
             mask.LabelName.Text = "Mask";
-            diffuse.BackColor = originalDiffuseBoxColour;
+            Base.BackColor = originalBaseBoxColour;
             normal.BackColor = originalNormalBoxColour;
             mask.BackColor = originalMultiBoxColour;
         }
         public void SetPaths() {
             if (textureList.SelectedIndex != -1) {
                 TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-                DisposeWatcher(textureSet.Diffuse, diffuse);
+                DisposeWatcher(textureSet.Base, Base);
                 DisposeWatcher(textureSet.Normal, normal);
                 DisposeWatcher(textureSet.Mask, mask);
                 DisposeWatcher(textureSet.NormalMask, bounds);
@@ -873,13 +875,13 @@ namespace FFXIVLooseTextureCompiler {
                 if (!string.IsNullOrWhiteSpace(textureSet.Glow)) {
                     generatMaskCheckBox.Checked = true;
                 }
-                textureSet.Diffuse = diffuse.CurrentPath;
+                textureSet.Base = Base.CurrentPath;
                 textureSet.Normal = normal.CurrentPath;
                 textureSet.Mask = mask.CurrentPath;
                 textureSet.NormalMask = bounds.CurrentPath;
                 textureSet.Glow = glow.CurrentPath;
 
-                AddWatcher(textureSet.Diffuse);
+                AddWatcher(textureSet.Base);
                 AddWatcher(textureSet.Normal);
                 AddWatcher(textureSet.Mask);
                 AddWatcher(textureSet.NormalMask);
@@ -924,7 +926,7 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             if (textureList.SelectedIndex > -1) {
                 textureList.Items.RemoveAt(textureList.SelectedIndex);
-                diffuse.CurrentPath = "";
+                Base.CurrentPath = "";
                 normal.CurrentPath = "";
                 mask.CurrentPath = "";
                 glow.CurrentPath = "";
@@ -942,13 +944,13 @@ namespace FFXIVLooseTextureCompiler {
                     textureList.Items.Clear();
                 }
             }
-            diffuse.CurrentPath = "";
+            Base.CurrentPath = "";
             normal.CurrentPath = "";
             mask.CurrentPath = "";
             bounds.CurrentPath = "";
             glow.CurrentPath = "";
 
-            diffuse.Enabled = false;
+            Base.Enabled = false;
             normal.Enabled = false;
             mask.Enabled = false;
             bounds.Enabled = false;
@@ -1087,12 +1089,12 @@ namespace FFXIVLooseTextureCompiler {
             modVersionTextBox.Text = "1.0.0";
             modDescriptionTextBox.Text = _defaultDescription;
             modWebsiteTextBox.Text = _defaultWebsite;
-            diffuse.CurrentPath = "";
+            Base.CurrentPath = "";
             normal.CurrentPath = "";
             mask.CurrentPath = "";
             glow.CurrentPath = "";
 
-            diffuse.Enabled = false;
+            Base.Enabled = false;
             normal.Enabled = false;
             mask.Enabled = false;
             bounds.Enabled = false;
@@ -1172,7 +1174,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (projectFile.GroupOptionTypes != null) {
                     groupOptionTypes = projectFile.GroupOptionTypes;
                 }
-                if (projectFile.ProjectVersion < 3) {
+                if (projectFile.ProjectVersion < 5) {
                     ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                 }
                 textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
@@ -1200,17 +1202,19 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
                 foreach (TextureSet textureSet in projectFile.TextureSets) {
-                    AddWatcher(textureSet.Diffuse);
+                    AddWatcher(textureSet.Base);
                     AddWatcher(textureSet.Normal);
                     AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
+                    //AddWatcher(textureSet.Glow);
                 }
                 if (missingFiles > 0) {
-                    MessageBox.Show($"{missingFiles} texture sets are missing files. Please update the file paths", VersionText);
+                    MessageBox.Show($"{missingFiles} texture sets are missing original files. Please update the file paths", VersionText);
                 }
                 if (foundFaceMod) {
-                    MessageBox.Show($"Face mods created before Dawntrail are no longer compatible with the game due to UV changes. You will need to remake your face textures.", VersionText);
+                    MessageBox.Show($"Face mods created before Dawntrail are no longer compatible with the game due to UV changes." +
+                        $" You will need to use the Face Salvager to attempt to recover it." +
+                        $"\r\n\"Tools -> Face Tools -> Legacy Face Salvager\"", VersionText);
                 }
             }
             HasSaved = true;
@@ -1220,17 +1224,17 @@ namespace FFXIVLooseTextureCompiler {
             foreach (TextureSet textureSet in projectFile.TextureSets) {
                 if (textureSet.InternalMaskPath.Contains("catchlight")) {
                     textureSet.InternalMaskPath = RacePaths.OldEyePathToNewEyeMultiPath(textureSet.InternalNormalPath);
-                    textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalDiffusePath);
-                    textureSet.InternalDiffusePath = RacePaths.OldEyePathToNewEyeDiffusePath(textureSet.InternalDiffusePath);
+                    textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalBasePath);
+                    textureSet.InternalBasePath = RacePaths.OldEyePathToNewEyeBasePath(textureSet.InternalBasePath);
                     if (File.Exists(textureSet.Normal)) {
                         var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
-                        textureSet.Diffuse = strings[0];
+                        textureSet.Base = strings[0];
                         textureSet.Normal = strings[1];
                         textureSet.Mask = strings[2];
                     } else {
                         textureSet.Mask = textureSet.Normal;
-                        textureSet.Normal = textureSet.Diffuse;
-                        textureSet.Diffuse = "";
+                        textureSet.Normal = textureSet.Base;
+                        textureSet.Base = "";
                         missingFiles++;
                     }
                 }
@@ -1253,14 +1257,14 @@ namespace FFXIVLooseTextureCompiler {
                         }
                     } else {
                         textureSet.Mask = textureSet.Normal;
-                        textureSet.Normal = textureSet.Diffuse;
-                        textureSet.Diffuse = "";
+                        textureSet.Normal = textureSet.Base;
+                        textureSet.Base = "";
                         missingFiles++;
                     }
                 }
                 textureSet.InternalMaskPath = RacePaths.PathCorrector(textureSet.InternalMaskPath);
                 textureSet.InternalNormalPath = RacePaths.PathCorrector(textureSet.InternalNormalPath);
-                textureSet.InternalDiffusePath = RacePaths.PathCorrector(textureSet.InternalDiffusePath);
+                textureSet.InternalBasePath = RacePaths.PathCorrector(textureSet.InternalBasePath);
                 if (textureSet.InternalMaskPath.Contains("fac_d")) {
                     foundFaceMod = true;
                 }
@@ -1276,7 +1280,7 @@ namespace FFXIVLooseTextureCompiler {
                     BringToFront();
                     int missingFiles = 0;
                     bool foundFaceMod = false;
-                    if (projectFile.ProjectVersion < 3) {
+                    if (projectFile.ProjectVersion < 5) {
                         ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                     }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
@@ -1284,7 +1288,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (!templateConfiguration.GroupName.Contains("Default")) {
                             textureSet.GroupName = templateConfiguration.GroupName;
                         }
-                        AddWatcher(textureSet.Diffuse);
+                        AddWatcher(textureSet.Base);
                         AddWatcher(textureSet.Normal);
                         AddWatcher(textureSet.Mask);
                         AddWatcher(textureSet.NormalMask);
@@ -1302,7 +1306,7 @@ namespace FFXIVLooseTextureCompiler {
             using (StreamWriter writer = new StreamWriter(path)) {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = new ProjectFile();
-                projectFile.ProjectVersion = 2;
+                projectFile.ProjectVersion = 5;
                 projectFile.Name = modNameTextBox.Text;
                 projectFile.Author = modAuthorTextBox.Text;
                 projectFile.Version = modVersionTextBox.Text;
@@ -1349,8 +1353,8 @@ namespace FFXIVLooseTextureCompiler {
         }
         #endregion
         #region Sub Programs
-        private void diffuseMergerToolStripMenuItem_Click(object sender, EventArgs e) {
-            new DiffuseMerger().Show();
+        private void baseTextureMergerToolStripMenuItem_Click(object sender, EventArgs e) {
+            new BaseMerger().Show();
         }
         private void bulkTexViewerToolStripMenuItem_Click(object sender, EventArgs e) {
             new BulkTexManager().Show();
@@ -1574,7 +1578,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 MessageBox.Show("Please select where you want to save the conversion", VersionText);
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    TexIO.SaveBitmap(MapWriting.ExtractGlowMapFromDiffuse(
+                    TexIO.SaveBitmap(MapWriting.ExtractGlowMapFromBase(
                         TexIO.ResolveBitmap(openFileDialog.FileName)), ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
                 }
             }
@@ -2067,13 +2071,13 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
-        private void diffuseToDawntrailSkinMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void baseTextureToDawntrailSkinMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
-                TexIO.SaveBitmap(ImageManipulation.ConvertDiffuseToDawntrailSkinMulti(image)
+                TexIO.SaveBitmap(ImageManipulation.ConvertBaseToDawntrailSkinMulti(image)
                     , ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to skin multi", VersionText);
             }
@@ -2105,12 +2109,12 @@ namespace FFXIVLooseTextureCompiler {
         private void duplicateToolStripMenuItem_Click(object sender, EventArgs e) {
             TextureSet newTextureSet = new TextureSet();
             TextureSet textureSet = (textureList.SelectedItem as TextureSet);
-            newTextureSet.Diffuse = textureSet.Diffuse;
+            newTextureSet.Base = textureSet.Base;
             newTextureSet.Normal = textureSet.Normal;
             newTextureSet.Mask = textureSet.Mask;
             newTextureSet.Glow = newTextureSet.Glow;
             newTextureSet.NormalCorrection = newTextureSet.NormalCorrection;
-            newTextureSet.InternalDiffusePath = textureSet.InternalDiffusePath;
+            newTextureSet.InternalBasePath = textureSet.InternalBasePath;
             newTextureSet.InternalNormalPath = textureSet.InternalNormalPath;
             newTextureSet.InternalMaskPath = textureSet.InternalMaskPath;
             newTextureSet.BackupTexturePaths = textureSet.BackupTexturePaths;
@@ -2133,13 +2137,13 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void hairBaseToFFXIVHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.HairDiffuseToHairMaps(openFileDialog.FileName);
-                MessageBox.Show("Hair Diffuse Converted To FFXIV Maps!", VersionText);
+                ImageManipulation.HairBaseToHairMaps(openFileDialog.FileName);
+                MessageBox.Show("Hair Base Converted To FFXIV Maps!", VersionText);
             }
         }
 
@@ -2166,13 +2170,13 @@ namespace FFXIVLooseTextureCompiler {
         }
 
 
-        private void convertDiffuseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void convertBaseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ClothingDiffuseToClothingMultiAndNormalMaps(openFileDialog.FileName);
-                MessageBox.Show("Clothing Diffuse Converted To FFXIV Maps!", VersionText);
+                ImageManipulation.ClothingBaseToClothingMultiAndNormalMaps(openFileDialog.FileName);
+                MessageBox.Show("Clothing Base Converted To FFXIV Maps!", VersionText);
             }
         }
 
@@ -2311,23 +2315,23 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void diffuseToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void baseTextureToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.DiffuseToNormaMap(openFileDialog.FileName);
-                MessageBox.Show("Diffuse converted to normal map!", VersionText);
+                ImageManipulation.BaseToNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Base converted to normal map!", VersionText);
             }
         }
 
-        private void diffuseToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void baseTextureToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.DiffuseToInvertedNormaMap(openFileDialog.FileName);
-                MessageBox.Show("Diffuse converted to inverted normal map!", VersionText);
+                ImageManipulation.BaseToInvertedNormaMap(openFileDialog.FileName);
+                MessageBox.Show("Base converted to inverted normal map!", VersionText);
             }
         }
 

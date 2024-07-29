@@ -1,5 +1,5 @@
 ﻿namespace FFXIVLooseTextureCompiler {
-    partial class DiffuseMerger {
+    partial class BaseMerger {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -102,7 +102,7 @@
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
-            // DiffuseMerger
+            // BaseMerger
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -116,8 +116,8 @@
             this.Controls.Add(this.image1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MinimizeBox = false;
-            this.Name = "DiffuseMerger";
-            this.Text = "Diffuse Merger (Experimental)";
+            this.Name = "BaseMerger";
+            this.Text = "Base Merger (Experimental)";
             ((System.ComponentModel.ISupportInitialize)(this.image1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.result)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.image2)).EndInit();

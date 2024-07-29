@@ -34,7 +34,7 @@
             uniqueAuRa = new CheckBox();
             mask = new FFXIVVoicePackCreator.FilePicker();
             normal = new FFXIVVoicePackCreator.FilePicker();
-            diffuse = new FFXIVVoicePackCreator.FilePicker();
+            Base = new FFXIVVoicePackCreator.FilePicker();
             asymCheckbox = new CheckBox();
             facePart = new ComboBox();
             faceTypeList = new ComboBox();
@@ -67,19 +67,19 @@
             convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
+            hairBaseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
             legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
             clothingToolsToolStripMenuItem = new ToolStripMenuItem();
-            convertDiffuseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
+            convertBaseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
             colourChannelSplittingToolStripMenuItem = new ToolStripMenuItem();
-            diffuseMergerToolStripMenuItem = new ToolStripMenuItem();
+            baseTextureMergerToolStripMenuItem = new ToolStripMenuItem();
             multiCreatorToolStripMenuItem = new ToolStripMenuItem();
             mergeRGBAndAlphaImagesToolStripMenuItem = new ToolStripMenuItem();
             imageToRGBChannelsToolStripMenuItem = new ToolStripMenuItem();
             splitImageToRGBAndAlphaToolStripMenuItem = new ToolStripMenuItem();
-            diffuseToNormalMapToolStripMenuItem = new ToolStripMenuItem();
-            diffuseToInvertedNormalMapToolStripMenuItem = new ToolStripMenuItem();
-            diffuseToDawntrailSkinMultiToolStripMenuItem = new ToolStripMenuItem();
+            baseTextureToNormalMapToolStripMenuItem = new ToolStripMenuItem();
+            baseTextureToInvertedNormalMapToolStripMenuItem = new ToolStripMenuItem();
+            baseTextureToDawntrailSkinMultiToolStripMenuItem = new ToolStripMenuItem();
             xNormalToolStripMenuItem = new ToolStripMenuItem();
             imageToTexConversionToolStripMenuItem = new ToolStripMenuItem();
             bulkTexViewerToolStripMenuItem = new ToolStripMenuItem();
@@ -291,24 +291,24 @@
             normal.Enter += multi_Enter;
             normal.Leave += multi_Leave;
             // 
-            // diffuse
+            // Base
             // 
-            diffuse.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            diffuse.BackColor = Color.LavenderBlush;
-            diffuse.CurrentPath = null;
-            diffuse.Enabled = false;
-            diffuse.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            diffuse.Index = -1;
-            diffuse.Location = new Point(4, 419);
-            diffuse.Margin = new Padding(4, 3, 4, 3);
-            diffuse.MinimumSize = new Size(300, 28);
-            diffuse.Name = "diffuse";
-            diffuse.Size = new Size(548, 28);
-            diffuse.TabIndex = 17;
-            helperToolTip.SetToolTip(diffuse, "Skin, and tattoo overlays go here.");
-            diffuse.OnFileSelected += multi_OnFileSelected;
-            diffuse.Enter += multi_Enter;
-            diffuse.Leave += multi_Leave;
+            Base.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            Base.BackColor = Color.LavenderBlush;
+            Base.CurrentPath = null;
+            Base.Enabled = false;
+            Base.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            Base.Index = -1;
+            Base.Location = new Point(4, 419);
+            Base.Margin = new Padding(4, 3, 4, 3);
+            Base.MinimumSize = new Size(300, 28);
+            Base.Name = "Base";
+            Base.Size = new Size(548, 28);
+            Base.TabIndex = 17;
+            helperToolTip.SetToolTip(Base, "Skin, and tattoo overlays go here.");
+            Base.OnFileSelected += multi_OnFileSelected;
+            Base.Enter += multi_Enter;
+            Base.Leave += multi_Leave;
             // 
             // asymCheckbox
             // 
@@ -518,8 +518,8 @@
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
             extractAtramentumLuminisGlowMapToolStripMenuItem.Name = "extractAtramentumLuminisGlowMapToolStripMenuItem";
-            extractAtramentumLuminisGlowMapToolStripMenuItem.Size = new Size(299, 22);
-            extractAtramentumLuminisGlowMapToolStripMenuItem.Text = "Atramentum Luminis Diffuse To Glow Map";
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Size = new Size(286, 22);
+            extractAtramentumLuminisGlowMapToolStripMenuItem.Text = "Atramentum Luminis Base To Glow Map";
             extractAtramentumLuminisGlowMapToolStripMenuItem.Visible = false;
             extractAtramentumLuminisGlowMapToolStripMenuItem.Click += extractAtramentumLuminisGlowMapToolStripMenuItem_Click;
             // 
@@ -527,7 +527,7 @@
             // 
             faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
             faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
-            faceToolsToolStripMenuItem.Size = new Size(299, 22);
+            faceToolsToolStripMenuItem.Size = new Size(286, 22);
             faceToolsToolStripMenuItem.Text = "Face Tools";
             // 
             // legacyMakeupSalvagerToolStripMenuItem
@@ -541,7 +541,7 @@
             // 
             eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem });
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
-            eyeToolsToolStripMenuItem.Size = new Size(299, 22);
+            eyeToolsToolStripMenuItem.Size = new Size(286, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
             // 
             // convertLegacyEyeMapToDawntrailMapToolStripMenuItem
@@ -567,17 +567,17 @@
             // 
             // hairToolsToolStripMenuItem
             // 
-            hairToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hairDiffuseToFFXIVHairMapsToolStripMenuItem, legacyHairMapsToDawntrailMaps });
+            hairToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hairBaseToFFXIVHairMapsToolStripMenuItem, legacyHairMapsToDawntrailMaps });
             hairToolsToolStripMenuItem.Name = "hairToolsToolStripMenuItem";
-            hairToolsToolStripMenuItem.Size = new Size(299, 22);
+            hairToolsToolStripMenuItem.Size = new Size(286, 22);
             hairToolsToolStripMenuItem.Text = "Hair Tools";
             // 
-            // hairDiffuseToFFXIVHairMapsToolStripMenuItem
+            // hairBaseToFFXIVHairMapsToolStripMenuItem
             // 
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Name = "hairDiffuseToFFXIVHairMapsToolStripMenuItem";
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Size = new Size(268, 22);
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Diffuse To FFXIV Hair Maps";
-            hairDiffuseToFFXIVHairMapsToolStripMenuItem.Click += hairDiffuseToFFXIVHairMapsToolStripMenuItem_Click;
+            hairBaseToFFXIVHairMapsToolStripMenuItem.Name = "hairBaseToFFXIVHairMapsToolStripMenuItem";
+            hairBaseToFFXIVHairMapsToolStripMenuItem.Size = new Size(268, 22);
+            hairBaseToFFXIVHairMapsToolStripMenuItem.Text = "Hair Base To FFXIV Hair Maps";
+            hairBaseToFFXIVHairMapsToolStripMenuItem.Click += hairBaseToFFXIVHairMapsToolStripMenuItem_Click;
             // 
             // legacyHairMapsToDawntrailMaps
             // 
@@ -588,86 +588,86 @@
             // 
             // clothingToolsToolStripMenuItem
             // 
-            clothingToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertDiffuseToNormalAndMultiToolStripMenuItem });
+            clothingToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertBaseToNormalAndMultiToolStripMenuItem });
             clothingToolsToolStripMenuItem.Name = "clothingToolsToolStripMenuItem";
-            clothingToolsToolStripMenuItem.Size = new Size(299, 22);
+            clothingToolsToolStripMenuItem.Size = new Size(286, 22);
             clothingToolsToolStripMenuItem.Text = "Clothing Tools";
             // 
-            // convertDiffuseToNormalAndMultiToolStripMenuItem
+            // convertBaseToNormalAndMultiToolStripMenuItem
             // 
-            convertDiffuseToNormalAndMultiToolStripMenuItem.Name = "convertDiffuseToNormalAndMultiToolStripMenuItem";
-            convertDiffuseToNormalAndMultiToolStripMenuItem.Size = new Size(270, 22);
-            convertDiffuseToNormalAndMultiToolStripMenuItem.Text = "Convert Diffuse To Normal And Mask";
-            convertDiffuseToNormalAndMultiToolStripMenuItem.Click += convertDiffuseToNormalAndMultiToolStripMenuItem_Click;
+            convertBaseToNormalAndMultiToolStripMenuItem.Name = "convertBaseToNormalAndMultiToolStripMenuItem";
+            convertBaseToNormalAndMultiToolStripMenuItem.Size = new Size(257, 22);
+            convertBaseToNormalAndMultiToolStripMenuItem.Text = "Convert Base To Normal And Mask";
+            convertBaseToNormalAndMultiToolStripMenuItem.Click += convertBaseToNormalAndMultiToolStripMenuItem_Click;
             // 
             // colourChannelSplittingToolStripMenuItem
             // 
-            colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { diffuseMergerToolStripMenuItem, multiCreatorToolStripMenuItem, mergeRGBAndAlphaImagesToolStripMenuItem, imageToRGBChannelsToolStripMenuItem, splitImageToRGBAndAlphaToolStripMenuItem, diffuseToNormalMapToolStripMenuItem, diffuseToInvertedNormalMapToolStripMenuItem, diffuseToDawntrailSkinMultiToolStripMenuItem, xNormalToolStripMenuItem });
+            colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { baseTextureMergerToolStripMenuItem, multiCreatorToolStripMenuItem, mergeRGBAndAlphaImagesToolStripMenuItem, imageToRGBChannelsToolStripMenuItem, splitImageToRGBAndAlphaToolStripMenuItem, baseTextureToNormalMapToolStripMenuItem, baseTextureToInvertedNormalMapToolStripMenuItem, baseTextureToDawntrailSkinMultiToolStripMenuItem, xNormalToolStripMenuItem });
             colourChannelSplittingToolStripMenuItem.Name = "colourChannelSplittingToolStripMenuItem";
-            colourChannelSplittingToolStripMenuItem.Size = new Size(299, 22);
+            colourChannelSplittingToolStripMenuItem.Size = new Size(286, 22);
             colourChannelSplittingToolStripMenuItem.Text = "Texture Manipulation";
             colourChannelSplittingToolStripMenuItem.Click += colourChannelSplittingToolStripMenuItem_Click;
             // 
-            // diffuseMergerToolStripMenuItem
+            // baseTextureMergerToolStripMenuItem
             // 
-            diffuseMergerToolStripMenuItem.Name = "diffuseMergerToolStripMenuItem";
-            diffuseMergerToolStripMenuItem.Size = new Size(242, 22);
-            diffuseMergerToolStripMenuItem.Text = "Diffuse Merger";
-            diffuseMergerToolStripMenuItem.Click += diffuseMergerToolStripMenuItem_Click;
+            baseTextureMergerToolStripMenuItem.Name = "baseTextureMergerToolStripMenuItem";
+            baseTextureMergerToolStripMenuItem.Size = new Size(233, 22);
+            baseTextureMergerToolStripMenuItem.Text = "Base Merger";
+            baseTextureMergerToolStripMenuItem.Click += baseTextureMergerToolStripMenuItem_Click;
             // 
             // multiCreatorToolStripMenuItem
             // 
             multiCreatorToolStripMenuItem.Name = "multiCreatorToolStripMenuItem";
-            multiCreatorToolStripMenuItem.Size = new Size(242, 22);
+            multiCreatorToolStripMenuItem.Size = new Size(233, 22);
             multiCreatorToolStripMenuItem.Text = "RGBA Merger";
             multiCreatorToolStripMenuItem.Click += multiCreatorToolStripMenuItem_Click;
             // 
             // mergeRGBAndAlphaImagesToolStripMenuItem
             // 
             mergeRGBAndAlphaImagesToolStripMenuItem.Name = "mergeRGBAndAlphaImagesToolStripMenuItem";
-            mergeRGBAndAlphaImagesToolStripMenuItem.Size = new Size(242, 22);
+            mergeRGBAndAlphaImagesToolStripMenuItem.Size = new Size(233, 22);
             mergeRGBAndAlphaImagesToolStripMenuItem.Text = "Merge RGB and Alpha Images";
             mergeRGBAndAlphaImagesToolStripMenuItem.Click += mergeRGBAndAlphaImagesToolStripMenuItem_Click;
             // 
             // imageToRGBChannelsToolStripMenuItem
             // 
             imageToRGBChannelsToolStripMenuItem.Name = "imageToRGBChannelsToolStripMenuItem";
-            imageToRGBChannelsToolStripMenuItem.Size = new Size(242, 22);
+            imageToRGBChannelsToolStripMenuItem.Size = new Size(233, 22);
             imageToRGBChannelsToolStripMenuItem.Text = "Split Image To RGBA Channels";
             imageToRGBChannelsToolStripMenuItem.Click += imageToRGBChannelsToolStripMenuItem_Click;
             // 
             // splitImageToRGBAndAlphaToolStripMenuItem
             // 
             splitImageToRGBAndAlphaToolStripMenuItem.Name = "splitImageToRGBAndAlphaToolStripMenuItem";
-            splitImageToRGBAndAlphaToolStripMenuItem.Size = new Size(242, 22);
+            splitImageToRGBAndAlphaToolStripMenuItem.Size = new Size(233, 22);
             splitImageToRGBAndAlphaToolStripMenuItem.Text = "Split Image to RGB and Alpha";
             splitImageToRGBAndAlphaToolStripMenuItem.Click += splitImageToRGBAndAlphaToolStripMenuItem_Click;
             // 
-            // diffuseToNormalMapToolStripMenuItem
+            // baseTextureToNormalMapToolStripMenuItem
             // 
-            diffuseToNormalMapToolStripMenuItem.Name = "diffuseToNormalMapToolStripMenuItem";
-            diffuseToNormalMapToolStripMenuItem.Size = new Size(242, 22);
-            diffuseToNormalMapToolStripMenuItem.Text = "Diffuse To Normal Map";
-            diffuseToNormalMapToolStripMenuItem.Click += diffuseToNormalMapToolStripMenuItem_Click;
+            baseTextureToNormalMapToolStripMenuItem.Name = "baseTextureToNormalMapToolStripMenuItem";
+            baseTextureToNormalMapToolStripMenuItem.Size = new Size(233, 22);
+            baseTextureToNormalMapToolStripMenuItem.Text = "Base To Normal Map";
+            baseTextureToNormalMapToolStripMenuItem.Click += baseTextureToNormalMapToolStripMenuItem_Click;
             // 
-            // diffuseToInvertedNormalMapToolStripMenuItem
+            // baseTextureToInvertedNormalMapToolStripMenuItem
             // 
-            diffuseToInvertedNormalMapToolStripMenuItem.Name = "diffuseToInvertedNormalMapToolStripMenuItem";
-            diffuseToInvertedNormalMapToolStripMenuItem.Size = new Size(242, 22);
-            diffuseToInvertedNormalMapToolStripMenuItem.Text = "Diffuse To Inverted Normal Map";
-            diffuseToInvertedNormalMapToolStripMenuItem.Click += diffuseToInvertedNormalMapToolStripMenuItem_Click;
+            baseTextureToInvertedNormalMapToolStripMenuItem.Name = "baseTextureToInvertedNormalMapToolStripMenuItem";
+            baseTextureToInvertedNormalMapToolStripMenuItem.Size = new Size(233, 22);
+            baseTextureToInvertedNormalMapToolStripMenuItem.Text = "Base To Inverted Normal Map";
+            baseTextureToInvertedNormalMapToolStripMenuItem.Click += baseTextureToInvertedNormalMapToolStripMenuItem_Click;
             // 
-            // diffuseToDawntrailSkinMultiToolStripMenuItem
+            // baseTextureToDawntrailSkinMultiToolStripMenuItem
             // 
-            diffuseToDawntrailSkinMultiToolStripMenuItem.Name = "diffuseToDawntrailSkinMultiToolStripMenuItem";
-            diffuseToDawntrailSkinMultiToolStripMenuItem.Size = new Size(242, 22);
-            diffuseToDawntrailSkinMultiToolStripMenuItem.Text = "Diffuse To Dawntrail Skin Mask";
-            diffuseToDawntrailSkinMultiToolStripMenuItem.Click += diffuseToDawntrailSkinMultiToolStripMenuItem_Click;
+            baseTextureToDawntrailSkinMultiToolStripMenuItem.Name = "baseTextureToDawntrailSkinMultiToolStripMenuItem";
+            baseTextureToDawntrailSkinMultiToolStripMenuItem.Size = new Size(233, 22);
+            baseTextureToDawntrailSkinMultiToolStripMenuItem.Text = "Base To Dawntrail Skin Mask";
+            baseTextureToDawntrailSkinMultiToolStripMenuItem.Click += baseTextureToDawntrailSkinMultiToolStripMenuItem_Click;
             // 
             // xNormalToolStripMenuItem
             // 
             xNormalToolStripMenuItem.Name = "xNormalToolStripMenuItem";
-            xNormalToolStripMenuItem.Size = new Size(242, 22);
+            xNormalToolStripMenuItem.Size = new Size(233, 22);
             xNormalToolStripMenuItem.Text = "XNormal";
             xNormalToolStripMenuItem.Click += xNormalToolStripMenuItem_Click;
             // 
@@ -675,7 +675,7 @@
             // 
             imageToTexConversionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { bulkTexViewerToolStripMenuItem, bulkImageToTexToolStripMenuItem, recursiveBulkImageToTexToolStripMenuItem });
             imageToTexConversionToolStripMenuItem.Name = "imageToTexConversionToolStripMenuItem";
-            imageToTexConversionToolStripMenuItem.Size = new Size(299, 22);
+            imageToTexConversionToolStripMenuItem.Size = new Size(286, 22);
             imageToTexConversionToolStripMenuItem.Text = "Tex File Management";
             // 
             // bulkTexViewerToolStripMenuItem
@@ -703,7 +703,7 @@
             // 
             convertStandaloneTextureToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { biboToGen3ToolStripMenuItem, biboToGen2ToolStripMenuItem, gen3ToBiboToolStripMenuItem, gen3ToGen2ToolStripMenuItem1, gen2ToGen3ToolStripMenuItem, gen2ToBiboToolStripMenuItem, otopopToVanillaToolStripMenuItem, vanillaToOtopopToolStripMenuItem });
             convertStandaloneTextureToolStripMenuItem.Name = "convertStandaloneTextureToolStripMenuItem";
-            convertStandaloneTextureToolStripMenuItem.Size = new Size(299, 22);
+            convertStandaloneTextureToolStripMenuItem.Size = new Size(286, 22);
             convertStandaloneTextureToolStripMenuItem.Text = "Convert Standalone Texture";
             // 
             // biboToGen3ToolStripMenuItem
@@ -766,7 +766,7 @@
             // 
             devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem, bulkDDSToPNGToolStripMenuItem, textureToTexToolStripMenuItem, autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem });
             devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
-            devToolsToolStripMenuItem.Size = new Size(299, 22);
+            devToolsToolStripMenuItem.Size = new Size(286, 22);
             devToolsToolStripMenuItem.Text = "Dev Tools";
             // 
             // textureToLTCTToolStripMenuItem
@@ -857,7 +857,6 @@
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thisToolIsTooHardMakeItSimplerToolStripMenuItem, howToGetTexturesToolStripMenuItem, howDoIUseThisToolStripMenuItem, howDoIMakeStuffBumpyToolStripMenuItem, howDoIMakeStuffGlowToolStripMenuItem, howDoIMakeEyesToolStripMenuItem, whatAreTemplatesAndHowDoIUseThemToolStripMenuItem, canIMakeMyBiboOrGen3BodyWorkOnAnotherBodyToolStripMenuItem, canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem, canIReplaceABunchOfStuffAtOnceToolStripMenuItem, whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem });
-            helpToolStripMenuItem.Enabled = false;
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "Help";
@@ -1502,7 +1501,7 @@
             Controls.Add(currentEditLabel);
             Controls.Add(mask);
             Controls.Add(normal);
-            Controls.Add(diffuse);
+            Controls.Add(Base);
             Controls.Add(textureList);
             Controls.Add(donateButton);
             Controls.Add(label4);
@@ -1557,7 +1556,7 @@
         private TextBox modWebsiteTextBox;
         private FFXIVVoicePackCreator.FilePicker mask;
         private FFXIVVoicePackCreator.FilePicker normal;
-        private FFXIVVoicePackCreator.FilePicker diffuse;
+        private FFXIVVoicePackCreator.FilePicker Base;
         private Label label4;
         private TextBox modDescriptionTextBox;
         private Label label3;
@@ -1651,7 +1650,7 @@
         private ToolStripMenuItem thisToolIsTooHardMakeItSimplerToolStripMenuItem;
         private ToolStripMenuItem eyeToolsToolStripMenuItem;
         private ToolStripMenuItem colourChannelSplittingToolStripMenuItem;
-        private ToolStripMenuItem diffuseMergerToolStripMenuItem;
+        private ToolStripMenuItem baseTextureMergerToolStripMenuItem;
         private ToolStripMenuItem multiCreatorToolStripMenuItem;
         private ToolStripMenuItem mergeRGBAndAlphaImagesToolStripMenuItem;
         private ToolStripMenuItem imageToRGBChannelsToolStripMenuItem;
@@ -1666,11 +1665,11 @@
         private ToolStripMenuItem duplicateToolStripMenuItem;
         private ToolStripMenuItem bulkNameReplacement;
         private ToolStripMenuItem hairToolsToolStripMenuItem;
-        private ToolStripMenuItem hairDiffuseToFFXIVHairMapsToolStripMenuItem;
+        private ToolStripMenuItem hairBaseToFFXIVHairMapsToolStripMenuItem;
         private ToolStripMenuItem clothingToolsToolStripMenuItem;
-        private ToolStripMenuItem convertDiffuseToNormalAndMultiToolStripMenuItem;
+        private ToolStripMenuItem convertBaseToNormalAndMultiToolStripMenuItem;
         private ToolStripMenuItem convertLegacyEyeMapToDawntrailMapToolStripMenuItem;
-        private ToolStripMenuItem diffuseToDawntrailSkinMultiToolStripMenuItem;
+        private ToolStripMenuItem baseTextureToDawntrailSkinMultiToolStripMenuItem;
         private ToolStripMenuItem convertImageToDawntrailEyeMapsToolStripMenuItem;
         private ToolStripMenuItem convertFolderToEyeMapsToolStripMenuItem;
         private ToolStripMenuItem legacyHairMapsToDawntrailMaps;
@@ -1690,8 +1689,8 @@
         private Label label15;
         private Label label14;
         private Label label13;
-        private ToolStripMenuItem diffuseToNormalMapToolStripMenuItem;
-        private ToolStripMenuItem diffuseToInvertedNormalMapToolStripMenuItem;
+        private ToolStripMenuItem baseTextureToNormalMapToolStripMenuItem;
+        private ToolStripMenuItem baseTextureToInvertedNormalMapToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

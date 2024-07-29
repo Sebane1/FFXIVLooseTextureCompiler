@@ -22,8 +22,8 @@ namespace FFXIVLooseTextureCompiler {
                 foreach (TextureSet textureSet in textureSet) {
                     if (textureSet.TextureSetName.ToLower().Contains(replacementString.Text.ToLower())
                         && textureSet.GroupName.ToLower().Contains(groupTextBox.Text.ToLower())) {
-                        if (!string.IsNullOrEmpty(diffuse.FilePath.Text)) {
-                            textureSet.Diffuse = diffuse.FilePath.Text;
+                        if (!string.IsNullOrEmpty(baseTexture.FilePath.Text)) {
+                            textureSet.Base = baseTexture.FilePath.Text;
                         }
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
                             textureSet.Normal = normal.FilePath.Text;
@@ -55,7 +55,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
-            diffuse.LabelName.Text = "Diffuse";
+            baseTexture.LabelName.Text = "Base";
             normal.LabelName.Text = "Normal";
             mask.LabelName.Text = "Mask";
         }
@@ -65,7 +65,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void replacementString_TextChanged(object sender, EventArgs e) {
-            diffuse.LabelName.Text = "Diffuse";
+            baseTexture.LabelName.Text = "Base";
             normal.LabelName.Text = "Normal";
             mask.LabelName.Text = "Mask";
         }

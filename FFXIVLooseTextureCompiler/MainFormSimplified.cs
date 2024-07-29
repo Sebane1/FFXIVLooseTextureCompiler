@@ -69,8 +69,8 @@ namespace FFXIVLooseTextureCompiler {
                 faceTextureSet.GroupName = "Character Customization";
                 eyesTextureSet.GroupName = "Character Customization";
 
-                body.FilePath.Text = skinTextureSet.Diffuse;
-                face.FilePath.Text = faceTextureSet.Diffuse;
+                body.FilePath.Text = skinTextureSet.Base;
+                face.FilePath.Text = faceTextureSet.Base;
                 eyes.FilePath.Text = eyesTextureSet.Normal;
 
                 ignoreTitleChange = true;
@@ -90,7 +90,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void SetBodyTypeFromPath() {
-            switch (RaceInfo.ReverseBodyLookup(skinTextureSet.Diffuse)) {
+            switch (RaceInfo.ReverseBodyLookup(skinTextureSet.Base)) {
                 case "bibo":
                     bodyType.SelectedIndex = 0;
                     break;
@@ -115,20 +115,20 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void skin_OnFileSelected(object sender, EventArgs e) {
-            skinTextureSet.Diffuse = body.FilePath.Text;
-            mainWindow.AddWatcher(skinTextureSet.Diffuse);
+            skinTextureSet.Base = body.FilePath.Text;
+            mainWindow.AddWatcher(skinTextureSet.Base);
             mainWindow.HasSaved = false;
         }
 
         private void face_OnFileSelected(object sender, EventArgs e) {
-            faceTextureSet.Diffuse = face.FilePath.Text;
-            mainWindow.AddWatcher(faceTextureSet.Diffuse);
+            faceTextureSet.Base = face.FilePath.Text;
+            mainWindow.AddWatcher(faceTextureSet.Base);
             mainWindow.HasSaved = false;
         }
 
         private void eyes_OnFileSelected(object sender, EventArgs e) {
             eyesTextureSet.Normal = eyes.FilePath.Text;
-            mainWindow.AddWatcher(eyesTextureSet.Diffuse);
+            mainWindow.AddWatcher(eyesTextureSet.Base);
             mainWindow.HasSaved = false;
         }
 
@@ -289,7 +289,7 @@ namespace FFXIVLooseTextureCompiler {
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = ImageManipulation.ExtractRed(TexIO.ResolveBitmap(openFileDialog.FileName));
-                Bitmap eyeMulti = ImageManipulation.BitmapToEyeDiffuseDawntrail(image);
+                Bitmap eyeMulti = ImageManipulation.BitmapToEyeBaseDawntrail(image);
                 TexIO.SaveBitmap(eyeMulti, openFileDialog.FileName.Replace(".", "_eye_texture."));
                 MessageBox.Show("Image successfully converted to eye multi", mainWindow.VersionText);
                 try {
@@ -321,10 +321,10 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void easyModeButton_Click(object sender, EventArgs e) {
-            Hide();
+            //Hide();
             var mainFormMoreSimplified = new MainFormMoreSimplified();
             mainFormMoreSimplified.MainFormSimplified = this;
-            mainFormMoreSimplified.Show();
+            mainFormMoreSimplified.ShowDialog();
         }
 
         private void exportLabel_Click(object sender, EventArgs e) {

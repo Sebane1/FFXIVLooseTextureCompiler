@@ -26,8 +26,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomPathDialog));
             this.materialSetNameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.diffuseLabel = new System.Windows.Forms.Label();
-            this.internalDiffusePathTextBox = new System.Windows.Forms.TextBox();
+            this.baseTextureLabel = new System.Windows.Forms.Label();
+            this.internalBasePathTextBox = new System.Windows.Forms.TextBox();
             this.normalLabel = new System.Windows.Forms.Label();
             this.internalNormalPathTextBox = new System.Windows.Forms.TextBox();
             this.multiLabel = new System.Windows.Forms.Label();
@@ -64,21 +64,21 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Texture Set Name";
             // 
-            // diffuseLabel
+            // baseTextureLabel
             // 
-            this.diffuseLabel.AutoSize = true;
-            this.diffuseLabel.Location = new System.Drawing.Point(4, 68);
-            this.diffuseLabel.Name = "diffuseLabel";
-            this.diffuseLabel.Size = new System.Drawing.Size(87, 15);
-            this.diffuseLabel.TabIndex = 3;
-            this.diffuseLabel.Text = "Internal Diffuse";
+            this.baseTextureLabel.AutoSize = true;
+            this.baseTextureLabel.Location = new System.Drawing.Point(4, 68);
+            this.baseTextureLabel.Name = "baseTextureLabel";
+            this.baseTextureLabel.Size = new System.Drawing.Size(87, 15);
+            this.baseTextureLabel.TabIndex = 3;
+            this.baseTextureLabel.Text = "Internal Base";
             // 
-            // internalDiffusePathTextBox
+            // internalBasePathTextBox
             // 
-            this.internalDiffusePathTextBox.Location = new System.Drawing.Point(113, 64);
-            this.internalDiffusePathTextBox.Name = "internalDiffusePathTextBox";
-            this.internalDiffusePathTextBox.Size = new System.Drawing.Size(324, 23);
-            this.internalDiffusePathTextBox.TabIndex = 2;
+            this.internalBasePathTextBox.Location = new System.Drawing.Point(113, 64);
+            this.internalBasePathTextBox.Name = "internalBasePathTextBox";
+            this.internalBasePathTextBox.Size = new System.Drawing.Size(324, 23);
+            this.internalBasePathTextBox.TabIndex = 2;
             // 
             // normalLabel
             // 
@@ -253,8 +253,8 @@
             this.Controls.Add(this.internalMultiPathTextbox);
             this.Controls.Add(this.normalLabel);
             this.Controls.Add(this.internalNormalPathTextBox);
-            this.Controls.Add(this.diffuseLabel);
-            this.Controls.Add(this.internalDiffusePathTextBox);
+            this.Controls.Add(this.baseTextureLabel);
+            this.Controls.Add(this.internalBasePathTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.materialSetNameTextBox);
             this.Controls.Add(this.invertNormals);
@@ -274,8 +274,8 @@
 
         private TextBox materialSetNameTextBox;
         private Label label1;
-        private Label diffuseLabel;
-        private TextBox internalDiffusePathTextBox;
+        private Label baseTextureLabel;
+        private TextBox internalBasePathTextBox;
         private Label normalLabel;
         private TextBox internalNormalPathTextBox;
         private Label multiLabel;

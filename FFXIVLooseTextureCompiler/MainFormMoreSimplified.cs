@@ -35,14 +35,17 @@ namespace FFXIVLooseTextureCompiler {
 
         private void eye_OnFileSelected(object sender, EventArgs e) {
             MainFormSimplified.Eyes.CurrentPath = eyes.FilePath.Text;
+            MainFormSimplified.Eyes.TriggerFileSelected();
         }
 
         private void face_OnFileSelected(object sender, EventArgs e) {
             MainFormSimplified.Face.CurrentPath = face.FilePath.Text;
+            MainFormSimplified.Face.TriggerFileSelected();
         }
 
         private void body_OnFileSelected(object sender, EventArgs e) {
             MainFormSimplified.Skin.CurrentPath = body.FilePath.Text;
+            MainFormSimplified.Skin.TriggerFileSelected();
         }
 
         private void modNameTextBox_TextChanged(object sender, EventArgs e) {
