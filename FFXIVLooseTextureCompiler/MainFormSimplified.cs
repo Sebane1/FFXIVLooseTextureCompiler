@@ -138,13 +138,13 @@ namespace FFXIVLooseTextureCompiler {
                     mainWindow.BaseBodyList.SelectedIndex = 1;
                     break;
                 case 1:
-                    mainWindow.BaseBodyList.SelectedIndex = 3;
+                    mainWindow.BaseBodyList.SelectedIndex = 2;
                     break;
                 case 2:
-                    mainWindow.BaseBodyList.SelectedIndex = 5;
+                    mainWindow.BaseBodyList.SelectedIndex = 3;
                     break;
                 case 3:
-                    mainWindow.BaseBodyList.SelectedIndex = 7;
+                    mainWindow.BaseBodyList.SelectedIndex = 5;
                     break;
             }
             mainWindow.AddBodyPaths(skinTextureSet);

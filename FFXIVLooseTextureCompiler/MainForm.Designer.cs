@@ -224,7 +224,7 @@
             // baseBodyList
             // 
             baseBodyList.FormattingEnabled = true;
-            baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "EVE", "Gen3 and T&F3", "SCALES+", "TBSE and HRBODY", "TAIL", "Otopop" });
+            baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "Gen3", "TBSE and HRBODY", "TAIL", "Otopop" });
             baseBodyList.Location = new Point(52, 4);
             baseBodyList.Name = "baseBodyList";
             baseBodyList.Size = new Size(112, 23);

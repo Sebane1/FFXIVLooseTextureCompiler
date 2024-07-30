@@ -630,7 +630,6 @@ namespace FFXIVLooseTextureCompiler {
                     break;
                 case 1:
                 case 2:
-                case 3:
                     genderList.SelectedIndex = 1;
                     //genderList.Enabled = false;
                     tailList.Enabled = false;
@@ -639,14 +638,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     uniqueAuRa.Enabled = false;
                     break;
-                case 4:
-                    raceList.SelectedIndex = 6;
-                    genderList.SelectedIndex = 1;
-                    //genderList.Enabled = false;
-                    tailList.Enabled = false;
-                    uniqueAuRa.Enabled = false;
-                    break;
-                case 5:
+                case 3:
                     genderList.SelectedIndex = 0;
                     //genderList.Enabled = false;
                     tailList.Enabled = false;
@@ -655,13 +647,13 @@ namespace FFXIVLooseTextureCompiler {
                     }
                     uniqueAuRa.Enabled = true;
                     break;
-                case 6:
+                case 4:
                     raceList.SelectedIndex = 6;
                     //genderList.Enabled = true;
                     tailList.Enabled = true;
                     uniqueAuRa.Enabled = false;
                     break;
-                case 7:
+                case 5:
                     //genderList.Enabled = false;
                     raceList.SelectedIndex = 5;
                     tailList.Enabled = false;
@@ -670,26 +662,26 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void raceList_SelectedIndexChanged(object sender, EventArgs e) {
-            if (baseBodyList.SelectedIndex == 6) {
+            if (baseBodyList.SelectedIndex == 4) {
                 if (raceList.SelectedIndex != 3 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     baseBodyList.SelectedIndex = 0;
                 }
-            } else if (baseBodyList.SelectedIndex == 4) {
+            } else if (baseBodyList.SelectedIndex == 3) {
                 if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     if (genderList.SelectedIndex == 0) {
-                        baseBodyList.SelectedIndex = 5;
+                        baseBodyList.SelectedIndex = 3;
                     } else {
                         baseBodyList.SelectedIndex = 1;
                     }
                 }
-            } else if (baseBodyList.SelectedIndex > 0 && baseBodyList.SelectedIndex < 7) {
+            } else if (baseBodyList.SelectedIndex > 0 && baseBodyList.SelectedIndex < 5) {
                 if (raceList.SelectedIndex == 5) {
-                    baseBodyList.SelectedIndex = 7;
+                    baseBodyList.SelectedIndex = 5;
                 }
-            } else if (baseBodyList.SelectedIndex > 6) {
+            } else if (baseBodyList.SelectedIndex > 4) {
                 if (raceList.SelectedIndex != 5) {
                     if (genderList.SelectedIndex == 0) {
-                        baseBodyList.SelectedIndex = 5;
+                        baseBodyList.SelectedIndex = 3;
                     } else {
                         baseBodyList.SelectedIndex = 1;
                     }
