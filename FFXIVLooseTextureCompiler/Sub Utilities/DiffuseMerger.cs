@@ -35,7 +35,7 @@ namespace FFXIVLooseTextureCompiler {
             if (image1.BackgroundImage != null && image2.BackgroundImage != null) {
                 Bitmap bitmap = new Bitmap(image1.BackgroundImage);
                 KVImage.ImageBlender blender = new ImageBlender();
-                blender.BlendImages(bitmap, image2.BackgroundImage, ImageBlender.BlendOperation.Blend_Darken);
+                blender.BlendImages(bitmap, ImageManipulation.Resize(new Bitmap(image2.BackgroundImage), bitmap.Width, bitmap.Height), ImageBlender.BlendOperation.Blend_Darken);
                 result.BackgroundImage = bitmap;
             }
         }

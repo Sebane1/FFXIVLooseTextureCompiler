@@ -126,7 +126,7 @@ namespace FFXIVVoicePackCreator {
             }
         }
         public static bool CheckExtentions(string file) {
-            string[] extentions = new string[] { ".png", ".dds", ".bmp", ".tex" };
+            string[] extentions = new string[] { ".png", ".tga", ".dds", ".bmp", ".tex" };
             foreach (string extention in extentions) {
                 if (file.EndsWith(extention)) {
                     return true;

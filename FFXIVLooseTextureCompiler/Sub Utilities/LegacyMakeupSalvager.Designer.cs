@@ -36,7 +36,7 @@
             // subRaceListBox
             // 
             subRaceListBox.FormattingEnabled = true;
-            subRaceListBox.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
+            subRaceListBox.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
             subRaceListBox.Location = new Point(0, 0);
             subRaceListBox.Name = "subRaceListBox";
             subRaceListBox.Size = new Size(140, 23);

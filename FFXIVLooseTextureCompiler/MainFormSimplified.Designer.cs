@@ -122,7 +122,7 @@
             // subRace
             // 
             subRace.FormattingEnabled = true;
-            subRace.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helions", "The Lost", "Rava", "Veena" });
+            subRace.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helions", "The Lost", "Rava", "Veena" });
             subRace.Location = new Point(81, 80);
             subRace.Name = "subRace";
             subRace.Size = new Size(369, 23);

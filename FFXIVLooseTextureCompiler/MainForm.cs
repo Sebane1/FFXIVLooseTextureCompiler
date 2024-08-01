@@ -633,8 +633,8 @@ namespace FFXIVLooseTextureCompiler {
                     genderList.SelectedIndex = 1;
                     //genderList.Enabled = false;
                     tailList.Enabled = false;
-                    if (raceList.SelectedIndex == 5) {
-                        raceList.SelectedIndex = 0;
+                    if (raceList.SelectedIndex == 3) {
+                        subRaceList.SelectedIndex = raceList.SelectedIndex = 0;
                     }
                     uniqueAuRa.Enabled = false;
                     break;
@@ -642,20 +642,22 @@ namespace FFXIVLooseTextureCompiler {
                     genderList.SelectedIndex = 0;
                     //genderList.Enabled = false;
                     tailList.Enabled = false;
-                    if (raceList.SelectedIndex == 5) {
-                        raceList.SelectedIndex = 0;
+                    if (raceList.SelectedIndex == 3) {
+                        subRaceList.SelectedIndex = raceList.SelectedIndex = 0;
                     }
                     uniqueAuRa.Enabled = true;
                     break;
                 case 4:
-                    raceList.SelectedIndex = 6;
-                    //genderList.Enabled = true;
+                    if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 4) {
+                        raceList.SelectedIndex = 6;
+                        //genderList.Enabled = true;
+                    }
                     tailList.Enabled = true;
                     uniqueAuRa.Enabled = false;
                     break;
                 case 5:
                     //genderList.Enabled = false;
-                    raceList.SelectedIndex = 5;
+                    raceList.SelectedIndex = 3;
                     tailList.Enabled = false;
                     break;
             }
@@ -663,11 +665,11 @@ namespace FFXIVLooseTextureCompiler {
 
         private void raceList_SelectedIndexChanged(object sender, EventArgs e) {
             if (baseBodyList.SelectedIndex == 4) {
-                if (raceList.SelectedIndex != 3 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
+                if (raceList.SelectedIndex != 4 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     baseBodyList.SelectedIndex = 0;
                 }
-            } else if (baseBodyList.SelectedIndex == 3) {
-                if (raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
+            } else if (baseBodyList.SelectedIndex == 5) {
+                if (raceList.SelectedIndex != 3) {
                     if (genderList.SelectedIndex == 0) {
                         baseBodyList.SelectedIndex = 3;
                     } else {
@@ -675,11 +677,11 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             } else if (baseBodyList.SelectedIndex > 0 && baseBodyList.SelectedIndex < 5) {
-                if (raceList.SelectedIndex == 5) {
+                if (raceList.SelectedIndex == 3) {
                     baseBodyList.SelectedIndex = 5;
                 }
             } else if (baseBodyList.SelectedIndex > 4) {
-                if (raceList.SelectedIndex != 5) {
+                if (raceList.SelectedIndex != 3) {
                     if (genderList.SelectedIndex == 0) {
                         baseBodyList.SelectedIndex = 3;
                     } else {
@@ -706,7 +708,7 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
             textureSet.TextureSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
-                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 5 ? "Unisex" : genderList.Text)
+                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 3 ? "Unisex" : genderList.Text)
                 + ", " + raceList.Text;
             AddBodyPaths(textureSet);
             textureList.Items.Add(textureSet);
@@ -1219,7 +1221,7 @@ namespace FFXIVLooseTextureCompiler {
                     textureSet.InternalNormalPath = RacePaths.OldEyePathToNewEyeNormalPath(textureSet.InternalBasePath);
                     textureSet.InternalBasePath = RacePaths.OldEyePathToNewEyeBasePath(textureSet.InternalBasePath);
                     if (File.Exists(textureSet.Normal)) {
-                        var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, null, true);
+                        var strings = ImageManipulation.ConvertImageToEyeMapsDawntrail(textureSet.Normal, true, null, true);
                         textureSet.Base = strings[0];
                         textureSet.Normal = strings[1];
                         textureSet.Mask = strings[2];
@@ -1601,7 +1603,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void multiMapToGrayscaleToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
@@ -1627,10 +1629,10 @@ namespace FFXIVLooseTextureCompiler {
 
         private void convertImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName, true);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1646,10 +1648,10 @@ namespace FFXIVLooseTextureCompiler {
 
         private void convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(openFileDialog.FileName);
+                ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(openFileDialog.FileName, true);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1665,9 +1667,9 @@ namespace FFXIVLooseTextureCompiler {
 
         private void convertImagesToAsymEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             OpenFileDialog openFileDialog2 = new OpenFileDialog();
-            openFileDialog2.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog2.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Texture File|*.png;";
 
@@ -1694,10 +1696,10 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void convertImageToDawntrailEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName);
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName, true);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -1715,7 +1717,7 @@ namespace FFXIVLooseTextureCompiler {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
-                    ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file);
+                    ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file, true);
                 }
                 MessageBox.Show("Images successfully converted to eye maps", VersionText);
                 try {
@@ -1732,7 +1734,7 @@ namespace FFXIVLooseTextureCompiler {
         private void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
@@ -1750,7 +1752,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
@@ -1764,8 +1766,8 @@ namespace FFXIVLooseTextureCompiler {
             OpenFileDialog openFileDialogRGB = new OpenFileDialog();
             OpenFileDialog openFileDialogAlpha = new OpenFileDialog();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialogRGB.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
-            openFileDialogAlpha.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialogRGB.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            openFileDialogAlpha.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             saveFileDialog.Filter = "Texture File|*.png;";
             MessageBox.Show("Please select RGB texture");
             if (openFileDialogRGB.ShowDialog() == DialogResult.OK) {
@@ -1933,7 +1935,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the body textures used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creator of Pythia\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the resources used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creators of Pythia\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nThanks to Yuria and KZ for helping improve a portion of the face bake models!\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -2054,7 +2056,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void textureToBodyMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
@@ -2065,7 +2067,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void baseTextureToDawntrailSkinMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
@@ -2076,24 +2078,24 @@ namespace FFXIVLooseTextureCompiler {
         }
         private void textureToFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
                 TexIO.SaveBitmap(ImageManipulation.GenerateFaceMulti(image, false)
-                    ,ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                    , ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
 
         private void textureToAsymFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
                 TexIO.SaveBitmap(ImageManipulation.GenerateFaceMulti(image, true)
-                    ,ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
+                    , ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_multi."), ".png"));
                 MessageBox.Show("Texture converted to body multi", VersionText);
             }
         }
@@ -2131,7 +2133,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void hairBaseToFFXIVHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.HairBaseToHairMaps(openFileDialog.FileName);
@@ -2141,7 +2143,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select legacy hair multi.");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 string multiPath = openFileDialog.FileName;
@@ -2164,7 +2166,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void convertBaseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.ClothingBaseToClothingMultiAndNormalMaps(openFileDialog.FileName);
@@ -2187,7 +2189,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void textureToTexToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture to convert to .tex");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 textureProcessor.ExportTex(openFileDialog.FileName, ImageManipulation.ReplaceExtension(openFileDialog.FileName, ".tex"));
@@ -2289,7 +2291,6 @@ namespace FFXIVLooseTextureCompiler {
             switch (baseBodyList.SelectedIndex) {
                 case 1:
                 case 2:
-                case 3:
                     if (genderList.SelectedIndex != 1) {
                         baseBodyList.SelectedIndex = 0;
                     }
@@ -2299,7 +2300,7 @@ namespace FFXIVLooseTextureCompiler {
                         baseBodyList.SelectedIndex = 0;
                     }
                     break;
-                case 5:
+                case 3:
                     if (genderList.SelectedIndex != 0) {
                         baseBodyList.SelectedIndex = 0;
                     }
@@ -2309,7 +2310,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void baseTextureToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.BaseToNormaMap(openFileDialog.FileName);
@@ -2319,7 +2320,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void baseTextureToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.BaseToInvertedNormaMap(openFileDialog.FileName);
@@ -2329,6 +2330,25 @@ namespace FFXIVLooseTextureCompiler {
 
         private void colourChannelSplittingToolStripMenuItem_Click(object sender, EventArgs e) {
 
+        }
+
+        private void generateMapsForDawntrailEyeDiffuseToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName, false);
+                MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
         }
     }
 }

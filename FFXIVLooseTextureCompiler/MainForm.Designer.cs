@@ -66,6 +66,7 @@
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
             convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            generateMapsForDawntrailEyeDiffuse = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
             hairBaseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
             legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
@@ -201,7 +202,7 @@
             // raceList
             // 
             raceList.FormattingEnabled = true;
-            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Miqo'te", "Roegadyn", "Lalafell", "Raen", "Xaela", "Helion", "The Lost", "Viera" });
+            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Lalafell", "Miqo'te", "Roegadyn", "Raen", "Xaela", "Helion", "The Lost", "Viera" });
             raceList.Location = new Point(312, 4);
             raceList.Name = "raceList";
             raceList.Size = new Size(84, 23);
@@ -259,7 +260,7 @@
             mask.BackColor = Color.FromArgb(255, 192, 255);
             mask.CurrentPath = null;
             mask.Enabled = false;
-            mask.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            mask.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             mask.Index = -1;
             mask.Location = new Point(4, 483);
             mask.Margin = new Padding(4, 3, 4, 3);
@@ -278,7 +279,7 @@
             normal.BackColor = SystemColors.GradientInactiveCaption;
             normal.CurrentPath = null;
             normal.Enabled = false;
-            normal.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            normal.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             normal.Index = -1;
             normal.Location = new Point(4, 451);
             normal.Margin = new Padding(4, 3, 4, 3);
@@ -297,7 +298,7 @@
             Base.BackColor = Color.LavenderBlush;
             Base.CurrentPath = null;
             Base.Enabled = false;
-            Base.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            Base.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             Base.Index = -1;
             Base.Location = new Point(4, 419);
             Base.Margin = new Padding(4, 3, 4, 3);
@@ -346,7 +347,7 @@
             // subRaceList
             // 
             subRaceList.FormattingEnabled = true;
-            subRaceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Plainsfolk", "Dunesfolk", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
+            subRaceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
             subRaceList.Location = new Point(180, 4);
             subRaceList.Name = "subRaceList";
             subRaceList.Size = new Size(84, 23);
@@ -510,7 +511,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, faceToolsToolStripMenuItem, eyeToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -539,7 +540,7 @@
             // 
             // eyeToolsToolStripMenuItem
             // 
-            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem });
+            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse });
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
             eyeToolsToolStripMenuItem.Size = new Size(286, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
@@ -564,6 +565,13 @@
             convertFolderToEyeMapsToolStripMenuItem.Size = new Size(329, 22);
             convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
             convertFolderToEyeMapsToolStripMenuItem.Click += convertFolderToEyeMapsToolStripMenuItem_Click;
+            // 
+            // generateMapsForDawntrailEyeDiffuse
+            // 
+            generateMapsForDawntrailEyeDiffuse.Name = "generateMapsForDawntrailEyeDiffuse";
+            generateMapsForDawntrailEyeDiffuse.Size = new Size(329, 22);
+            generateMapsForDawntrailEyeDiffuse.Text = "Convert Maps For Dawntrail Eye Diffuse";
+            generateMapsForDawntrailEyeDiffuse.Click += generateMapsForDawntrailEyeDiffuseToolStripMenuItem_Click;
             // 
             // hairToolsToolStripMenuItem
             // 
@@ -1194,7 +1202,7 @@
             bounds.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             bounds.CurrentPath = null;
             bounds.Enabled = false;
-            bounds.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            bounds.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             bounds.Index = -1;
             bounds.Location = new Point(4, 515);
             bounds.Margin = new Padding(4, 3, 4, 3);
@@ -1234,7 +1242,7 @@
             glow.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             glow.CurrentPath = null;
             glow.Enabled = false;
-            glow.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            glow.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             glow.Index = -1;
             glow.Location = new Point(4, 515);
             glow.Margin = new Padding(4, 3, 4, 3);
@@ -1691,6 +1699,7 @@
         private Label label13;
         private ToolStripMenuItem baseTextureToNormalMapToolStripMenuItem;
         private ToolStripMenuItem baseTextureToInvertedNormalMapToolStripMenuItem;
+        private ToolStripMenuItem generateMapsForDawntrailEyeDiffuse;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

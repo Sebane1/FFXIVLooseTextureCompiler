@@ -44,13 +44,16 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
                 if (string.IsNullOrEmpty(makeupPath)) {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
-                    openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+                    openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
                     MessageBox.Show("Please select input texture");
 
                     if (openFileDialog.ShowDialog() == DialogResult.OK) {
                         makeupPath = openFileDialog.FileName;
                     }
                 }
+                string tempPath = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(makeupPath, "_backup"), ".png");
+                TexIO.SaveBitmap(TexIO.ResolveBitmap(makeupPath), tempPath);
+                makeupPath = tempPath;
                 if (!string.IsNullOrEmpty(makeupPath)) {
                     string path = ImageManipulation.AddSuffix(makeupPath, "_bake");
                     if (!textureIsNormalMap.Checked) {

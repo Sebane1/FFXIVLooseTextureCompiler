@@ -285,11 +285,11 @@ namespace FFXIVLooseTextureCompiler {
 
         private void convertPictureToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;**.tex;";
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 Bitmap image = ImageManipulation.ExtractRed(TexIO.ResolveBitmap(openFileDialog.FileName));
-                Bitmap eyeMulti = ImageManipulation.BitmapToEyeBaseDawntrail(image);
+                Bitmap eyeMulti = ImageManipulation.BitmapToEyeBaseDawntrail(image, true);
                 TexIO.SaveBitmap(eyeMulti, openFileDialog.FileName.Replace(".", "_eye_texture."));
                 MessageBox.Show("Image successfully converted to eye multi", mainWindow.VersionText);
                 try {
