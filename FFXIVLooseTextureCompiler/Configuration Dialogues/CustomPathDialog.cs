@@ -15,12 +15,14 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet = value;
                 if (textureSet != null) {
                     groupNameTextBox.Text = textureSet.GroupName;
-                    materialSetNameTextBox.Text = textureSet.TextureSetName;
+                    textureSetNameTextBox.Text = textureSet.TextureSetName;
                     internalBasePathTextBox.Text = textureSet.InternalBasePath;
                     internalNormalPathTextBox.Text = textureSet.InternalNormalPath;
-                    internalMultiPathTextbox.Text = textureSet.InternalMaskPath;
+                    internalMaskPathTextbox.Text = textureSet.InternalMaskPath;
+                    internalMaterialPathTextBox.Text = textureSet.InternalMaterialPath;
                     ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
                     ignoreMultiCheckbox.Checked = textureSet.IgnoreMaskGeneration;
+                    material.CurrentPath = textureSet.Material;
                     invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
                     var skinTypes = UniversalTextureSetCreator.GetSkinTypeNames(textureSet);
@@ -35,9 +37,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void acceptChangesButton_Click(object sender, EventArgs e) {
-            if (!string.IsNullOrWhiteSpace(materialSetNameTextBox.Text)) {
+            if (!string.IsNullOrWhiteSpace(textureSetNameTextBox.Text)) {
                 textureSet.GroupName = groupNameTextBox.Text;
-                textureSet.TextureSetName = materialSetNameTextBox.Text;
+                textureSet.TextureSetName = textureSetNameTextBox.Text;
                 int validationCount = 0;
                 if (IsValidGamePathFormat(internalBasePathTextBox.Text)) {
                     textureSet.InternalBasePath = internalBasePathTextBox.Text;
@@ -51,11 +53,17 @@ namespace FFXIVLooseTextureCompiler {
                 } else {
                     MessageBox.Show("Internal normal path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
                 }
-                if (IsValidGamePathFormat(internalMultiPathTextbox.Text)) {
-                    textureSet.InternalMaskPath = internalMultiPathTextbox.Text;
+                if (IsValidGamePathFormat(internalMaskPathTextbox.Text)) {
+                    textureSet.InternalMaskPath = internalMaskPathTextbox.Text;
                     validationCount++;
                 } else {
                     MessageBox.Show("Internal multi path is invalid. Make sure an in game path format is being used and that it points to a .tex file!", Text);
+                }
+                if (IsValidGamePathFormatMaterial(internalMaterialPathTextBox.Text)) {
+                    textureSet.InternalMaterialPath = internalMaterialPathTextBox.Text;
+                    validationCount++;
+                } else {
+                    MessageBox.Show("Internal material path is invalid. Make sure an in game path format is being used and that it points to a .mtrl file!", Text);
                 }
                 if (File.Exists(normalCorrection.Text) || string.IsNullOrEmpty(normalCorrection.Text)) {
                     textureSet.NormalCorrection = normalCorrection.Text;
@@ -63,13 +71,14 @@ namespace FFXIVLooseTextureCompiler {
                 } else {
                     MessageBox.Show("Normal correction path is invalid.", Text);
                 }
-                if (validationCount == 4) {
+                if (validationCount == 5) {
                     DialogResult = DialogResult.OK;
                     Close();
                 }
                 textureSet.IgnoreNormalGeneration = ignoreNormalsCheckbox.Checked;
                 textureSet.IgnoreMaskGeneration = ignoreMultiCheckbox.Checked;
                 textureSet.InvertNormalGeneration = invertNormals.Checked;
+                textureSet.Material = material.FilePath.Text;
                 textureSet.SkinType = skinTypeSelection.SelectedIndex;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
@@ -78,6 +87,13 @@ namespace FFXIVLooseTextureCompiler {
 
         public bool IsValidGamePathFormat(string input) {
             if ((input.Contains(@"\") || !input.Contains(".tex")) && !string.IsNullOrWhiteSpace(input)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        public bool IsValidGamePathFormatMaterial(string input) {
+            if ((input.Contains(@"\") || !input.Contains(".mtrl")) && !string.IsNullOrWhiteSpace(input)) {
                 return false;
             } else {
                 return true;
@@ -103,6 +119,10 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void invertNormals_CheckedChanged(object sender, EventArgs e) {
+
+        }
+
+        private void skinTypeSelection_SelectedIndexChanged(object sender, EventArgs e) {
 
         }
     }

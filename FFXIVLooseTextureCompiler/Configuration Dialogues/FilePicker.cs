@@ -14,6 +14,7 @@ namespace FFXIVVoicePackCreator {
         private Point startPos;
         private bool canDoDragDrop;
         private string currentPath;
+        private bool isMaterial;
 
         [Category("Filter"), Description("Changes what type of selection is made")]
         public string Filter { get => filter; set => filter = value; }
@@ -36,6 +37,8 @@ namespace FFXIVVoicePackCreator {
                 filePath.Text = value;
             }
         }
+        [Category("Is Material"), Description("Makes file selector only accept Material files")]
+        public bool IsMaterial { get => isMaterial; set => isMaterial = value; }
 
         private void filePicker_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
@@ -115,7 +118,7 @@ namespace FFXIVVoicePackCreator {
 
         private void filePath_DragDrop(object sender, DragEventArgs e) {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop, false))[0];
-            if (CheckExtentions(file)) {
+            if (CheckExtentions(file, isMaterial)) {
                 filePath.Text = file;
                 currentPath = file;
                 if (OnFileSelected != null) {
@@ -125,8 +128,8 @@ namespace FFXIVVoicePackCreator {
                 MessageBox.Show("This is not a media file this tool supports.", ParentForm.Text);
             }
         }
-        public static bool CheckExtentions(string file) {
-            string[] extentions = new string[] { ".png", ".tga", ".dds", ".bmp", ".tex" };
+        public static bool CheckExtentions(string file, bool isMaterial = false) {
+            string[] extentions = isMaterial ? new string[] { ".mtrl" } :  new string[] { ".png", ".tga", ".dds", ".bmp", ".tex" };
             foreach (string extention in extentions) {
                 if (file.EndsWith(extention)) {
                     return true;
@@ -145,7 +148,7 @@ namespace FFXIVVoicePackCreator {
 
         private void filePath_KeyPress(object sender, KeyPressEventArgs e) {
             if (e.KeyChar == 13) {
-                if (CheckExtentions(FilePath.Text) || string.IsNullOrEmpty(filePath.Text)) {
+                if (CheckExtentions(FilePath.Text,isMaterial) || string.IsNullOrEmpty(filePath.Text)) {
                     currentPath = FilePath.Text;
                     if (OnFileSelected != null) {
                         OnFileSelected.Invoke(this, EventArgs.Empty);
@@ -161,7 +164,7 @@ namespace FFXIVVoicePackCreator {
         }
 
         private void filePath_Leave(object sender, EventArgs e) {
-            if (CheckExtentions(filePath.Text) || string.IsNullOrEmpty(filePath.Text)) {
+            if (CheckExtentions(filePath.Text, isMaterial) || string.IsNullOrEmpty(filePath.Text)) {
                 filePath.Text = filePath.Text;
                 currentPath = filePath.Text;
                 if (OnFileSelected != null) {

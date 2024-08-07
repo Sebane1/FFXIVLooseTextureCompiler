@@ -37,6 +37,9 @@ namespace FFXIVLooseTextureCompiler {
                         if (!string.IsNullOrEmpty(glow.FilePath.Text)) {
                             textureSet.Glow = glow.FilePath.Text;
                         }
+                        if (!string.IsNullOrEmpty(material.FilePath.Text)) {
+                            textureSet.Material = material.FilePath.Text;
+                        }
                     }
                 }
                 DialogResult = DialogResult.OK;

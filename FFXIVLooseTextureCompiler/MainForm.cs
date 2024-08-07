@@ -607,7 +607,7 @@ namespace FFXIVLooseTextureCompiler {
                 auraFaceScalesDropdown.Enabled = asymCheckbox.Enabled = faceTypeList.Enabled = subRaceList.Enabled = false;
                 faceExtraList.Enabled = true;
             } else if (facePart.SelectedIndex == 2) {
-                auraFaceScalesDropdown.Enabled = faceTypeList.Enabled = false;
+                auraFaceScalesDropdown.Enabled = false;
             } else if (facePart.SelectedIndex == 5) {
                 auraFaceScalesDropdown.Enabled = false;
                 asymCheckbox.Enabled = faceTypeList.Enabled;
@@ -735,7 +735,7 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
                 + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4 && facePart.SelectedIndex != 2 ? faceTypeList.Text : "Multi Face");
+                + (facePart.SelectedIndex != 4? faceTypeList.Text : "Multi Face");
             textureSet.BackupTexturePaths = null;
             switch (facePart.SelectedIndex) {
                 default:
@@ -778,38 +778,40 @@ namespace FFXIVLooseTextureCompiler {
 
         public void AddEyePaths(TextureSet textureSet) {
             if (asymCheckbox.Checked) {
-                textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalBasePath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
                 2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
-                textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalNormalPath = RacePaths.GetFacePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
                 2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
-                textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalMaskPath = RacePaths.GetFacePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
                 2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
             } else {
-                RaceEyePaths.GetEyeTextureSet(subRaceList.SelectedIndex, Convert.ToBoolean(genderList.SelectedIndex), textureSet);
+                RaceEyePaths.GetEyeTextureSet(subRaceList.SelectedIndex, faceTypeList.SelectedIndex, Convert.ToBoolean(genderList.SelectedIndex), textureSet);
             }
+            textureSet.InternalMaterialPath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked, true);
         }
 
         public void AddEyePathsLegacy(TextureSet textureSet) {
-            textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalBasePath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalNormalPath = RacePaths.GetFacePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetFacePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
             2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
         }
 
         public void AddFacePaths(TextureSet textureSet) {
             if (facePart.SelectedIndex != 1) {
-                textureSet.InternalBasePath = RacePaths.GetFaceTexturePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+                textureSet.InternalBasePath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
                     facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
             }
 
-            textureSet.InternalNormalPath = RacePaths.GetFaceTexturePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalNormalPath = RacePaths.GetFacePath(1, genderList.SelectedIndex, subRaceList.SelectedIndex,
             facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
 
-            textureSet.InternalMaskPath = RacePaths.GetFaceTexturePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            textureSet.InternalMaskPath = RacePaths.GetFacePath(2, genderList.SelectedIndex, subRaceList.SelectedIndex,
             facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked);
         }
 

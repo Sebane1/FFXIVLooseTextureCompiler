@@ -24,262 +24,296 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomPathDialog));
-            this.materialSetNameTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.baseTextureLabel = new System.Windows.Forms.Label();
-            this.internalBasePathTextBox = new System.Windows.Forms.TextBox();
-            this.normalLabel = new System.Windows.Forms.Label();
-            this.internalNormalPathTextBox = new System.Windows.Forms.TextBox();
-            this.multiLabel = new System.Windows.Forms.Label();
-            this.internalMultiPathTextbox = new System.Windows.Forms.TextBox();
-            this.acceptChangesButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupNameTextBox = new System.Windows.Forms.TextBox();
-            this.ignoreNormalsCheckbox = new System.Windows.Forms.CheckBox();
-            this.ignoreMultiCheckbox = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.normalCorrection = new System.Windows.Forms.TextBox();
-            this.invertNormals = new System.Windows.Forms.CheckBox();
-            this.groupChoiceType = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.skinTypeLabel = new System.Windows.Forms.Label();
-            this.skinTypeSelection = new System.Windows.Forms.ComboBox();
-            this.SuspendLayout();
+            textureSetNameTextBox = new TextBox();
+            label1 = new Label();
+            baseTextureLabel = new Label();
+            internalBasePathTextBox = new TextBox();
+            normalLabel = new Label();
+            internalNormalPathTextBox = new TextBox();
+            multiLabel = new Label();
+            internalMaskPathTextbox = new TextBox();
+            acceptChangesButton = new Button();
+            button1 = new Button();
+            label5 = new Label();
+            groupNameTextBox = new TextBox();
+            ignoreNormalsCheckbox = new CheckBox();
+            ignoreMultiCheckbox = new CheckBox();
+            label2 = new Label();
+            normalCorrection = new TextBox();
+            invertNormals = new CheckBox();
+            groupChoiceType = new ComboBox();
+            label3 = new Label();
+            skinTypeLabel = new Label();
+            skinTypeSelection = new ComboBox();
+            label4 = new Label();
+            internalMaterialPathTextBox = new TextBox();
+            material = new FFXIVVoicePackCreator.FilePicker();
+            SuspendLayout();
             // 
-            // materialSetNameTextBox
+            // textureSetNameTextBox
             // 
-            this.materialSetNameTextBox.Location = new System.Drawing.Point(113, 36);
-            this.materialSetNameTextBox.Name = "materialSetNameTextBox";
-            this.materialSetNameTextBox.Size = new System.Drawing.Size(324, 23);
-            this.materialSetNameTextBox.TabIndex = 0;
-            this.materialSetNameTextBox.TextChanged += new System.EventHandler(this.materialSetNameTextBox_TextChanged);
+            textureSetNameTextBox.Location = new Point(113, 36);
+            textureSetNameTextBox.Name = "textureSetNameTextBox";
+            textureSetNameTextBox.Size = new Size(324, 23);
+            textureSetNameTextBox.TabIndex = 0;
+            textureSetNameTextBox.TextChanged += materialSetNameTextBox_TextChanged;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(99, 15);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Texture Set Name";
+            label1.AutoSize = true;
+            label1.Location = new Point(4, 40);
+            label1.Name = "label1";
+            label1.Size = new Size(99, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Texture Set Name";
             // 
             // baseTextureLabel
             // 
-            this.baseTextureLabel.AutoSize = true;
-            this.baseTextureLabel.Location = new System.Drawing.Point(4, 68);
-            this.baseTextureLabel.Name = "baseTextureLabel";
-            this.baseTextureLabel.Size = new System.Drawing.Size(87, 15);
-            this.baseTextureLabel.TabIndex = 3;
-            this.baseTextureLabel.Text = "Internal Base";
+            baseTextureLabel.AutoSize = true;
+            baseTextureLabel.Location = new Point(4, 68);
+            baseTextureLabel.Name = "baseTextureLabel";
+            baseTextureLabel.Size = new Size(74, 15);
+            baseTextureLabel.TabIndex = 3;
+            baseTextureLabel.Text = "Internal Base";
             // 
             // internalBasePathTextBox
             // 
-            this.internalBasePathTextBox.Location = new System.Drawing.Point(113, 64);
-            this.internalBasePathTextBox.Name = "internalBasePathTextBox";
-            this.internalBasePathTextBox.Size = new System.Drawing.Size(324, 23);
-            this.internalBasePathTextBox.TabIndex = 2;
+            internalBasePathTextBox.Location = new Point(113, 64);
+            internalBasePathTextBox.Name = "internalBasePathTextBox";
+            internalBasePathTextBox.Size = new Size(324, 23);
+            internalBasePathTextBox.TabIndex = 2;
             // 
             // normalLabel
             // 
-            this.normalLabel.AutoSize = true;
-            this.normalLabel.Location = new System.Drawing.Point(4, 96);
-            this.normalLabel.Name = "normalLabel";
-            this.normalLabel.Size = new System.Drawing.Size(90, 15);
-            this.normalLabel.TabIndex = 5;
-            this.normalLabel.Text = "Internal Normal";
+            normalLabel.AutoSize = true;
+            normalLabel.Location = new Point(4, 96);
+            normalLabel.Name = "normalLabel";
+            normalLabel.Size = new Size(90, 15);
+            normalLabel.TabIndex = 5;
+            normalLabel.Text = "Internal Normal";
             // 
             // internalNormalPathTextBox
             // 
-            this.internalNormalPathTextBox.Location = new System.Drawing.Point(113, 92);
-            this.internalNormalPathTextBox.Name = "internalNormalPathTextBox";
-            this.internalNormalPathTextBox.Size = new System.Drawing.Size(324, 23);
-            this.internalNormalPathTextBox.TabIndex = 4;
+            internalNormalPathTextBox.Location = new Point(113, 92);
+            internalNormalPathTextBox.Name = "internalNormalPathTextBox";
+            internalNormalPathTextBox.Size = new Size(324, 23);
+            internalNormalPathTextBox.TabIndex = 4;
             // 
             // multiLabel
             // 
-            this.multiLabel.AutoSize = true;
-            this.multiLabel.Location = new System.Drawing.Point(4, 124);
-            this.multiLabel.Name = "multiLabel";
-            this.multiLabel.Size = new System.Drawing.Size(78, 15);
-            this.multiLabel.TabIndex = 7;
-            this.multiLabel.Text = "Internal Mask";
+            multiLabel.AutoSize = true;
+            multiLabel.Location = new Point(4, 124);
+            multiLabel.Name = "multiLabel";
+            multiLabel.Size = new Size(78, 15);
+            multiLabel.TabIndex = 7;
+            multiLabel.Text = "Internal Mask";
             // 
-            // internalMultiPathTextbox
+            // internalMaskPathTextbox
             // 
-            this.internalMultiPathTextbox.Location = new System.Drawing.Point(113, 120);
-            this.internalMultiPathTextbox.Name = "internalMultiPathTextbox";
-            this.internalMultiPathTextbox.Size = new System.Drawing.Size(324, 23);
-            this.internalMultiPathTextbox.TabIndex = 6;
+            internalMaskPathTextbox.Location = new Point(112, 120);
+            internalMaskPathTextbox.Name = "internalMaskPathTextbox";
+            internalMaskPathTextbox.Size = new Size(325, 23);
+            internalMaskPathTextbox.TabIndex = 6;
             // 
             // acceptChangesButton
             // 
-            this.acceptChangesButton.Location = new System.Drawing.Point(264, 224);
-            this.acceptChangesButton.Name = "acceptChangesButton";
-            this.acceptChangesButton.Size = new System.Drawing.Size(111, 23);
-            this.acceptChangesButton.TabIndex = 8;
-            this.acceptChangesButton.Text = "Confirm Changes";
-            this.acceptChangesButton.UseVisualStyleBackColor = true;
-            this.acceptChangesButton.Click += new System.EventHandler(this.acceptChangesButton_Click);
+            acceptChangesButton.Location = new Point(264, 284);
+            acceptChangesButton.Name = "acceptChangesButton";
+            acceptChangesButton.Size = new Size(111, 23);
+            acceptChangesButton.TabIndex = 8;
+            acceptChangesButton.Text = "Confirm Changes";
+            acceptChangesButton.UseVisualStyleBackColor = true;
+            acceptChangesButton.Click += acceptChangesButton_Click;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(376, 224);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(59, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new Point(376, 284);
+            button1.Name = "button1";
+            button1.Size = new Size(59, 23);
+            button1.TabIndex = 9;
+            button1.Text = "Cancel";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 12);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(40, 15);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Group";
+            label5.AutoSize = true;
+            label5.Location = new Point(4, 12);
+            label5.Name = "label5";
+            label5.Size = new Size(40, 15);
+            label5.TabIndex = 11;
+            label5.Text = "Group";
             // 
             // groupNameTextBox
             // 
-            this.groupNameTextBox.Location = new System.Drawing.Point(112, 8);
-            this.groupNameTextBox.Name = "groupNameTextBox";
-            this.groupNameTextBox.Size = new System.Drawing.Size(324, 23);
-            this.groupNameTextBox.TabIndex = 10;
+            groupNameTextBox.Location = new Point(112, 8);
+            groupNameTextBox.Name = "groupNameTextBox";
+            groupNameTextBox.Size = new Size(324, 23);
+            groupNameTextBox.TabIndex = 10;
             // 
             // ignoreNormalsCheckbox
             // 
-            this.ignoreNormalsCheckbox.AutoSize = true;
-            this.ignoreNormalsCheckbox.Location = new System.Drawing.Point(128, 204);
-            this.ignoreNormalsCheckbox.Name = "ignoreNormalsCheckbox";
-            this.ignoreNormalsCheckbox.Size = new System.Drawing.Size(150, 19);
-            this.ignoreNormalsCheckbox.TabIndex = 12;
-            this.ignoreNormalsCheckbox.Text = "Dont Generate Normals";
-            this.ignoreNormalsCheckbox.UseVisualStyleBackColor = true;
+            ignoreNormalsCheckbox.AutoSize = true;
+            ignoreNormalsCheckbox.Location = new Point(128, 264);
+            ignoreNormalsCheckbox.Name = "ignoreNormalsCheckbox";
+            ignoreNormalsCheckbox.Size = new Size(150, 19);
+            ignoreNormalsCheckbox.TabIndex = 12;
+            ignoreNormalsCheckbox.Text = "Dont Generate Normals";
+            ignoreNormalsCheckbox.UseVisualStyleBackColor = true;
             // 
             // ignoreMultiCheckbox
             // 
-            this.ignoreMultiCheckbox.AutoSize = true;
-            this.ignoreMultiCheckbox.Location = new System.Drawing.Point(300, 204);
-            this.ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
-            this.ignoreMultiCheckbox.Size = new System.Drawing.Size(133, 19);
-            this.ignoreMultiCheckbox.TabIndex = 13;
-            this.ignoreMultiCheckbox.Text = "Dont Generate Mask";
-            this.ignoreMultiCheckbox.UseVisualStyleBackColor = true;
+            ignoreMultiCheckbox.AutoSize = true;
+            ignoreMultiCheckbox.Location = new Point(300, 264);
+            ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
+            ignoreMultiCheckbox.Size = new Size(133, 19);
+            ignoreMultiCheckbox.TabIndex = 13;
+            ignoreMultiCheckbox.Text = "Dont Generate Mask";
+            ignoreMultiCheckbox.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 152);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 15);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Normal Correction";
+            label2.AutoSize = true;
+            label2.Location = new Point(3, 181);
+            label2.Name = "label2";
+            label2.Size = new Size(106, 15);
+            label2.TabIndex = 15;
+            label2.Text = "Normal Correction";
             // 
             // normalCorrection
             // 
-            this.normalCorrection.Location = new System.Drawing.Point(112, 148);
-            this.normalCorrection.Name = "normalCorrection";
-            this.normalCorrection.Size = new System.Drawing.Size(324, 23);
-            this.normalCorrection.TabIndex = 14;
+            normalCorrection.Location = new Point(112, 177);
+            normalCorrection.Name = "normalCorrection";
+            normalCorrection.Size = new Size(324, 23);
+            normalCorrection.TabIndex = 14;
             // 
             // invertNormals
             // 
-            this.invertNormals.AutoSize = true;
-            this.invertNormals.Location = new System.Drawing.Point(4, 204);
-            this.invertNormals.Name = "invertNormals";
-            this.invertNormals.Size = new System.Drawing.Size(104, 19);
-            this.invertNormals.TabIndex = 16;
-            this.invertNormals.Text = "Invert Normals";
-            this.invertNormals.UseVisualStyleBackColor = true;
-            this.invertNormals.CheckedChanged += new System.EventHandler(this.invertNormals_CheckedChanged);
+            invertNormals.AutoSize = true;
+            invertNormals.Location = new Point(4, 264);
+            invertNormals.Name = "invertNormals";
+            invertNormals.Size = new Size(104, 19);
+            invertNormals.TabIndex = 16;
+            invertNormals.Text = "Invert Normals";
+            invertNormals.UseVisualStyleBackColor = true;
+            invertNormals.CheckedChanged += invertNormals_CheckedChanged;
             // 
             // groupChoiceType
             // 
-            this.groupChoiceType.FormattingEnabled = true;
-            this.groupChoiceType.Items.AddRange(new object[] {
-            "Use Global Setting"});
-            this.groupChoiceType.Location = new System.Drawing.Point(112, 224);
-            this.groupChoiceType.Name = "groupChoiceType";
-            this.groupChoiceType.Size = new System.Drawing.Size(148, 23);
-            this.groupChoiceType.TabIndex = 17;
-            this.groupChoiceType.SelectedIndexChanged += new System.EventHandler(this.groupChoiceType_SelectedIndexChanged);
+            groupChoiceType.FormattingEnabled = true;
+            groupChoiceType.Items.AddRange(new object[] { "Use Global Setting" });
+            groupChoiceType.Location = new Point(112, 284);
+            groupChoiceType.Name = "groupChoiceType";
+            groupChoiceType.Size = new Size(148, 23);
+            groupChoiceType.TabIndex = 17;
+            groupChoiceType.SelectedIndexChanged += groupChoiceType_SelectedIndexChanged;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 228);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(107, 15);
-            this.label3.TabIndex = 18;
-            this.label3.Text = "Group Choice Type";
+            label3.AutoSize = true;
+            label3.Location = new Point(4, 288);
+            label3.Name = "label3";
+            label3.Size = new Size(107, 15);
+            label3.TabIndex = 18;
+            label3.Text = "Group Choice Type";
             // 
             // skinTypeLabel
             // 
-            this.skinTypeLabel.AutoSize = true;
-            this.skinTypeLabel.Location = new System.Drawing.Point(4, 180);
-            this.skinTypeLabel.Name = "skinTypeLabel";
-            this.skinTypeLabel.Size = new System.Drawing.Size(106, 15);
-            this.skinTypeLabel.TabIndex = 19;
-            this.skinTypeLabel.Text = "Skin Underlay Type";
+            skinTypeLabel.AutoSize = true;
+            skinTypeLabel.Location = new Point(4, 209);
+            skinTypeLabel.Name = "skinTypeLabel";
+            skinTypeLabel.Size = new Size(106, 15);
+            skinTypeLabel.TabIndex = 19;
+            skinTypeLabel.Text = "Skin Underlay Type";
             // 
             // skinTypeSelection
             // 
-            this.skinTypeSelection.FormattingEnabled = true;
-            this.skinTypeSelection.Location = new System.Drawing.Point(112, 176);
-            this.skinTypeSelection.Name = "skinTypeSelection";
-            this.skinTypeSelection.Size = new System.Drawing.Size(324, 23);
-            this.skinTypeSelection.TabIndex = 20;
+            skinTypeSelection.FormattingEnabled = true;
+            skinTypeSelection.Location = new Point(112, 205);
+            skinTypeSelection.Name = "skinTypeSelection";
+            skinTypeSelection.Size = new Size(324, 23);
+            skinTypeSelection.TabIndex = 20;
+            skinTypeSelection.SelectedIndexChanged += skinTypeSelection_SelectedIndexChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(5, 152);
+            label4.Name = "label4";
+            label4.Size = new Size(93, 15);
+            label4.TabIndex = 22;
+            label4.Text = "Internal Material";
+            // 
+            // internalMaterialPathTextBox
+            // 
+            internalMaterialPathTextBox.Location = new Point(112, 148);
+            internalMaterialPathTextBox.Name = "internalMaterialPathTextBox";
+            internalMaterialPathTextBox.Size = new Size(326, 23);
+            internalMaterialPathTextBox.TabIndex = 21;
+            // 
+            // material
+            // 
+            material.CurrentPath = null;
+            material.Filter = null;
+            material.Index = -1;
+            material.IsMaterial = true;
+            material.Location = new Point(34, 234);
+            material.Margin = new Padding(4, 3, 4, 3);
+            material.MinimumSize = new Size(300, 28);
+            material.Name = "material";
+            material.Size = new Size(402, 28);
+            material.TabIndex = 23;
             // 
             // CustomPathDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(442, 256);
-            this.Controls.Add(this.skinTypeSelection);
-            this.Controls.Add(this.skinTypeLabel);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.groupChoiceType);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.normalCorrection);
-            this.Controls.Add(this.ignoreMultiCheckbox);
-            this.Controls.Add(this.ignoreNormalsCheckbox);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.groupNameTextBox);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.acceptChangesButton);
-            this.Controls.Add(this.multiLabel);
-            this.Controls.Add(this.internalMultiPathTextbox);
-            this.Controls.Add(this.normalLabel);
-            this.Controls.Add(this.internalNormalPathTextBox);
-            this.Controls.Add(this.baseTextureLabel);
-            this.Controls.Add(this.internalBasePathTextBox);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.materialSetNameTextBox);
-            this.Controls.Add(this.invertNormals);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.Name = "CustomPathDialog";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Custom Path";
-            this.Load += new System.EventHandler(this.CustomPathDialog_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(442, 312);
+            Controls.Add(material);
+            Controls.Add(label4);
+            Controls.Add(internalMaterialPathTextBox);
+            Controls.Add(skinTypeSelection);
+            Controls.Add(skinTypeLabel);
+            Controls.Add(label3);
+            Controls.Add(groupChoiceType);
+            Controls.Add(label2);
+            Controls.Add(normalCorrection);
+            Controls.Add(ignoreMultiCheckbox);
+            Controls.Add(ignoreNormalsCheckbox);
+            Controls.Add(label5);
+            Controls.Add(groupNameTextBox);
+            Controls.Add(button1);
+            Controls.Add(acceptChangesButton);
+            Controls.Add(multiLabel);
+            Controls.Add(internalMaskPathTextbox);
+            Controls.Add(normalLabel);
+            Controls.Add(internalNormalPathTextBox);
+            Controls.Add(baseTextureLabel);
+            Controls.Add(internalBasePathTextBox);
+            Controls.Add(label1);
+            Controls.Add(textureSetNameTextBox);
+            Controls.Add(invertNormals);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            Name = "CustomPathDialog";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Custom Path";
+            Load += CustomPathDialog_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private TextBox materialSetNameTextBox;
+        private TextBox textureSetNameTextBox;
         private Label label1;
         private Label baseTextureLabel;
         private TextBox internalBasePathTextBox;
         private Label normalLabel;
         private TextBox internalNormalPathTextBox;
         private Label multiLabel;
-        private TextBox internalMultiPathTextbox;
+        private TextBox internalMaskPathTextbox;
         private Button acceptChangesButton;
         private Button button1;
         private Label label5;
@@ -293,5 +327,8 @@
         private Label label3;
         private Label skinTypeLabel;
         private ComboBox skinTypeSelection;
+        private Label label4;
+        private TextBox internalMaterialPathTextBox;
+        private FFXIVVoicePackCreator.FilePicker material;
     }
 }

@@ -38,12 +38,13 @@ namespace FFXIVLooseTextureCompiler {
             glow = new FilePicker();
             label2 = new Label();
             groupTextBox = new TextBox();
+            material = new FilePicker();
             SuspendLayout();
             // 
             // acceptChangesButton
             // 
             acceptChangesButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            acceptChangesButton.Location = new Point(200, 320);
+            acceptChangesButton.Location = new Point(200, 324);
             acceptChangesButton.Name = "acceptChangesButton";
             acceptChangesButton.Size = new Size(143, 24);
             acceptChangesButton.TabIndex = 8;
@@ -54,7 +55,7 @@ namespace FFXIVLooseTextureCompiler {
             // button1
             // 
             button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Location = new Point(344, 320);
+            button1.Location = new Point(344, 324);
             button1.Name = "button1";
             button1.Size = new Size(59, 24);
             button1.TabIndex = 9;
@@ -97,6 +98,7 @@ namespace FFXIVLooseTextureCompiler {
             normal.CurrentPath = null;
             normal.Filter = null;
             normal.Index = -1;
+            normal.IsMaterial = false;
             normal.Location = new Point(5, 190);
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
@@ -104,16 +106,17 @@ namespace FFXIVLooseTextureCompiler {
             normal.Size = new Size(404, 28);
             normal.TabIndex = 14;
             // 
-            // multi
+            // mask
             // 
             mask.BackColor = Color.FromArgb(255, 192, 255);
             mask.CurrentPath = null;
             mask.Filter = null;
             mask.Index = -1;
+            mask.IsMaterial = false;
             mask.Location = new Point(5, 222);
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
-            mask.Name = "Mask";
+            mask.Name = "mask";
             mask.Size = new Size(404, 28);
             mask.TabIndex = 15;
             mask.Load += multi_Load;
@@ -124,6 +127,7 @@ namespace FFXIVLooseTextureCompiler {
             baseTexture.CurrentPath = null;
             baseTexture.Filter = null;
             baseTexture.Index = -1;
+            baseTexture.IsMaterial = false;
             baseTexture.Location = new Point(5, 156);
             baseTexture.Margin = new Padding(4, 3, 4, 3);
             baseTexture.MinimumSize = new Size(300, 28);
@@ -131,15 +135,16 @@ namespace FFXIVLooseTextureCompiler {
             baseTexture.Size = new Size(404, 28);
             baseTexture.TabIndex = 16;
             // 
-            // mask
+            // bounds
             // 
             bounds.CurrentPath = null;
             bounds.Filter = null;
             bounds.Index = -1;
+            bounds.IsMaterial = false;
             bounds.Location = new Point(5, 254);
             bounds.Margin = new Padding(4, 3, 4, 3);
             bounds.MinimumSize = new Size(300, 28);
-            bounds.Name = "Bounds";
+            bounds.Name = "bounds";
             bounds.Size = new Size(404, 28);
             bounds.TabIndex = 17;
             // 
@@ -148,7 +153,8 @@ namespace FFXIVLooseTextureCompiler {
             glow.CurrentPath = null;
             glow.Filter = null;
             glow.Index = -1;
-            glow.Location = new Point(5, 286);
+            glow.IsMaterial = false;
+            glow.Location = new Point(5, 315);
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
@@ -173,11 +179,25 @@ namespace FFXIVLooseTextureCompiler {
             groupTextBox.Size = new Size(400, 23);
             groupTextBox.TabIndex = 20;
             // 
+            // material
+            // 
+            material.CurrentPath = null;
+            material.Filter = null;
+            material.Index = -1;
+            material.IsMaterial = true;
+            material.Location = new Point(5, 284);
+            material.Margin = new Padding(4, 3, 4, 3);
+            material.MinimumSize = new Size(300, 28);
+            material.Name = "material";
+            material.Size = new Size(404, 28);
+            material.TabIndex = 21;
+            // 
             // FindAndReplace
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(414, 346);
+            ClientSize = new Size(414, 350);
+            Controls.Add(material);
             Controls.Add(groupTextBox);
             Controls.Add(label2);
             Controls.Add(glow);
@@ -214,6 +234,7 @@ namespace FFXIVLooseTextureCompiler {
         private FilePicker glow;
         private Label label2;
         private TextBox groupTextBox;
+        private FilePicker material;
 
         public FilePicker Base { get => baseTexture; set => baseTexture = value; }
         public FilePicker Mask { get => mask; set => mask = value; }

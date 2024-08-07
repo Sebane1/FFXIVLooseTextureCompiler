@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.0.2.0</Version>
+    <Version>2.0.2.2</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>
     <Copyright>Lawener Industries</Copyright>
@@ -51,12 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Sub Utilities\MultiCreator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Configuration Dialogues\FindAndReplace.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Sub Utilities\MultiCreator.cs" />
+    <Compile Update="Configuration Dialogues\FindAndReplace.cs" />
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

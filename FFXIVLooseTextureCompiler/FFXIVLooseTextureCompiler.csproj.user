@@ -4,7 +4,28 @@
     <Compile Update="Configuration Dialogues\BulkNameReplacement.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Configuration Dialogues\ConnectionDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Configuration Dialogues\CustomPathDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Configuration Dialogues\CustomUnderlayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Configuration Dialogues\FilePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Configuration Dialogues\FindAndReplace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Configuration Dialogues\HelpWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Configuration Dialogues\TemplateConfiguration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="MainFormMoreSimplified.cs">
@@ -16,28 +37,13 @@
     <Compile Update="Sub Utilities\BulkTexManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Configuration Dialogues\CustomPathDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Sub Utilities\DiffuseMerger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Configuration Dialogues\FilePicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Configuration Dialogues\ConnectionDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Configuration Dialogues\HelpWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Configuration Dialogues\TemplateConfiguration.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Sub Utilities\LegacyMakeupSalvager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Sub Utilities\MultiCreator.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
