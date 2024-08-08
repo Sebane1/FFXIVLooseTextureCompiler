@@ -735,7 +735,7 @@ namespace FFXIVLooseTextureCompiler {
             textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
                 + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
                 + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4? faceTypeList.Text : "Multi Face");
+                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
             textureSet.BackupTexturePaths = null;
             switch (facePart.SelectedIndex) {
                 default:
@@ -868,6 +868,7 @@ namespace FFXIVLooseTextureCompiler {
                 DisposeWatcher(textureSet.Mask, mask);
                 DisposeWatcher(textureSet.NormalMask, bounds);
                 DisposeWatcher(textureSet.Glow, glow);
+                DisposeWatcher(textureSet.Material, null);
                 if (!string.IsNullOrWhiteSpace(textureSet.Glow)) {
                     generatMaskCheckBox.Checked = true;
                 }
@@ -882,12 +883,13 @@ namespace FFXIVLooseTextureCompiler {
                 AddWatcher(textureSet.Mask);
                 AddWatcher(textureSet.NormalMask);
                 AddWatcher(textureSet.Glow);
+                AddWatcher(textureSet.Material);
             }
         }
         public void DisposeWatcher(string path, FilePicker filePicker) {
             if (!string.IsNullOrWhiteSpace(path)) {
                 if (watchers.ContainsKey(path)) {
-                    if (path != filePicker.CurrentPath) {
+                    if (path != filePicker.CurrentPath || filePicker == null) {
                         watchers[path].Dispose();
                         watchers.Remove(path);
                     }
