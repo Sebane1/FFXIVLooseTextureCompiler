@@ -2118,7 +2118,7 @@ namespace FFXIVLooseTextureCompiler {
             newTextureSet.BackupTexturePaths = textureSet.BackupTexturePaths;
             newTextureSet.ChildSets = textureSet.ChildSets;
             newTextureSet.GroupName = textureSet.GroupName;
-            newTextureSet.TextureSetName = textureSet.GroupName;
+            newTextureSet.TextureSetName = textureSet.TextureSetName;
             newTextureSet.InvertNormalGeneration = textureSet.InvertNormalGeneration;
             newTextureSet.IgnoreNormalGeneration = textureSet.IgnoreNormalGeneration;
             newTextureSet.IgnoreMaskGeneration = textureSet.IgnoreMaskGeneration;

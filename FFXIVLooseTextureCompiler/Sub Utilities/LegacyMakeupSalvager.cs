@@ -43,7 +43,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
             string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
             RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
-            + (((subRaceListBox.SelectedIndex == 5 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? (textureIsNormalMap.Checked ? 1 : 101) : 1)
+            + (((subRaceListBox.SelectedIndex == 7 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? (textureIsNormalMap.Checked ? 1 : 101) : 1)
             + faceNumberListBox.SelectedIndex) + (textureIsNormalMap.Checked ? "n" : "") + ".png");
 
             if (File.Exists(inputModel) && File.Exists(outputModel) && File.Exists(outputTexture)) {
