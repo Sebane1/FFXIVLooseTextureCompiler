@@ -60,13 +60,13 @@
             findAndBulkReplaceToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             extractAtramentumLuminisGlowMapToolStripMenuItem = new ToolStripMenuItem();
-            faceToolsToolStripMenuItem = new ToolStripMenuItem();
-            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             eyeToolsToolStripMenuItem = new ToolStripMenuItem();
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
             convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             generateMapsForDawntrailEyeDiffuse = new ToolStripMenuItem();
+            faceToolsToolStripMenuItem = new ToolStripMenuItem();
+            legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
             hairBaseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
             legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
@@ -202,7 +202,7 @@
             // raceList
             // 
             raceList.FormattingEnabled = true;
-            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Lalafell", "Miqo'te", "Roegadyn", "Raen", "Xaela", "Helion", "The Lost", "Viera" });
+            raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Lalafell", "Miqo'te", "Roegadyn", "Raen", "Xaela", "Hrothgar", "Viera" });
             raceList.Location = new Point(312, 4);
             raceList.Name = "raceList";
             raceList.Size = new Size(84, 23);
@@ -262,6 +262,7 @@
             mask.Enabled = false;
             mask.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             mask.Index = -1;
+            mask.IsMaterial = false;
             mask.Location = new Point(4, 483);
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
@@ -281,6 +282,7 @@
             normal.Enabled = false;
             normal.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             normal.Index = -1;
+            normal.IsMaterial = false;
             normal.Location = new Point(4, 451);
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
@@ -300,6 +302,7 @@
             Base.Enabled = false;
             Base.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             Base.Index = -1;
+            Base.IsMaterial = false;
             Base.Location = new Point(4, 419);
             Base.Margin = new Padding(4, 3, 4, 3);
             Base.MinimumSize = new Size(300, 28);
@@ -524,20 +527,6 @@
             extractAtramentumLuminisGlowMapToolStripMenuItem.Visible = false;
             extractAtramentumLuminisGlowMapToolStripMenuItem.Click += extractAtramentumLuminisGlowMapToolStripMenuItem_Click;
             // 
-            // faceToolsToolStripMenuItem
-            // 
-            faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
-            faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
-            faceToolsToolStripMenuItem.Size = new Size(286, 22);
-            faceToolsToolStripMenuItem.Text = "Face Tools";
-            // 
-            // legacyMakeupSalvagerToolStripMenuItem
-            // 
-            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
-            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(204, 22);
-            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
-            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
-            // 
             // eyeToolsToolStripMenuItem
             // 
             eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse });
@@ -572,6 +561,20 @@
             generateMapsForDawntrailEyeDiffuse.Size = new Size(329, 22);
             generateMapsForDawntrailEyeDiffuse.Text = "Convert Maps For Dawntrail Eye Diffuse";
             generateMapsForDawntrailEyeDiffuse.Click += generateMapsForDawntrailEyeDiffuseToolStripMenuItem_Click;
+            // 
+            // faceToolsToolStripMenuItem
+            // 
+            faceToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyMakeupSalvagerToolStripMenuItem });
+            faceToolsToolStripMenuItem.Name = "faceToolsToolStripMenuItem";
+            faceToolsToolStripMenuItem.Size = new Size(286, 22);
+            faceToolsToolStripMenuItem.Text = "Face Tools";
+            // 
+            // legacyMakeupSalvagerToolStripMenuItem
+            // 
+            legacyMakeupSalvagerToolStripMenuItem.Name = "legacyMakeupSalvagerToolStripMenuItem";
+            legacyMakeupSalvagerToolStripMenuItem.Size = new Size(204, 22);
+            legacyMakeupSalvagerToolStripMenuItem.Text = "Legacy Makeup Salvager";
+            legacyMakeupSalvagerToolStripMenuItem.Click += legacyMakeupSalvagerToolStripMenuItem_Click;
             // 
             // hairToolsToolStripMenuItem
             // 
@@ -1204,6 +1207,7 @@
             bounds.Enabled = false;
             bounds.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             bounds.Index = -1;
+            bounds.IsMaterial = false;
             bounds.Location = new Point(4, 515);
             bounds.Margin = new Padding(4, 3, 4, 3);
             bounds.MinimumSize = new Size(300, 28);
@@ -1244,6 +1248,7 @@
             glow.Enabled = false;
             glow.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             glow.Index = -1;
+            glow.IsMaterial = false;
             glow.Location = new Point(4, 515);
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);

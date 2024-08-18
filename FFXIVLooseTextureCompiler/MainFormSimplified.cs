@@ -330,5 +330,17 @@ namespace FFXIVLooseTextureCompiler {
         private void exportLabel_Click(object sender, EventArgs e) {
 
         }
+
+        private void universalPathingCompatibilityToolStripMenuItem_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1X1VZ16cFFqtlpAodvdWgLKN35ZcZJWpXoKU_-g2vsvk/edit?usp=sharing",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
+        }
     }
 }

@@ -43,6 +43,7 @@
             face = new FFXIVVoicePackCreator.FilePicker();
             eyes = new FFXIVVoicePackCreator.FilePicker();
             five = new TabPage();
+            universalPathingCompatibility = new Button();
             exportButton = new Button();
             label8 = new Label();
             modNameTextBox = new TextBox();
@@ -172,7 +173,7 @@
             four.Controls.Add(eyes);
             four.Location = new Point(4, 24);
             four.Name = "four";
-            four.Size = new Size(447, 219);
+            four.Size = new Size(192, 72);
             four.TabIndex = 2;
             four.Text = "Select Textures";
             four.UseVisualStyleBackColor = true;
@@ -242,6 +243,7 @@
             body.CurrentPath = null;
             body.Filter = null;
             body.Index = -1;
+            body.IsMaterial = false;
             body.Location = new Point(5, 183);
             body.Margin = new Padding(4, 3, 4, 3);
             body.MinimumSize = new Size(300, 28);
@@ -256,6 +258,7 @@
             face.CurrentPath = null;
             face.Filter = null;
             face.Index = -1;
+            face.IsMaterial = false;
             face.Location = new Point(5, 121);
             face.Margin = new Padding(4, 3, 4, 3);
             face.MinimumSize = new Size(300, 28);
@@ -270,6 +273,7 @@
             eyes.CurrentPath = "";
             eyes.Filter = null;
             eyes.Index = -1;
+            eyes.IsMaterial = false;
             eyes.Location = new Point(5, 89);
             eyes.Margin = new Padding(4, 3, 4, 3);
             eyes.MinimumSize = new Size(300, 28);
@@ -281,20 +285,32 @@
             // 
             // five
             // 
+            five.Controls.Add(universalPathingCompatibility);
             five.Controls.Add(exportButton);
             five.Controls.Add(label8);
             five.Controls.Add(modNameTextBox);
             five.Location = new Point(4, 24);
             five.Name = "five";
-            five.Size = new Size(192, 72);
+            five.Size = new Size(447, 219);
             five.TabIndex = 3;
             five.Text = "Export";
             five.UseVisualStyleBackColor = true;
             // 
+            // universalPathingCompatibility
+            // 
+            universalPathingCompatibility.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            universalPathingCompatibility.Location = new Point(69, 171);
+            universalPathingCompatibility.Name = "universalPathingCompatibility";
+            universalPathingCompatibility.Size = new Size(304, 36);
+            universalPathingCompatibility.TabIndex = 8;
+            universalPathingCompatibility.Text = "Universal Pathing Compatibility";
+            universalPathingCompatibility.UseVisualStyleBackColor = true;
+            universalPathingCompatibility.Click += universalPathingCompatibility_Click;
+            // 
             // exportButton
             // 
             exportButton.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            exportButton.Location = new Point(69, 142);
+            exportButton.Location = new Point(69, 92);
             exportButton.Name = "exportButton";
             exportButton.Size = new Size(304, 63);
             exportButton.TabIndex = 3;
@@ -314,7 +330,7 @@
             // 
             // modNameTextBox
             // 
-            modNameTextBox.Location = new Point(69, 85);
+            modNameTextBox.Location = new Point(69, 53);
             modNameTextBox.Name = "modNameTextBox";
             modNameTextBox.Size = new Size(304, 23);
             modNameTextBox.TabIndex = 0;
@@ -422,5 +438,6 @@
         private Label bodyLabel;
         private Label faceLabel;
         private Label noSelection;
+        private Button universalPathingCompatibility;
     }
 }

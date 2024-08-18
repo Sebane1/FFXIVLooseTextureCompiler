@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -65,7 +66,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void gender_SelectedIndexChanged(object sender, EventArgs e) {
-            MainFormSimplified.MainWindow.Gender.SelectedIndex = 0;
+            MainFormSimplified.MainWindow.Gender.SelectedIndex = gender.SelectedIndex;
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e) {
@@ -131,6 +132,18 @@ namespace FFXIVLooseTextureCompiler {
 
         private void eye_Load(object sender, EventArgs e) {
 
+        }
+
+        private void universalPathingCompatibility_Click(object sender, EventArgs e) {
+            try {
+                Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                    FileName = "https://docs.google.com/document/d/1X1VZ16cFFqtlpAodvdWgLKN35ZcZJWpXoKU_-g2vsvk/edit?usp=sharing",
+                    UseShellExecute = true,
+                    Verb = "OPEN"
+                });
+            } catch {
+
+            }
         }
     }
 }

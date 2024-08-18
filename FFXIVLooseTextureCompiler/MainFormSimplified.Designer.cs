@@ -52,6 +52,8 @@
             modShareToolStripMenuItem = new ToolStripMenuItem();
             enableModShareToolStripMenuItem = new ToolStripMenuItem();
             creditsToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            universalPathingCompatibilityToolStripMenuItem = new ToolStripMenuItem();
             donateButton = new Button();
             discordButton = new Button();
             exportPanel = new Panel();
@@ -71,6 +73,7 @@
             body.CurrentPath = null;
             body.Filter = null;
             body.Index = -1;
+            body.IsMaterial = false;
             body.Location = new Point(4, 216);
             body.Margin = new Padding(4, 3, 4, 3);
             body.MinimumSize = new Size(300, 28);
@@ -85,6 +88,7 @@
             face.CurrentPath = null;
             face.Filter = null;
             face.Index = -1;
+            face.IsMaterial = false;
             face.Location = new Point(4, 160);
             face.Margin = new Padding(4, 3, 4, 3);
             face.MinimumSize = new Size(300, 28);
@@ -100,6 +104,7 @@
             eyes.CurrentPath = null;
             eyes.Filter = null;
             eyes.Index = -1;
+            eyes.IsMaterial = false;
             eyes.Location = new Point(4, 130);
             eyes.Margin = new Padding(4, 3, 4, 3);
             eyes.MinimumSize = new Size(300, 28);
@@ -176,7 +181,7 @@
             advancedModeButton.Name = "advancedModeButton";
             advancedModeButton.Size = new Size(119, 23);
             advancedModeButton.TabIndex = 9;
-            advancedModeButton.Text = "Advanced Mode";
+            advancedModeButton.Text = "Detailed Mode";
             advancedModeButton.UseVisualStyleBackColor = false;
             advancedModeButton.Click += advancedModeButton_Click;
             // 
@@ -227,7 +232,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(453, 24);
@@ -310,6 +315,20 @@
             creditsToolStripMenuItem.Size = new Size(56, 20);
             creditsToolStripMenuItem.Text = "Credits";
             creditsToolStripMenuItem.Click += creditsToolStripMenuItem_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { universalPathingCompatibilityToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // universalPathingCompatibilityToolStripMenuItem
+            // 
+            universalPathingCompatibilityToolStripMenuItem.Name = "universalPathingCompatibilityToolStripMenuItem";
+            universalPathingCompatibilityToolStripMenuItem.Size = new Size(241, 22);
+            universalPathingCompatibilityToolStripMenuItem.Text = "Universal Pathing Compatibility";
+            universalPathingCompatibilityToolStripMenuItem.Click += universalPathingCompatibilityToolStripMenuItem_Click;
             // 
             // donateButton
             // 
@@ -491,6 +510,8 @@
         private Label label5;
         private Label label6;
         private Button easyModeButton;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem universalPathingCompatibilityToolStripMenuItem;
 
         public ComboBox BodyType { get => bodyType; set => bodyType = value; }
         public ComboBox SubRace { get => subRace; set => subRace = value; }

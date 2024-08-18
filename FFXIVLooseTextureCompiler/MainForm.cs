@@ -202,7 +202,6 @@ namespace FFXIVLooseTextureCompiler {
                 } else {
                     _exportTexManager.ClearList();
                 }
-                _exportTexManager.Show();
                 _exportTexManager.AddFilesRecursively(path, 0, 10);
             }
         }
@@ -234,7 +233,7 @@ namespace FFXIVLooseTextureCompiler {
             processGeneration.CancelAsync();
         }
         private void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
-            exportProgress.Value = Math.Clamp(e.ProgressPercentage, 0, exportProgress.Maximum);
+            exportProgress.Value = Math.Clamp(textureProcessor.ExportCompletion, 0, exportProgress.Maximum);
             Console.WriteLine(exportProgress.Value + "% Complete");
         }
         private void MainForm_Load(object sender, EventArgs e) {
@@ -284,7 +283,7 @@ namespace FFXIVLooseTextureCompiler {
                         exportPanel.Visible = true;
                         exportPanel.BringToFront();
                         exportProgress.BringToFront();
-                        exportProgress.Maximum = textureList.Items.Count * 3;
+                        exportProgress.Maximum = textureList.Items.Count * 4;
                         exportProgress.Visible = true;
                         modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
                         jsonFilepath = Path.Combine(modPath, "default_mod.json");
@@ -308,7 +307,7 @@ namespace FFXIVLooseTextureCompiler {
                         foreach (TextureSet item in textureList.Items) {
                             if (item.OmniExportMode) {
                                 UniversalTextureSetCreator.ConfigureOmniConfiguration(item);
-                                exportProgress.Maximum += (item.ChildSets.Count * 3);
+                                exportProgress.Maximum += (item.ChildSets.Count * 4);
                             }
                             textureSets.Add(item);
                         }
@@ -1939,7 +1938,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the resources used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creators of Pythia\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nThanks to Yuria and KZ for helping improve a portion of the face bake models!\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the resources used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creators of Pythia\r\nThe creators of Freyja\r\nThe creators of Eve\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nThanks to Yuria and KZ for helping improve a portion of the face bake models!\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -2111,10 +2110,12 @@ namespace FFXIVLooseTextureCompiler {
             newTextureSet.Normal = textureSet.Normal;
             newTextureSet.Mask = textureSet.Mask;
             newTextureSet.Glow = newTextureSet.Glow;
+            newTextureSet.Material = textureSet.Material;
             newTextureSet.NormalCorrection = newTextureSet.NormalCorrection;
             newTextureSet.InternalBasePath = textureSet.InternalBasePath;
             newTextureSet.InternalNormalPath = textureSet.InternalNormalPath;
             newTextureSet.InternalMaskPath = textureSet.InternalMaskPath;
+            newTextureSet.InternalMaterialPath = textureSet.InternalMaterialPath;
             newTextureSet.BackupTexturePaths = textureSet.BackupTexturePaths;
             newTextureSet.ChildSets = textureSet.ChildSets;
             newTextureSet.GroupName = textureSet.GroupName;
