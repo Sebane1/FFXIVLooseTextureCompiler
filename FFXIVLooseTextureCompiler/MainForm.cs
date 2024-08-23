@@ -740,6 +740,7 @@ namespace FFXIVLooseTextureCompiler {
                 default:
                     AddFacePaths(textureSet);
                     if (facePart.SelectedIndex == 0) {
+                        textureSet.UsesScales = auraFaceScalesDropdown.SelectedIndex == 1;
                         BackupTexturePaths.AddFaceBackupPaths(genderList.SelectedIndex, subRaceList.SelectedIndex, faceTypeList.SelectedIndex, textureSet);
                     }
                     break;
@@ -1938,7 +1939,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         public void creditsToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Credits for the resources used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creators of Pythia\r\nThe creators of Freyja\r\nThe creators of Eve\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nThanks to Yuria and KZ for helping improve a portion of the face bake models!\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
+            MessageBox.Show("Credits for the resources used in this tool:\r\n\r\nThe creators of Bibo+\r\nThe creators of Tight&Firm (Gen3)\r\nThe creators of TBSE\r\nThe creator of Otopop.\r\nThe creators of Pythia\r\nThe creators of Freyja\r\nThe creators of Eve\r\nThe creators of EXQB\r\n\r\nTake care to read the terms and permissions for each body type when releasing public mods.\r\n\r\nThanks to Yuria and KZ for helping improve a portion of the face bake models!\r\n\r\nSpecial thanks to Zatori for all their help with testing, and all of you for using the tool!", VersionText);
         }
         private void howToGetTexturesToolStripMenuItem_Click(object sender, EventArgs e) {
             new HelpWindow().Show();
@@ -2352,6 +2353,71 @@ namespace FFXIVLooseTextureCompiler {
                     });
                 } catch {
 
+                }
+            }
+        }
+
+        private void fullTattooToOverlayToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexIO.SaveBitmap(ImageManipulation.SeperateTattoo(TexIO.ResolveBitmap(openFileDialog.FileName)),
+                ImageManipulation.AddSuffix(openFileDialog.FileName, "_separated"));
+                MessageBox.Show("Tattoo has attempted to be separated.", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+        private void fullTattooToOverlayBodyToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                TexIO.SaveBitmap(ImageManipulation.SeperateTattooByDifference(TexIO.ResolveBitmap(openFileDialog.FileName)),
+                ImageManipulation.AddSuffix(openFileDialog.FileName, "_separated"));
+                MessageBox.Show("Tattoo has attempted to be separated.", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
+        private void seperateTextureByDifferenceToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            OpenFileDialog openFileDialog2 = new OpenFileDialog();
+            openFileDialog2.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select an input texture with the element you want to separate.");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                MessageBox.Show("Please select an input texture that has the same underlying texture but without the element you want to separate.");
+                if (openFileDialog2.ShowDialog() == DialogResult.OK) {
+                    TexIO.SaveBitmap(ImageManipulation.SeperateByDifference(
+                    TexIO.ResolveBitmap(openFileDialog.FileName), TexIO.ResolveBitmap(openFileDialog2.FileName)),
+                    ImageManipulation.AddSuffix(openFileDialog.FileName, "_separated"));
+                    MessageBox.Show("Texture has attempted to be separated.", VersionText);
+                    try {
+                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                            FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                            UseShellExecute = true,
+                            Verb = "OPEN"
+                        });
+                    } catch {
+
+                    }
                 }
             }
         }

@@ -62,10 +62,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                 if (!string.IsNullOrEmpty(makeupPath)) {
                     string path = ImageManipulation.AddSuffix(makeupPath, "_bake");
                     if (!textureIsNormalMap.Checked) {
-                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
+                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,false,
                         (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 2048 : 1024, 2048);
                     } else {
-                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path,
+                        XNormal.CallXNormal(inputModel, outputModel, makeupPath, path, false,
                        (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 1024 : 512, 1024);
                     }
                     Bitmap bitmap = null;

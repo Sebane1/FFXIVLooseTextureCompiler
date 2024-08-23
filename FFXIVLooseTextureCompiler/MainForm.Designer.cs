@@ -59,6 +59,8 @@
             editToolStripMenuItem = new ToolStripMenuItem();
             findAndBulkReplaceToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
+            fullTattooToOverlayExperimentalToolStripMenuItem = new ToolStripMenuItem();
+            fToolStripMenuItem = new ToolStripMenuItem();
             extractAtramentumLuminisGlowMapToolStripMenuItem = new ToolStripMenuItem();
             eyeToolsToolStripMenuItem = new ToolStripMenuItem();
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
@@ -81,6 +83,7 @@
             baseTextureToNormalMapToolStripMenuItem = new ToolStripMenuItem();
             baseTextureToInvertedNormalMapToolStripMenuItem = new ToolStripMenuItem();
             baseTextureToDawntrailSkinMultiToolStripMenuItem = new ToolStripMenuItem();
+            seperateTextureByDifferenceToolStripMenuItem = new ToolStripMenuItem();
             xNormalToolStripMenuItem = new ToolStripMenuItem();
             imageToTexConversionToolStripMenuItem = new ToolStripMenuItem();
             bulkTexViewerToolStripMenuItem = new ToolStripMenuItem();
@@ -171,6 +174,7 @@
             textureSetName = new TextBox();
             textureSetNameRefreshTimer = new System.Windows.Forms.Timer(components);
             panel3 = new Panel();
+            label16 = new Label();
             label10 = new Label();
             label9 = new Label();
             label7 = new Label();
@@ -203,7 +207,7 @@
             // 
             raceList.FormattingEnabled = true;
             raceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Elezen", "Lalafell", "Miqo'te", "Roegadyn", "Raen", "Xaela", "Hrothgar", "Viera" });
-            raceList.Location = new Point(312, 4);
+            raceList.Location = new Point(312, 101);
             raceList.Name = "raceList";
             raceList.Size = new Size(84, 23);
             raceList.TabIndex = 2;
@@ -514,10 +518,24 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fullTattooToOverlayExperimentalToolStripMenuItem, fToolStripMenuItem, extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // fullTattooToOverlayExperimentalToolStripMenuItem
+            // 
+            fullTattooToOverlayExperimentalToolStripMenuItem.Name = "fullTattooToOverlayExperimentalToolStripMenuItem";
+            fullTattooToOverlayExperimentalToolStripMenuItem.Size = new Size(286, 22);
+            fullTattooToOverlayExperimentalToolStripMenuItem.Text = "Full Tattoo To Overlay (Generic)";
+            fullTattooToOverlayExperimentalToolStripMenuItem.Click += fullTattooToOverlayToolStripMenuItem_Click;
+            // 
+            // fToolStripMenuItem
+            // 
+            fToolStripMenuItem.Name = "fToolStripMenuItem";
+            fToolStripMenuItem.Size = new Size(286, 22);
+            fToolStripMenuItem.Text = "Full Tattoo To Overlay (Body)";
+            fToolStripMenuItem.Click += fullTattooToOverlayBodyToolStripMenuItem_Click;
             // 
             // extractAtramentumLuminisGlowMapToolStripMenuItem
             // 
@@ -613,7 +631,7 @@
             // 
             // colourChannelSplittingToolStripMenuItem
             // 
-            colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { baseTextureMergerToolStripMenuItem, multiCreatorToolStripMenuItem, mergeRGBAndAlphaImagesToolStripMenuItem, imageToRGBChannelsToolStripMenuItem, splitImageToRGBAndAlphaToolStripMenuItem, baseTextureToNormalMapToolStripMenuItem, baseTextureToInvertedNormalMapToolStripMenuItem, baseTextureToDawntrailSkinMultiToolStripMenuItem, xNormalToolStripMenuItem });
+            colourChannelSplittingToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { baseTextureMergerToolStripMenuItem, multiCreatorToolStripMenuItem, mergeRGBAndAlphaImagesToolStripMenuItem, imageToRGBChannelsToolStripMenuItem, splitImageToRGBAndAlphaToolStripMenuItem, baseTextureToNormalMapToolStripMenuItem, baseTextureToInvertedNormalMapToolStripMenuItem, baseTextureToDawntrailSkinMultiToolStripMenuItem, seperateTextureByDifferenceToolStripMenuItem, xNormalToolStripMenuItem });
             colourChannelSplittingToolStripMenuItem.Name = "colourChannelSplittingToolStripMenuItem";
             colourChannelSplittingToolStripMenuItem.Size = new Size(286, 22);
             colourChannelSplittingToolStripMenuItem.Text = "Texture Manipulation";
@@ -674,6 +692,13 @@
             baseTextureToDawntrailSkinMultiToolStripMenuItem.Size = new Size(233, 22);
             baseTextureToDawntrailSkinMultiToolStripMenuItem.Text = "Base To Dawntrail Skin Mask";
             baseTextureToDawntrailSkinMultiToolStripMenuItem.Click += baseTextureToDawntrailSkinMultiToolStripMenuItem_Click;
+            // 
+            // seperateTextureByDifferenceToolStripMenuItem
+            // 
+            seperateTextureByDifferenceToolStripMenuItem.Name = "seperateTextureByDifferenceToolStripMenuItem";
+            seperateTextureByDifferenceToolStripMenuItem.Size = new Size(233, 22);
+            seperateTextureByDifferenceToolStripMenuItem.Text = "Seperate Texture By Difference";
+            seperateTextureByDifferenceToolStripMenuItem.Click += seperateTextureByDifferenceToolStripMenuItem_Click;
             // 
             // xNormalToolStripMenuItem
             // 
@@ -1275,13 +1300,12 @@
             // auraFaceScalesDropdown
             // 
             auraFaceScalesDropdown.FormattingEnabled = true;
-            auraFaceScalesDropdown.Items.AddRange(new object[] { "Vanilla Scales", "Scaleless Vanilla", "Scaleless Varied" });
-            auraFaceScalesDropdown.Location = new Point(276, 176);
+            auraFaceScalesDropdown.Items.AddRange(new object[] { "Vanilla Scales", "Scaleless" });
+            auraFaceScalesDropdown.Location = new Point(317, 4);
             auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
-            auraFaceScalesDropdown.Size = new Size(104, 23);
+            auraFaceScalesDropdown.Size = new Size(94, 23);
             auraFaceScalesDropdown.TabIndex = 48;
             auraFaceScalesDropdown.Text = "Vanilla Scales";
-            auraFaceScalesDropdown.Visible = false;
             // 
             // panel1
             // 
@@ -1447,17 +1471,28 @@
             // panel3
             // 
             panel3.BackColor = Color.FromArgb(192, 255, 192);
+            panel3.Controls.Add(label16);
             panel3.Controls.Add(label10);
             panel3.Controls.Add(label9);
             panel3.Controls.Add(label7);
             panel3.Controls.Add(genderList);
             panel3.Controls.Add(subRaceList);
             panel3.Controls.Add(raceList);
+            panel3.Controls.Add(auraFaceScalesDropdown);
             panel3.Controls.Add(addCustomPathButton);
             panel3.Location = new Point(0, 80);
             panel3.Name = "panel3";
             panel3.Size = new Size(556, 32);
             panel3.TabIndex = 54;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(273, 8);
+            label16.Name = "label16";
+            label16.Size = new Size(39, 15);
+            label16.TabIndex = 49;
+            label16.Text = "Scales";
             // 
             // label10
             // 
@@ -1471,7 +1506,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(272, 8);
+            label9.Location = new Point(272, 105);
             label9.Name = "label9";
             label9.Size = new Size(32, 15);
             label9.TabIndex = 35;
@@ -1497,7 +1532,6 @@
             Controls.Add(generateButton);
             Controls.Add(label8);
             Controls.Add(ipBox);
-            Controls.Add(auraFaceScalesDropdown);
             Controls.Add(finalizeButton);
             Controls.Add(glow);
             Controls.Add(discordButton);
@@ -1705,6 +1739,10 @@
         private ToolStripMenuItem baseTextureToNormalMapToolStripMenuItem;
         private ToolStripMenuItem baseTextureToInvertedNormalMapToolStripMenuItem;
         private ToolStripMenuItem generateMapsForDawntrailEyeDiffuse;
+        private ToolStripMenuItem fullTattooToOverlayExperimentalToolStripMenuItem;
+        private ToolStripMenuItem fToolStripMenuItem;
+        private ToolStripMenuItem seperateTextureByDifferenceToolStripMenuItem;
+        private Label label16;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

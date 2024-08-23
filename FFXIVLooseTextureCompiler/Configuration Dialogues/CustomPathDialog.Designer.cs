@@ -48,6 +48,7 @@
             label4 = new Label();
             internalMaterialPathTextBox = new TextBox();
             material = new FFXIVVoicePackCreator.FilePicker();
+            usesAlternateTextures = new CheckBox();
             SuspendLayout();
             // 
             // textureSetNameTextBox
@@ -117,7 +118,7 @@
             // 
             // acceptChangesButton
             // 
-            acceptChangesButton.Location = new Point(264, 284);
+            acceptChangesButton.Location = new Point(264, 310);
             acceptChangesButton.Name = "acceptChangesButton";
             acceptChangesButton.Size = new Size(111, 23);
             acceptChangesButton.TabIndex = 8;
@@ -127,7 +128,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(376, 284);
+            button1.Location = new Point(376, 310);
             button1.Name = "button1";
             button1.Size = new Size(59, 23);
             button1.TabIndex = 9;
@@ -154,7 +155,7 @@
             // ignoreNormalsCheckbox
             // 
             ignoreNormalsCheckbox.AutoSize = true;
-            ignoreNormalsCheckbox.Location = new Point(128, 264);
+            ignoreNormalsCheckbox.Location = new Point(265, 289);
             ignoreNormalsCheckbox.Name = "ignoreNormalsCheckbox";
             ignoreNormalsCheckbox.Size = new Size(150, 19);
             ignoreNormalsCheckbox.TabIndex = 12;
@@ -164,7 +165,7 @@
             // ignoreMultiCheckbox
             // 
             ignoreMultiCheckbox.AutoSize = true;
-            ignoreMultiCheckbox.Location = new Point(300, 264);
+            ignoreMultiCheckbox.Location = new Point(265, 264);
             ignoreMultiCheckbox.Name = "ignoreMultiCheckbox";
             ignoreMultiCheckbox.Size = new Size(133, 19);
             ignoreMultiCheckbox.TabIndex = 13;
@@ -190,7 +191,7 @@
             // invertNormals
             // 
             invertNormals.AutoSize = true;
-            invertNormals.Location = new Point(4, 264);
+            invertNormals.Location = new Point(113, 289);
             invertNormals.Name = "invertNormals";
             invertNormals.Size = new Size(104, 19);
             invertNormals.TabIndex = 16;
@@ -202,7 +203,7 @@
             // 
             groupChoiceType.FormattingEnabled = true;
             groupChoiceType.Items.AddRange(new object[] { "Use Global Setting" });
-            groupChoiceType.Location = new Point(112, 284);
+            groupChoiceType.Location = new Point(112, 310);
             groupChoiceType.Name = "groupChoiceType";
             groupChoiceType.Size = new Size(148, 23);
             groupChoiceType.TabIndex = 17;
@@ -211,7 +212,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(4, 288);
+            label3.Location = new Point(4, 314);
             label3.Name = "label3";
             label3.Size = new Size(107, 15);
             label3.TabIndex = 18;
@@ -264,11 +265,22 @@
             material.Size = new Size(402, 28);
             material.TabIndex = 23;
             // 
+            // usesAlternateTextures
+            // 
+            usesAlternateTextures.AutoSize = true;
+            usesAlternateTextures.Location = new Point(113, 264);
+            usesAlternateTextures.Name = "usesAlternateTextures";
+            usesAlternateTextures.Size = new Size(147, 19);
+            usesAlternateTextures.TabIndex = 24;
+            usesAlternateTextures.Text = "Uses Alternate Textures";
+            usesAlternateTextures.UseVisualStyleBackColor = true;
+            // 
             // CustomPathDialog
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(442, 312);
+            ClientSize = new Size(442, 338);
+            Controls.Add(usesAlternateTextures);
             Controls.Add(material);
             Controls.Add(label4);
             Controls.Add(internalMaterialPathTextBox);
@@ -330,5 +342,6 @@
         private Label label4;
         private TextBox internalMaterialPathTextBox;
         private FFXIVVoicePackCreator.FilePicker material;
+        private CheckBox usesAlternateTextures;
     }
 }

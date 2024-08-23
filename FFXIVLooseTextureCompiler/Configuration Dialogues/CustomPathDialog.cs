@@ -22,6 +22,7 @@ namespace FFXIVLooseTextureCompiler {
                     internalMaterialPathTextBox.Text = textureSet.InternalMaterialPath;
                     ignoreNormalsCheckbox.Checked = textureSet.IgnoreNormalGeneration;
                     ignoreMultiCheckbox.Checked = textureSet.IgnoreMaskGeneration;
+                    usesAlternateTextures.Checked = textureSet.UsesScales;
                     material.CurrentPath = textureSet.Material;
                     invertNormals.Checked = textureSet.InvertNormalGeneration;
                     normalCorrection.Text = textureSet.NormalCorrection;
@@ -80,6 +81,7 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.InvertNormalGeneration = invertNormals.Checked;
                 textureSet.Material = material.FilePath.Text;
                 textureSet.SkinType = skinTypeSelection.SelectedIndex;
+                textureSet.UsesScales = usesAlternateTextures.Checked;
             } else {
                 MessageBox.Show("Please enter a name for your custom material set!", Text);
             }
