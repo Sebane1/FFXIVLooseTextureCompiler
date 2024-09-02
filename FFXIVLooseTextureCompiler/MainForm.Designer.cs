@@ -463,28 +463,28 @@
             // newToolStripMenuItem
             // 
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(127, 22);
+            newToolStripMenuItem.Size = new Size(180, 22);
             newToolStripMenuItem.Text = "New";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(127, 22);
+            openToolStripMenuItem.Size = new Size(180, 22);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(127, 22);
+            saveToolStripMenuItem.Size = new Size(180, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(127, 22);
+            saveAsToolStripMenuItem.Size = new Size(180, 22);
             saveAsToolStripMenuItem.Text = "Save As";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
@@ -492,7 +492,7 @@
             // 
             templatesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { importCustomTemplateToolStripMenuItem });
             templatesToolStripMenuItem.Name = "templatesToolStripMenuItem";
-            templatesToolStripMenuItem.Size = new Size(127, 22);
+            templatesToolStripMenuItem.Size = new Size(180, 22);
             templatesToolStripMenuItem.Text = "Templates";
             // 
             // importCustomTemplateToolStripMenuItem
@@ -871,7 +871,7 @@
             // enableModshareToolStripMenuItem
             // 
             enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            enableModshareToolStripMenuItem.Size = new Size(171, 22);
+            enableModshareToolStripMenuItem.Size = new Size(180, 22);
             enableModshareToolStripMenuItem.Text = "Enable Modshare";
             enableModshareToolStripMenuItem.Click += enableModshareToolStripMenuItem_Click;
             // 
@@ -879,7 +879,7 @@
             // 
             sendCurrentModToolStripMenuItem.Enabled = false;
             sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            sendCurrentModToolStripMenuItem.Size = new Size(171, 22);
+            sendCurrentModToolStripMenuItem.Size = new Size(180, 22);
             sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             sendCurrentModToolStripMenuItem.Click += sendCurrentModToolStripMenuItem_Click;
             // 
@@ -1240,6 +1240,7 @@
             bounds.Size = new Size(548, 28);
             bounds.TabIndex = 41;
             helperToolTip.SetToolTip(bounds, "Used to restrict where generated normal maps actually use generated normals.");
+            bounds.Visible = false;
             bounds.OnFileSelected += multi_OnFileSelected;
             bounds.Enter += multi_Enter;
             bounds.Leave += multi_Leave;
@@ -1281,7 +1282,6 @@
             glow.Size = new Size(548, 28);
             glow.TabIndex = 45;
             helperToolTip.SetToolTip(glow, "Used to make the character glow. Use a transparent overlay where you want glow to happen. Similar to a using an overlay.");
-            glow.Visible = false;
             glow.OnFileSelected += multi_OnFileSelected;
             glow.Enter += multi_Enter;
             glow.Leave += multi_Leave;

@@ -85,9 +85,9 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     Bitmap eyeCorrectionBitmap = TexIO.ResolveBitmap(eyeCorrectionMap);
                     if (!skipUnderlayCheckBox.Checked) {
                         Bitmap teeth = TexIO.Clone(bitmap, new Rectangle(0, 0, (int)((float)bitmap.Height * 0.24853515625f), (int)((float)bitmap.Height * 0.1372549019607843f)));
-                        if ((subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10)) {
-                            makeup = ImageManipulation.ClearOldHorns(makeup);
-                        }
+                        //if ((subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10)) {
+                        //    makeup = ImageManipulation.ClearOldHorns(makeup);
+                        //}
                         graphics.DrawImage(makeup, new Point(0, 0));
                         graphics.DrawImage(teeth, new Point(0, 0));
                     } else {
@@ -112,7 +112,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
                     } else {
                         TexIO.SaveBitmap(ImageManipulation.MergeGrayscalesToRGBA(TexIO.NewBitmap(canvas), TexIO.NewBitmap(canvas), TexIO.NewBitmap(bitmap), alpha), lastItem = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(path, textureIsNormalMap.Checked ? "_final_normal" : "_final"), ".png"));
                     }
-                    File.Delete(path);
+                    //File.Delete(path);
                 }
             } else {
                 MessageBox.Show("Assets for the current selection do no exist. If this is a valid selection, its possible Loose Texture Compiler needs to be re-installed.");

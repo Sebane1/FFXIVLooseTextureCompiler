@@ -44,7 +44,7 @@ namespace FFXIVLooseTextureCompiler {
             // acceptChangesButton
             // 
             acceptChangesButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            acceptChangesButton.Location = new Point(200, 324);
+            acceptChangesButton.Location = new Point(200, 346);
             acceptChangesButton.Name = "acceptChangesButton";
             acceptChangesButton.Size = new Size(143, 24);
             acceptChangesButton.TabIndex = 8;
@@ -55,7 +55,7 @@ namespace FFXIVLooseTextureCompiler {
             // button1
             // 
             button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Location = new Point(344, 324);
+            button1.Location = new Point(344, 346);
             button1.Name = "button1";
             button1.Size = new Size(59, 24);
             button1.TabIndex = 9;
@@ -154,13 +154,12 @@ namespace FFXIVLooseTextureCompiler {
             glow.Filter = null;
             glow.Index = -1;
             glow.IsMaterial = false;
-            glow.Location = new Point(5, 315);
+            glow.Location = new Point(5, 316);
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
             glow.Size = new Size(404, 28);
             glow.TabIndex = 18;
-            glow.Visible = false;
             // 
             // label2
             // 
@@ -196,7 +195,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(414, 350);
+            ClientSize = new Size(414, 372);
             Controls.Add(material);
             Controls.Add(groupTextBox);
             Controls.Add(label2);
