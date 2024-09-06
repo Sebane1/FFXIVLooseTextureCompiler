@@ -6,14 +6,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.0.3.1</Version>
+    <Version>2.0.3.2</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>
     <Copyright>Lawener Industries</Copyright>
     <PackageProjectUrl>https://github.com/Sebane1/FFXIVLooseTextureCompiler</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Sebane1/FFXIVLooseTextureCompiler</RepositoryUrl>
     <ApplicationIcon>FFXIVTP.ico</ApplicationIcon>
-    <TargetFrameworks>net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -159,11 +159,15 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
+        private async void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             ExportJson();
             ExportMeta();
-            PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-            PenumbraHttpApi.Redraw(0);
+            Thread.Sleep(1000);
+            await PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
+            Thread.Sleep(1000);
+            await PenumbraHttpApi.Redraw(0);
+            Thread.Sleep(1000);
+            await PenumbraHttpApi.Redraw(0);
             hasDoneReload = true;
             textureSetList_SelectedIndexChanged(this, EventArgs.Empty);
             finalizeButton.Enabled = generateButton.Enabled = false;
@@ -183,15 +187,7 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Export completed in " + stopwatch.Elapsed + "!");
             }
             string path = Path.Combine(modPath, @"do_not_edit\textures\");
-            //ProcessStartInfo ProcessInfo;
-            //Process Process; ;
-            //try {
-            //    Directory.CreateDirectory(path);
-            //} catch {
-            //}
-            //ProcessInfo = new ProcessStartInfo("explorer.exe", @"""" + path + @"""");
-            //ProcessInfo.UseShellExecute = true;
-            //Process = Process.Start(ProcessInfo);
+
             stopwatch.Reset();
             if (isNetworkSync) {
                 SendModOverNetwork();
@@ -725,7 +721,9 @@ namespace FFXIVLooseTextureCompiler {
 
             textureSet.InternalMaskPath = RacePaths.GetBodyTexturePath(2, genderList.SelectedIndex,
                     baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex, uniqueAuRa.Checked);
+            textureSet.InternalMaterialPath = RacePaths.GetBodyMaterialPath(genderList.SelectedIndex, baseBodyList.SelectedIndex, raceList.SelectedIndex, tailList.SelectedIndex);
             BackupTexturePaths.AddBodyBackupPaths(genderList.SelectedIndex, raceList.SelectedIndex, textureSet);
+
         }
 
         private void addFaceButton_Click(object sender, EventArgs e) {
@@ -755,6 +753,8 @@ namespace FFXIVLooseTextureCompiler {
                     break;
 
             }
+            textureSet.InternalMaterialPath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
+            facePart.SelectedIndex, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked, true);
             textureSet.IgnoreMaskGeneration = true;
             textureList.Items.Add(textureSet);
             textureList.SelectedIndex = textureList.Items.Count - 1;
@@ -787,8 +787,6 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 RaceEyePaths.GetEyeTextureSet(subRaceList.SelectedIndex, faceTypeList.SelectedIndex, Convert.ToBoolean(genderList.SelectedIndex), textureSet);
             }
-            textureSet.InternalMaterialPath = RacePaths.GetFacePath(0, genderList.SelectedIndex, subRaceList.SelectedIndex,
-            2, faceTypeList.SelectedIndex, auraFaceScalesDropdown.SelectedIndex, asymCheckbox.Checked, true);
         }
 
         public void AddEyePathsLegacy(TextureSet textureSet) {
@@ -1204,7 +1202,7 @@ namespace FFXIVLooseTextureCompiler {
                     AddWatcher(textureSet.Normal);
                     AddWatcher(textureSet.Mask);
                     AddWatcher(textureSet.NormalMask);
-                    //AddWatcher(textureSet.Glow);
+                    AddWatcher(textureSet.Glow);
                 }
                 if (missingFiles > 0) {
                     MessageBox.Show($"{missingFiles} texture sets are missing original files. Please update the file paths", VersionText);
