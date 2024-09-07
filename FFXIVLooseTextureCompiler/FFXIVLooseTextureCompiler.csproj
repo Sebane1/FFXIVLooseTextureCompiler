@@ -14,7 +14,11 @@
     <RepositoryUrl>https://github.com/Sebane1/FFXIVLooseTextureCompiler</RepositoryUrl>
     <ApplicationIcon>FFXIVTP.ico</ApplicationIcon>
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +27,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows|AnyCPU'">
+    <DefineConstants>$(DefineConstants);dotnet build --self-contained;dotnet publish --self-contained;dotnet publish -r win-x64</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows|AnyCPU'">
+    <DefineConstants>$(DefineConstants);dotnet build --self-contained;dotnet publish --self-contained;dotnet build -r win-x64</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

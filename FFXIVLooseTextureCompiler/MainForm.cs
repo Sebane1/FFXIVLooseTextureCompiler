@@ -162,11 +162,11 @@ namespace FFXIVLooseTextureCompiler {
         private async void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             ExportJson();
             ExportMeta();
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
             await PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
             await PenumbraHttpApi.Redraw(0);
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
             await PenumbraHttpApi.Redraw(0);
             hasDoneReload = true;
             textureSetList_SelectedIndexChanged(this, EventArgs.Empty);
@@ -301,8 +301,8 @@ namespace FFXIVLooseTextureCompiler {
                         SaveProject(Path.Combine(penumbraModPath, modNameTextBox.Text + ".ffxivtp"), true);
                         textureSets = new List<TextureSet>();
                         foreach (TextureSet item in textureList.Items) {
+                            UniversalTextureSetCreator.ConfigureTextureSet(item);
                             if (item.OmniExportMode) {
-                                UniversalTextureSetCreator.ConfigureOmniConfiguration(item);
                                 exportProgress.Maximum += (item.ChildSets.Count * 4);
                             }
                             textureSets.Add(item);
@@ -690,7 +690,8 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
             if (textureSet != null) {
                 if (!textureSet.OmniExportMode) {
-                    UniversalTextureSetCreator.ConfigureOmniConfiguration(textureSet);
+                    textureSet.OmniExportMode = true;
+                    UniversalTextureSetCreator.ConfigureTextureSet(textureSet);
                     MessageBox.Show("Enabling universal compatibility mode allows your currently selected body or face textures to be compatible with other body/face configurations on a best effort basis.\r\n\r\nWarning: this slows down the generation process, so you will need to click the finalize button to update changes on bodies that arent this one.", VersionText);
                 } else {
                     textureSet.OmniExportMode = false;
