@@ -13,10 +13,6 @@ Tutorials and resources can be found here:
 
 https://loosetexturecompiler.zip/
 
-Make sure you have .net desktop runtime 7.0 (not to be confused with .net runtime 7.0)
-
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.1-windows-x64-installer
-
 You may need to install XNormal if you run into any errors that say stuff is missing (using universal texture set feature).
 
 https://xnormal.net/
