@@ -1417,6 +1417,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.BiboToGen3(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1430,6 +1432,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.Gen3ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1444,6 +1448,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.Gen3ToGen2(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1458,6 +1464,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.Gen2ToGen3(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1472,6 +1480,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.Gen2ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1490,6 +1500,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.BiboToGen2(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1505,6 +1517,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.OtopopToVanillaLala(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1520,6 +1534,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.VanillaLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1534,6 +1550,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.VanillaLalaToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1548,6 +1566,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.OtopopToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1562,6 +1582,8 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     XNormal.AsymLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
+                    MessageBox.Show("Conversion successful!");
+                    NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
@@ -1740,11 +1762,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
-                TexIO.SaveBitmap(ImageManipulation.ExtractRed(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_R."), ".png"));
-                TexIO.SaveBitmap(ImageManipulation.ExtractGreen(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_G."), ".png"));
-                TexIO.SaveBitmap(ImageManipulation.ExtractBlue(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_B."), ".png"));
-                TexIO.SaveBitmap(ImageManipulation.ExtractAlpha(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_A."), ".png"));
+                ImageManipulation.SplitImageToRGBA(openFileDialog.FileName);
                 MessageBox.Show("Image successfully split into seperate channels", VersionText);
             }
         }
@@ -1752,15 +1770,19 @@ namespace FFXIVLooseTextureCompiler {
         private void multiCreatorToolStripMenuItem_Click(object sender, EventArgs e) {
             new MaskCreator().Show();
         }
-
+        private void NavigateToFolder(string folder) {
+            Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                FileName = Path.GetDirectoryName(folder),
+                UseShellExecute = true,
+                Verb = "OPEN"
+            });
+        }
         private void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Bitmap image = TexIO.ResolveBitmap(openFileDialog.FileName);
-                TexIO.SaveBitmap(ImageManipulation.ExtractRGB(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_RGB."), ".png"));
-                TexIO.SaveBitmap(ImageManipulation.ExtractAlpha(image), ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(openFileDialog.FileName, "_Alpha."), ".png"));
+                ImageManipulation.SplitRGBAndAlpha(openFileDialog.FileName);
                 MessageBox.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
