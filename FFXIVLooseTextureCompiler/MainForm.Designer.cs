@@ -65,8 +65,10 @@
             eyeToolsToolStripMenuItem = new ToolStripMenuItem();
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem = new ToolStripMenuItem();
             convertImageToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
-            convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             generateMapsForDawntrailEyeDiffuse = new ToolStripMenuItem();
+            convertFolderToEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
+            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem = new ToolStripMenuItem();
             faceToolsToolStripMenuItem = new ToolStripMenuItem();
             legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
@@ -178,6 +180,7 @@
             label10 = new Label();
             label9 = new Label();
             label7 = new Label();
+            convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -463,28 +466,28 @@
             // newToolStripMenuItem
             // 
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(180, 22);
+            newToolStripMenuItem.Size = new Size(127, 22);
             newToolStripMenuItem.Text = "New";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(180, 22);
+            openToolStripMenuItem.Size = new Size(127, 22);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Size = new Size(127, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(180, 22);
+            saveAsToolStripMenuItem.Size = new Size(127, 22);
             saveAsToolStripMenuItem.Text = "Save As";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
@@ -492,7 +495,7 @@
             // 
             templatesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { importCustomTemplateToolStripMenuItem });
             templatesToolStripMenuItem.Name = "templatesToolStripMenuItem";
-            templatesToolStripMenuItem.Size = new Size(180, 22);
+            templatesToolStripMenuItem.Size = new Size(127, 22);
             templatesToolStripMenuItem.Text = "Templates";
             // 
             // importCustomTemplateToolStripMenuItem
@@ -547,7 +550,7 @@
             // 
             // eyeToolsToolStripMenuItem
             // 
-            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse });
+            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse, convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem, autoAssembleAndExportEyeModsFromFolderToolStripMenuItem });
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
             eyeToolsToolStripMenuItem.Size = new Size(286, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
@@ -555,30 +558,44 @@
             // convertLegacyEyeMapToDawntrailMapToolStripMenuItem
             // 
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Name = "convertLegacyEyeMapToDawntrailMapToolStripMenuItem";
-            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Size = new Size(329, 22);
-            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Text = "Convert Legacy Eye Mask To Dawntrail Eye Maps";
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Size = new Size(386, 22);
+            convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Text = "Convert Legacy Eye Multi To Dawntrail Eye Maps";
             convertLegacyEyeMapToDawntrailMapToolStripMenuItem.Click += convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click;
             // 
             // convertImageToDawntrailEyeMapsToolStripMenuItem
             // 
             convertImageToDawntrailEyeMapsToolStripMenuItem.Name = "convertImageToDawntrailEyeMapsToolStripMenuItem";
-            convertImageToDawntrailEyeMapsToolStripMenuItem.Size = new Size(329, 22);
-            convertImageToDawntrailEyeMapsToolStripMenuItem.Text = "Convert Image To Dawntrail Eye Maps";
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Size = new Size(386, 22);
+            convertImageToDawntrailEyeMapsToolStripMenuItem.Text = "Convert Generic Image To Dawntrail Eye Maps";
             convertImageToDawntrailEyeMapsToolStripMenuItem.Click += convertImageToDawntrailEyeMapsToolStripMenuItem_Click;
-            // 
-            // convertFolderToEyeMapsToolStripMenuItem
-            // 
-            convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
-            convertFolderToEyeMapsToolStripMenuItem.Size = new Size(329, 22);
-            convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder To Eye Maps";
-            convertFolderToEyeMapsToolStripMenuItem.Click += convertFolderToEyeMapsToolStripMenuItem_Click;
             // 
             // generateMapsForDawntrailEyeDiffuse
             // 
             generateMapsForDawntrailEyeDiffuse.Name = "generateMapsForDawntrailEyeDiffuse";
-            generateMapsForDawntrailEyeDiffuse.Size = new Size(329, 22);
-            generateMapsForDawntrailEyeDiffuse.Text = "Convert Maps For Dawntrail Eye Diffuse";
+            generateMapsForDawntrailEyeDiffuse.Size = new Size(386, 22);
+            generateMapsForDawntrailEyeDiffuse.Text = "Create Maps For Existing Dawntrail Eye Base";
             generateMapsForDawntrailEyeDiffuse.Click += generateMapsForDawntrailEyeDiffuseToolStripMenuItem_Click;
+            // 
+            // convertFolderToEyeMapsToolStripMenuItem
+            // 
+            convertFolderToEyeMapsToolStripMenuItem.Name = "convertFolderToEyeMapsToolStripMenuItem";
+            convertFolderToEyeMapsToolStripMenuItem.Size = new Size(386, 22);
+            convertFolderToEyeMapsToolStripMenuItem.Text = "Convert Folder Of Generic Eye Textures To Eye Maps";
+            convertFolderToEyeMapsToolStripMenuItem.Click += convertFolderToEyeMapsToolStripMenuItem_Click;
+            // 
+            // createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem
+            // 
+            createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem.Name = "createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem";
+            createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem.Size = new Size(386, 22);
+            createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem.Text = "Create Maps For Folder Of Existing Dawntrail Eye Bases";
+            createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem.Click += createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem_Click;
+            // 
+            // autoAssembleAndExportEyeModsFromFolderToolStripMenuItem
+            // 
+            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem.Name = "autoAssembleAndExportEyeModsFromFolderToolStripMenuItem";
+            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem.Size = new Size(386, 22);
+            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem.Text = "Auto Assemble And Export Eye Mods From Folder";
+            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem.Click += autoAssembleAndExportEyeModsFromFolderToolStripMenuItem_Click;
             // 
             // faceToolsToolStripMenuItem
             // 
@@ -871,7 +888,7 @@
             // enableModshareToolStripMenuItem
             // 
             enableModshareToolStripMenuItem.Name = "enableModshareToolStripMenuItem";
-            enableModshareToolStripMenuItem.Size = new Size(180, 22);
+            enableModshareToolStripMenuItem.Size = new Size(171, 22);
             enableModshareToolStripMenuItem.Text = "Enable Modshare";
             enableModshareToolStripMenuItem.Click += enableModshareToolStripMenuItem_Click;
             // 
@@ -879,7 +896,7 @@
             // 
             sendCurrentModToolStripMenuItem.Enabled = false;
             sendCurrentModToolStripMenuItem.Name = "sendCurrentModToolStripMenuItem";
-            sendCurrentModToolStripMenuItem.Size = new Size(180, 22);
+            sendCurrentModToolStripMenuItem.Size = new Size(171, 22);
             sendCurrentModToolStripMenuItem.Text = "Send Current Mod";
             sendCurrentModToolStripMenuItem.Click += sendCurrentModToolStripMenuItem_Click;
             // 
@@ -1522,6 +1539,13 @@
             label7.TabIndex = 34;
             label7.Text = "Gender";
             // 
+            // convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem
+            // 
+            convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem.Name = "convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem";
+            convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem.Size = new Size(386, 22);
+            convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem.Text = "Convert Folder Of Legacy Eye Multis To Dawntrail Eye Maps";
+            convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem.Click += convertFolderOfLegacyEyeMultiMapsToolStripMenuItem_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -1743,6 +1767,9 @@
         private ToolStripMenuItem fToolStripMenuItem;
         private ToolStripMenuItem seperateTextureByDifferenceToolStripMenuItem;
         private Label label16;
+        private ToolStripMenuItem createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem;
+        private ToolStripMenuItem autoAssembleAndExportEyeModsFromFolderToolStripMenuItem;
+        private ToolStripMenuItem convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

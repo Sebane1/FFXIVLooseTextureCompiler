@@ -16,8 +16,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public bool IsForEyes { get; internal set; }
-
-        private void acceptChangesButton_Click(object sender, EventArgs e) {
+        public void AcceptChanges() {
             if (!string.IsNullOrEmpty(replacementString.Text)) {
                 foreach (TextureSet textureSet in textureSet) {
                     if (textureSet.TextureSetName.ToLower().Contains(replacementString.Text.ToLower())
@@ -46,6 +45,9 @@ namespace FFXIVLooseTextureCompiler {
             } else {
                 MessageBox.Show("Search value cannot be empty!", Text);
             }
+        }
+        private void acceptChangesButton_Click(object sender, EventArgs e) {
+            AcceptChanges();
         }
 
         public bool IsValidGamePathFormat(string input) {

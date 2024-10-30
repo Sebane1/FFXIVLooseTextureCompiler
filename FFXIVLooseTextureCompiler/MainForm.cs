@@ -10,8 +10,10 @@ using FFXIVVoicePackCreator;
 using LooseTextureCompilerCore.Json;
 using LooseTextureCompilerCore.Racial;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Imaging;
+using System.IO.Compression;
+using System.Windows.Forms;
 using TypingConnector;
 #endregion
 namespace FFXIVLooseTextureCompiler {
@@ -413,43 +415,54 @@ namespace FFXIVLooseTextureCompiler {
                     menuItem.Text = Path.GetFileNameWithoutExtension(file);
                     menuItem.Click += (s, e) => {
                         string value = file;
-                        OpenTemplate(value);
-                        MessageBox.Show("You can now select textures to bulk replace in the template.", VersionText);
-                        FindAndReplace findAndReplace = new FindAndReplace();
-                        textureList.SelectedIndex = textureList.Items.Count - 1;
-                        TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-                        Tokenizer tokenizer = new Tokenizer(sourceTextureSet.TextureSetName);
-                        findAndReplace.ReplacementString.Text = tokenizer.GetToken();
-                        findAndReplace.ReplacementGroup.Text = "";
-                        findAndReplace.Base.CurrentPath = Base.CurrentPath;
-                        findAndReplace.Normal.CurrentPath = normal.CurrentPath;
-                        findAndReplace.Mask.CurrentPath = mask.CurrentPath;
-                        findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
-                        findAndReplace.Glow.CurrentPath = glow.CurrentPath;
-
-                        findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
-                        if (_lastGroupName != "Default") {
-                            findAndReplace.ReplacementGroup.Text = sourceTextureSet.GroupName
-                            != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
-                        }
-                        if (findAndReplace.ShowDialog() == DialogResult.OK) {
-                            foreach (TextureSet textureSet in textureList.Items) {
-                                AddWatcher(textureSet.Base);
-                                AddWatcher(textureSet.Normal);
-                                AddWatcher(textureSet.Mask);
-                                AddWatcher(textureSet.NormalMask);
-                                AddWatcher(textureSet.Glow);
-                            }
-                            textureList.SelectedIndex = -1;
-                            MessageBox.Show("Replacement succeeded.", VersionText);
-                        }
+                        OpenLoadTemplate(value);
                     };
                     templatesToolStripMenuItem.DropDownItems.Add(menuItem);
                 }
             }
         }
+
+        private void OpenLoadTemplate(string templatePaths, string overrideGroupName = "", TextureSet paths = null) {
+            OpenTemplate(templatePaths, overrideGroupName);
+            if (paths == null) {
+                MessageBox.Show("You can now select textures to bulk replace in the template.", VersionText);
+            }
+            FindAndReplace findAndReplace = new FindAndReplace();
+            textureList.SelectedIndex = textureList.Items.Count - 1;
+            TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
+            Tokenizer tokenizer = new Tokenizer(sourceTextureSet.TextureSetName);
+            findAndReplace.ReplacementString.Text = tokenizer.GetToken();
+            findAndReplace.ReplacementGroup.Text = "";
+            findAndReplace.Base.CurrentPath = paths != null ? paths.Base : Base.CurrentPath;
+            findAndReplace.Normal.CurrentPath = paths != null ? paths.Normal : normal.CurrentPath;
+            findAndReplace.Mask.CurrentPath = paths != null ? paths.Mask : mask.CurrentPath;
+            findAndReplace.Glow.CurrentPath = paths != null ? paths.Glow : glow.CurrentPath;
+            findAndReplace.Bounds.CurrentPath = bounds.CurrentPath;
+
+            findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
+            if (_lastGroupName != "Default") {
+                findAndReplace.ReplacementGroup.Text = sourceTextureSet.GroupName
+                != sourceTextureSet.TextureSetName ? sourceTextureSet.GroupName : "";
+            }
+            if (paths == null && findAndReplace.ShowDialog() == DialogResult.OK) {
+                foreach (TextureSet textureSet in textureList.Items) {
+                    AddWatcher(textureSet.Base);
+                    AddWatcher(textureSet.Normal);
+                    AddWatcher(textureSet.Mask);
+                    AddWatcher(textureSet.NormalMask);
+                    AddWatcher(textureSet.Glow);
+                }
+                textureList.SelectedIndex = -1;
+                MessageBox.Show("Replacement succeeded.", VersionText);
+            } else {
+                findAndReplace.AcceptChanges();
+            }
+        }
+
         private void ConfigurePenumbraModFolder() {
-            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. This should be where you have penumbra set to use mods.\r\n\r\nNote:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
+            MessageBox.Show("Please configure where your penumbra mods folder is, we will remember it for all future exports. " +
+                "This should be where you have penumbra set to use mods.\r\n\r\n" +
+                "Note:\r\nAVOID MANUALLY CREATING ANY NEW FOLDERS IN YOUR PENUMBRA FOLDER, ONLY SELECT THE BASE FOLDER!", VersionText);
             FolderBrowserDialog folderSelect = new FolderBrowserDialog();
             if (folderSelect.ShowDialog() == DialogResult.OK) {
                 penumbraModPath = folderSelect.SelectedPath;
@@ -1268,12 +1281,12 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        public void OpenTemplate(string path) {
+        public void OpenTemplate(string path, string overridePath = "") {
             using (StreamReader file = File.OpenText(path)) {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = (ProjectFile)serializer.Deserialize(file, typeof(ProjectFile));
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
-                if (templateConfiguration.ShowDialog() == DialogResult.OK) {
+                if (overridePath != null || templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
                     int missingFiles = 0;
                     bool foundFaceMod = false;
@@ -1281,9 +1294,16 @@ namespace FFXIVLooseTextureCompiler {
                         ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                     }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
-                        _lastGroupName = templateConfiguration.GroupName;
-                        if (!templateConfiguration.GroupName.Contains("Default")) {
-                            textureSet.GroupName = templateConfiguration.GroupName;
+                        if (overridePath != null) {
+                            _lastGroupName = overridePath;
+                            if (!overridePath.Contains("Default")) {
+                                textureSet.GroupName = overridePath;
+                            }
+                        } else {
+                            _lastGroupName = templateConfiguration.GroupName;
+                            if (!templateConfiguration.GroupName.Contains("Default")) {
+                                textureSet.GroupName = templateConfiguration.GroupName;
+                            }
                         }
                         AddWatcher(textureSet.Base);
                         AddWatcher(textureSet.Normal);
@@ -1678,15 +1698,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(openFileDialog.FileName, true);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
-                try {
-                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
-                        UseShellExecute = true,
-                        Verb = "OPEN"
-                    });
-                } catch {
-
-                }
+                AutoModPackingPrompt(openFileDialog.FileName);
             }
         }
 
@@ -1726,9 +1738,61 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName, true);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
+                AutoModPackingPrompt(openFileDialog.FileName);
+            }
+        }
+        public void AutoModPackingPrompt(string filePath) {
+            if (MessageBox.Show("Would you like to export these textures as a mod right now?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                string path1 = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(filePath, "_eye_base"), ".png");
+                string path2 = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(filePath, "_eye_norm"), ".png");
+                string path3 = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(filePath, "_eye_mask"), ".png");
+                string modPackPackageFolder = Path.Combine(Path.GetDirectoryName(path1), "Mod Packs");
+                ExportEyePackList(new string[] { path1, path2, path3 }, modPackPackageFolder);
+            } else {
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                        FileName = Path.GetDirectoryName(filePath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+        private void convertFolderOfLegacyEyeMultiMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of generic eye textures to generate maps for.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            int maxItems = 0;
+            int itemsCounted = 0;
+            int calculatingItems = 0;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
+                    if (!file.Contains("_base") && !file.Contains("_norm") && !file.Contains("_mask")) {
+                        maxItems++;
+                        while (calculatingItems > Environment.ProcessorCount) {
+                            Thread.Sleep(3000);
+                        }
+                        calculatingItems++;
+                        Task.Run(() => {
+                            try {
+                                ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file, true);
+                            } catch {
+
+                            }
+                            itemsCounted++;
+                            calculatingItems--;
+                        });
+                    }
+                }
+                while (itemsCounted < maxItems) {
+                    Thread.Sleep(5000);
+                }
+                MessageBox.Show("Images successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
                         UseShellExecute = true,
                         Verb = "OPEN"
                     });
@@ -1738,11 +1802,33 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private void convertFolderToEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of generic eye textures to generate maps for.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            int maxItems = 0;
+            int itemsCounted = 0;
+            int calculatingItems = 0;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
-                    ImageManipulation.ConvertOldEyeMultiToDawntrailEyeMaps(file, true);
+                    if (!file.Contains("_base") && !file.Contains("_norm") && !file.Contains("_mask")) {
+                        maxItems++;
+                        while (calculatingItems > Environment.ProcessorCount) {
+                            Thread.Sleep(3000);
+                        }
+                        calculatingItems++;
+                        Task.Run(() => {
+                            try {
+                                ImageManipulation.ConvertImageToEyeMapsDawntrail(file, true);
+                            } catch {
+
+                            }
+                            itemsCounted++;
+                            calculatingItems--;
+                        });
+                    }
+                }
+                while (itemsCounted < maxItems) {
+                    Thread.Sleep(5000);
                 }
                 MessageBox.Show("Images successfully converted to eye maps", VersionText);
                 try {
@@ -2366,15 +2452,7 @@ namespace FFXIVLooseTextureCompiler {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 ImageManipulation.ConvertImageToEyeMapsDawntrail(openFileDialog.FileName, false);
                 MessageBox.Show("Image successfully converted to eye maps", VersionText);
-                try {
-                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
-                        FileName = Path.GetDirectoryName(openFileDialog.FileName),
-                        UseShellExecute = true,
-                        Verb = "OPEN"
-                    });
-                } catch {
-
-                }
+                AutoModPackingPrompt(openFileDialog.FileName);
             }
         }
 
@@ -2441,6 +2519,201 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
+        }
+
+        private void createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of dawntrail eye maps to generate missing maps for.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            int maxItems = 0;
+            int itemsCounted = 0;
+            int calculatingItems = 0;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
+                    if (file.Contains("_base") && !file.Contains("_norm") && !file.Contains("_mask")) {
+                        maxItems++;
+                        while (calculatingItems > Environment.ProcessorCount) {
+                            Thread.Sleep(3000);
+                        }
+                        calculatingItems++;
+                        Task.Run(() => {
+                            try {
+                                ImageManipulation.ConvertImageToEyeMapsDawntrail(file, false);
+                            } catch {
+
+                            }
+                            itemsCounted++;
+                            calculatingItems--;
+                        });
+                    }
+                }
+                while (itemsCounted < maxItems) {
+                    Thread.Sleep(5000);
+                }
+                MessageBox.Show("Images successfully converted to eye maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
+        private void convertFolderToEyeMapsToolStripMenuItem1_Click(object sender, EventArgs e) {
+
+        }
+
+        private void autoAssembleAndExportEyeModsFromFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of eye maps to auto assemble.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                var items = Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tga") || s.EndsWith(".tex"));
+                modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                string modPackPackageFolder = Path.Combine(folderBrowserDialog.SelectedPath, "Mod Packs");
+                ExportEyePackList(items, modPackPackageFolder);
+            }
+        }
+        public void ExportEyePackList(IEnumerable<string> files, string modPackPackageFolder) {
+            Dictionary<string, TextureSet> keyValuePairs = new Dictionary<string, TextureSet>();
+            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            foreach (string file in files) {
+                if (file.Contains("_eye")) {
+                    try {
+                        string cleanedName = Path.GetFileNameWithoutExtension(file)
+                        .Replace("_eye", "").Replace("_base", "").Replace("_norm", "").Replace("_mask", "");
+                        if (!keyValuePairs.ContainsKey(cleanedName)) {
+                            keyValuePairs[cleanedName] = new TextureSet();
+                        }
+                        if (file.Contains("_base")) {
+                            keyValuePairs[cleanedName].Base = file;
+                        }
+                        if (file.Contains("_norm")) {
+                            keyValuePairs[cleanedName].Normal = file;
+                        }
+                        if (file.Contains("_mask")) {
+                            keyValuePairs[cleanedName].Mask = file;
+                        }
+                    } catch (Exception weee) {
+                        MessageBox.Show(weee.Message, "Error");
+                    }
+                }
+            }
+            Task.Run(() => {
+                foreach (var item in keyValuePairs) {
+                    Thread.Sleep(500);
+                    bool executed = false;
+                    string modName1 = item.Key + " Eye Mod";
+                    string modName2 = item.Key + " Right Eye Mod";
+                    string modPath1 = "";
+                    string modPath2 = "";
+                  //  while (!executed) {
+                        generateButton.Invoke(() => {
+                            try {
+                                NewProject();
+                                OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Symmetrical Eyes And Left Eye", item.Value);
+                                OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Right Eye", item.Value);
+                                foreach (TextureSet textureSet in textureList.Items) {
+                                    if (textureSet.GroupName == "Right Eye") {
+                                        textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
+                                        textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
+                                        textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
+                                        textureSet.InternalMaterialPath = textureSet.InternalMaterialPath.Replace("_a", "_b");
+                                    }
+                                    textureSet.Glow = "c:\\dontRemoveButYouCanReplace.png";
+                                }
+                                generationType.SelectedIndex = 3;
+                                choiceTypeIndex = 3;
+                                modNameTextBox.Text = modName1;
+                                generateButton_Click(this, EventArgs.Empty);
+                                modPath1 = modPath;
+                                executed = true;
+                            } catch (Exception e) {
+                                MessageBox.Show(e.Message, "Error");
+                            }
+                        });
+                   // }
+                    while (lockDuplicateGeneration) {
+                        Thread.Sleep(2000);
+                    }
+                    //Thread.Sleep(500);
+                    //executed = false;
+                    //while (!executed) {
+                    //    generateButton.Invoke(() => {
+                    //        try {
+                    //            NewProject();
+                    //            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Eye Pack", item.Value);
+                    //            foreach (TextureSet textureSet in textureList.Items) {
+                    //                textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
+                    //                textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
+                    //                textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
+                    //                textureSet.InternalMaterialPath = textureSet.InternalMaterialPath.Replace("_a", "_b");
+                    //                textureSet.Glow = "c:\\eeeeee.tex";
+                    //            }
+                    //            generationType.SelectedIndex = 3;
+                    //            choiceTypeIndex = 3;
+                    //            modNameTextBox.Text = modName2;
+                    //            generateButton_Click(this, EventArgs.Empty);
+                    //            modPath2 = modPath;
+                    //            executed = true;
+                    //        } catch (Exception e) {
+                    //            MessageBox.Show(e.Message, "Error");
+                    //        }
+                    //    });
+                    //}
+                    //while (lockDuplicateGeneration) {
+                    //    Thread.Sleep(2000);
+                    //}
+                    Task.Run(() => {
+                        Directory.CreateDirectory(modPackPackageFolder);
+                        string packagingFolder = Path.Combine(modPackPackageFolder, modName1);
+                        //Directory.CreateDirectory(packagingFolder);
+                        string path1 = Path.Combine(modPackPackageFolder, modName1 + ".pmp");
+                        //string path2 = Path.Combine(packagingFolder, modName2 + ".pmp");
+                        if (File.Exists(path1)) {
+                            File.Delete(path1);
+                        }
+                        //if (File.Exists(path2)) {
+                        //    File.Delete(path2);
+                        //}
+                        ZipFile.CreateFromDirectory(modPath1, path1);
+                        //ZipFile.CreateFromDirectory(modPath2, path2);
+                        //ZipFile.CreateFromDirectory(packagingFolder, Path.Combine(modPackPackageFolder, modName1 + ".zip"));
+                        //Thread.Sleep(500);
+                        //if (File.Exists(path1)) {
+                        //    File.Delete(path1);
+                        //}
+                        //if (File.Exists(path2)) {
+                        //    File.Delete(path2);
+                        //}
+                        //while (Directory.Exists(packagingFolder)) {
+                        //    try {
+                        //        Thread.Sleep(1000);
+                        //        Directory.Delete(packagingFolder, true);
+                        //    } catch {
+
+                        //    }
+                        //}
+                    });
+                }
+                generateButton.Invoke(() => {
+                    MessageBox.Show("Your .pmp archives have been exported, but are also already in Penumbra.", VersionText);
+                    try {
+                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                            FileName = modPackPackageFolder,
+                            UseShellExecute = true,
+                            Verb = "OPEN"
+                        });
+                    } catch {
+
+                    }
+                });
+            }
+            );
         }
     }
 }
