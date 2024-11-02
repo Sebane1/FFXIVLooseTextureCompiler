@@ -83,7 +83,12 @@ namespace FFXIVLooseTextureCompiler {
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
             textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
+            textureProcessor.OnError += TextureProcessor_OnError;
             Racial.RacePaths.otopopNoticeTriggered += RacePaths_otopopNoticeTriggered;
+        }
+
+        private void TextureProcessor_OnError(object? sender, string e) {
+            MessageBox.Show(e);
         }
 
         private void RacePaths_otopopNoticeTriggered(object? sender, EventArgs e) {
@@ -881,8 +886,8 @@ namespace FFXIVLooseTextureCompiler {
                 DisposeWatcher(textureSet.NormalMask, bounds);
                 DisposeWatcher(textureSet.Glow, glow);
                 DisposeWatcher(textureSet.Material, null);
-                if (!string.IsNullOrWhiteSpace(textureSet.Glow)) {
-                    generatMaskCheckBox.Checked = true;
+                if (!string.IsNullOrWhiteSpace(textureSet.Glow) && !textureSet.InternalBasePath.Contains("eye")) {
+                    bakeNormals.Checked = true;
                 }
                 textureSet.Base = Base.CurrentPath;
                 textureSet.Normal = normal.CurrentPath;
@@ -2611,32 +2616,32 @@ namespace FFXIVLooseTextureCompiler {
                     string modName2 = item.Key + " Right Eye Mod";
                     string modPath1 = "";
                     string modPath2 = "";
-                  //  while (!executed) {
-                        generateButton.Invoke(() => {
-                            try {
-                                NewProject();
-                                OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Symmetrical Eyes And Left Eye", item.Value);
-                                OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Right Eye", item.Value);
-                                foreach (TextureSet textureSet in textureList.Items) {
-                                    if (textureSet.GroupName == "Right Eye") {
-                                        textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
-                                        textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
-                                        textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
-                                        textureSet.InternalMaterialPath = textureSet.InternalMaterialPath.Replace("_a", "_b");
-                                    }
-                                    textureSet.Glow = "c:\\dontRemoveButYouCanReplace.png";
+                    //  while (!executed) {
+                    generateButton.Invoke(() => {
+                        try {
+                            NewProject();
+                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Symmetrical Eyes And Left Eye", item.Value);
+                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Right Eye", item.Value);
+                            foreach (TextureSet textureSet in textureList.Items) {
+                                if (textureSet.GroupName == "Right Eye") {
+                                    textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
+                                    textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
+                                    textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
+                                    textureSet.InternalMaterialPath = textureSet.InternalMaterialPath.Replace("_a", "_b");
                                 }
-                                generationType.SelectedIndex = 3;
-                                choiceTypeIndex = 3;
-                                modNameTextBox.Text = modName1;
-                                generateButton_Click(this, EventArgs.Empty);
-                                modPath1 = modPath;
-                                executed = true;
-                            } catch (Exception e) {
-                                MessageBox.Show(e.Message, "Error");
+                                textureSet.Glow = "c:\\dontRemoveButYouCanReplace.png";
                             }
-                        });
-                   // }
+                            generationType.SelectedIndex = 3;
+                            choiceTypeIndex = 3;
+                            modNameTextBox.Text = modName1;
+                            generateButton_Click(this, EventArgs.Empty);
+                            modPath1 = modPath;
+                            executed = true;
+                        } catch (Exception e) {
+                            MessageBox.Show(e.Message, "Error");
+                        }
+                    });
+                    // }
                     while (lockDuplicateGeneration) {
                         Thread.Sleep(2000);
                     }
