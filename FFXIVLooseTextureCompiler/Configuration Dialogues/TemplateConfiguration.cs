@@ -1,6 +1,6 @@
 ﻿namespace FFXIVLooseTextureCompiler {
     public partial class TemplateConfiguration : Form {
-        private string groupName;
+        private string groupName = "";
 
         public TemplateConfiguration() {
             InitializeComponent();

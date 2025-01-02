@@ -1,5 +1,4 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
-using OtterTex;
 using Penumbra.LTCImport.Textures;
 using System.Diagnostics;
 using System.Drawing.Imaging;

@@ -1291,7 +1291,7 @@ namespace FFXIVLooseTextureCompiler {
                 JsonSerializer serializer = new JsonSerializer();
                 ProjectFile projectFile = (ProjectFile)serializer.Deserialize(file, typeof(ProjectFile));
                 TemplateConfiguration templateConfiguration = new TemplateConfiguration();
-                if (overridePath != null || templateConfiguration.ShowDialog() == DialogResult.OK) {
+                if (!string.IsNullOrEmpty(overridePath) || templateConfiguration.ShowDialog() == DialogResult.OK) {
                     BringToFront();
                     int missingFiles = 0;
                     bool foundFaceMod = false;
@@ -1299,7 +1299,7 @@ namespace FFXIVLooseTextureCompiler {
                         ProjectUpgrade(projectFile, ref missingFiles, ref foundFaceMod);
                     }
                     foreach (TextureSet textureSet in projectFile.TextureSets) {
-                        if (overridePath != null) {
+                        if (!string.IsNullOrEmpty(overridePath)) {
                             _lastGroupName = overridePath;
                             if (!overridePath.Contains("Default")) {
                                 textureSet.GroupName = overridePath;
@@ -1765,6 +1765,25 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
+        public void AutoModPackingPromptContacts(string filePath) {
+            if (MessageBox.Show("Would you like to export these textures as a mod right now?", VersionText, MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                string path1 = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(filePath, "_contactBase"), ".png");
+                string modPackPackageFolder = Path.Combine(Path.GetDirectoryName(path1), "Mod Packs");
+                ExportContactPackList(new string[] { path1 }, modPackPackageFolder);
+            } else {
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(filePath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
         private void convertFolderOfLegacyEyeMultiMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("Pick folder of generic eye textures to generate maps for.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
@@ -2616,7 +2635,6 @@ namespace FFXIVLooseTextureCompiler {
                     string modName2 = item.Key + " Right Eye Mod";
                     string modPath1 = "";
                     string modPath2 = "";
-                    //  while (!executed) {
                     generateButton.Invoke(() => {
                         try {
                             NewProject();
@@ -2641,68 +2659,17 @@ namespace FFXIVLooseTextureCompiler {
                             MessageBox.Show(e.Message, "Error");
                         }
                     });
-                    // }
                     while (lockDuplicateGeneration) {
                         Thread.Sleep(2000);
                     }
-                    //Thread.Sleep(500);
-                    //executed = false;
-                    //while (!executed) {
-                    //    generateButton.Invoke(() => {
-                    //        try {
-                    //            NewProject();
-                    //            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Eye Pack", item.Value);
-                    //            foreach (TextureSet textureSet in textureList.Items) {
-                    //                textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
-                    //                textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
-                    //                textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
-                    //                textureSet.InternalMaterialPath = textureSet.InternalMaterialPath.Replace("_a", "_b");
-                    //                textureSet.Glow = "c:\\eeeeee.tex";
-                    //            }
-                    //            generationType.SelectedIndex = 3;
-                    //            choiceTypeIndex = 3;
-                    //            modNameTextBox.Text = modName2;
-                    //            generateButton_Click(this, EventArgs.Empty);
-                    //            modPath2 = modPath;
-                    //            executed = true;
-                    //        } catch (Exception e) {
-                    //            MessageBox.Show(e.Message, "Error");
-                    //        }
-                    //    });
-                    //}
-                    //while (lockDuplicateGeneration) {
-                    //    Thread.Sleep(2000);
-                    //}
                     Task.Run(() => {
                         Directory.CreateDirectory(modPackPackageFolder);
                         string packagingFolder = Path.Combine(modPackPackageFolder, modName1);
-                        //Directory.CreateDirectory(packagingFolder);
                         string path1 = Path.Combine(modPackPackageFolder, modName1 + ".pmp");
-                        //string path2 = Path.Combine(packagingFolder, modName2 + ".pmp");
                         if (File.Exists(path1)) {
                             File.Delete(path1);
                         }
-                        //if (File.Exists(path2)) {
-                        //    File.Delete(path2);
-                        //}
                         ZipFile.CreateFromDirectory(modPath1, path1);
-                        //ZipFile.CreateFromDirectory(modPath2, path2);
-                        //ZipFile.CreateFromDirectory(packagingFolder, Path.Combine(modPackPackageFolder, modName1 + ".zip"));
-                        //Thread.Sleep(500);
-                        //if (File.Exists(path1)) {
-                        //    File.Delete(path1);
-                        //}
-                        //if (File.Exists(path2)) {
-                        //    File.Delete(path2);
-                        //}
-                        //while (Directory.Exists(packagingFolder)) {
-                        //    try {
-                        //        Thread.Sleep(1000);
-                        //        Directory.Delete(packagingFolder, true);
-                        //    } catch {
-
-                        //    }
-                        //}
                     });
                 }
                 generateButton.Invoke(() => {
@@ -2719,6 +2686,139 @@ namespace FFXIVLooseTextureCompiler {
                 });
             }
             );
+        }
+
+        public void ExportContactPackList(IEnumerable<string> files, string modPackPackageFolder) {
+            Dictionary<string, TextureSet> keyValuePairs = new Dictionary<string, TextureSet>();
+            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            foreach (string file in files) {
+                if (file.Contains("_contactBase")) {
+                    try {
+                        string cleanedName = Path.GetFileNameWithoutExtension(file)
+                        .Replace("_contactBase", "");
+                        if (!keyValuePairs.ContainsKey(cleanedName)) {
+                            keyValuePairs[cleanedName] = new TextureSet();
+                        }
+                        if (file.Contains("_contactBase")) {
+                            keyValuePairs[cleanedName].Base = file;
+                        }
+                    } catch (Exception weee) {
+                        MessageBox.Show(weee.Message, "Error");
+                    }
+                }
+            }
+            Task.Run(() => {
+                foreach (var item in keyValuePairs) {
+                    Thread.Sleep(500);
+                    bool executed = false;
+                    string modName1 = item.Key + " Contact Mod";
+                    string modPath1 = "";
+                    generateButton.Invoke(() => {
+                        try {
+                            NewProject();
+                            OpenLoadTemplate(templatePath + "\\" + "- Animated Contact Lense.ffxivtp", "Default", item.Value);
+                            generationType.SelectedIndex = 3;
+                            choiceTypeIndex = 3;
+                            modNameTextBox.Text = modName1;
+                            generateButton_Click(this, EventArgs.Empty);
+                            modPath1 = modPath;
+                            executed = true;
+                        } catch (Exception e) {
+                            MessageBox.Show(e.Message, "Error");
+                        }
+                    });
+                    while (lockDuplicateGeneration) {
+                        Thread.Sleep(2000);
+                    }
+                    Task.Run(() => {
+                        Directory.CreateDirectory(modPackPackageFolder);
+                        string packagingFolder = Path.Combine(modPackPackageFolder, modName1);
+                        string path1 = Path.Combine(modPackPackageFolder, modName1 + ".pmp");
+                        if (File.Exists(path1)) {
+                            File.Delete(path1);
+                        }
+                        ZipFile.CreateFromDirectory(modPath1, path1);
+                    });
+                }
+                generateButton.Invoke(() => {
+                    MessageBox.Show("Your .pmp archives have been exported, but are also already in Penumbra.", VersionText);
+                    try {
+                        Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                            FileName = modPackPackageFolder,
+                            UseShellExecute = true,
+                            Verb = "OPEN"
+                        });
+                    } catch {
+
+                    }
+                });
+            }
+            );
+        }
+
+        private void createAnimatedContactLensesToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select input texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                ImageManipulation.CreateContact(AppDomain.CurrentDomain.BaseDirectory, openFileDialog.FileName);
+                MessageBox.Show("Image successfully converted to contact maps.", VersionText);
+                AutoModPackingPromptContacts(openFileDialog.FileName);
+            }
+        }
+
+        private void convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of generic eye textures to generate maps for.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            int maxItems = 0;
+            int itemsCounted = 0;
+            int calculatingItems = 0;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
+                    if (!file.Contains("_contactBase") && !file.Contains("_base") && !file.Contains("_norm") && !file.Contains("_mask")) {
+                        maxItems++;
+                        while (calculatingItems > Environment.ProcessorCount) {
+                            Thread.Sleep(3000);
+                        }
+                        calculatingItems++;
+                        Task.Run(() => {
+                            try {
+                                ImageManipulation.CreateContact(AppDomain.CurrentDomain.BaseDirectory, file);
+                            } catch {
+
+                            }
+                            itemsCounted++;
+                            calculatingItems--;
+                        });
+                    }
+                }
+                while (itemsCounted < maxItems) {
+                    Thread.Sleep(5000);
+                }
+                MessageBox.Show("Images successfully converted to contact maps", VersionText);
+                try {
+                    Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath),
+                        UseShellExecute = true,
+                        Verb = "OPEN"
+                    });
+                } catch {
+
+                }
+            }
+        }
+
+        private void autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1_Click(object sender, EventArgs e) {
+            MessageBox.Show("Pick folder of eye maps to auto assemble.\r\nWARNING: This process may take a while if the folder has lots of eye textures.", VersionText);
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                var items = Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tga") || s.EndsWith(".tex"));
+                modPath = Path.Combine(penumbraModPath, modNameTextBox.Text);
+                string modPackPackageFolder = Path.Combine(folderBrowserDialog.SelectedPath, "Mod Packs");
+                ExportContactPackList(items, modPackPackageFolder);
+            }
         }
     }
 }
