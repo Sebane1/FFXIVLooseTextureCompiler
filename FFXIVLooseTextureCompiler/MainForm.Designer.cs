@@ -184,6 +184,9 @@
             label10 = new Label();
             label9 = new Label();
             label7 = new Label();
+            layerBaseButton = new Button();
+            layerNormalButton = new Button();
+            layerMaskButton = new Button();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             materialListContextMenu.SuspendLayout();
@@ -277,7 +280,7 @@
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
             mask.Name = "mask";
-            mask.Size = new Size(548, 28);
+            mask.Size = new Size(488, 28);
             mask.TabIndex = 19;
             helperToolTip.SetToolTip(mask, "The orange looking image goes here.");
             mask.OnFileSelected += multi_OnFileSelected;
@@ -297,7 +300,7 @@
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
             normal.Name = "normal";
-            normal.Size = new Size(548, 28);
+            normal.Size = new Size(488, 28);
             normal.TabIndex = 18;
             helperToolTip.SetToolTip(normal, "The blue and red bump map goes here");
             normal.OnFileSelected += multi_OnFileSelected;
@@ -317,10 +320,11 @@
             Base.Margin = new Padding(4, 3, 4, 3);
             Base.MinimumSize = new Size(300, 28);
             Base.Name = "Base";
-            Base.Size = new Size(548, 28);
+            Base.Size = new Size(488, 28);
             Base.TabIndex = 17;
             helperToolTip.SetToolTip(Base, "Skin, and tattoo overlays go here.");
             Base.OnFileSelected += multi_OnFileSelected;
+            Base.Load += Base_Load;
             Base.Enter += multi_Enter;
             Base.Leave += multi_Leave;
             // 
@@ -1285,7 +1289,7 @@
             bounds.Margin = new Padding(4, 3, 4, 3);
             bounds.MinimumSize = new Size(300, 28);
             bounds.Name = "bounds";
-            bounds.Size = new Size(548, 28);
+            bounds.Size = new Size(488, 28);
             bounds.TabIndex = 41;
             helperToolTip.SetToolTip(bounds, "Used to restrict where generated normal maps actually use generated normals.");
             bounds.Visible = false;
@@ -1327,7 +1331,7 @@
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
-            glow.Size = new Size(548, 28);
+            glow.Size = new Size(488, 28);
             glow.TabIndex = 45;
             helperToolTip.SetToolTip(glow, "Used to make the character glow. Use a transparent overlay where you want glow to happen. Similar to a using an overlay.");
             glow.OnFileSelected += multi_OnFileSelected;
@@ -1470,7 +1474,7 @@
             // 
             // ipBox
             // 
-            ipBox.Location = new Point(444, 156);
+            ipBox.Location = new Point(398, 180);
             ipBox.Name = "ipBox";
             ipBox.Size = new Size(52, 23);
             ipBox.TabIndex = 51;
@@ -1482,7 +1486,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(376, 168);
+            label8.Location = new Point(330, 184);
             label8.Name = "label8";
             label8.Size = new Size(61, 15);
             label8.TabIndex = 52;
@@ -1570,11 +1574,47 @@
             label7.TabIndex = 34;
             label7.Text = "Gender";
             // 
+            // layerBaseButton
+            // 
+            layerBaseButton.Enabled = false;
+            layerBaseButton.Location = new Point(488, 422);
+            layerBaseButton.Name = "layerBaseButton";
+            layerBaseButton.Size = new Size(64, 23);
+            layerBaseButton.TabIndex = 55;
+            layerBaseButton.Text = "Layers";
+            layerBaseButton.UseVisualStyleBackColor = true;
+            layerBaseButton.Click += layerBaseButton_Click;
+            // 
+            // layerNormalButton
+            // 
+            layerNormalButton.Enabled = false;
+            layerNormalButton.Location = new Point(488, 453);
+            layerNormalButton.Name = "layerNormalButton";
+            layerNormalButton.Size = new Size(64, 23);
+            layerNormalButton.TabIndex = 56;
+            layerNormalButton.Text = "Layers";
+            layerNormalButton.UseVisualStyleBackColor = true;
+            layerNormalButton.Click += layerNormalButton_Click;
+            // 
+            // layerMaskButton
+            // 
+            layerMaskButton.Enabled = false;
+            layerMaskButton.Location = new Point(488, 485);
+            layerMaskButton.Name = "layerMaskButton";
+            layerMaskButton.Size = new Size(64, 23);
+            layerMaskButton.TabIndex = 57;
+            layerMaskButton.Text = "Layers";
+            layerMaskButton.UseVisualStyleBackColor = true;
+            layerMaskButton.Click += layersMaskButton_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(557, 576);
+            Controls.Add(layerMaskButton);
+            Controls.Add(layerNormalButton);
+            Controls.Add(layerBaseButton);
             Controls.Add(panel3);
             Controls.Add(textureSetName);
             Controls.Add(generateButton);
@@ -1797,6 +1837,9 @@
         private ToolStripMenuItem createAnimatedContactLensesToolStripMenuItem;
         private ToolStripMenuItem convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem;
         private ToolStripMenuItem autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1;
+        private Button layerBaseButton;
+        private Button layerNormalButton;
+        private Button layerMaskButton;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

@@ -1,12 +1,26 @@
-﻿using FFXIVLooseTextureCompiler.PathOrganization;
+﻿using FFXIVLooseTextureCompiler.Configuration_Dialogues;
+using FFXIVLooseTextureCompiler.PathOrganization;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class FindAndReplace : Form {
         public FindAndReplace() {
             InitializeComponent();
             AutoScaleDimensions = new SizeF(96, 96);
+
+            _overlaySelectorBase = new OverlaySelector();
+            _overlaySelectorBase.LayeredImages = new List<string>();
+
+            _overlaySelectorNormal = new OverlaySelector();
+            _overlaySelectorNormal.LayeredImages = new List<string>();
+
+            _overlaySelectorMask = new OverlaySelector();
+            _overlaySelectorMask.LayeredImages = new List<string>();
+
         }
         List<TextureSet> textureSet = new List<TextureSet>();
+        private OverlaySelector _overlaySelectorBase;
+        private OverlaySelector _overlaySelectorNormal;
+        private OverlaySelector _overlaySelectorMask;
 
         public List<TextureSet> TextureSets {
             get => textureSet;
@@ -24,12 +38,24 @@ namespace FFXIVLooseTextureCompiler {
                         if (!string.IsNullOrEmpty(baseTexture.FilePath.Text)) {
                             textureSet.Base = baseTexture.FilePath.Text;
                         }
+                        if (_overlaySelectorBase.LayeredImages.Count > 0) {
+                            textureSet.BaseOverlays = _overlaySelectorBase.LayeredImages;
+                        }
+
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
                             textureSet.Normal = normal.FilePath.Text;
                         }
+                        if (_overlaySelectorNormal.LayeredImages.Count > 0) {
+                            textureSet.NormalOverlays = _overlaySelectorNormal.LayeredImages;
+                        }
+
                         if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
                             textureSet.Mask = mask.FilePath.Text;
                         }
+                        if (_overlaySelectorMask.LayeredImages.Count > 0) {
+                            textureSet.MaskOverlays = _overlaySelectorMask.LayeredImages;
+                        }
+
                         if (!string.IsNullOrEmpty(bounds.FilePath.Text)) {
                             textureSet.NormalMask = bounds.FilePath.Text;
                         }
@@ -77,6 +103,19 @@ namespace FFXIVLooseTextureCompiler {
 
         private void multi_Load(object sender, EventArgs e) {
 
+        }
+
+        private void layerBaseButton_Click(object sender, EventArgs e) {
+
+            _overlaySelectorBase.ShowDialog();
+        }
+
+        private void layerNormalButton_Click(object sender, EventArgs e) {
+            _overlaySelectorNormal.ShowDialog();
+        }
+
+        private void layersMaskButton_Click(object sender, EventArgs e) {
+            _overlaySelectorMask.ShowDialog();
         }
     }
 }

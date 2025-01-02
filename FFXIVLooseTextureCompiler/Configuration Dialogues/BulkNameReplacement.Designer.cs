@@ -122,7 +122,7 @@
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "BulkNameReplacement";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "f";
+            Text = "Bulk Text Replacement";
             Load += BulkNameReplacement_Load;
             ResumeLayout(false);
             PerformLayout();

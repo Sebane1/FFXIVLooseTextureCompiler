@@ -1,5 +1,6 @@
 #region Libraries
 using Anamnesis.Penumbra;
+using FFXIVLooseTextureCompiler.Configuration_Dialogues;
 using FFXIVLooseTextureCompiler.Export;
 using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Networking;
@@ -856,6 +857,11 @@ namespace FFXIVLooseTextureCompiler {
             Base.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalBasePath);
             normal.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalNormalPath);
             mask.Enabled = enabled && !string.IsNullOrEmpty(textureSet.InternalMaskPath);
+
+            layerBaseButton.Enabled = Base.Enabled;
+            layerNormalButton.Enabled = normal.Enabled;
+            layerMaskButton.Enabled = mask.Enabled;
+
             bounds.Enabled = enabled && bakeNormals.Checked;
             glow.Enabled = enabled && !textureSet.TextureSetName.ToLower().Contains("face paint")
                     && !textureSet.TextureSetName.ToLower().Contains("hair") && Base.Enabled;
@@ -2819,6 +2825,35 @@ namespace FFXIVLooseTextureCompiler {
                 string modPackPackageFolder = Path.Combine(folderBrowserDialog.SelectedPath, "Mod Packs");
                 ExportContactPackList(items, modPackPackageFolder);
             }
+        }
+
+        private void label8_Click(object sender, EventArgs e) {
+
+        }
+
+        private void Base_Load(object sender, EventArgs e) {
+
+        }
+
+        private void layerBaseButton_Click(object sender, EventArgs e) {
+            TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
+            OverlaySelector overlaySelector = new OverlaySelector();
+            overlaySelector.LayeredImages = textureSet.BaseOverlays;
+            overlaySelector.ShowDialog();
+        }
+
+        private void layerNormalButton_Click(object sender, EventArgs e) {
+            TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
+            OverlaySelector overlaySelector = new OverlaySelector();
+            overlaySelector.LayeredImages = textureSet.NormalOverlays;
+            overlaySelector.ShowDialog();
+        }
+
+        private void layersMaskButton_Click(object sender, EventArgs e) {
+            TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
+            OverlaySelector overlaySelector = new OverlaySelector();
+            overlaySelector.LayeredImages = textureSet.MaskOverlays;
+            overlaySelector.ShowDialog();
         }
     }
 }

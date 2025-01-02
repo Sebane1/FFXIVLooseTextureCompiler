@@ -39,6 +39,9 @@ namespace FFXIVLooseTextureCompiler {
             label2 = new Label();
             groupTextBox = new TextBox();
             material = new FilePicker();
+            layersMaskButton = new Button();
+            layerNormalButton = new Button();
+            layerBaseButton = new Button();
             SuspendLayout();
             // 
             // acceptChangesButton
@@ -99,11 +102,11 @@ namespace FFXIVLooseTextureCompiler {
             normal.Filter = null;
             normal.Index = -1;
             normal.IsMaterial = false;
-            normal.Location = new Point(5, 190);
+            normal.Location = new Point(4, 190);
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
             normal.Name = "normal";
-            normal.Size = new Size(404, 28);
+            normal.Size = new Size(338, 28);
             normal.TabIndex = 14;
             // 
             // mask
@@ -117,7 +120,7 @@ namespace FFXIVLooseTextureCompiler {
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
             mask.Name = "mask";
-            mask.Size = new Size(404, 28);
+            mask.Size = new Size(337, 28);
             mask.TabIndex = 15;
             mask.Load += multi_Load;
             // 
@@ -132,7 +135,7 @@ namespace FFXIVLooseTextureCompiler {
             baseTexture.Margin = new Padding(4, 3, 4, 3);
             baseTexture.MinimumSize = new Size(300, 28);
             baseTexture.Name = "baseTexture";
-            baseTexture.Size = new Size(404, 28);
+            baseTexture.Size = new Size(338, 28);
             baseTexture.TabIndex = 16;
             // 
             // bounds
@@ -191,11 +194,44 @@ namespace FFXIVLooseTextureCompiler {
             material.Size = new Size(404, 28);
             material.TabIndex = 21;
             // 
+            // layersMaskButton
+            // 
+            layersMaskButton.Location = new Point(340, 224);
+            layersMaskButton.Name = "layersMaskButton";
+            layersMaskButton.Size = new Size(64, 23);
+            layersMaskButton.TabIndex = 60;
+            layersMaskButton.Text = "Layers";
+            layersMaskButton.UseVisualStyleBackColor = true;
+            layersMaskButton.Click += layersMaskButton_Click;
+            // 
+            // layerNormalButton
+            // 
+            layerNormalButton.Location = new Point(340, 192);
+            layerNormalButton.Name = "layerNormalButton";
+            layerNormalButton.Size = new Size(64, 23);
+            layerNormalButton.TabIndex = 59;
+            layerNormalButton.Text = "Layers";
+            layerNormalButton.UseVisualStyleBackColor = true;
+            layerNormalButton.Click += layerNormalButton_Click;
+            // 
+            // layerBaseButton
+            // 
+            layerBaseButton.Location = new Point(340, 159);
+            layerBaseButton.Name = "layerBaseButton";
+            layerBaseButton.Size = new Size(64, 23);
+            layerBaseButton.TabIndex = 58;
+            layerBaseButton.Text = "Layers";
+            layerBaseButton.UseVisualStyleBackColor = true;
+            layerBaseButton.Click += layerBaseButton_Click;
+            // 
             // FindAndReplace
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(414, 372);
+            Controls.Add(layersMaskButton);
+            Controls.Add(layerNormalButton);
+            Controls.Add(layerBaseButton);
             Controls.Add(material);
             Controls.Add(groupTextBox);
             Controls.Add(label2);
@@ -234,6 +270,9 @@ namespace FFXIVLooseTextureCompiler {
         private Label label2;
         private TextBox groupTextBox;
         private FilePicker material;
+        private Button layersMaskButton;
+        private Button layerNormalButton;
+        private Button layerBaseButton;
 
         public FilePicker Base { get => baseTexture; set => baseTexture = value; }
         public FilePicker Mask { get => mask; set => mask = value; }

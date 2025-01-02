@@ -25,6 +25,9 @@
     <Compile Update="Configuration Dialogues\HelpWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Configuration Dialogues\OverlaySelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Configuration Dialogues\TemplateConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
