@@ -337,17 +337,48 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Base);
-                    AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Mask);
-                    AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
+                    AddWatchersToTextureSet(textureSet);
                 }
                 textureList.SelectedIndex = -1;
                 MessageBox.Show("Replacement succeeded.", VersionText);
             }
         }
+        private void AddWatchersToTextureSet(TextureSet textureSet) {
+            AddWatcher(textureSet.Base);
+            AddWatcher(textureSet.Normal);
+            AddWatcher(textureSet.Mask);
+            AddWatcher(textureSet.NormalMask);
+            AddWatcher(textureSet.Glow);
 
+            foreach (var item in textureSet.BaseOverlays) {
+                AddWatcher(item);
+            }
+            foreach (var item in textureSet.NormalOverlays) {
+                AddWatcher(item);
+            }
+            foreach (var item in textureSet.MaskOverlays) {
+                AddWatcher(item);
+            }
+        }
+
+        private void RemovedWatchersFromTextureSet(TextureSet textureSet) {
+            DisposeWatcher(textureSet.Base, Base);
+            DisposeWatcher(textureSet.Normal, normal);
+            DisposeWatcher(textureSet.Mask, mask);
+            DisposeWatcher(textureSet.NormalMask, bounds);
+            DisposeWatcher(textureSet.Glow, glow);
+            DisposeWatcher(textureSet.Material, null);
+
+            foreach (var item in textureSet.BaseOverlays) {
+                DisposeWatcher(item, null);
+            }
+            foreach (var item in textureSet.NormalOverlays) {
+                DisposeWatcher(item, null);
+            }
+            foreach (var item in textureSet.MaskOverlays) {
+                DisposeWatcher(item, null);
+            }
+        }
         private void bulkReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
             FindAndReplace findAndReplace = new FindAndReplace();
             TextureSet sourceTextureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
@@ -364,11 +395,7 @@ namespace FFXIVLooseTextureCompiler {
             findAndReplace.TextureSets.AddRange(textureList.Items.Cast<TextureSet>().ToArray());
             if (findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Base);
-                    AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Mask);
-                    AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
+                    AddWatchersToTextureSet(textureSet);
                 }
                 textureList.SelectedIndex = -1;
                 MessageBox.Show("Replacement succeeded.", VersionText);
@@ -452,11 +479,7 @@ namespace FFXIVLooseTextureCompiler {
             }
             if (paths == null && findAndReplace.ShowDialog() == DialogResult.OK) {
                 foreach (TextureSet textureSet in textureList.Items) {
-                    AddWatcher(textureSet.Base);
-                    AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Mask);
-                    AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
+                    AddWatchersToTextureSet(textureSet);
                 }
                 textureList.SelectedIndex = -1;
                 MessageBox.Show("Replacement succeeded.", VersionText);
@@ -886,12 +909,7 @@ namespace FFXIVLooseTextureCompiler {
         public void SetPaths() {
             if (textureList.SelectedIndex != -1) {
                 TextureSet textureSet = (textureList.Items[textureList.SelectedIndex] as TextureSet);
-                DisposeWatcher(textureSet.Base, Base);
-                DisposeWatcher(textureSet.Normal, normal);
-                DisposeWatcher(textureSet.Mask, mask);
-                DisposeWatcher(textureSet.NormalMask, bounds);
-                DisposeWatcher(textureSet.Glow, glow);
-                DisposeWatcher(textureSet.Material, null);
+                RemovedWatchersFromTextureSet(textureSet);
                 if (!string.IsNullOrWhiteSpace(textureSet.Glow) && !textureSet.InternalBasePath.Contains("eye")) {
                     bakeNormals.Checked = true;
                 }
@@ -900,19 +918,13 @@ namespace FFXIVLooseTextureCompiler {
                 textureSet.Mask = mask.CurrentPath;
                 textureSet.NormalMask = bounds.CurrentPath;
                 textureSet.Glow = glow.CurrentPath;
-
-                AddWatcher(textureSet.Base);
-                AddWatcher(textureSet.Normal);
-                AddWatcher(textureSet.Mask);
-                AddWatcher(textureSet.NormalMask);
-                AddWatcher(textureSet.Glow);
-                AddWatcher(textureSet.Material);
+                AddWatchersToTextureSet(textureSet);
             }
         }
         public void DisposeWatcher(string path, FilePicker filePicker) {
             if (!string.IsNullOrWhiteSpace(path)) {
                 if (watchers.ContainsKey(path)) {
-                    if (path != filePicker.CurrentPath || filePicker == null) {
+                    if (filePicker == null || path != filePicker.CurrentPath) {
                         watchers[path].Dispose();
                         watchers.Remove(path);
                     }
@@ -979,7 +991,7 @@ namespace FFXIVLooseTextureCompiler {
 
         }
 
-        private void multi_OnFileSelected(object sender, EventArgs e) {
+        public void multi_OnFileSelected(object sender, EventArgs e) {
             SetPaths();
             HasSaved = false;
             hasDoneReload = false;
@@ -1223,11 +1235,7 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
                 foreach (TextureSet textureSet in projectFile.TextureSets) {
-                    AddWatcher(textureSet.Base);
-                    AddWatcher(textureSet.Normal);
-                    AddWatcher(textureSet.Mask);
-                    AddWatcher(textureSet.NormalMask);
-                    AddWatcher(textureSet.Glow);
+                    AddWatchersToTextureSet(textureSet);
                 }
                 if (missingFiles > 0) {
                     MessageBox.Show($"{missingFiles} texture sets are missing original files. Please update the file paths", VersionText);
@@ -1316,11 +1324,7 @@ namespace FFXIVLooseTextureCompiler {
                                 textureSet.GroupName = templateConfiguration.GroupName;
                             }
                         }
-                        AddWatcher(textureSet.Base);
-                        AddWatcher(textureSet.Normal);
-                        AddWatcher(textureSet.Mask);
-                        AddWatcher(textureSet.NormalMask);
-                        AddWatcher(textureSet.Glow);
+                        AddWatchersToTextureSet(textureSet);
                     }
                     textureList.Items.AddRange(projectFile.TextureSets?.ToArray());
                 }
@@ -2839,6 +2843,7 @@ namespace FFXIVLooseTextureCompiler {
             TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
             OverlaySelector overlaySelector = new OverlaySelector();
             overlaySelector.LayeredImages = textureSet.BaseOverlays;
+            overlaySelector.OnSelectedEventHandler = multi_OnFileSelected;
             overlaySelector.ShowDialog();
         }
 

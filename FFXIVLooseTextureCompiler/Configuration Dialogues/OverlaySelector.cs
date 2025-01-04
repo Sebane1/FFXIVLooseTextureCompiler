@@ -12,6 +12,7 @@ using System.Windows.Forms;
 namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
     public partial class OverlaySelector : Form {
         List<FilePicker> _filePickers = new List<FilePicker>();
+        public EventHandler OnSelectedEventHandler;
         public OverlaySelector() {
             InitializeComponent();
             AutoScaleDimensions = new SizeF(96, 96);
@@ -66,15 +67,22 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
                 var i = index;
                 var selector = filePicker;
                 _layeredImages[i] = selector.FilePath.Text;
+                //if (string.IsNullOrEmpty(selector.FilePath.Text)) {
+                //    RemoveSelector(selector, index);
+                //}
             };
+            if (OnSelectedEventHandler != null) {
+                filePicker.OnFileSelected += OnSelectedEventHandler;
+            }
         }
-        void RemoveSelector(FilePicker filePicker) {
+        void RemoveSelector(FilePicker filePicker, int index) {
             this.Height -= filePicker.Height;
             filePicker.CurrentPath = "";
             filePicker.FilePath.Text = "";
             filePicker.Parent = null;
             filePicker.Dispose();
             _filePickers.Remove(filePicker);
+            _layeredImages.RemoveAt(index);
         }
         private void addLayerButton_Click(object sender, EventArgs e) {
             AddSelector("");
