@@ -1644,12 +1644,13 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                foreach (string file in Directory.EnumerateFiles(openFileDialog.SelectedPath)) {
-                    if (FilePicker.CheckExtentions(file)) {
+                var files = Directory.GetFiles(openFileDialog.SelectedPath);
+                foreach (string file in files) {
+                    if (FilePicker.CheckExtentions(file) && !file.ToLower().EndsWith(".tex")) {
                         textureProcessor.ExportTex(file, ImageManipulation.ReplaceExtension(file, ".tex"));
-                        MessageBox.Show("The operation succeeded!", VersionText);
                     }
                 }
+                MessageBox.Show("The operation succeeded!", VersionText);
             }
         }
 
@@ -1657,7 +1658,7 @@ namespace FFXIVLooseTextureCompiler {
             FolderBrowserDialog openFileDialog = new FolderBrowserDialog();
             MessageBox.Show("Please select folder");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                RecursiveImageToText(openFileDialog.SelectedPath);
+                RecursiveImageToTex(openFileDialog.SelectedPath);
                 MessageBox.Show("The operation succeeded!", VersionText);
             }
         }
@@ -1671,15 +1672,16 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Multi successfully converted to grayscale", VersionText);
             }
         }
-        public void RecursiveImageToText(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
-            foreach (string file in Directory.EnumerateFiles(filePath)) {
+        public void RecursiveImageToTex(string filePath, int layer = 0, int maxLayer = int.MaxValue) {
+            var files = Directory.GetFiles(filePath);
+            foreach (string file in files) {
                 if (FilePicker.CheckExtentions(file)) {
                     textureProcessor.ExportTex(file, ImageManipulation.ReplaceExtension(file, ".tex"));
                 }
             }
             if (layer < maxLayer) {
                 foreach (string directory in Directory.EnumerateDirectories(filePath)) {
-                    RecursiveImageToText(directory, layer + 1, maxLayer);
+                    RecursiveImageToTex(directory, layer + 1, maxLayer);
                 }
             }
         }
