@@ -2514,8 +2514,10 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                TexIO.SaveBitmap(ImageManipulation.SeperateTattooByDifference(TexIO.ResolveBitmap(openFileDialog.FileName)),
-                ImageManipulation.AddSuffix(openFileDialog.FileName, "_separated"));
+                foreach (var skin in BackupTexturePaths.BiboSkinTypes) {
+                    TexIO.SaveBitmap(ImageManipulation.SeperateTattooByDifference(TexIO.ResolveBitmap(openFileDialog.FileName), skin, null, openFileDialog.FileName.ToLower().Contains("raen")),
+                    ImageManipulation.AddSuffix(openFileDialog.FileName, "_" + skin.Name + "_separated"));
+                }
                 MessageBox.Show("Tattoo has attempted to be separated.", VersionText);
                 try {
                     Process.Start(new System.Diagnostics.ProcessStartInfo() {
