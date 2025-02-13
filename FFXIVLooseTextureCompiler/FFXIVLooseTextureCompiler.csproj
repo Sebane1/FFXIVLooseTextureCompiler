@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.0.4.5</Version>
+    <Version>2.0.4.6</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>
     <Copyright>Lawener Industries</Copyright>
@@ -55,12 +55,6 @@
     <ProjectReference Include="..\LooseTextureCompilerCore\LooseTextureCompilerCore.csproj">
       <Private>True</Private>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="OtterTex">
-      <HintPath>..\LooseTextureCompilerCore\Penumbra\lib\OtterTex.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
