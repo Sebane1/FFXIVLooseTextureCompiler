@@ -72,12 +72,22 @@
             autoAssembleAndExportEyeModsFromFolderToolStripMenuItem = new ToolStripMenuItem();
             createAnimatedContactLensesToolStripMenuItem = new ToolStripMenuItem();
             convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem = new ToolStripMenuItem();
-            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1 = new ToolStripMenuItem();
+            autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1 = new ToolStripMenuItem();
             faceToolsToolStripMenuItem = new ToolStripMenuItem();
             legacyMakeupSalvagerToolStripMenuItem = new ToolStripMenuItem();
             hairToolsToolStripMenuItem = new ToolStripMenuItem();
             hairBaseToFFXIVHairMapsToolStripMenuItem = new ToolStripMenuItem();
             legacyHairMapsToDawntrailMaps = new ToolStripMenuItem();
+            tailToolsToolStripMenuItem = new ToolStripMenuItem();
+            legacyAuRaTailToDawntrailToolStripMenuItem = new ToolStripMenuItem();
+            tail1FemaleToolStripMenuItem = new ToolStripMenuItem();
+            tail2FemaleToolStripMenuItem = new ToolStripMenuItem();
+            tail3FemaleToolStripMenuItem = new ToolStripMenuItem();
+            tail4FemaleToolStripMenuItem = new ToolStripMenuItem();
+            tail1MaleToolStripMenuItem = new ToolStripMenuItem();
+            tail2MaleToolStripMenuItem = new ToolStripMenuItem();
+            tail3MaleToolStripMenuItem = new ToolStripMenuItem();
+            tail4MaleToolStripMenuItem = new ToolStripMenuItem();
             clothingToolsToolStripMenuItem = new ToolStripMenuItem();
             convertBaseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
             colourChannelSplittingToolStripMenuItem = new ToolStripMenuItem();
@@ -528,7 +538,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fullTattooToOverlayExperimentalToolStripMenuItem, fToolStripMenuItem, extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fullTattooToOverlayExperimentalToolStripMenuItem, fToolStripMenuItem, extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, tailToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -557,10 +567,11 @@
             // 
             // eyeToolsToolStripMenuItem
             // 
-            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse, convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem, autoAssembleAndExportEyeModsFromFolderToolStripMenuItem, createAnimatedContactLensesToolStripMenuItem, convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem, autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1 });
+            eyeToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { convertLegacyEyeMapToDawntrailMapToolStripMenuItem, convertImageToDawntrailEyeMapsToolStripMenuItem, generateMapsForDawntrailEyeDiffuse, convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem, convertFolderToEyeMapsToolStripMenuItem, createMapsForFolderOfExistingDawntrailEyeMapsToolStripMenuItem, autoAssembleAndExportEyeModsFromFolderToolStripMenuItem, createAnimatedContactLensesToolStripMenuItem, convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem, autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1 });
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
             eyeToolsToolStripMenuItem.Size = new Size(286, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
+            eyeToolsToolStripMenuItem.Click += eyeToolsToolStripMenuItem_Click;
             // 
             // convertLegacyEyeMapToDawntrailMapToolStripMenuItem
             // 
@@ -625,12 +636,12 @@
             convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem.Text = "Convert Folder Of Generic Eye Textures To Animated Contact Lenses";
             convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem.Click += convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem_Click;
             // 
-            // autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1
+            // autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1
             // 
-            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1.Name = "autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1";
-            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1.Size = new Size(431, 22);
-            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1.Text = "Auto Assemble And Export Eye Mods From Folder";
-            autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1.Click += autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1_Click;
+            autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1.Name = "autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1";
+            autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1.Size = new Size(431, 22);
+            autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1.Text = "Auto Assemble And Export Animated Contact Mods From Folder";
+            autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1.Click += autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1_Click;
             // 
             // faceToolsToolStripMenuItem
             // 
@@ -666,6 +677,76 @@
             legacyHairMapsToDawntrailMaps.Size = new Size(268, 22);
             legacyHairMapsToDawntrailMaps.Text = "Legacy Hair Maps To Dawntrail Maps";
             legacyHairMapsToDawntrailMaps.Click += legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click;
+            // 
+            // tailToolsToolStripMenuItem
+            // 
+            tailToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyAuRaTailToDawntrailToolStripMenuItem });
+            tailToolsToolStripMenuItem.Name = "tailToolsToolStripMenuItem";
+            tailToolsToolStripMenuItem.Size = new Size(286, 22);
+            tailToolsToolStripMenuItem.Text = "Tail Tools";
+            // 
+            // legacyAuRaTailToDawntrailToolStripMenuItem
+            // 
+            legacyAuRaTailToDawntrailToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tail1FemaleToolStripMenuItem, tail2FemaleToolStripMenuItem, tail3FemaleToolStripMenuItem, tail4FemaleToolStripMenuItem, tail1MaleToolStripMenuItem, tail2MaleToolStripMenuItem, tail3MaleToolStripMenuItem, tail4MaleToolStripMenuItem });
+            legacyAuRaTailToDawntrailToolStripMenuItem.Name = "legacyAuRaTailToDawntrailToolStripMenuItem";
+            legacyAuRaTailToDawntrailToolStripMenuItem.Size = new Size(233, 22);
+            legacyAuRaTailToDawntrailToolStripMenuItem.Text = "Legacy Au Ra Tail To Dawntrail";
+            // 
+            // tail1FemaleToolStripMenuItem
+            // 
+            tail1FemaleToolStripMenuItem.Name = "tail1FemaleToolStripMenuItem";
+            tail1FemaleToolStripMenuItem.Size = new Size(141, 22);
+            tail1FemaleToolStripMenuItem.Text = "Tail 1 Female";
+            tail1FemaleToolStripMenuItem.Click += tail1FemaleToolStripMenuItem_Click;
+            // 
+            // tail2FemaleToolStripMenuItem
+            // 
+            tail2FemaleToolStripMenuItem.Name = "tail2FemaleToolStripMenuItem";
+            tail2FemaleToolStripMenuItem.Size = new Size(141, 22);
+            tail2FemaleToolStripMenuItem.Text = "Tail 2 Female";
+            tail2FemaleToolStripMenuItem.Click += tail2FemaleToolStripMenuItem_Click;
+            // 
+            // tail3FemaleToolStripMenuItem
+            // 
+            tail3FemaleToolStripMenuItem.Name = "tail3FemaleToolStripMenuItem";
+            tail3FemaleToolStripMenuItem.Size = new Size(141, 22);
+            tail3FemaleToolStripMenuItem.Text = "Tail 3 Female";
+            tail3FemaleToolStripMenuItem.Click += tail3FemaleToolStripMenuItem_Click;
+            // 
+            // tail4FemaleToolStripMenuItem
+            // 
+            tail4FemaleToolStripMenuItem.Name = "tail4FemaleToolStripMenuItem";
+            tail4FemaleToolStripMenuItem.Size = new Size(141, 22);
+            tail4FemaleToolStripMenuItem.Text = "Tail 4 Female";
+            tail4FemaleToolStripMenuItem.Click += tail4FemaleToolStripMenuItem_Click;
+            // 
+            // tail1MaleToolStripMenuItem
+            // 
+            tail1MaleToolStripMenuItem.Name = "tail1MaleToolStripMenuItem";
+            tail1MaleToolStripMenuItem.Size = new Size(141, 22);
+            tail1MaleToolStripMenuItem.Text = "Tail 1 Male";
+            tail1MaleToolStripMenuItem.Click += tail1MaleToolStripMenuItem_Click;
+            // 
+            // tail2MaleToolStripMenuItem
+            // 
+            tail2MaleToolStripMenuItem.Name = "tail2MaleToolStripMenuItem";
+            tail2MaleToolStripMenuItem.Size = new Size(141, 22);
+            tail2MaleToolStripMenuItem.Text = "Tail 2 Male";
+            tail2MaleToolStripMenuItem.Click += tail2MaleToolStripMenuItem_Click;
+            // 
+            // tail3MaleToolStripMenuItem
+            // 
+            tail3MaleToolStripMenuItem.Name = "tail3MaleToolStripMenuItem";
+            tail3MaleToolStripMenuItem.Size = new Size(141, 22);
+            tail3MaleToolStripMenuItem.Text = "Tail 3 Male";
+            tail3MaleToolStripMenuItem.Click += tail3MaleToolStripMenuItem_Click;
+            // 
+            // tail4MaleToolStripMenuItem
+            // 
+            tail4MaleToolStripMenuItem.Name = "tail4MaleToolStripMenuItem";
+            tail4MaleToolStripMenuItem.Size = new Size(141, 22);
+            tail4MaleToolStripMenuItem.Text = "Tail 4 Male";
+            tail4MaleToolStripMenuItem.Click += tail4MaleToolStripMenuItem_Click;
             // 
             // clothingToolsToolStripMenuItem
             // 
@@ -1836,10 +1917,20 @@
         private ToolStripMenuItem convertFolderOfLegacyEyeMultiToDawntrailEyeMapsToolStripMenuItem;
         private ToolStripMenuItem createAnimatedContactLensesToolStripMenuItem;
         private ToolStripMenuItem convertFolderOfGenericEyeTexturesToAnimatedContactLensesToolStripMenuItem;
-        private ToolStripMenuItem autoAssembleAndExportEyeModsFromFolderToolStripMenuItem1;
+        private ToolStripMenuItem autoAssembleAndExportEyeContactModsFromFolderToolStripMenuItem1;
         private Button layerBaseButton;
         private Button layerNormalButton;
         private Button layerMaskButton;
+        private ToolStripMenuItem tailToolsToolStripMenuItem;
+        private ToolStripMenuItem legacyAuRaTailToDawntrailToolStripMenuItem;
+        private ToolStripMenuItem tail1FemaleToolStripMenuItem;
+        private ToolStripMenuItem tail2FemaleToolStripMenuItem;
+        private ToolStripMenuItem tail3FemaleToolStripMenuItem;
+        private ToolStripMenuItem tail4FemaleToolStripMenuItem;
+        private ToolStripMenuItem tail1MaleToolStripMenuItem;
+        private ToolStripMenuItem tail2MaleToolStripMenuItem;
+        private ToolStripMenuItem tail3MaleToolStripMenuItem;
+        private ToolStripMenuItem tail4MaleToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }
