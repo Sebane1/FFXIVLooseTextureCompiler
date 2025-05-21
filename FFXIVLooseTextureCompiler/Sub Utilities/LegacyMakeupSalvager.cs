@@ -1,6 +1,7 @@
 ﻿using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.Racial;
 using KVImage;
+using LooseTextureCompilerCore;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows.Documents;
@@ -24,23 +25,23 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
 
         private void ConvertMakeup(string makeupPath = null) {
             convertMakeupButton.Enabled = false;
-            string lipCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            string lipCorrectionMap = Path.Combine(GlobalPathStorage.OriginalBaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\correction.png");
 
-            string eyeCorrectionMap = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            string eyeCorrectionMap = Path.Combine(GlobalPathStorage.OriginalBaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\eyecorrection.png");
 
-            string inputModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            string inputModel = Path.Combine(GlobalPathStorage.OriginalBaseDirectory,
             @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
             RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\input\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
 
-            string outputModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            string outputModel = Path.Combine(GlobalPathStorage.OriginalBaseDirectory,
             @"res\model\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
             RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\output\"
             + (1 + faceNumberListBox.SelectedIndex) + ".fbx");
 
-            string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            string outputTexture = Path.Combine(GlobalPathStorage.OriginalBaseDirectory,
             @"res\textures\face\" + racialGender.SelectedItem.ToString().ToLower() + @"\" +
             RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower() + @"\"
             + (((subRaceListBox.SelectedIndex == 7 && racialGender.SelectedIndex == 0) || subRaceListBox.SelectedIndex == 11 ? (textureIsNormalMap.Checked ? 1 : 101) : 1)

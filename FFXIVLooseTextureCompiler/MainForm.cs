@@ -8,6 +8,7 @@ using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using FFXIVLooseTextureCompiler.Sub_Utilities;
 using FFXIVVoicePackCreator;
+using LooseTextureCompilerCore;
 using LooseTextureCompilerCore.Json;
 using LooseTextureCompilerCore.Racial;
 using Newtonsoft.Json;
@@ -444,7 +445,7 @@ namespace FFXIVLooseTextureCompiler {
             WriteAuthorWebsite(modWebsiteTextBox.Text);
         }
         private void LoadTemplates() {
-            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            string templatePath = Path.Combine(GlobalPathStorage.OriginalBaseDirectory, @"res\templates");
             Directory.CreateDirectory(templatePath);
             foreach (string file in Directory.GetFiles(templatePath)) {
                 if (file.ToLower().EndsWith(".ffxivtp")) {
@@ -2396,7 +2397,7 @@ namespace FFXIVLooseTextureCompiler {
                             if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
                                 //try {
                                 string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
-                                string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                string outputTexture = Path.Combine(GlobalPathStorage.OriginalBaseDirectory, @"res\textures\face\"
                                 + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
                                 Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
                                 TexIO.SaveBitmap(TexIO.ResolveBitmap(file), outputTexture);
@@ -2425,7 +2426,7 @@ namespace FFXIVLooseTextureCompiler {
                                 if (file.Contains("_norm") && !file.Contains("eye") && !file.Contains("etc")) {
                                     try {
                                         string faceNumber = Path.GetFileNameWithoutExtension(file).Replace("000", "").Replace("010", "").Replace("_", "").Split("f")[1];
-                                        string outputTexture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\textures\face\"
+                                        string outputTexture = Path.Combine(GlobalPathStorage.OriginalBaseDirectory, @"res\textures\face\"
                                         + gender + @"\" + race.ToLower() + @"\" + faceNumber + "n.png");
                                         Directory.CreateDirectory(Path.GetDirectoryName(outputTexture));
                                         TexIO.SaveBitmap(TexIO.ResolveBitmap(file), outputTexture);
@@ -2622,7 +2623,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         public void ExportEyePackList(IEnumerable<string> files, string modPackPackageFolder) {
             Dictionary<string, TextureSet> keyValuePairs = new Dictionary<string, TextureSet>();
-            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            string templatePath = Path.Combine(GlobalPathStorage.OriginalBaseDirectory, @"res\templates");
             foreach (string file in files) {
                 if (file.Contains("_eye")) {
                     try {
@@ -2708,7 +2709,7 @@ namespace FFXIVLooseTextureCompiler {
 
         public void ExportContactPackList(IEnumerable<string> files, string modPackPackageFolder) {
             Dictionary<string, TextureSet> keyValuePairs = new Dictionary<string, TextureSet>();
-            string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"res\templates");
+            string templatePath = Path.Combine(GlobalPathStorage.OriginalBaseDirectory, @"res\templates");
             foreach (string file in files) {
                 if (file.Contains("_contactBase")) {
                     try {
@@ -2779,7 +2780,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.CreateContact(AppDomain.CurrentDomain.BaseDirectory, openFileDialog.FileName);
+                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, openFileDialog.FileName);
                 MessageBox.Show("Image successfully converted to contact maps.", VersionText);
                 AutoModPackingPromptContacts(openFileDialog.FileName);
             }
@@ -2802,7 +2803,7 @@ namespace FFXIVLooseTextureCompiler {
                         calculatingItems++;
                         Task.Run(() => {
                             try {
-                                ImageManipulation.CreateContact(AppDomain.CurrentDomain.BaseDirectory, file);
+                                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, file);
                             } catch {
 
                             }

@@ -1,4 +1,5 @@
 using AutoUpdaterDotNET;
+using LooseTextureCompilerCore;
 
 namespace FFXIVLooseTextureCompiler {
     internal static class Program {
@@ -11,6 +12,7 @@ namespace FFXIVLooseTextureCompiler {
         /// </summary>
         [STAThread]
         static void Main() {
+            GlobalPathStorage.OriginalBaseDirectory = Environment.CurrentDirectory;
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             bool launchForm = true;
