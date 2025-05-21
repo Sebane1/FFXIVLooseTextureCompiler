@@ -313,8 +313,8 @@ namespace FFXIVLooseTextureCompiler {
                         SaveProject(Path.Combine(penumbraModPath, modNameTextBox.Text + ".ffxivtp"), true);
                         textureSets = new List<TextureSet>();
                         foreach (TextureSet item in textureList.Items) {
-                            UniversalTextureSetCreator.ConfigureTextureSet(item);
                             if (item.OmniExportMode) {
+                                UniversalTextureSetCreator.ConfigureTextureSet(item);
                                 exportProgress.Maximum += (item.ChildSets.Count * 4);
                             }
                             textureSets.Add(item);

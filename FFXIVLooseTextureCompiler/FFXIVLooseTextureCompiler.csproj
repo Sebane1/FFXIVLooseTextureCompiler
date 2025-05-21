@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.0.4.8</Version>
+    <Version>2.0.5.0</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>
     <Copyright>Lawener Industries</Copyright>
@@ -16,9 +16,11 @@
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <TargetFramework>net8.0-windows</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <DebugType>embedded</DebugType>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
