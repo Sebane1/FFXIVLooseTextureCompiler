@@ -88,6 +88,7 @@
             tail2MaleToolStripMenuItem = new ToolStripMenuItem();
             tail3MaleToolStripMenuItem = new ToolStripMenuItem();
             tail4MaleToolStripMenuItem = new ToolStripMenuItem();
+            legacyAuRaMapsToDawntrailToolStripMenuItem = new ToolStripMenuItem();
             clothingToolsToolStripMenuItem = new ToolStripMenuItem();
             convertBaseToNormalAndMultiToolStripMenuItem = new ToolStripMenuItem();
             colourChannelSplittingToolStripMenuItem = new ToolStripMenuItem();
@@ -141,7 +142,8 @@
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new ToolStripMenuItem();
             donateButton = new Button();
             textureList = new ListBox();
-            materialListContextMenu = new ContextMenuStrip(components);
+            textureSetListContextMenu = new ContextMenuStrip(components);
+            swapRaceToolStripMenuItem = new ToolStripMenuItem();
             editPathsToolStripMenuItem = new ToolStripMenuItem();
             omniExportModeToolStripMenuItem = new ToolStripMenuItem();
             moveUpToolStripMenuItem = new ToolStripMenuItem();
@@ -199,7 +201,7 @@
             layerMaskButton = new Button();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
-            materialListContextMenu.SuspendLayout();
+            textureSetListContextMenu.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             exportPanel.SuspendLayout();
@@ -571,7 +573,6 @@
             eyeToolsToolStripMenuItem.Name = "eyeToolsToolStripMenuItem";
             eyeToolsToolStripMenuItem.Size = new Size(286, 22);
             eyeToolsToolStripMenuItem.Text = "Eye Tools";
-            eyeToolsToolStripMenuItem.Click += eyeToolsToolStripMenuItem_Click;
             // 
             // convertLegacyEyeMapToDawntrailMapToolStripMenuItem
             // 
@@ -680,16 +681,16 @@
             // 
             // tailToolsToolStripMenuItem
             // 
-            tailToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyAuRaTailToDawntrailToolStripMenuItem });
+            tailToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { legacyAuRaTailToDawntrailToolStripMenuItem, legacyAuRaMapsToDawntrailToolStripMenuItem });
             tailToolsToolStripMenuItem.Name = "tailToolsToolStripMenuItem";
             tailToolsToolStripMenuItem.Size = new Size(286, 22);
-            tailToolsToolStripMenuItem.Text = "Tail Tools";
+            tailToolsToolStripMenuItem.Text = "Au Ra Tools";
             // 
             // legacyAuRaTailToDawntrailToolStripMenuItem
             // 
             legacyAuRaTailToDawntrailToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tail1FemaleToolStripMenuItem, tail2FemaleToolStripMenuItem, tail3FemaleToolStripMenuItem, tail4FemaleToolStripMenuItem, tail1MaleToolStripMenuItem, tail2MaleToolStripMenuItem, tail3MaleToolStripMenuItem, tail4MaleToolStripMenuItem });
             legacyAuRaTailToDawntrailToolStripMenuItem.Name = "legacyAuRaTailToDawntrailToolStripMenuItem";
-            legacyAuRaTailToDawntrailToolStripMenuItem.Size = new Size(233, 22);
+            legacyAuRaTailToDawntrailToolStripMenuItem.Size = new Size(245, 22);
             legacyAuRaTailToDawntrailToolStripMenuItem.Text = "Legacy Au Ra Tail To Dawntrail";
             // 
             // tail1FemaleToolStripMenuItem
@@ -747,6 +748,13 @@
             tail4MaleToolStripMenuItem.Size = new Size(141, 22);
             tail4MaleToolStripMenuItem.Text = "Tail 4 Male";
             tail4MaleToolStripMenuItem.Click += tail4MaleToolStripMenuItem_Click;
+            // 
+            // legacyAuRaMapsToDawntrailToolStripMenuItem
+            // 
+            legacyAuRaMapsToDawntrailToolStripMenuItem.Name = "legacyAuRaMapsToDawntrailToolStripMenuItem";
+            legacyAuRaMapsToDawntrailToolStripMenuItem.Size = new Size(245, 22);
+            legacyAuRaMapsToDawntrailToolStripMenuItem.Text = "Legacy Au Ra Maps To Dawntrail";
+            legacyAuRaMapsToDawntrailToolStripMenuItem.Click += legacyAuRaMapsToDawntrailToolStripMenuItem_Click;
             // 
             // clothingToolsToolStripMenuItem
             // 
@@ -1123,7 +1131,7 @@
             // textureList
             // 
             textureList.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textureList.ContextMenuStrip = materialListContextMenu;
+            textureList.ContextMenuStrip = textureSetListContextMenu;
             textureList.FormattingEnabled = true;
             textureList.ItemHeight = 15;
             textureList.Location = new Point(0, 208);
@@ -1132,12 +1140,20 @@
             textureList.TabIndex = 26;
             textureList.SelectedIndexChanged += textureSetList_SelectedIndexChanged;
             // 
-            // materialListContextMenu
+            // textureSetListContextMenu
             // 
-            materialListContextMenu.Items.AddRange(new ToolStripItem[] { editPathsToolStripMenuItem, omniExportModeToolStripMenuItem, moveUpToolStripMenuItem, moveDownToolStripMenuItem, bulkNameReplacement, bulkReplaceToolStripMenuItem, duplicateToolStripMenuItem, deleteToolStripMenuItem });
-            materialListContextMenu.Name = "materialListContextMenu";
-            materialListContextMenu.Size = new Size(236, 180);
-            materialListContextMenu.Opening += materialListContextMenu_Opening;
+            textureSetListContextMenu.Items.AddRange(new ToolStripItem[] { editPathsToolStripMenuItem, omniExportModeToolStripMenuItem, swapRaceToolStripMenuItem, moveUpToolStripMenuItem, moveDownToolStripMenuItem, bulkNameReplacement, bulkReplaceToolStripMenuItem, duplicateToolStripMenuItem, deleteToolStripMenuItem });
+            textureSetListContextMenu.Name = "materialListContextMenu";
+            textureSetListContextMenu.Size = new Size(236, 224);
+            textureSetListContextMenu.Opening += textureSetListContextMenu_Opening;
+            // 
+            // swapRaceToolStripMenuItem
+            // 
+            swapRaceToolStripMenuItem.Name = "swapRaceToolStripMenuItem";
+            swapRaceToolStripMenuItem.Size = new Size(235, 22);
+            swapRaceToolStripMenuItem.Text = "Swap Body Race";
+            swapRaceToolStripMenuItem.Click += swapRaceToolStripMenuItem_Click;
+            swapRaceToolStripMenuItem.VisibleChanged += swapRaceToolStripMenuItem_VisibleChanged;
             // 
             // editPathsToolStripMenuItem
             // 
@@ -1746,7 +1762,7 @@
             Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            materialListContextMenu.ResumeLayout(false);
+            textureSetListContextMenu.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -1798,7 +1814,7 @@
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private Button addCustomPathButton;
-        private ContextMenuStrip materialListContextMenu;
+        private ContextMenuStrip textureSetListContextMenu;
         private ToolStripMenuItem editPathsToolStripMenuItem;
         private ToolStripMenuItem moveUpToolStripMenuItem;
         private ToolStripMenuItem moveDownToolStripMenuItem;
@@ -1931,6 +1947,8 @@
         private ToolStripMenuItem tail2MaleToolStripMenuItem;
         private ToolStripMenuItem tail3MaleToolStripMenuItem;
         private ToolStripMenuItem tail4MaleToolStripMenuItem;
+        private ToolStripMenuItem legacyAuRaMapsToDawntrailToolStripMenuItem;
+        private ToolStripMenuItem swapRaceToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

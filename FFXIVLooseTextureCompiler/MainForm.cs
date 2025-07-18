@@ -82,6 +82,7 @@ namespace FFXIVLooseTextureCompiler {
             GetPenumbraPath();
             Text += " " + Program.Version;
             textureProcessor = new TextureProcessor();
+            textureProcessor.OnProgressReport += TextureProcessor_OnProgressReport;
             textureProcessor.OnProgressChange += TextureProcessor_OnProgressChange;
             textureProcessor.OnLaunchedXnormal += TextureProcessor_OnLaunchedXnormal;
             textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
@@ -89,6 +90,20 @@ namespace FFXIVLooseTextureCompiler {
             Racial.RacePaths.otopopNoticeTriggered += RacePaths_otopopNoticeTriggered;
         }
 
+        private void TextureProcessor_OnProgressReport(object? sender, string e) {
+            if (generateButton.InvokeRequired) {
+                Action safeWrite = delegate { ProgressReport(e); };
+                generateButton.Invoke(safeWrite);
+            } else {
+                exportLabel.AutoSize = true;
+                exportLabel.Text = e;
+                Console.WriteLine(e);
+            }
+        }
+        public void ProgressReport(string text) {
+            exportLabel.AutoSize = true;
+            exportLabel.Text = text;
+        }
         private void TextureProcessor_OnError(object? sender, string e) {
             MessageBox.Show(e);
         }
@@ -1013,13 +1028,22 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void materialListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void textureSetListContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
             if (textureList.Items.Count < 1 || textureList.SelectedIndex < 0) {
                 e.Cancel = true;
-                materialListContextMenu.Close();
+                textureSetListContextMenu.Close();
             } else {
-                omniExportModeToolStripMenuItem.Text = (textureList.SelectedItem as TextureSet).OmniExportMode
+                var textureSet = (textureList.SelectedItem as TextureSet);
+                omniExportModeToolStripMenuItem.Text = textureSet.OmniExportMode
                     ? "Disable Universal Compatibility" : "Enable Universal Compatibility";
+
+                if (textureSet.InternalBasePath.ToLower().Contains("bibo") ||
+                textureSet.InternalBasePath.ToLower().Contains("gen3") ||
+                textureSet.InternalBasePath.ToLower().Contains("body")) {
+                    swapRaceToolStripMenuItem.Visible = true;
+                } else {
+                    swapRaceToolStripMenuItem.Visible = false;
+                }
             }
         }
 
@@ -2273,6 +2297,25 @@ namespace FFXIVLooseTextureCompiler {
             newTextureSet.IgnoreNormalGeneration = textureSet.IgnoreNormalGeneration;
             newTextureSet.IgnoreMaskGeneration = textureSet.IgnoreMaskGeneration;
             newTextureSet.OmniExportMode = textureSet.OmniExportMode;
+
+            List<string> layers = new List<string>();
+            foreach (var item in textureSet.BaseOverlays) {
+                layers.Add(item);
+            }
+            newTextureSet.BaseOverlays = layers;
+
+            layers = new List<string>();
+            foreach (var item in textureSet.NormalOverlays) {
+                layers.Add(item);
+            }
+            newTextureSet.NormalOverlays = layers;
+
+            layers = new List<string>();
+            foreach (var item in textureSet.MaskOverlays) {
+                layers.Add(item);
+            }
+            newTextureSet.MaskOverlays = layers;
+
             textureList.Items.Add(newTextureSet);
             textureList.SelectedIndex = textureList.Items.Count - 1;
         }
@@ -3022,8 +3065,61 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
 
-        private void eyeToolsToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void legacyAuRaMapsToDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
+            MessageBox.Show("Please select Au Ra diffuse (skin) texture");
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                var diffuse = openFileDialog.FileName;
+                MessageBox.Show("Please select Au Ra normal (blue/red) texture");
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    var normal = openFileDialog.FileName;
+                    MessageBox.Show("Please select Au Ra multi (orange/green) texture");
+                    if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                        var multi = openFileDialog.FileName;
+                        var normalImage = TexIO.ResolveBitmap(normal);
+                        var normalR = ImageManipulation.ExtractRed(normalImage);
+                        var normalG = ImageManipulation.ExtractGreen(normalImage);
+                        var normalB = ImageManipulation.ExtractRed(TexIO.ResolveBitmap(multi));
+                        var normalA = ImageManipulation.ExtractAlpha(normalImage);
+                        TexIO.SaveBitmap(ImageManipulation.MergeGrayscalesToRGBA(normalR, normalG, normalB, normalA), ImageManipulation.AddSuffix(normal, "_dawntrail_normal"));
+                        TexIO.SaveBitmap(ImageManipulation.ConvertBaseToDawntrailSkinMulti(TexIO.ResolveBitmap(diffuse)), ImageManipulation.AddSuffix(multi, "_dawntrail_mask"));
+                        MessageBox.Show("Au Ra textures successfully converted! Your diffuse texture did not require conversion and is the same.", VersionText);
+                        try {
+                            Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                                FileName = Path.GetDirectoryName(openFileDialog.FileName),
+                                UseShellExecute = true,
+                                Verb = "OPEN"
+                            });
+                        } catch {
 
+                        }
+                    }
+                }
+            }
+        }
+
+        private void swapRaceToolStripMenuItem_Click(object sender, EventArgs e) {
+            var textureSet = (textureList.SelectedItem as TextureSet);
+            hasDoneReload = false;
+            string previousTextureSetName = textureSet.TextureSetName;
+            textureSet.TextureSetName = baseBodyList.Text + (baseBodyList.Text.ToLower().Contains("tail") ? " " +
+                (tailList.SelectedIndex + 1) : "") + ", " + (raceList.SelectedIndex == 3 ? "Unisex" : genderList.Text)
+                + ", " + raceList.Text;
+
+            if (previousTextureSetName == textureSet.GroupName) {
+                textureSet.GroupName = textureSet.TextureSetName;
+            }
+
+            AddBodyPaths(textureSet);
+            RefreshList();
+            HasSaved = false;
+        }
+
+        private void swapRaceToolStripMenuItem_VisibleChanged(object sender, EventArgs e) {
+            if (swapRaceToolStripMenuItem.Visible) {
+
+            }
         }
     }
 }
