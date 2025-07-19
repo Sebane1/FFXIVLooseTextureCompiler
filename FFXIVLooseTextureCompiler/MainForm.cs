@@ -270,8 +270,6 @@ namespace FFXIVLooseTextureCompiler {
         }
         private async void MainForm_Load(object sender, EventArgs e) {
             ReadLanguageOptions();
-            TextureSet.GroupLocalization = await WFTranslator.String("Group");
-            VersionText = (await WFTranslator.String(Application.ProductName)) + " " + Program.Version;
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
             Base.FilePath.Enabled = false;
@@ -299,6 +297,8 @@ namespace FFXIVLooseTextureCompiler {
             GetDefaultMode();
             CheckForCommandArguments();
             Translator.LoadCache(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "languageCache.json"));
+            TextureSet.GroupLocalization = await WFTranslator.String("Group");
+            VersionText = (await WFTranslator.String(Application.ProductName)) + " " + Program.Version;
             WFTranslator.ParentForm = this;
             WFTranslator.TranslateControl(this);
             WFTranslator.TranslateMenuStrip(menuStrip1);

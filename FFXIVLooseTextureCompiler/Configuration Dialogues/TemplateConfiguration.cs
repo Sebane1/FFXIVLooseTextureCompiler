@@ -18,5 +18,9 @@
         private void TemplateConfiguration_Load(object sender, EventArgs e) {
             WFTranslator.TranslateControl(this);
         }
+
+        private void groupNameTextBox_TextChanged(object sender, EventArgs e) {
+
+        }
     }
 }

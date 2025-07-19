@@ -51,5 +51,11 @@ namespace FFXIVLooseTextureCompiler {
             DialogResult = DialogResult.OK;
             Close();
         }
+
+        private void koreanButton_Click(object sender, EventArgs e) {
+            Language = LanguageEnum.Korean;
+            DialogResult = DialogResult.OK;
+            Close();
+        }
     }
 }

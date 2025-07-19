@@ -33,9 +33,10 @@
             // 
             groupNameTextBox.Location = new Point(0, 44);
             groupNameTextBox.Name = "groupNameTextBox";
-            groupNameTextBox.Size = new Size(360, 23);
+            groupNameTextBox.Size = new Size(511, 23);
             groupNameTextBox.TabIndex = 0;
             groupNameTextBox.Text = "Default";
+            groupNameTextBox.TextChanged += groupNameTextBox_TextChanged;
             // 
             // label
             // 
@@ -49,7 +50,7 @@
             // 
             // confirmButton
             // 
-            confirmButton.Location = new Point(284, 72);
+            confirmButton.Location = new Point(436, 73);
             confirmButton.Name = "confirmButton";
             confirmButton.Size = new Size(75, 23);
             confirmButton.TabIndex = 2;
@@ -61,7 +62,7 @@
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(359, 97);
+            ClientSize = new Size(512, 97);
             Controls.Add(confirmButton);
             Controls.Add(label);
             Controls.Add(groupNameTextBox);

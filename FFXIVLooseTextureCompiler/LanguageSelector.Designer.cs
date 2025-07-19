@@ -29,6 +29,7 @@
             japaneseButton = new Button();
             chineseButton = new Button();
             swedishButton = new Button();
+            koreanButton = new Button();
             SuspendLayout();
             // 
             // englishButton
@@ -83,7 +84,7 @@
             // 
             // swedishButton
             // 
-            swedishButton.Location = new Point(12, 207);
+            swedishButton.Location = new Point(12, 246);
             swedishButton.Name = "swedishButton";
             swedishButton.Size = new Size(176, 33);
             swedishButton.TabIndex = 5;
@@ -91,11 +92,22 @@
             swedishButton.UseVisualStyleBackColor = true;
             swedishButton.Click += swedishButton_Click;
             // 
+            // koreanButton
+            // 
+            koreanButton.Location = new Point(12, 207);
+            koreanButton.Name = "koreanButton";
+            koreanButton.Size = new Size(176, 33);
+            koreanButton.TabIndex = 6;
+            koreanButton.Text = "한국인";
+            koreanButton.UseVisualStyleBackColor = true;
+            koreanButton.Click += koreanButton_Click;
+            // 
             // LanguageSelector
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(200, 253);
+            ClientSize = new Size(200, 292);
+            Controls.Add(koreanButton);
             Controls.Add(swedishButton);
             Controls.Add(chineseButton);
             Controls.Add(japaneseButton);
@@ -118,5 +130,6 @@
         private Button japaneseButton;
         private Button chineseButton;
         private Button swedishButton;
+        private Button koreanButton;
     }
 }
