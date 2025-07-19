@@ -17,8 +17,8 @@ namespace FFXIVLooseTextureCompiler {
                 case ".png":
                 case ".bmp":
                 case ".dds":
-                        Bitmap target = TexIO.ResolveBitmap(path);
-                        output.BackgroundImage = target;
+                    Bitmap target = TexIO.ResolveBitmap(path);
+                    output.BackgroundImage = target;
                     break;
             }
             if (redImage.BackgroundImage != null && greenImage.BackgroundImage != null
@@ -135,8 +135,12 @@ namespace FFXIVLooseTextureCompiler {
             saveFileDialog.Filter = "Texture Files|*.png;";
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 TexIO.SaveBitmap(result.BackgroundImage as Bitmap, saveFileDialog.FileName);
-                MessageBox.Show("Texture saved!", Text);
+                WFTranslator.Show("Texture saved!", Text);
             }
+        }
+
+        private void MaskCreator_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
         }
     }
 }

@@ -78,7 +78,7 @@
             body.Margin = new Padding(4, 3, 4, 3);
             body.MinimumSize = new Size(300, 28);
             body.Name = "body";
-            body.Size = new Size(445, 28);
+            body.Size = new Size(561, 28);
             body.TabIndex = 0;
             body.OnFileSelected += skin_OnFileSelected;
             // 
@@ -93,7 +93,7 @@
             face.Margin = new Padding(4, 3, 4, 3);
             face.MinimumSize = new Size(300, 28);
             face.Name = "face";
-            face.Size = new Size(445, 28);
+            face.Size = new Size(561, 28);
             face.TabIndex = 1;
             face.OnFileSelected += face_OnFileSelected;
             face.Load += face_Load;
@@ -109,9 +109,10 @@
             eyes.Margin = new Padding(4, 3, 4, 3);
             eyes.MinimumSize = new Size(300, 28);
             eyes.Name = "eyes";
-            eyes.Size = new Size(445, 28);
+            eyes.Size = new Size(561, 28);
             eyes.TabIndex = 2;
             eyes.OnFileSelected += eyes_OnFileSelected;
+            eyes.Load += eyes_Load;
             // 
             // bodyType
             // 
@@ -119,7 +120,7 @@
             bodyType.Items.AddRange(new object[] { "Bibo+", "Gen3", "TBSE/HRBODY", "Otopop" });
             bodyType.Location = new Point(82, 189);
             bodyType.Name = "bodyType";
-            bodyType.Size = new Size(368, 23);
+            bodyType.Size = new Size(483, 23);
             bodyType.TabIndex = 3;
             bodyType.Text = "Bibo+";
             bodyType.SelectedIndexChanged += bodyType_SelectedIndexChanged;
@@ -127,10 +128,10 @@
             // subRace
             // 
             subRace.FormattingEnabled = true;
-            subRace.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helions", "The Lost", "Rava", "Veena" });
-            subRace.Location = new Point(81, 80);
+            subRace.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
+            subRace.Location = new Point(103, 80);
             subRace.Name = "subRace";
-            subRace.Size = new Size(369, 23);
+            subRace.Size = new Size(462, 23);
             subRace.TabIndex = 4;
             subRace.Text = "Midlander";
             subRace.SelectedIndexChanged += subRace_SelectedIndexChanged;
@@ -139,18 +140,18 @@
             // 
             faceType.FormattingEnabled = true;
             faceType.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7", "Face 8" });
-            faceType.Location = new Point(81, 106);
+            faceType.Location = new Point(103, 106);
             faceType.Name = "faceType";
-            faceType.Size = new Size(369, 23);
+            faceType.Size = new Size(462, 23);
             faceType.TabIndex = 5;
             faceType.Text = "Face 1";
             faceType.SelectedIndexChanged += faceType_SelectedIndexChanged;
             // 
             // modNameTextBox
             // 
-            modNameTextBox.Location = new Point(82, 53);
+            modNameTextBox.Location = new Point(104, 53);
             modNameTextBox.Name = "modNameTextBox";
-            modNameTextBox.Size = new Size(367, 23);
+            modNameTextBox.Size = new Size(460, 23);
             modNameTextBox.TabIndex = 6;
             modNameTextBox.TextChanged += modNameTextBox_TextChanged;
             // 
@@ -165,9 +166,9 @@
             // 
             // generateButton
             // 
-            generateButton.Location = new Point(277, 276);
+            generateButton.Location = new Point(269, 276);
             generateButton.Name = "generateButton";
-            generateButton.Size = new Size(176, 23);
+            generateButton.Size = new Size(296, 23);
             generateButton.TabIndex = 8;
             generateButton.Text = "Finished (To finish mod)";
             generateButton.UseVisualStyleBackColor = true;
@@ -177,7 +178,7 @@
             // 
             advancedModeButton.BackColor = Color.IndianRed;
             advancedModeButton.ForeColor = Color.White;
-            advancedModeButton.Location = new Point(331, 24);
+            advancedModeButton.Location = new Point(444, 24);
             advancedModeButton.Name = "advancedModeButton";
             advancedModeButton.Size = new Size(119, 23);
             advancedModeButton.TabIndex = 9;
@@ -187,9 +188,9 @@
             // 
             // previewButton
             // 
-            previewButton.Location = new Point(109, 276);
+            previewButton.Location = new Point(0, 276);
             previewButton.Name = "previewButton";
-            previewButton.Size = new Size(168, 23);
+            previewButton.Size = new Size(263, 23);
             previewButton.TabIndex = 10;
             previewButton.Text = "Preview (For quick edits)";
             previewButton.UseVisualStyleBackColor = true;
@@ -199,9 +200,9 @@
             // 
             normalGeneration.FormattingEnabled = true;
             normalGeneration.Items.AddRange(new object[] { "No Bumps On Skin", "Bumps On Skin", "Inverted Bumps On Skin" });
-            normalGeneration.Location = new Point(82, 247);
+            normalGeneration.Location = new Point(104, 247);
             normalGeneration.Name = "normalGeneration";
-            normalGeneration.Size = new Size(368, 23);
+            normalGeneration.Size = new Size(461, 23);
             normalGeneration.TabIndex = 11;
             normalGeneration.Text = "No Bumps On Skin";
             normalGeneration.SelectedIndexChanged += normalGeneration_SelectedIndexChanged;
@@ -217,9 +218,9 @@
             // 
             // exportProgress
             // 
-            exportProgress.Location = new Point(-2, 270);
+            exportProgress.Location = new Point(-2, 269);
             exportProgress.Name = "exportProgress";
-            exportProgress.Size = new Size(455, 31);
+            exportProgress.Size = new Size(567, 32);
             exportProgress.TabIndex = 13;
             exportProgress.Visible = false;
             exportProgress.Click += exportProgress_Click;
@@ -235,7 +236,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(453, 24);
+            menuStrip1.Size = new Size(565, 24);
             menuStrip1.TabIndex = 14;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -334,7 +335,7 @@
             // 
             donateButton.BackColor = Color.LightCoral;
             donateButton.ForeColor = Color.White;
-            donateButton.Location = new Point(391, 0);
+            donateButton.Location = new Point(503, 0);
             donateButton.Name = "donateButton";
             donateButton.Size = new Size(59, 23);
             donateButton.TabIndex = 15;
@@ -346,7 +347,7 @@
             // 
             discordButton.BackColor = Color.SlateBlue;
             discordButton.ForeColor = Color.White;
-            discordButton.Location = new Point(331, 0);
+            discordButton.Location = new Point(443, 0);
             discordButton.Name = "discordButton";
             discordButton.Size = new Size(59, 23);
             discordButton.TabIndex = 16;
@@ -360,7 +361,7 @@
             exportPanel.Controls.Add(exportLabel);
             exportPanel.Location = new Point(0, 0);
             exportPanel.Name = "exportPanel";
-            exportPanel.Size = new Size(453, 270);
+            exportPanel.Size = new Size(565, 270);
             exportPanel.TabIndex = 17;
             exportPanel.Visible = false;
             exportPanel.Paint += exportPanel_Paint;
@@ -381,7 +382,7 @@
             // 
             easyModeButton.BackColor = Color.FromArgb(128, 255, 128);
             easyModeButton.ForeColor = Color.Black;
-            easyModeButton.Location = new Point(258, 24);
+            easyModeButton.Location = new Point(371, 24);
             easyModeButton.Name = "easyModeButton";
             easyModeButton.Size = new Size(73, 23);
             easyModeButton.TabIndex = 22;
@@ -429,7 +430,7 @@
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(453, 300);
+            ClientSize = new Size(565, 300);
             Controls.Add(easyModeButton);
             Controls.Add(label6);
             Controls.Add(label5);

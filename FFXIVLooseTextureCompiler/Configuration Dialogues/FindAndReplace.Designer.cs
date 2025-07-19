@@ -47,7 +47,7 @@ namespace FFXIVLooseTextureCompiler {
             // acceptChangesButton
             // 
             acceptChangesButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            acceptChangesButton.Location = new Point(200, 346);
+            acceptChangesButton.Location = new Point(266, 346);
             acceptChangesButton.Name = "acceptChangesButton";
             acceptChangesButton.Size = new Size(143, 24);
             acceptChangesButton.TabIndex = 8;
@@ -58,9 +58,9 @@ namespace FFXIVLooseTextureCompiler {
             // button1
             // 
             button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Location = new Point(344, 346);
+            button1.Location = new Point(415, 346);
             button1.Name = "button1";
-            button1.Size = new Size(59, 24);
+            button1.Size = new Size(140, 24);
             button1.TabIndex = 9;
             button1.Text = "Cancel";
             button1.UseVisualStyleBackColor = true;
@@ -80,7 +80,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             replacementString.Location = new Point(4, 36);
             replacementString.Name = "replacementString";
-            replacementString.Size = new Size(400, 23);
+            replacementString.Size = new Size(551, 23);
             replacementString.TabIndex = 10;
             replacementString.TextChanged += replacementString_TextChanged;
             // 
@@ -106,7 +106,7 @@ namespace FFXIVLooseTextureCompiler {
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
             normal.Name = "normal";
-            normal.Size = new Size(338, 28);
+            normal.Size = new Size(427, 28);
             normal.TabIndex = 14;
             // 
             // mask
@@ -120,7 +120,7 @@ namespace FFXIVLooseTextureCompiler {
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
             mask.Name = "mask";
-            mask.Size = new Size(337, 28);
+            mask.Size = new Size(426, 28);
             mask.TabIndex = 15;
             mask.Load += multi_Load;
             // 
@@ -135,7 +135,7 @@ namespace FFXIVLooseTextureCompiler {
             baseTexture.Margin = new Padding(4, 3, 4, 3);
             baseTexture.MinimumSize = new Size(300, 28);
             baseTexture.Name = "baseTexture";
-            baseTexture.Size = new Size(338, 28);
+            baseTexture.Size = new Size(427, 28);
             baseTexture.TabIndex = 16;
             // 
             // bounds
@@ -148,7 +148,7 @@ namespace FFXIVLooseTextureCompiler {
             bounds.Margin = new Padding(4, 3, 4, 3);
             bounds.MinimumSize = new Size(300, 28);
             bounds.Name = "bounds";
-            bounds.Size = new Size(404, 28);
+            bounds.Size = new Size(550, 28);
             bounds.TabIndex = 17;
             // 
             // glow
@@ -161,7 +161,7 @@ namespace FFXIVLooseTextureCompiler {
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
-            glow.Size = new Size(404, 28);
+            glow.Size = new Size(550, 28);
             glow.TabIndex = 18;
             // 
             // label2
@@ -178,7 +178,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             groupTextBox.Location = new Point(4, 92);
             groupTextBox.Name = "groupTextBox";
-            groupTextBox.Size = new Size(400, 23);
+            groupTextBox.Size = new Size(551, 23);
             groupTextBox.TabIndex = 20;
             // 
             // material
@@ -191,14 +191,14 @@ namespace FFXIVLooseTextureCompiler {
             material.Margin = new Padding(4, 3, 4, 3);
             material.MinimumSize = new Size(300, 28);
             material.Name = "material";
-            material.Size = new Size(404, 28);
+            material.Size = new Size(550, 28);
             material.TabIndex = 21;
             // 
             // layersMaskButton
             // 
-            layersMaskButton.Location = new Point(340, 224);
+            layersMaskButton.Location = new Point(438, 224);
             layersMaskButton.Name = "layersMaskButton";
-            layersMaskButton.Size = new Size(64, 23);
+            layersMaskButton.Size = new Size(116, 23);
             layersMaskButton.TabIndex = 60;
             layersMaskButton.Text = "Layers";
             layersMaskButton.UseVisualStyleBackColor = true;
@@ -206,9 +206,9 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // layerNormalButton
             // 
-            layerNormalButton.Location = new Point(340, 192);
+            layerNormalButton.Location = new Point(438, 192);
             layerNormalButton.Name = "layerNormalButton";
-            layerNormalButton.Size = new Size(64, 23);
+            layerNormalButton.Size = new Size(117, 23);
             layerNormalButton.TabIndex = 59;
             layerNormalButton.Text = "Layers";
             layerNormalButton.UseVisualStyleBackColor = true;
@@ -216,9 +216,9 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // layerBaseButton
             // 
-            layerBaseButton.Location = new Point(340, 159);
+            layerBaseButton.Location = new Point(438, 159);
             layerBaseButton.Name = "layerBaseButton";
-            layerBaseButton.Size = new Size(64, 23);
+            layerBaseButton.Size = new Size(117, 23);
             layerBaseButton.TabIndex = 58;
             layerBaseButton.Text = "Layers";
             layerBaseButton.UseVisualStyleBackColor = true;
@@ -228,7 +228,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(414, 372);
+            ClientSize = new Size(557, 372);
             Controls.Add(layersMaskButton);
             Controls.Add(layerNormalButton);
             Controls.Add(layerBaseButton);

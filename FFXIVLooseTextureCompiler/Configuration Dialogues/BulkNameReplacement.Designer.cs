@@ -35,9 +35,9 @@
             // 
             // replaceAll
             // 
-            replaceAll.Location = new Point(171, 161);
+            replaceAll.Location = new Point(76, 161);
             replaceAll.Name = "replaceAll";
-            replaceAll.Size = new Size(75, 25);
+            replaceAll.Size = new Size(127, 25);
             replaceAll.TabIndex = 15;
             replaceAll.Text = "Replace All";
             replaceAll.UseVisualStyleBackColor = true;
@@ -45,9 +45,9 @@
             // 
             // cancel
             // 
-            cancel.Location = new Point(252, 161);
+            cancel.Location = new Point(209, 161);
             cancel.Name = "cancel";
-            cancel.Size = new Size(75, 26);
+            cancel.Size = new Size(118, 26);
             cancel.TabIndex = 14;
             cancel.Text = "Cancel";
             cancel.UseVisualStyleBackColor = true;

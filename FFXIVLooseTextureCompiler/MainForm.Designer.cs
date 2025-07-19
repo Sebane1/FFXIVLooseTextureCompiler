@@ -140,12 +140,13 @@
             canICustomizeTheGroupsThisToolExporrtsToolStripMenuItem = new ToolStripMenuItem();
             canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new ToolStripMenuItem();
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new ToolStripMenuItem();
+            languageToolStripMenuItem = new ToolStripMenuItem();
             donateButton = new Button();
             textureList = new ListBox();
             textureSetListContextMenu = new ContextMenuStrip(components);
-            swapRaceToolStripMenuItem = new ToolStripMenuItem();
             editPathsToolStripMenuItem = new ToolStripMenuItem();
             omniExportModeToolStripMenuItem = new ToolStripMenuItem();
+            swapRaceToolStripMenuItem = new ToolStripMenuItem();
             moveUpToolStripMenuItem = new ToolStripMenuItem();
             moveDownToolStripMenuItem = new ToolStripMenuItem();
             bulkNameReplacement = new ToolStripMenuItem();
@@ -199,6 +200,7 @@
             layerBaseButton = new Button();
             layerNormalButton = new Button();
             layerMaskButton = new Button();
+            resetLanguageSettingsToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             textureSetListContextMenu.SuspendLayout();
@@ -217,7 +219,7 @@
             // 
             genderList.FormattingEnabled = true;
             genderList.Items.AddRange(new object[] { "Masculine", "Feminine" });
-            genderList.Location = new Point(52, 4);
+            genderList.Location = new Point(81, 4);
             genderList.Name = "genderList";
             genderList.Size = new Size(80, 23);
             genderList.TabIndex = 1;
@@ -241,7 +243,7 @@
             tailList.Enabled = false;
             tailList.FormattingEnabled = true;
             tailList.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8" });
-            tailList.Location = new Point(256, 4);
+            tailList.Location = new Point(316, 4);
             tailList.Name = "tailList";
             tailList.Size = new Size(32, 23);
             tailList.TabIndex = 3;
@@ -251,7 +253,7 @@
             // 
             baseBodyList.FormattingEnabled = true;
             baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "Gen3", "TBSE and HRBODY", "TAIL", "Otopop" });
-            baseBodyList.Location = new Point(52, 4);
+            baseBodyList.Location = new Point(81, 4);
             baseBodyList.Name = "baseBodyList";
             baseBodyList.Size = new Size(112, 23);
             baseBodyList.TabIndex = 4;
@@ -261,9 +263,9 @@
             // generateButton
             // 
             generateButton.Anchor = AnchorStyles.Bottom;
-            generateButton.Location = new Point(436, 548);
+            generateButton.Location = new Point(552, 587);
             generateButton.Name = "generateButton";
-            generateButton.Size = new Size(56, 24);
+            generateButton.Size = new Size(107, 24);
             generateButton.TabIndex = 7;
             generateButton.Text = "Preview";
             generateButton.UseVisualStyleBackColor = true;
@@ -272,7 +274,7 @@
             // uniqueAuRa
             // 
             uniqueAuRa.AutoSize = true;
-            uniqueAuRa.Location = new Point(300, 8);
+            uniqueAuRa.Location = new Point(360, 8);
             uniqueAuRa.Name = "uniqueAuRa";
             uniqueAuRa.Size = new Size(98, 19);
             uniqueAuRa.TabIndex = 20;
@@ -288,11 +290,11 @@
             mask.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             mask.Index = -1;
             mask.IsMaterial = false;
-            mask.Location = new Point(4, 483);
+            mask.Location = new Point(4, 522);
             mask.Margin = new Padding(4, 3, 4, 3);
             mask.MinimumSize = new Size(300, 28);
             mask.Name = "mask";
-            mask.Size = new Size(488, 28);
+            mask.Size = new Size(642, 28);
             mask.TabIndex = 19;
             helperToolTip.SetToolTip(mask, "The orange looking image goes here.");
             mask.OnFileSelected += multi_OnFileSelected;
@@ -308,11 +310,11 @@
             normal.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             normal.Index = -1;
             normal.IsMaterial = false;
-            normal.Location = new Point(4, 451);
+            normal.Location = new Point(4, 490);
             normal.Margin = new Padding(4, 3, 4, 3);
             normal.MinimumSize = new Size(300, 28);
             normal.Name = "normal";
-            normal.Size = new Size(488, 28);
+            normal.Size = new Size(642, 28);
             normal.TabIndex = 18;
             helperToolTip.SetToolTip(normal, "The blue and red bump map goes here");
             normal.OnFileSelected += multi_OnFileSelected;
@@ -328,11 +330,11 @@
             Base.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             Base.Index = -1;
             Base.IsMaterial = false;
-            Base.Location = new Point(4, 419);
+            Base.Location = new Point(4, 458);
             Base.Margin = new Padding(4, 3, 4, 3);
             Base.MinimumSize = new Size(300, 28);
             Base.Name = "Base";
-            Base.Size = new Size(488, 28);
+            Base.Size = new Size(642, 28);
             Base.TabIndex = 17;
             helperToolTip.SetToolTip(Base, "Skin, and tattoo overlays go here.");
             Base.OnFileSelected += multi_OnFileSelected;
@@ -344,7 +346,7 @@
             // 
             asymCheckbox.AutoSize = true;
             asymCheckbox.BackColor = Color.FromArgb(0, 192, 192);
-            asymCheckbox.Location = new Point(400, 8);
+            asymCheckbox.Location = new Point(512, 8);
             asymCheckbox.Name = "asymCheckbox";
             asymCheckbox.Size = new Size(56, 19);
             asymCheckbox.TabIndex = 23;
@@ -356,7 +358,7 @@
             // 
             facePart.FormattingEnabled = true;
             facePart.Items.AddRange(new object[] { "Face", "Eyebrows", "Eyes", "Ears", "Face Paint", "Hair", "Face B", "Etc B" });
-            facePart.Location = new Point(196, 4);
+            facePart.Location = new Point(283, 4);
             facePart.Name = "facePart";
             facePart.Size = new Size(80, 23);
             facePart.TabIndex = 4;
@@ -367,9 +369,9 @@
             // 
             faceTypeList.FormattingEnabled = true;
             faceTypeList.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7", "Face 8", "Face 9" });
-            faceTypeList.Location = new Point(56, 4);
+            faceTypeList.Location = new Point(85, 4);
             faceTypeList.Name = "faceTypeList";
-            faceTypeList.Size = new Size(60, 23);
+            faceTypeList.Size = new Size(82, 23);
             faceTypeList.TabIndex = 3;
             faceTypeList.Text = "Face 4";
             // 
@@ -377,7 +379,7 @@
             // 
             subRaceList.FormattingEnabled = true;
             subRaceList.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
-            subRaceList.Location = new Point(180, 4);
+            subRaceList.Location = new Point(243, 4);
             subRaceList.Name = "subRaceList";
             subRaceList.Size = new Size(84, 23);
             subRaceList.TabIndex = 2;
@@ -395,9 +397,9 @@
             // 
             // modDescriptionTextBox
             // 
-            modDescriptionTextBox.Location = new Point(76, 56);
+            modDescriptionTextBox.Location = new Point(88, 56);
             modDescriptionTextBox.Name = "modDescriptionTextBox";
-            modDescriptionTextBox.Size = new Size(164, 23);
+            modDescriptionTextBox.Size = new Size(302, 23);
             modDescriptionTextBox.TabIndex = 22;
             modDescriptionTextBox.Text = "Exported by FFXIV Loose Texture Compiler";
             modDescriptionTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -405,7 +407,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(460, 184);
+            label3.Location = new Point(661, 184);
             label3.Name = "label3";
             label3.Size = new Size(45, 15);
             label3.TabIndex = 21;
@@ -414,7 +416,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(244, 60);
+            label2.Location = new Point(395, 60);
             label2.Name = "label2";
             label2.Size = new Size(49, 15);
             label2.TabIndex = 16;
@@ -422,9 +424,9 @@
             // 
             // modWebsiteTextBox
             // 
-            modWebsiteTextBox.Location = new Point(296, 56);
+            modWebsiteTextBox.Location = new Point(447, 56);
             modWebsiteTextBox.Name = "modWebsiteTextBox";
-            modWebsiteTextBox.Size = new Size(256, 23);
+            modWebsiteTextBox.Size = new Size(311, 23);
             modWebsiteTextBox.TabIndex = 15;
             modWebsiteTextBox.Text = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
             modWebsiteTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -433,7 +435,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(248, 32);
+            label1.Location = new Point(399, 32);
             label1.Name = "label1";
             label1.Size = new Size(44, 15);
             label1.TabIndex = 14;
@@ -441,9 +443,9 @@
             // 
             // modAuthorTextBox
             // 
-            modAuthorTextBox.Location = new Point(296, 28);
+            modAuthorTextBox.Location = new Point(447, 28);
             modAuthorTextBox.Name = "modAuthorTextBox";
-            modAuthorTextBox.Size = new Size(256, 23);
+            modAuthorTextBox.Size = new Size(311, 23);
             modAuthorTextBox.TabIndex = 13;
             modAuthorTextBox.Text = "FFXIV Loose Texture Compiler";
             modAuthorTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -460,18 +462,18 @@
             // 
             // modNameTextBox
             // 
-            modNameTextBox.Location = new Point(76, 28);
+            modNameTextBox.Location = new Point(88, 28);
             modNameTextBox.Name = "modNameTextBox";
-            modNameTextBox.Size = new Size(164, 23);
+            modNameTextBox.Size = new Size(302, 23);
             modNameTextBox.TabIndex = 11;
             modNameTextBox.TextChanged += modDescriptionTextBox_TextChanged;
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, configToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, configToolStripMenuItem, modShareToolStripMenuItem, creditsToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(557, 24);
+            menuStrip1.Size = new Size(758, 24);
             menuStrip1.TabIndex = 24;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -1116,11 +1118,18 @@
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Text = "What is modshare, and can I quickly send a mod to somebody else?";
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem.Click += whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem_Click;
             // 
+            // languageToolStripMenuItem
+            // 
+            languageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { resetLanguageSettingsToolStripMenuItem });
+            languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            languageToolStripMenuItem.Size = new Size(71, 20);
+            languageToolStripMenuItem.Text = "Language";
+            // 
             // donateButton
             // 
             donateButton.BackColor = Color.IndianRed;
             donateButton.ForeColor = Color.White;
-            donateButton.Location = new Point(478, 0);
+            donateButton.Location = new Point(680, 0);
             donateButton.Name = "donateButton";
             donateButton.Size = new Size(75, 23);
             donateButton.TabIndex = 25;
@@ -1136,7 +1145,7 @@
             textureList.ItemHeight = 15;
             textureList.Location = new Point(0, 208);
             textureList.Name = "textureList";
-            textureList.Size = new Size(556, 154);
+            textureList.Size = new Size(757, 154);
             textureList.TabIndex = 26;
             textureList.SelectedIndexChanged += textureSetList_SelectedIndexChanged;
             // 
@@ -1144,16 +1153,8 @@
             // 
             textureSetListContextMenu.Items.AddRange(new ToolStripItem[] { editPathsToolStripMenuItem, omniExportModeToolStripMenuItem, swapRaceToolStripMenuItem, moveUpToolStripMenuItem, moveDownToolStripMenuItem, bulkNameReplacement, bulkReplaceToolStripMenuItem, duplicateToolStripMenuItem, deleteToolStripMenuItem });
             textureSetListContextMenu.Name = "materialListContextMenu";
-            textureSetListContextMenu.Size = new Size(236, 224);
+            textureSetListContextMenu.Size = new Size(236, 202);
             textureSetListContextMenu.Opening += textureSetListContextMenu_Opening;
-            // 
-            // swapRaceToolStripMenuItem
-            // 
-            swapRaceToolStripMenuItem.Name = "swapRaceToolStripMenuItem";
-            swapRaceToolStripMenuItem.Size = new Size(235, 22);
-            swapRaceToolStripMenuItem.Text = "Swap Body Race";
-            swapRaceToolStripMenuItem.Click += swapRaceToolStripMenuItem_Click;
-            swapRaceToolStripMenuItem.VisibleChanged += swapRaceToolStripMenuItem_VisibleChanged;
             // 
             // editPathsToolStripMenuItem
             // 
@@ -1168,6 +1169,14 @@
             omniExportModeToolStripMenuItem.Size = new Size(235, 22);
             omniExportModeToolStripMenuItem.Text = "Enable Universal Compatibility";
             omniExportModeToolStripMenuItem.Click += omniExportModeToolStripMenuItem_Click;
+            // 
+            // swapRaceToolStripMenuItem
+            // 
+            swapRaceToolStripMenuItem.Name = "swapRaceToolStripMenuItem";
+            swapRaceToolStripMenuItem.Size = new Size(235, 22);
+            swapRaceToolStripMenuItem.Text = "Swap Body Race";
+            swapRaceToolStripMenuItem.Click += swapRaceToolStripMenuItem_Click;
+            swapRaceToolStripMenuItem.VisibleChanged += swapRaceToolStripMenuItem_VisibleChanged;
             // 
             // moveUpToolStripMenuItem
             // 
@@ -1213,9 +1222,9 @@
             // 
             // addBodyButton
             // 
-            addBodyButton.Location = new Point(459, 4);
+            addBodyButton.Location = new Point(605, 4);
             addBodyButton.Name = "addBodyButton";
-            addBodyButton.Size = new Size(96, 23);
+            addBodyButton.Size = new Size(148, 23);
             addBodyButton.TabIndex = 27;
             addBodyButton.Text = "Add Body";
             addBodyButton.UseVisualStyleBackColor = true;
@@ -1223,9 +1232,9 @@
             // 
             // addFaceButton
             // 
-            addFaceButton.Location = new Point(463, 4);
+            addFaceButton.Location = new Point(609, 4);
             addFaceButton.Name = "addFaceButton";
-            addFaceButton.Size = new Size(96, 23);
+            addFaceButton.Size = new Size(148, 23);
             addFaceButton.TabIndex = 28;
             addFaceButton.Text = "Add Face Paint";
             addFaceButton.UseVisualStyleBackColor = true;
@@ -1236,7 +1245,7 @@
             currentEditLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             currentEditLabel.AutoSize = true;
             currentEditLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            currentEditLabel.Location = new Point(-1, 384);
+            currentEditLabel.Location = new Point(-1, 389);
             currentEditLabel.Name = "currentEditLabel";
             currentEditLabel.Size = new Size(89, 30);
             currentEditLabel.TabIndex = 29;
@@ -1256,7 +1265,7 @@
             // removeSelection
             // 
             removeSelection.Anchor = AnchorStyles.None;
-            removeSelection.Location = new Point(0, 360);
+            removeSelection.Location = new Point(3, 360);
             removeSelection.Name = "removeSelection";
             removeSelection.Size = new Size(112, 23);
             removeSelection.TabIndex = 31;
@@ -1267,9 +1276,9 @@
             // clearList
             // 
             clearList.Anchor = AnchorStyles.None;
-            clearList.Location = new Point(112, 360);
+            clearList.Location = new Point(117, 360);
             clearList.Name = "clearList";
-            clearList.Size = new Size(72, 23);
+            clearList.Size = new Size(130, 23);
             clearList.TabIndex = 32;
             clearList.Text = "Clear List";
             clearList.UseVisualStyleBackColor = true;
@@ -1277,9 +1286,9 @@
             // 
             // addCustomPathButton
             // 
-            addCustomPathButton.Location = new Point(459, 4);
+            addCustomPathButton.Location = new Point(605, 4);
             addCustomPathButton.Name = "addCustomPathButton";
-            addCustomPathButton.Size = new Size(96, 23);
+            addCustomPathButton.Size = new Size(148, 23);
             addCustomPathButton.TabIndex = 33;
             addCustomPathButton.Text = "Custom Path";
             addCustomPathButton.UseVisualStyleBackColor = true;
@@ -1288,9 +1297,9 @@
             // moveUpButton
             // 
             moveUpButton.Anchor = AnchorStyles.None;
-            moveUpButton.Location = new Point(184, 360);
+            moveUpButton.Location = new Point(250, 360);
             moveUpButton.Name = "moveUpButton";
-            moveUpButton.Size = new Size(68, 23);
+            moveUpButton.Size = new Size(126, 23);
             moveUpButton.TabIndex = 34;
             moveUpButton.Text = "Move Up";
             moveUpButton.UseVisualStyleBackColor = true;
@@ -1299,9 +1308,9 @@
             // moveDownButton
             // 
             moveDownButton.Anchor = AnchorStyles.None;
-            moveDownButton.Location = new Point(252, 360);
+            moveDownButton.Location = new Point(378, 360);
             moveDownButton.Name = "moveDownButton";
-            moveDownButton.Size = new Size(80, 23);
+            moveDownButton.Size = new Size(126, 23);
             moveDownButton.TabIndex = 35;
             moveDownButton.Text = "Move Down";
             moveDownButton.UseVisualStyleBackColor = true;
@@ -1323,7 +1332,7 @@
             generationType.Anchor = AnchorStyles.Bottom;
             generationType.FormattingEnabled = true;
             generationType.Items.AddRange(new object[] { "Detailed", "Simple", "Dropdown", "Group Is Checkbox" });
-            generationType.Location = new Point(80, 547);
+            generationType.Location = new Point(137, 586);
             generationType.Name = "generationType";
             generationType.Size = new Size(106, 23);
             generationType.TabIndex = 36;
@@ -1334,7 +1343,7 @@
             // 
             label5.Anchor = AnchorStyles.Bottom;
             label5.AutoSize = true;
-            label5.Location = new Point(4, 551);
+            label5.Location = new Point(8, 590);
             label5.Name = "label5";
             label5.Size = new Size(71, 15);
             label5.TabIndex = 37;
@@ -1343,18 +1352,19 @@
             // exportProgress
             // 
             exportProgress.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            exportProgress.Location = new Point(0, 544);
+            exportProgress.Location = new Point(0, 583);
             exportProgress.Name = "exportProgress";
-            exportProgress.Size = new Size(556, 32);
+            exportProgress.Size = new Size(757, 32);
             exportProgress.Style = ProgressBarStyle.Continuous;
             exportProgress.TabIndex = 38;
             exportProgress.Visible = false;
+            exportProgress.Click += exportProgress_Click;
             // 
             // bakeNormals
             // 
             bakeNormals.Anchor = AnchorStyles.Bottom;
             bakeNormals.AutoSize = true;
-            bakeNormals.Location = new Point(192, 552);
+            bakeNormals.Location = new Point(247, 590);
             bakeNormals.Name = "bakeNormals";
             bakeNormals.Size = new Size(116, 19);
             bakeNormals.TabIndex = 39;
@@ -1366,7 +1376,7 @@
             // 
             generatMaskCheckBox.Anchor = AnchorStyles.Bottom;
             generatMaskCheckBox.AutoSize = true;
-            generatMaskCheckBox.Location = new Point(312, 551);
+            generatMaskCheckBox.Location = new Point(402, 589);
             generatMaskCheckBox.Name = "generatMaskCheckBox";
             generatMaskCheckBox.Size = new Size(104, 19);
             generatMaskCheckBox.TabIndex = 40;
@@ -1382,11 +1392,11 @@
             bounds.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             bounds.Index = -1;
             bounds.IsMaterial = false;
-            bounds.Location = new Point(4, 515);
+            bounds.Location = new Point(4, 554);
             bounds.Margin = new Padding(4, 3, 4, 3);
             bounds.MinimumSize = new Size(300, 28);
             bounds.Name = "bounds";
-            bounds.Size = new Size(488, 28);
+            bounds.Size = new Size(642, 28);
             bounds.TabIndex = 41;
             helperToolTip.SetToolTip(bounds, "Used to restrict where generated normal maps actually use generated normals.");
             bounds.Visible = false;
@@ -1398,7 +1408,7 @@
             // 
             discordButton.BackColor = Color.MediumSlateBlue;
             discordButton.ForeColor = Color.White;
-            discordButton.Location = new Point(402, 0);
+            discordButton.Location = new Point(604, 0);
             discordButton.Name = "discordButton";
             discordButton.Size = new Size(75, 23);
             discordButton.TabIndex = 42;
@@ -1410,7 +1420,7 @@
             // 
             faceExtraList.Enabled = false;
             faceExtraList.FormattingEnabled = true;
-            faceExtraList.Location = new Point(348, 4);
+            faceExtraList.Location = new Point(458, 4);
             faceExtraList.Name = "faceExtraList";
             faceExtraList.Size = new Size(48, 23);
             faceExtraList.TabIndex = 43;
@@ -1424,11 +1434,11 @@
             glow.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             glow.Index = -1;
             glow.IsMaterial = false;
-            glow.Location = new Point(4, 515);
+            glow.Location = new Point(4, 554);
             glow.Margin = new Padding(4, 3, 4, 3);
             glow.MinimumSize = new Size(300, 28);
             glow.Name = "glow";
-            glow.Size = new Size(488, 28);
+            glow.Size = new Size(642, 28);
             glow.TabIndex = 45;
             helperToolTip.SetToolTip(glow, "Used to make the character glow. Use a transparent overlay where you want glow to happen. Similar to a using an overlay.");
             glow.OnFileSelected += multi_OnFileSelected;
@@ -1438,9 +1448,9 @@
             // finalizeButton
             // 
             finalizeButton.Anchor = AnchorStyles.Bottom;
-            finalizeButton.Location = new Point(492, 548);
+            finalizeButton.Location = new Point(659, 587);
             finalizeButton.Name = "finalizeButton";
-            finalizeButton.Size = new Size(64, 24);
+            finalizeButton.Size = new Size(98, 24);
             finalizeButton.TabIndex = 46;
             finalizeButton.Text = "Finished";
             finalizeButton.UseVisualStyleBackColor = true;
@@ -1450,9 +1460,9 @@
             // 
             auraFaceScalesDropdown.FormattingEnabled = true;
             auraFaceScalesDropdown.Items.AddRange(new object[] { "Vanilla Scales", "Scaleless" });
-            auraFaceScalesDropdown.Location = new Point(317, 4);
+            auraFaceScalesDropdown.Location = new Point(420, 4);
             auraFaceScalesDropdown.Name = "auraFaceScalesDropdown";
-            auraFaceScalesDropdown.Size = new Size(94, 23);
+            auraFaceScalesDropdown.Size = new Size(179, 23);
             auraFaceScalesDropdown.TabIndex = 48;
             auraFaceScalesDropdown.Text = "Vanilla Scales";
             // 
@@ -1467,13 +1477,13 @@
             panel1.Controls.Add(tailList);
             panel1.Location = new Point(0, 112);
             panel1.Name = "panel1";
-            panel1.Size = new Size(556, 32);
+            panel1.Size = new Size(758, 32);
             panel1.TabIndex = 49;
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(176, 9);
+            label12.Location = new Point(202, 9);
             label12.Name = "label12";
             label12.Size = new Size(71, 15);
             label12.TabIndex = 38;
@@ -1501,13 +1511,13 @@
             panel2.Controls.Add(addFaceButton);
             panel2.Location = new Point(-4, 144);
             panel2.Name = "panel2";
-            panel2.Size = new Size(560, 32);
+            panel2.Size = new Size(761, 32);
             panel2.TabIndex = 50;
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(288, 8);
+            label15.Location = new Point(379, 8);
             label15.Name = "label15";
             label15.Size = new Size(51, 15);
             label15.TabIndex = 45;
@@ -1516,7 +1526,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(128, 8);
+            label14.Location = new Point(173, 8);
             label14.Name = "label14";
             label14.Size = new Size(55, 15);
             label14.TabIndex = 44;
@@ -1537,7 +1547,7 @@
             exportLabel.BackColor = SystemColors.GrayText;
             exportLabel.Font = new Font("Segoe UI", 36F, FontStyle.Bold);
             exportLabel.ForeColor = Color.Snow;
-            exportLabel.Location = new Point(10, 246);
+            exportLabel.Location = new Point(110, 265);
             exportLabel.Name = "exportLabel";
             exportLabel.Size = new Size(536, 65);
             exportLabel.TabIndex = 0;
@@ -1551,7 +1561,7 @@
             exportPanel.Controls.Add(exportLabel);
             exportPanel.Location = new Point(0, 0);
             exportPanel.Name = "exportPanel";
-            exportPanel.Size = new Size(556, 572);
+            exportPanel.Size = new Size(757, 611);
             exportPanel.TabIndex = 44;
             exportPanel.Visible = false;
             // 
@@ -1562,7 +1572,7 @@
             // 
             // modVersionTextBox
             // 
-            modVersionTextBox.Location = new Point(508, 180);
+            modVersionTextBox.Location = new Point(709, 180);
             modVersionTextBox.Name = "modVersionTextBox";
             modVersionTextBox.Size = new Size(44, 23);
             modVersionTextBox.TabIndex = 20;
@@ -1603,9 +1613,9 @@
             textureSetName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             textureSetName.Enabled = false;
             textureSetName.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textureSetName.Location = new Point(82, 384);
+            textureSetName.Location = new Point(3, 423);
             textureSetName.Name = "textureSetName";
-            textureSetName.Size = new Size(474, 33);
+            textureSetName.Size = new Size(754, 33);
             textureSetName.TabIndex = 53;
             textureSetName.Text = "Please select a texture set to start importing.";
             textureSetName.TextChanged += textureSetName_TextChanged;
@@ -1631,13 +1641,13 @@
             panel3.Controls.Add(addCustomPathButton);
             panel3.Location = new Point(0, 80);
             panel3.Name = "panel3";
-            panel3.Size = new Size(556, 32);
+            panel3.Size = new Size(758, 32);
             panel3.TabIndex = 54;
             // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(273, 8);
+            label16.Location = new Point(336, 8);
             label16.Name = "label16";
             label16.Size = new Size(39, 15);
             label16.TabIndex = 49;
@@ -1646,7 +1656,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(140, 8);
+            label10.Location = new Point(169, 8);
             label10.Name = "label10";
             label10.Size = new Size(31, 15);
             label10.TabIndex = 36;
@@ -1674,9 +1684,9 @@
             // layerBaseButton
             // 
             layerBaseButton.Enabled = false;
-            layerBaseButton.Location = new Point(488, 422);
+            layerBaseButton.Location = new Point(646, 462);
             layerBaseButton.Name = "layerBaseButton";
-            layerBaseButton.Size = new Size(64, 23);
+            layerBaseButton.Size = new Size(109, 23);
             layerBaseButton.TabIndex = 55;
             layerBaseButton.Text = "Layers";
             layerBaseButton.UseVisualStyleBackColor = true;
@@ -1685,9 +1695,9 @@
             // layerNormalButton
             // 
             layerNormalButton.Enabled = false;
-            layerNormalButton.Location = new Point(488, 453);
+            layerNormalButton.Location = new Point(646, 493);
             layerNormalButton.Name = "layerNormalButton";
-            layerNormalButton.Size = new Size(64, 23);
+            layerNormalButton.Size = new Size(109, 23);
             layerNormalButton.TabIndex = 56;
             layerNormalButton.Text = "Layers";
             layerNormalButton.UseVisualStyleBackColor = true;
@@ -1696,19 +1706,26 @@
             // layerMaskButton
             // 
             layerMaskButton.Enabled = false;
-            layerMaskButton.Location = new Point(488, 485);
+            layerMaskButton.Location = new Point(646, 525);
             layerMaskButton.Name = "layerMaskButton";
-            layerMaskButton.Size = new Size(64, 23);
+            layerMaskButton.Size = new Size(109, 23);
             layerMaskButton.TabIndex = 57;
             layerMaskButton.Text = "Layers";
             layerMaskButton.UseVisualStyleBackColor = true;
             layerMaskButton.Click += layersMaskButton_Click;
             // 
+            // resetLanguageSettingsToolStripMenuItem
+            // 
+            resetLanguageSettingsToolStripMenuItem.Name = "resetLanguageSettingsToolStripMenuItem";
+            resetLanguageSettingsToolStripMenuItem.Size = new Size(202, 22);
+            resetLanguageSettingsToolStripMenuItem.Text = "Reset Language Settings";
+            resetLanguageSettingsToolStripMenuItem.Click += resetLanguageSettingsToolStripMenuItem_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(557, 576);
+            ClientSize = new Size(758, 615);
             Controls.Add(layerMaskButton);
             Controls.Add(layerNormalButton);
             Controls.Add(layerBaseButton);
@@ -1949,6 +1966,8 @@
         private ToolStripMenuItem tail4MaleToolStripMenuItem;
         private ToolStripMenuItem legacyAuRaMapsToDawntrailToolStripMenuItem;
         private ToolStripMenuItem swapRaceToolStripMenuItem;
+        private ToolStripMenuItem languageToolStripMenuItem;
+        private ToolStripMenuItem resetLanguageSettingsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

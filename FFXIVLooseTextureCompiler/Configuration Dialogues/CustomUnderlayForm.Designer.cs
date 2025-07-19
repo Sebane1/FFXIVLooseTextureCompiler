@@ -23,273 +23,274 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.pictureBox9 = new System.Windows.Forms.PictureBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox10 = new System.Windows.Forms.PictureBox();
-            this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.pictureBox12 = new System.Windows.Forms.PictureBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.pictureBox13 = new System.Windows.Forms.PictureBox();
-            this.pictureBox14 = new System.Windows.Forms.PictureBox();
-            this.pictureBox15 = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).BeginInit();
-            this.SuspendLayout();
+            label1 = new Label();
+            pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            pictureBox3 = new PictureBox();
+            pictureBox4 = new PictureBox();
+            pictureBox5 = new PictureBox();
+            pictureBox6 = new PictureBox();
+            label2 = new Label();
+            pictureBox7 = new PictureBox();
+            pictureBox8 = new PictureBox();
+            pictureBox9 = new PictureBox();
+            label3 = new Label();
+            pictureBox10 = new PictureBox();
+            pictureBox11 = new PictureBox();
+            pictureBox12 = new PictureBox();
+            label4 = new Label();
+            pictureBox13 = new PictureBox();
+            pictureBox14 = new PictureBox();
+            pictureBox15 = new PictureBox();
+            label5 = new Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).BeginInit();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(4, 152);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 37);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Bibo";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label1.Location = new Point(4, 152);
+            label1.Name = "label1";
+            label1.Size = new Size(76, 37);
+            label1.TabIndex = 0;
+            label1.Text = "Bibo";
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Tan;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 188);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            pictureBox1.BackColor = Color.Tan;
+            pictureBox1.Location = new Point(8, 188);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(100, 104);
+            pictureBox1.TabIndex = 1;
+            pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.pictureBox2.Location = new System.Drawing.Point(112, 188);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox2.TabIndex = 2;
-            this.pictureBox2.TabStop = false;
+            pictureBox2.BackColor = SystemColors.GradientActiveCaption;
+            pictureBox2.Location = new Point(112, 188);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(100, 104);
+            pictureBox2.TabIndex = 2;
+            pictureBox2.TabStop = false;
             // 
             // pictureBox3
             // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox3.Location = new System.Drawing.Point(216, 188);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox3.TabIndex = 3;
-            this.pictureBox3.TabStop = false;
+            pictureBox3.BackColor = Color.Orange;
+            pictureBox3.Location = new Point(216, 188);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(100, 104);
+            pictureBox3.TabIndex = 3;
+            pictureBox3.TabStop = false;
             // 
             // pictureBox4
             // 
-            this.pictureBox4.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox4.Location = new System.Drawing.Point(552, 48);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox4.TabIndex = 7;
-            this.pictureBox4.TabStop = false;
+            pictureBox4.BackColor = Color.Orange;
+            pictureBox4.Location = new Point(552, 48);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(100, 104);
+            pictureBox4.TabIndex = 7;
+            pictureBox4.TabStop = false;
             // 
             // pictureBox5
             // 
-            this.pictureBox5.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.pictureBox5.Location = new System.Drawing.Point(448, 48);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox5.TabIndex = 6;
-            this.pictureBox5.TabStop = false;
+            pictureBox5.BackColor = SystemColors.GradientActiveCaption;
+            pictureBox5.Location = new Point(448, 48);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(100, 104);
+            pictureBox5.TabIndex = 6;
+            pictureBox5.TabStop = false;
             // 
             // pictureBox6
             // 
-            this.pictureBox6.BackColor = System.Drawing.Color.Tan;
-            this.pictureBox6.Location = new System.Drawing.Point(344, 48);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox6.TabIndex = 5;
-            this.pictureBox6.TabStop = false;
+            pictureBox6.BackColor = Color.Tan;
+            pictureBox6.Location = new Point(344, 48);
+            pictureBox6.Name = "pictureBox6";
+            pictureBox6.Size = new Size(100, 104);
+            pictureBox6.TabIndex = 5;
+            pictureBox6.TabStop = false;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(340, 12);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 37);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Gen3";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label2.Location = new Point(340, 12);
+            label2.Name = "label2";
+            label2.Size = new Size(83, 37);
+            label2.TabIndex = 4;
+            label2.Text = "Gen3";
+            label2.Click += label2_Click;
             // 
             // pictureBox7
             // 
-            this.pictureBox7.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox7.Location = new System.Drawing.Point(552, 188);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox7.TabIndex = 11;
-            this.pictureBox7.TabStop = false;
+            pictureBox7.BackColor = Color.Orange;
+            pictureBox7.Location = new Point(552, 188);
+            pictureBox7.Name = "pictureBox7";
+            pictureBox7.Size = new Size(100, 104);
+            pictureBox7.TabIndex = 11;
+            pictureBox7.TabStop = false;
             // 
             // pictureBox8
             // 
-            this.pictureBox8.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.pictureBox8.Location = new System.Drawing.Point(448, 188);
-            this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox8.TabIndex = 10;
-            this.pictureBox8.TabStop = false;
+            pictureBox8.BackColor = SystemColors.GradientActiveCaption;
+            pictureBox8.Location = new Point(448, 188);
+            pictureBox8.Name = "pictureBox8";
+            pictureBox8.Size = new Size(100, 104);
+            pictureBox8.TabIndex = 10;
+            pictureBox8.TabStop = false;
             // 
             // pictureBox9
             // 
-            this.pictureBox9.BackColor = System.Drawing.Color.Tan;
-            this.pictureBox9.Location = new System.Drawing.Point(344, 188);
-            this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox9.TabIndex = 9;
-            this.pictureBox9.TabStop = false;
+            pictureBox9.BackColor = Color.Tan;
+            pictureBox9.Location = new Point(344, 188);
+            pictureBox9.Name = "pictureBox9";
+            pictureBox9.Size = new Size(100, 104);
+            pictureBox9.TabIndex = 9;
+            pictureBox9.TabStop = false;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(340, 152);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(116, 37);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Otopop";
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label3.Location = new Point(340, 152);
+            label3.Name = "label3";
+            label3.Size = new Size(116, 37);
+            label3.TabIndex = 8;
+            label3.Text = "Otopop";
             // 
             // pictureBox10
             // 
-            this.pictureBox10.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox10.Location = new System.Drawing.Point(216, 48);
-            this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox10.TabIndex = 15;
-            this.pictureBox10.TabStop = false;
+            pictureBox10.BackColor = Color.Orange;
+            pictureBox10.Location = new Point(216, 48);
+            pictureBox10.Name = "pictureBox10";
+            pictureBox10.Size = new Size(100, 104);
+            pictureBox10.TabIndex = 15;
+            pictureBox10.TabStop = false;
             // 
             // pictureBox11
             // 
-            this.pictureBox11.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.pictureBox11.Location = new System.Drawing.Point(112, 48);
-            this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox11.TabIndex = 14;
-            this.pictureBox11.TabStop = false;
+            pictureBox11.BackColor = SystemColors.GradientActiveCaption;
+            pictureBox11.Location = new Point(112, 48);
+            pictureBox11.Name = "pictureBox11";
+            pictureBox11.Size = new Size(100, 104);
+            pictureBox11.TabIndex = 14;
+            pictureBox11.TabStop = false;
             // 
             // pictureBox12
             // 
-            this.pictureBox12.BackColor = System.Drawing.Color.Tan;
-            this.pictureBox12.Location = new System.Drawing.Point(8, 48);
-            this.pictureBox12.Name = "pictureBox12";
-            this.pictureBox12.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox12.TabIndex = 13;
-            this.pictureBox12.TabStop = false;
+            pictureBox12.BackColor = Color.Tan;
+            pictureBox12.Location = new Point(8, 48);
+            pictureBox12.Name = "pictureBox12";
+            pictureBox12.Size = new Size(100, 104);
+            pictureBox12.TabIndex = 13;
+            pictureBox12.TabStop = false;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(4, 12);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 37);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Vanilla";
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label4.Location = new Point(4, 12);
+            label4.Name = "label4";
+            label4.Size = new Size(103, 37);
+            label4.TabIndex = 12;
+            label4.Text = "Vanilla";
             // 
             // pictureBox13
             // 
-            this.pictureBox13.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox13.Location = new System.Drawing.Point(216, 332);
-            this.pictureBox13.Name = "pictureBox13";
-            this.pictureBox13.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox13.TabIndex = 19;
-            this.pictureBox13.TabStop = false;
+            pictureBox13.BackColor = Color.Orange;
+            pictureBox13.Location = new Point(216, 332);
+            pictureBox13.Name = "pictureBox13";
+            pictureBox13.Size = new Size(100, 104);
+            pictureBox13.TabIndex = 19;
+            pictureBox13.TabStop = false;
             // 
             // pictureBox14
             // 
-            this.pictureBox14.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.pictureBox14.Location = new System.Drawing.Point(112, 332);
-            this.pictureBox14.Name = "pictureBox14";
-            this.pictureBox14.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox14.TabIndex = 18;
-            this.pictureBox14.TabStop = false;
+            pictureBox14.BackColor = SystemColors.GradientActiveCaption;
+            pictureBox14.Location = new Point(112, 332);
+            pictureBox14.Name = "pictureBox14";
+            pictureBox14.Size = new Size(100, 104);
+            pictureBox14.TabIndex = 18;
+            pictureBox14.TabStop = false;
             // 
             // pictureBox15
             // 
-            this.pictureBox15.BackColor = System.Drawing.Color.Tan;
-            this.pictureBox15.Location = new System.Drawing.Point(8, 332);
-            this.pictureBox15.Name = "pictureBox15";
-            this.pictureBox15.Size = new System.Drawing.Size(100, 104);
-            this.pictureBox15.TabIndex = 17;
-            this.pictureBox15.TabStop = false;
+            pictureBox15.BackColor = Color.Tan;
+            pictureBox15.Location = new Point(8, 332);
+            pictureBox15.Name = "pictureBox15";
+            pictureBox15.Size = new Size(100, 104);
+            pictureBox15.TabIndex = 17;
+            pictureBox15.TabStop = false;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(4, 296);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(203, 37);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "TBSE/HRBODY";
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label5.Location = new Point(4, 296);
+            label5.Name = "label5";
+            label5.Size = new Size(203, 37);
+            label5.TabIndex = 16;
+            label5.Text = "TBSE/HRBODY";
             // 
             // CustomUnderlayForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 455);
-            this.Controls.Add(this.pictureBox13);
-            this.Controls.Add(this.pictureBox14);
-            this.Controls.Add(this.pictureBox15);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.pictureBox10);
-            this.Controls.Add(this.pictureBox11);
-            this.Controls.Add(this.pictureBox12);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.pictureBox7);
-            this.Controls.Add(this.pictureBox8);
-            this.Controls.Add(this.pictureBox9);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox5);
-            this.Controls.Add(this.pictureBox6);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label1);
-            this.Name = "CustomUnderlayForm";
-            this.Text = "CustomUnderlayForm";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(676, 455);
+            Controls.Add(pictureBox13);
+            Controls.Add(pictureBox14);
+            Controls.Add(pictureBox15);
+            Controls.Add(label5);
+            Controls.Add(pictureBox10);
+            Controls.Add(pictureBox11);
+            Controls.Add(pictureBox12);
+            Controls.Add(label4);
+            Controls.Add(pictureBox7);
+            Controls.Add(pictureBox8);
+            Controls.Add(pictureBox9);
+            Controls.Add(label3);
+            Controls.Add(pictureBox4);
+            Controls.Add(pictureBox5);
+            Controls.Add(pictureBox6);
+            Controls.Add(label2);
+            Controls.Add(pictureBox3);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
+            Controls.Add(label1);
+            Name = "CustomUnderlayForm";
+            Text = "CustomUnderlayForm";
+            Load += CustomUnderlayForm_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

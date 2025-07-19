@@ -1,3 +1,6 @@
 [submodule "LooseTextureCompilerCore"]
 	path = LooseTextureCompilerCore
 	url = https://github.com/Sebane1/LooseTextureCompilerCore.git
+[submodule "RoleplayingQuestCore"]
+	path = RoleplayingQuestCore
+	url = https://github.com/Sebane1/RoleplayingQuestCore.git

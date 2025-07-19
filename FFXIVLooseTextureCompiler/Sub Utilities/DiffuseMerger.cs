@@ -103,5 +103,9 @@ namespace FFXIVLooseTextureCompiler {
                 MessageBox.Show("Texture saved!", Text);
             }
         }
+
+        private void BaseMerger_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
+        }
     }
 }

@@ -14,5 +14,9 @@
             DialogResult = DialogResult.OK;
             Close();
         }
+
+        private void TemplateConfiguration_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
+        }
     }
 }

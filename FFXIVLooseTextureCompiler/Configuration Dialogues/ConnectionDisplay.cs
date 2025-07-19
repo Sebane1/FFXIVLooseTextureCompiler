@@ -27,5 +27,9 @@
         private void ConnectionDisplay_FormClosing(object sender, FormClosingEventArgs e) {
             // e.Cancel = true;
         }
+
+        private void ConnectionDisplay_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
+        }
     }
 }

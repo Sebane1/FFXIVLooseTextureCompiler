@@ -108,6 +108,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void MainFormMoreSimplified_Load(object sender, EventArgs e) {
             RefreshValues();
+            WFTranslator.TranslateControl(this);
         }
 
         private void itemChangeQuestions_ItemCheck(object sender, ItemCheckEventArgs e) {
@@ -144,6 +145,18 @@ namespace FFXIVLooseTextureCompiler {
             } catch {
 
             }
+        }
+
+        private void label_Resize(object sender, EventArgs e) {
+
+        }
+
+        private void genderLabel_Click(object sender, EventArgs e) {
+
+        }
+
+        private void clanLabel_Click(object sender, EventArgs e) {
+
         }
     }
 }

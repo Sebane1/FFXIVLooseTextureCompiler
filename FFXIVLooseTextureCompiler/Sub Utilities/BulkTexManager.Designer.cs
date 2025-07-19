@@ -157,6 +157,7 @@
             Name = "BulkTexManager";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Bulk Tex Manager";
+            Load += BulkTexManager_Load;
             ((System.ComponentModel.ISupportInitialize)texturePreview).EndInit();
             ResumeLayout(false);
             PerformLayout();

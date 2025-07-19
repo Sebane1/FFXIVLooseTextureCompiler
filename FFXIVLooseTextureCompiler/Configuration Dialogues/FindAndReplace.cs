@@ -89,6 +89,7 @@ namespace FFXIVLooseTextureCompiler {
             baseTexture.LabelName.Text = "Base";
             normal.LabelName.Text = "Normal";
             mask.LabelName.Text = "Mask";
+            WFTranslator.TranslateControl(this);
         }
 
         private void button1_Click(object sender, EventArgs e) {

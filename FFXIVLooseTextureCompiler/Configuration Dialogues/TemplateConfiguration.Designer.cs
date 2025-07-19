@@ -24,56 +24,57 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TemplateConfiguration));
-            this.groupNameTextBox = new System.Windows.Forms.TextBox();
-            this.label = new System.Windows.Forms.Label();
-            this.confirmButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            groupNameTextBox = new TextBox();
+            label = new Label();
+            confirmButton = new Button();
+            SuspendLayout();
             // 
             // groupNameTextBox
             // 
-            this.groupNameTextBox.Location = new System.Drawing.Point(0, 44);
-            this.groupNameTextBox.Name = "groupNameTextBox";
-            this.groupNameTextBox.Size = new System.Drawing.Size(360, 23);
-            this.groupNameTextBox.TabIndex = 0;
-            this.groupNameTextBox.Text = "Default";
+            groupNameTextBox.Location = new Point(0, 44);
+            groupNameTextBox.Name = "groupNameTextBox";
+            groupNameTextBox.Size = new Size(360, 23);
+            groupNameTextBox.TabIndex = 0;
+            groupNameTextBox.Text = "Default";
             // 
             // label
             // 
-            this.label.AutoSize = true;
-            this.label.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label.Location = new System.Drawing.Point(4, 4);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(356, 37);
-            this.label.TabIndex = 1;
-            this.label.Text = "Group Name For Template";
+            label.AutoSize = true;
+            label.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label.Location = new Point(4, 4);
+            label.Name = "label";
+            label.Size = new Size(356, 37);
+            label.TabIndex = 1;
+            label.Text = "Group Name For Template";
             // 
             // confirmButton
             // 
-            this.confirmButton.Location = new System.Drawing.Point(284, 72);
-            this.confirmButton.Name = "confirmButton";
-            this.confirmButton.Size = new System.Drawing.Size(75, 23);
-            this.confirmButton.TabIndex = 2;
-            this.confirmButton.Text = "Confirm";
-            this.confirmButton.UseVisualStyleBackColor = true;
-            this.confirmButton.Click += new System.EventHandler(this.confirmButton_Click);
+            confirmButton.Location = new Point(284, 72);
+            confirmButton.Name = "confirmButton";
+            confirmButton.Size = new Size(75, 23);
+            confirmButton.TabIndex = 2;
+            confirmButton.Text = "Confirm";
+            confirmButton.UseVisualStyleBackColor = true;
+            confirmButton.Click += confirmButton_Click;
             // 
             // TemplateConfiguration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(359, 97);
-            this.Controls.Add(this.confirmButton);
-            this.Controls.Add(this.label);
-            this.Controls.Add(this.groupNameTextBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "TemplateConfiguration";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Template Configuration";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(359, 97);
+            Controls.Add(confirmButton);
+            Controls.Add(label);
+            Controls.Add(groupNameTextBox);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "TemplateConfiguration";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Template Configuration";
+            Load += TemplateConfiguration_Load;
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

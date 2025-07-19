@@ -39,7 +39,7 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
         }
 
         private void OverlaySelector_Load(object sender, EventArgs e) {
-
+            WFTranslator.TranslateControl(this);
         }
 
         private void label1_Click(object sender, EventArgs e) {

@@ -24,79 +24,80 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectionDisplay));
-            this.label1 = new System.Windows.Forms.Label();
-            this.sharingTextbox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.sendId = new System.Windows.Forms.TextBox();
-            this.sendModButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            label1 = new Label();
+            sharingTextbox = new TextBox();
+            label2 = new Label();
+            sendId = new TextBox();
+            sendModButton = new Button();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(254, 37);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Share This Id Code";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label1.Location = new Point(0, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(254, 37);
+            label1.TabIndex = 0;
+            label1.Text = "Share This Id Code";
             // 
             // sharingTextbox
             // 
-            this.sharingTextbox.Location = new System.Drawing.Point(0, 40);
-            this.sharingTextbox.Name = "sharingTextbox";
-            this.sharingTextbox.Size = new System.Drawing.Size(348, 23);
-            this.sharingTextbox.TabIndex = 1;
-            this.sharingTextbox.TextChanged += new System.EventHandler(this.sharingTextbox_TextChanged);
+            sharingTextbox.Location = new Point(0, 40);
+            sharingTextbox.Name = "sharingTextbox";
+            sharingTextbox.Size = new Size(348, 23);
+            sharingTextbox.TabIndex = 1;
+            sharingTextbox.TextChanged += sharingTextbox_TextChanged;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(0, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(259, 37);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Enter Id Code Here";
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            label2.Location = new Point(0, 64);
+            label2.Name = "label2";
+            label2.Size = new Size(259, 37);
+            label2.TabIndex = 2;
+            label2.Text = "Enter Id Code Here";
             // 
             // sendId
             // 
-            this.sendId.Location = new System.Drawing.Point(1, 104);
-            this.sendId.Name = "sendId";
-            this.sendId.Size = new System.Drawing.Size(348, 23);
-            this.sendId.TabIndex = 3;
+            sendId.Location = new Point(1, 104);
+            sendId.Name = "sendId";
+            sendId.Size = new Size(348, 23);
+            sendId.TabIndex = 3;
             // 
             // sendModButton
             // 
-            this.sendModButton.Location = new System.Drawing.Point(0, 136);
-            this.sendModButton.Name = "sendModButton";
-            this.sendModButton.Size = new System.Drawing.Size(352, 32);
-            this.sendModButton.TabIndex = 4;
-            this.sendModButton.Text = "Send Current Mod";
-            this.sendModButton.UseVisualStyleBackColor = true;
-            this.sendModButton.Click += new System.EventHandler(this.sendModButton_Click);
+            sendModButton.Location = new Point(0, 136);
+            sendModButton.Name = "sendModButton";
+            sendModButton.Size = new Size(352, 32);
+            sendModButton.TabIndex = 4;
+            sendModButton.Text = "Send Current Mod";
+            sendModButton.UseVisualStyleBackColor = true;
+            sendModButton.Click += sendModButton_Click;
             // 
             // ConnectionDisplay
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(351, 169);
-            this.ControlBox = false;
-            this.Controls.Add(this.sendModButton);
-            this.Controls.Add(this.sendId);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.sharingTextbox);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ConnectionDisplay";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FFXIV Loose Texture Compiler";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionDisplay_FormClosing);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(351, 169);
+            ControlBox = false;
+            Controls.Add(sendModButton);
+            Controls.Add(sendId);
+            Controls.Add(label2);
+            Controls.Add(sharingTextbox);
+            Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ConnectionDisplay";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "FFXIV Loose Texture Compiler";
+            FormClosing += ConnectionDisplay_FormClosing;
+            Load += ConnectionDisplay_Load;
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

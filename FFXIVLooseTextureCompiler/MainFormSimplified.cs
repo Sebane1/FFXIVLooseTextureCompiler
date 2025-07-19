@@ -43,7 +43,7 @@ namespace FFXIVLooseTextureCompiler {
             _clanType = subRace;
         }
 
-        public void RefreshValues() {
+        public async void RefreshValues() {
             if (Visible) {
                 mainWindow.IsSimpleMode = true;
                 Text = mainWindow.VersionText;
@@ -61,13 +61,14 @@ namespace FFXIVLooseTextureCompiler {
                 }
                 mainWindow.Hide();
                 skinTextureSet.OmniExportMode = true;
-                skinTextureSet.TextureSetName = "Skin";
-                faceTextureSet.TextureSetName = "Face";
-                eyesTextureSet.TextureSetName = "Eyes";
+                skinTextureSet.TextureSetName = await WFTranslator.String("Skin");
+                faceTextureSet.TextureSetName = await WFTranslator.String("Face");
+                eyesTextureSet.TextureSetName = await WFTranslator.String("Eyes");
 
-                skinTextureSet.GroupName = "Character Customization";
-                faceTextureSet.GroupName = "Character Customization";
-                eyesTextureSet.GroupName = "Character Customization";
+                string groupName = await WFTranslator.String("Character Customization");
+                skinTextureSet.GroupName = groupName;
+                faceTextureSet.GroupName = groupName;
+                eyesTextureSet.GroupName = groupName;
 
                 body.FilePath.Text = skinTextureSet.Base;
                 face.FilePath.Text = faceTextureSet.Base;
@@ -252,6 +253,8 @@ namespace FFXIVLooseTextureCompiler {
 
         private void MainFormSimplified_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
+            WFTranslator.TranslateControl(this);
+            WFTranslator.TranslateMenuStrip(menuStrip1);
         }
 
         private void MainFormSimplified_FormClosing(object sender, FormClosingEventArgs e) {
@@ -341,6 +344,10 @@ namespace FFXIVLooseTextureCompiler {
             } catch {
 
             }
+        }
+
+        private void eyes_Load(object sender, EventArgs e) {
+
         }
     }
 }

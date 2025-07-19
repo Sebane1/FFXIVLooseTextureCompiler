@@ -168,5 +168,9 @@ namespace FFXIVLooseTextureCompiler {
                 AddFilesRecursively(_lastPath, 0, 10);
             }
         }
+
+        private void BulkTexManager_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
+        }
     }
 }

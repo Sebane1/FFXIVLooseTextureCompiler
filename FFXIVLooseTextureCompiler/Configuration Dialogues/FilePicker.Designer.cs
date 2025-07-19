@@ -41,7 +41,7 @@ namespace FFXIVVoicePackCreator {
             filePath.Location = new Point(78, 3);
             filePath.Margin = new Padding(4, 3, 4, 3);
             filePath.Name = "filePath";
-            filePath.Size = new Size(471, 23);
+            filePath.Size = new Size(423, 23);
             filePath.TabIndex = 0;
             filePath.TextChanged += filePath_TextChanged;
             filePath.DragDrop += filePath_DragDrop;
@@ -54,10 +54,10 @@ namespace FFXIVVoicePackCreator {
             // openButton
             // 
             openButton.Dock = DockStyle.Fill;
-            openButton.Location = new Point(586, 3);
+            openButton.Location = new Point(541, 3);
             openButton.Margin = new Padding(4, 3, 4, 3);
             openButton.Name = "openButton";
-            openButton.Size = new Size(58, 22);
+            openButton.Size = new Size(103, 22);
             openButton.TabIndex = 1;
             openButton.Text = "Select";
             openButton.UseVisualStyleBackColor = true;
@@ -81,8 +81,8 @@ namespace FFXIVVoicePackCreator {
             tableLayoutPanel1.ColumnCount = 4;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 74F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 29F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 111F));
             tableLayoutPanel1.Controls.Add(openButton, 3, 0);
             tableLayoutPanel1.Controls.Add(filePath, 1, 0);
             tableLayoutPanel1.Controls.Add(labelName, 0, 0);
@@ -99,7 +99,7 @@ namespace FFXIVVoicePackCreator {
             // 
             clearButton.BackColor = Color.IndianRed;
             clearButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            clearButton.Location = new Point(556, 3);
+            clearButton.Location = new Point(508, 3);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(23, 22);
             clearButton.TabIndex = 3;

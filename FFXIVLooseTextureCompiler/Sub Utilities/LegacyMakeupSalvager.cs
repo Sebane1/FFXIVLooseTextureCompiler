@@ -155,6 +155,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities {
         private void LegacyMakeupSalvager_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
             racialGender.SelectedIndex = faceNumberListBox.SelectedIndex = subRaceListBox.SelectedIndex = 0;
+            WFTranslator.TranslateControl(this);
         }
         public void OpenFolder(string folder) {
             string path = Path.GetDirectoryName(folder);

@@ -104,6 +104,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void CustomPathDialog_Load(object sender, EventArgs e) {
             AutoScaleDimensions = new SizeF(96, 96);
+            WFTranslator.TranslateControl(this);
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -125,6 +126,10 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void skinTypeSelection_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
+        private void material_Load(object sender, EventArgs e) {
 
         }
     }

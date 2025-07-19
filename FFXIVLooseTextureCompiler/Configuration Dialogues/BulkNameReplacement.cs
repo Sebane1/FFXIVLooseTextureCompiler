@@ -11,6 +11,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private void BulkNameReplacement_Load(object sender, EventArgs e) {
             replacementTypeComboBox.SelectedIndex = 0;
+            WFTranslator.TranslateControl(this);
         }
 
         private void replacementTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {

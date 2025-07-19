@@ -67,7 +67,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void HelpWindow_Load(object sender, EventArgs e) {
-
+            WFTranslator.TranslateControl(this);
         }
 
         private void getOtopop_Click(object sender, EventArgs e) {

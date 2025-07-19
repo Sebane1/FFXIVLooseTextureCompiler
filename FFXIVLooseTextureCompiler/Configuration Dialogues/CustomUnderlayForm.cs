@@ -17,5 +17,9 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
         private void label2_Click(object sender, EventArgs e) {
 
         }
+
+        private void CustomUnderlayForm_Load(object sender, EventArgs e) {
+            WFTranslator.TranslateControl(this);
+        }
     }
 }
