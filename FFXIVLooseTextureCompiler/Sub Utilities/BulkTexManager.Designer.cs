@@ -45,7 +45,7 @@
             textureList.ItemHeight = 15;
             textureList.Location = new Point(4, 4);
             textureList.Name = "textureList";
-            textureList.Size = new Size(168, 394);
+            textureList.Size = new Size(168, 589);
             textureList.TabIndex = 0;
             textureList.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             textureList.DragDrop += texList_DragDrop;
@@ -58,16 +58,16 @@
             texturePreview.BackgroundImageLayout = ImageLayout.Zoom;
             texturePreview.Location = new Point(176, 0);
             texturePreview.Name = "texturePreview";
-            texturePreview.Size = new Size(400, 400);
+            texturePreview.Size = new Size(584, 593);
             texturePreview.TabIndex = 1;
             texturePreview.TabStop = false;
             texturePreview.Click += pictureBox1_Click;
             // 
             // exportPNG
             // 
-            exportPNG.Location = new Point(400, 404);
+            exportPNG.Location = new Point(481, 597);
             exportPNG.Name = "exportPNG";
-            exportPNG.Size = new Size(80, 24);
+            exportPNG.Size = new Size(140, 24);
             exportPNG.TabIndex = 3;
             exportPNG.Text = "Export PNG";
             exportPNG.UseVisualStyleBackColor = true;
@@ -75,7 +75,7 @@
             // 
             // bulkImport
             // 
-            bulkImport.Location = new Point(4, 404);
+            bulkImport.Location = new Point(4, 597);
             bulkImport.Name = "bulkImport";
             bulkImport.Size = new Size(168, 23);
             bulkImport.TabIndex = 4;
@@ -85,7 +85,7 @@
             // 
             // exportAllButton
             // 
-            exportAllButton.Location = new Point(264, 404);
+            exportAllButton.Location = new Point(343, 597);
             exportAllButton.Name = "exportAllButton";
             exportAllButton.Size = new Size(132, 24);
             exportAllButton.TabIndex = 5;
@@ -95,9 +95,9 @@
             // 
             // clearListButton
             // 
-            clearListButton.Location = new Point(176, 404);
+            clearListButton.Location = new Point(176, 596);
             clearListButton.Name = "clearListButton";
-            clearListButton.Size = new Size(88, 24);
+            clearListButton.Size = new Size(161, 24);
             clearListButton.TabIndex = 6;
             clearListButton.Text = "Clear List";
             clearListButton.UseVisualStyleBackColor = true;
@@ -106,17 +106,17 @@
             // pathTextBox
             // 
             pathTextBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pathTextBox.Location = new Point(72, 428);
+            pathTextBox.Location = new Point(72, 624);
             pathTextBox.Name = "pathTextBox";
-            pathTextBox.Size = new Size(504, 23);
+            pathTextBox.Size = new Size(688, 23);
             pathTextBox.TabIndex = 7;
             pathTextBox.TextChanged += pathTextBox_TextChanged;
             // 
             // openPathButton
             // 
-            openPathButton.Location = new Point(484, 404);
+            openPathButton.Location = new Point(627, 597);
             openPathButton.Name = "openPathButton";
-            openPathButton.Size = new Size(92, 24);
+            openPathButton.Size = new Size(133, 24);
             openPathButton.TabIndex = 8;
             openPathButton.Text = "Open Path";
             openPathButton.UseVisualStyleBackColor = true;
@@ -125,7 +125,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(8, 432);
+            label1.Location = new Point(8, 628);
             label1.Name = "label1";
             label1.Size = new Size(58, 15);
             label1.TabIndex = 9;
@@ -141,7 +141,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(580, 455);
+            ClientSize = new Size(764, 651);
             Controls.Add(label1);
             Controls.Add(openPathButton);
             Controls.Add(pathTextBox);

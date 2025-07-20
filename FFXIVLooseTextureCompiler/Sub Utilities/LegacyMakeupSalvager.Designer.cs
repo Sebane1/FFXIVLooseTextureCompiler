@@ -39,16 +39,16 @@
             subRaceListBox.Items.AddRange(new object[] { "Midlander", "Highlander", "Wildwood", "Duskwight", "Plainsfolk", "Dunesfolk", "Seeker", "Keeper", "Sea Wolf", "Hellsguard", "Raen", "Xaela", "Helion", "The Lost", "Rava", "Veena" });
             subRaceListBox.Location = new Point(0, 0);
             subRaceListBox.Name = "subRaceListBox";
-            subRaceListBox.Size = new Size(140, 23);
+            subRaceListBox.Size = new Size(204, 23);
             subRaceListBox.TabIndex = 0;
             // 
             // faceNumberListBox
             // 
             faceNumberListBox.FormattingEnabled = true;
             faceNumberListBox.Items.AddRange(new object[] { "Face 1", "Face 2", "Face 3", "Face 4", "Face 5", "Face 6", "Face 7" });
-            faceNumberListBox.Location = new Point(144, 0);
+            faceNumberListBox.Location = new Point(210, 0);
             faceNumberListBox.Name = "faceNumberListBox";
-            faceNumberListBox.Size = new Size(140, 23);
+            faceNumberListBox.Size = new Size(205, 23);
             faceNumberListBox.TabIndex = 1;
             // 
             // convertMakeupButton
@@ -56,7 +56,7 @@
             convertMakeupButton.AllowDrop = true;
             convertMakeupButton.Location = new Point(0, 52);
             convertMakeupButton.Name = "convertMakeupButton";
-            convertMakeupButton.Size = new Size(432, 37);
+            convertMakeupButton.Size = new Size(622, 37);
             convertMakeupButton.TabIndex = 2;
             convertMakeupButton.Text = "Pick Makeup";
             convertMakeupButton.UseVisualStyleBackColor = true;
@@ -78,20 +78,21 @@
             // 
             racialGender.FormattingEnabled = true;
             racialGender.Items.AddRange(new object[] { "Feminine", "Masculine" });
-            racialGender.Location = new Point(288, 0);
+            racialGender.Location = new Point(421, 0);
             racialGender.Name = "racialGender";
-            racialGender.Size = new Size(144, 23);
+            racialGender.Size = new Size(201, 23);
             racialGender.TabIndex = 4;
             // 
             // skipLipCorrection
             // 
             skipLipCorrection.AutoSize = true;
-            skipLipCorrection.Location = new Point(144, 28);
+            skipLipCorrection.Location = new Point(210, 28);
             skipLipCorrection.Name = "skipLipCorrection";
             skipLipCorrection.Size = new Size(140, 19);
             skipLipCorrection.TabIndex = 5;
             skipLipCorrection.Text = "Skip Facial Correction";
             skipLipCorrection.UseVisualStyleBackColor = true;
+            skipLipCorrection.CheckedChanged += skipLipCorrection_CheckedChanged;
             // 
             // textBox1
             // 
@@ -104,7 +105,7 @@
             textBox1.Location = new Point(4, 92);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(426, 96);
+            textBox1.Size = new Size(618, 137);
             textBox1.TabIndex = 6;
             textBox1.Text = "Select the makeup race, face, and gender and then drag and drop your makeups onto this window! Attempts to makes things Dawntrail compatible.";
             textBox1.TextAlign = HorizontalAlignment.Center;
@@ -115,7 +116,7 @@
             // textureIsNormalMap
             // 
             textureIsNormalMap.AutoSize = true;
-            textureIsNormalMap.Location = new Point(284, 28);
+            textureIsNormalMap.Location = new Point(421, 29);
             textureIsNormalMap.Name = "textureIsNormalMap";
             textureIsNormalMap.Size = new Size(145, 19);
             textureIsNormalMap.TabIndex = 7;
@@ -127,7 +128,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(433, 192);
+            ClientSize = new Size(626, 241);
             Controls.Add(textureIsNormalMap);
             Controls.Add(textBox1);
             Controls.Add(skipLipCorrection);

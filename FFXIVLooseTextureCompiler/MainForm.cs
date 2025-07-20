@@ -30,7 +30,7 @@ namespace FFXIVLooseTextureCompiler {
         private string jsonFilepath;
         private string metaFilePath;
         private string _defaultAuthor = "FFXIV Loose Texture Compiler";
-        private readonly string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
+        private string _defaultDescription = "Exported by FFXIV Loose Texture Compiler";
         private string _defaultWebsite = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
         private string savePath;
         private bool hasSaved;
@@ -123,7 +123,7 @@ namespace FFXIVLooseTextureCompiler {
                     case DialogResult.Yes:
                         if (savePath == null) {
                             SaveFileDialog saveFileDialog = new SaveFileDialog();
-                            saveFileDialog.Filter = "FFXIV Sound Project|*.ffxivtp;";
+                            saveFileDialog.Filter = WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                                 savePath = saveFileDialog.FileName;
                             }
@@ -181,7 +181,7 @@ namespace FFXIVLooseTextureCompiler {
                 Action safeWrite = delegate { LaunchingXnormal(); };
                 generateButton.Invoke(safeWrite);
             } else {
-                exportLabel.Text = "Wait For xNormal";
+                exportLabel.Text = await WFTranslator.String("Wait For xNormal");
                 Console.WriteLine(exportLabel.Text);
             }
         }
@@ -190,7 +190,7 @@ namespace FFXIVLooseTextureCompiler {
                 Action safeWrite = delegate { StartedProcessing(); };
                 generateButton.Invoke(safeWrite);
             } else {
-                exportLabel.Text = "Exporting";
+                exportLabel.Text = await WFTranslator.String("Exporting");
                 Console.WriteLine(exportLabel.Text);
             }
         }
@@ -240,7 +240,7 @@ namespace FFXIVLooseTextureCompiler {
 
         private async void SendModOverNetwork() {
             exportPanel.Visible = true;
-            exportLabel.Text = "Sending Over Network";
+            exportLabel.Text = await WFTranslator.String("Sending Over Network");
             exportProgress.Visible = true;
             Refresh();
             Application.DoEvents();
@@ -248,7 +248,7 @@ namespace FFXIVLooseTextureCompiler {
             exportProgress.Value = exportProgress.Maximum;
             exportPanel.Visible = false;
             exportProgress.Visible = false;
-            exportLabel.Text = "Send Attempt Finished";
+            exportLabel.Text = await WFTranslator.String("Send Attempt Finished");
             isNetworkSync = false;
             if (!networkedClient.Connected) {
                 enableModshareToolStripMenuItem.Enabled = true;
@@ -266,10 +266,14 @@ namespace FFXIVLooseTextureCompiler {
         }
         private async void processGeneration_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e) {
             exportProgress.Value = Math.Clamp(textureProcessor.ExportCompletion, 0, exportProgress.Maximum);
-            Console.WriteLine(exportProgress.Value + "% Complete");
+            Console.WriteLine(exportProgress.Value + "%" + await WFTranslator.String(" Complete"));
         }
         private async void MainForm_Load(object sender, EventArgs e) {
             ReadLanguageOptions();
+            Translator.LoadCache(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "languageCache.json"));
+            TextureSet.GroupLocalization = await WFTranslator.String("Group");
+            _defaultAuthor = await WFTranslator.String("FFXIV Loose Texture Compiler");
+            _defaultDescription = await WFTranslator.String("Exported by FFXIV Loose Texture Compiler");
             RacePaths.VersionText = VersionText;
             AutoScaleDimensions = new SizeF(96, 96);
             Base.FilePath.Enabled = false;
@@ -296,16 +300,16 @@ namespace FFXIVLooseTextureCompiler {
             mainFormSimplified.MainWindow = this;
             GetDefaultMode();
             CheckForCommandArguments();
-            Translator.LoadCache(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "languageCache.json"));
-            TextureSet.GroupLocalization = await WFTranslator.String("Group");
             VersionText = (await WFTranslator.String(Application.ProductName)) + " " + Program.Version;
             WFTranslator.ParentForm = this;
             WFTranslator.TranslateControl(this);
             WFTranslator.TranslateMenuStrip(menuStrip1);
             WFTranslator.TranslateToolStripDropDown(textureSetListContextMenu);
+            modAuthorTextBox.Text = _defaultAuthor;
+            modDescriptionTextBox.Text = _defaultDescription;
         }
         public async void generateButton_Click(object sender, EventArgs e) {
-            exportLabel.Text = "Exporting";
+            exportLabel.Text = await WFTranslator.String("Exporting");
             if (!lockDuplicateGeneration && !generationCooldown.Enabled) {
                 if (!string.IsNullOrWhiteSpace(modNameTextBox.Text)) {
                     if (string.IsNullOrEmpty(penumbraModPath)) {
@@ -843,9 +847,9 @@ namespace FFXIVLooseTextureCompiler {
             hasDoneReload = false;
             TextureSet textureSet = new TextureSet();
             textureSet.TextureSetName = facePart.Text + (facePart.SelectedIndex == 4 ? " "
-                + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : "Unisex")
-                + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : "Multi Race") + ", "
-                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : "Multi Face");
+                + (faceExtraList.SelectedIndex + 1) : "") + ", " + (facePart.SelectedIndex != 4 ? genderList.Text : await WFTranslator.String("Unisex"))
+                + ", " + (facePart.SelectedIndex != 4 ? subRaceList.Text : await WFTranslator.String("Multi Race")) + ", "
+                + (facePart.SelectedIndex != 4 ? faceTypeList.Text : await WFTranslator.String("Multi Face"));
             textureSet.BackupTexturePaths = null;
             switch (facePart.SelectedIndex) {
                 default:
@@ -1199,8 +1203,8 @@ namespace FFXIVLooseTextureCompiler {
             savePath = null;
             textureList.Items.Clear();
             modNameTextBox.Text = "";
-            modAuthorTextBox.Text = _defaultAuthor;
             modVersionTextBox.Text = "1.0.0";
+            modAuthorTextBox.Text = _defaultAuthor;
             modDescriptionTextBox.Text = _defaultDescription;
             modWebsiteTextBox.Text = _defaultWebsite;
             Base.CurrentPath = "";
@@ -2741,21 +2745,21 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
-            Task.Run(() => {
+            Task.Run(async () => {
                 foreach (var item in keyValuePairs) {
                     Thread.Sleep(500);
                     bool executed = false;
-                    string modName1 = item.Key + " Eye Mod";
-                    string modName2 = item.Key + " Right Eye Mod";
+                    string modName1 = item.Key + (await WFTranslator.String(" Eye Mod"));
+                    string modName2 = item.Key + (await WFTranslator.String(" Right Eye Mod"));
                     string modPath1 = "";
                     string modPath2 = "";
-                    generateButton.Invoke(() => {
+                    generateButton.Invoke(async () => {
                         try {
                             NewProject();
-                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Symmetrical Eyes And Left Eye", item.Value);
-                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", "Right Eye", item.Value);
+                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", await WFTranslator.String("Symmetrical Eyes And Left Eye"), item.Value);
+                            OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", await WFTranslator.String("Right Eye"), item.Value);
                             foreach (TextureSet textureSet in textureList.Items) {
-                                if (textureSet.GroupName == "Right Eye") {
+                                if (textureSet.GroupName == await WFTranslator.String("Right Eye")) {
                                     textureSet.InternalBasePath = textureSet.InternalBasePath.Replace("_", "_b_");
                                     textureSet.InternalNormalPath = textureSet.InternalNormalPath.Replace("_", "_b_");
                                     textureSet.InternalMaskPath = textureSet.InternalMaskPath.Replace("_", "_b_");
@@ -2821,11 +2825,11 @@ namespace FFXIVLooseTextureCompiler {
                     }
                 }
             }
-            Task.Run(() => {
+            Task.Run(async () => {
                 foreach (var item in keyValuePairs) {
                     Thread.Sleep(500);
                     bool executed = false;
-                    string modName1 = item.Key + " Contact Mod";
+                    string modName1 = item.Key + (await WFTranslator.String(" Contact Mod"));
                     string modPath1 = "";
                     generateButton.Invoke(() => {
                         try {
@@ -3180,6 +3184,10 @@ namespace FFXIVLooseTextureCompiler {
 
         private void resetLanguageSettingsToolStripMenuItem_Click(object sender, EventArgs e) {
             ResetLanguageOptions();
+        }
+
+        private void label2_Click(object sender, EventArgs e) {
+
         }
     }
 }

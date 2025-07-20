@@ -39,11 +39,15 @@ namespace FFXIVLooseTextureCompiler {
                         if (!int.TryParse(textItem, out var result))
                             text = await Translator.LocalizeText(textItem, Translator.UiLanguage,
                                 LanguageConversionProxy.LanguageEnum.English);
-                        parentControl?.Invoke(delegate {
-                            if (text != null) {
-                                comboBox.Items[i] = text;
-                            }
-                        });
+                        try {
+                            parentControl?.Invoke(delegate {
+                                if (text != null) {
+                                    comboBox.Items[i] = text;
+                                }
+                            });
+                        } catch {
+
+                        }
                     }
                 }
             }

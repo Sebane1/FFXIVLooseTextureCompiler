@@ -141,6 +141,7 @@
             canIReplaceABunchOfStuffAtOnceToolStripMenuItem = new ToolStripMenuItem();
             whatIsModshareAndCanIQuicklySendAModToSomebodyElseToolStripMenuItem = new ToolStripMenuItem();
             languageToolStripMenuItem = new ToolStripMenuItem();
+            resetLanguageSettingsToolStripMenuItem = new ToolStripMenuItem();
             donateButton = new Button();
             textureList = new ListBox();
             textureSetListContextMenu = new ContextMenuStrip(components);
@@ -200,7 +201,6 @@
             layerBaseButton = new Button();
             layerNormalButton = new Button();
             layerMaskButton = new Button();
-            resetLanguageSettingsToolStripMenuItem = new ToolStripMenuItem();
             autoGenerateTImer = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             textureSetListContextMenu.SuspendLayout();
@@ -397,9 +397,9 @@
             // 
             // modDescriptionTextBox
             // 
-            modDescriptionTextBox.Location = new Point(88, 56);
+            modDescriptionTextBox.Location = new Point(81, 56);
             modDescriptionTextBox.Name = "modDescriptionTextBox";
-            modDescriptionTextBox.Size = new Size(302, 23);
+            modDescriptionTextBox.Size = new Size(309, 23);
             modDescriptionTextBox.TabIndex = 22;
             modDescriptionTextBox.Text = "Exported by FFXIV Loose Texture Compiler";
             modDescriptionTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -416,17 +416,18 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(395, 60);
+            label2.Location = new Point(399, 60);
             label2.Name = "label2";
             label2.Size = new Size(49, 15);
             label2.TabIndex = 16;
             label2.Text = "Website";
+            label2.Click += label2_Click;
             // 
             // modWebsiteTextBox
             // 
-            modWebsiteTextBox.Location = new Point(447, 56);
+            modWebsiteTextBox.Location = new Point(472, 56);
             modWebsiteTextBox.Name = "modWebsiteTextBox";
-            modWebsiteTextBox.Size = new Size(311, 23);
+            modWebsiteTextBox.Size = new Size(286, 23);
             modWebsiteTextBox.TabIndex = 15;
             modWebsiteTextBox.Text = "https://github.com/Sebane1/FFXIVLooseTextureCompiler";
             modWebsiteTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -443,9 +444,9 @@
             // 
             // modAuthorTextBox
             // 
-            modAuthorTextBox.Location = new Point(447, 28);
+            modAuthorTextBox.Location = new Point(472, 28);
             modAuthorTextBox.Name = "modAuthorTextBox";
-            modAuthorTextBox.Size = new Size(311, 23);
+            modAuthorTextBox.Size = new Size(286, 23);
             modAuthorTextBox.TabIndex = 13;
             modAuthorTextBox.Text = "FFXIV Loose Texture Compiler";
             modAuthorTextBox.TextChanged += modDescriptionTextBox_TextChanged;
@@ -462,9 +463,9 @@
             // 
             // modNameTextBox
             // 
-            modNameTextBox.Location = new Point(88, 28);
+            modNameTextBox.Location = new Point(81, 28);
             modNameTextBox.Name = "modNameTextBox";
-            modNameTextBox.Size = new Size(302, 23);
+            modNameTextBox.Size = new Size(309, 23);
             modNameTextBox.TabIndex = 11;
             modNameTextBox.TextChanged += modDescriptionTextBox_TextChanged;
             // 
@@ -1125,6 +1126,13 @@
             languageToolStripMenuItem.Size = new Size(71, 20);
             languageToolStripMenuItem.Text = "Language";
             // 
+            // resetLanguageSettingsToolStripMenuItem
+            // 
+            resetLanguageSettingsToolStripMenuItem.Name = "resetLanguageSettingsToolStripMenuItem";
+            resetLanguageSettingsToolStripMenuItem.Size = new Size(202, 22);
+            resetLanguageSettingsToolStripMenuItem.Text = "Reset Language Settings";
+            resetLanguageSettingsToolStripMenuItem.Click += resetLanguageSettingsToolStripMenuItem_Click;
+            // 
             // donateButton
             // 
             donateButton.BackColor = Color.IndianRed;
@@ -1265,20 +1273,20 @@
             // removeSelection
             // 
             removeSelection.Anchor = AnchorStyles.None;
-            removeSelection.Location = new Point(3, 360);
+            removeSelection.Location = new Point(-1, 363);
             removeSelection.Name = "removeSelection";
-            removeSelection.Size = new Size(112, 23);
+            removeSelection.Size = new Size(143, 23);
             removeSelection.TabIndex = 31;
-            removeSelection.Text = "Remove Selection From List";
+            removeSelection.Text = "Remove Selection";
             removeSelection.UseVisualStyleBackColor = true;
             removeSelection.Click += removeSelectionButton_Click;
             // 
             // clearList
             // 
             clearList.Anchor = AnchorStyles.None;
-            clearList.Location = new Point(117, 360);
+            clearList.Location = new Point(148, 363);
             clearList.Name = "clearList";
-            clearList.Size = new Size(130, 23);
+            clearList.Size = new Size(158, 23);
             clearList.TabIndex = 32;
             clearList.Text = "Clear List";
             clearList.UseVisualStyleBackColor = true;
@@ -1297,9 +1305,9 @@
             // moveUpButton
             // 
             moveUpButton.Anchor = AnchorStyles.None;
-            moveUpButton.Location = new Point(250, 360);
+            moveUpButton.Location = new Point(312, 363);
             moveUpButton.Name = "moveUpButton";
-            moveUpButton.Size = new Size(126, 23);
+            moveUpButton.Size = new Size(154, 23);
             moveUpButton.TabIndex = 34;
             moveUpButton.Text = "Move Up";
             moveUpButton.UseVisualStyleBackColor = true;
@@ -1308,9 +1316,9 @@
             // moveDownButton
             // 
             moveDownButton.Anchor = AnchorStyles.None;
-            moveDownButton.Location = new Point(378, 360);
+            moveDownButton.Location = new Point(472, 363);
             moveDownButton.Name = "moveDownButton";
-            moveDownButton.Size = new Size(126, 23);
+            moveDownButton.Size = new Size(156, 23);
             moveDownButton.TabIndex = 35;
             moveDownButton.Text = "Move Down";
             moveDownButton.UseVisualStyleBackColor = true;
@@ -1713,13 +1721,6 @@
             layerMaskButton.Text = "Layers";
             layerMaskButton.UseVisualStyleBackColor = true;
             layerMaskButton.Click += layersMaskButton_Click;
-            // 
-            // resetLanguageSettingsToolStripMenuItem
-            // 
-            resetLanguageSettingsToolStripMenuItem.Name = "resetLanguageSettingsToolStripMenuItem";
-            resetLanguageSettingsToolStripMenuItem.Size = new Size(202, 22);
-            resetLanguageSettingsToolStripMenuItem.Text = "Reset Language Settings";
-            resetLanguageSettingsToolStripMenuItem.Click += resetLanguageSettingsToolStripMenuItem_Click;
             // 
             // MainWindow
             // 
