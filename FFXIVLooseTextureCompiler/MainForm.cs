@@ -1989,7 +1989,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.SplitRGBAndAlpha(openFileDialog.FileName);
+                ImageManipulation.SplitRGBAndAlphaToFile(openFileDialog.FileName);
                 await WFTranslator.Show("Image successfully split into RGB and Alpha", VersionText);
             }
         }
