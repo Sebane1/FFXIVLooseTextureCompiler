@@ -1,4 +1,5 @@
-﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using Ookii.Dialogs.WinForms;
+using FFXIVLooseTextureCompiler.ImageProcessing;
 using FFXIVLooseTextureCompiler.PathOrganization;
 using FFXIVLooseTextureCompiler.Racial;
 using FFXIVVoicePackCreator;
@@ -287,7 +288,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private void convertPictureToEyeMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.tga;*.dds;*.bmp;*.tex;";
             MessageBox.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -351,3 +352,4 @@ namespace FFXIVLooseTextureCompiler {
         }
     }
 }
+

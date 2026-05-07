@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+using Ookii.Dialogs.WinForms;
+using System.ComponentModel;
 
 namespace FFXIVVoicePackCreator {
     public partial class FilePicker : UserControl {
@@ -78,14 +79,14 @@ namespace FFXIVVoicePackCreator {
         }
         private void openButton_Click(object sender, EventArgs e) {
             if (!isSaveMode) {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
+                VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
                 openFileDialog.Filter = filter;
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     filePath.Text = openFileDialog.FileName;
                     currentPath = openFileDialog.FileName;
                 }
             } else {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                 saveFileDialog.Filter = filter;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     filePath.Text = saveFileDialog.FileName;
@@ -185,5 +186,6 @@ namespace FFXIVVoicePackCreator {
         }
     }
 }
+
 
 

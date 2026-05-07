@@ -36,5 +36,5 @@ namespace FFXIVLooseTextureCompiler {
                 Application.Run(new MainWindow());
             }
         }
-    }
+            }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+using Ookii.Dialogs.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -160,3 +161,4 @@ namespace FFXIVLooseTextureCompiler {
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿namespace FFXIVLooseTextureCompiler {
+namespace FFXIVLooseTextureCompiler {
     partial class MainWindow {
         /// <summary>
         ///  Required designer variable.
@@ -107,6 +107,22 @@
             bulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
             recursiveBulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
             convertStandaloneTextureToolStripMenuItem = new ToolStripMenuItem();
+            uvTransferMapToolsToolStripMenuItem = new ToolStripMenuItem();
+            generateCoordinateMapToolStripMenuItem = new ToolStripMenuItem();
+            applyTransferMapToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapBiboToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapGen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapBiboToGen2ToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapGen2ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapGen3ToGen2ToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapGen2ToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapOtopopToVanillaToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapVanillaToOtopopToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem = new ToolStripMenuItem();
+            bakeAllTransferMapsToolStripMenuItem = new ToolStripMenuItem();
             biboToGen3ToolStripMenuItem = new ToolStripMenuItem();
             biboToGen2ToolStripMenuItem = new ToolStripMenuItem();
             gen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
@@ -124,6 +140,7 @@
             autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem = new ToolStripMenuItem();
             configToolStripMenuItem = new ToolStripMenuItem();
             changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
+            useFastUVTransferToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
             enableModshareToolStripMenuItem = new ToolStripMenuItem();
             sendCurrentModToolStripMenuItem = new ToolStripMenuItem();
@@ -543,7 +560,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fullTattooToOverlayExperimentalToolStripMenuItem, fToolStripMenuItem, extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, tailToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, devToolsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fullTattooToOverlayExperimentalToolStripMenuItem, fToolStripMenuItem, extractAtramentumLuminisGlowMapToolStripMenuItem, eyeToolsToolStripMenuItem, faceToolsToolStripMenuItem, hairToolsToolStripMenuItem, tailToolsToolStripMenuItem, clothingToolsToolStripMenuItem, colourChannelSplittingToolStripMenuItem, imageToTexConversionToolStripMenuItem, convertStandaloneTextureToolStripMenuItem, uvTransferMapToolsToolStripMenuItem, devToolsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -942,6 +959,118 @@
             vanillaToOtopopToolStripMenuItem.Text = "Vanilla to Otopop";
             vanillaToOtopopToolStripMenuItem.Click += vanillaToOtopopToolStripMenuItem_Click;
             // 
+            // uvTransferMapToolsToolStripMenuItem
+            // 
+            uvTransferMapToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateCoordinateMapToolStripMenuItem, applyTransferMapToolStripMenuItem, bakeAllTransferMapsToolStripMenuItem, bakeTransferMapBiboToGen3ToolStripMenuItem, bakeTransferMapGen3ToBiboToolStripMenuItem, bakeTransferMapBiboToGen2ToolStripMenuItem, bakeTransferMapGen2ToBiboToolStripMenuItem, bakeTransferMapGen3ToGen2ToolStripMenuItem, bakeTransferMapGen2ToGen3ToolStripMenuItem, bakeTransferMapOtopopToVanillaToolStripMenuItem, bakeTransferMapVanillaToOtopopToolStripMenuItem, bakeTransferMapVanillaToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToVanillaToolStripMenuItem, bakeTransferMapOtopopToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToOtopopToolStripMenuItem });
+            uvTransferMapToolsToolStripMenuItem.Name = "uvTransferMapToolsToolStripMenuItem";
+            uvTransferMapToolsToolStripMenuItem.Size = new Size(286, 22);
+            uvTransferMapToolsToolStripMenuItem.Text = "UV Transfer Map Tools";
+            // 
+            // generateCoordinateMapToolStripMenuItem
+            // 
+            generateCoordinateMapToolStripMenuItem.Name = "generateCoordinateMapToolStripMenuItem";
+            generateCoordinateMapToolStripMenuItem.Size = new Size(220, 22);
+            generateCoordinateMapToolStripMenuItem.Text = "Generate Coordinate Map";
+            generateCoordinateMapToolStripMenuItem.Click += generateCoordinateMapToolStripMenuItem_Click;
+            // 
+            // applyTransferMapToolStripMenuItem
+            // 
+            applyTransferMapToolStripMenuItem.Name = "applyTransferMapToolStripMenuItem";
+            applyTransferMapToolStripMenuItem.Size = new Size(220, 22);
+            applyTransferMapToolStripMenuItem.Text = "Apply Transfer Map";
+            applyTransferMapToolStripMenuItem.Click += applyTransferMapToolStripMenuItem_Click;
+            // 
+            // bakeAllTransferMapsToolStripMenuItem
+            // 
+            bakeAllTransferMapsToolStripMenuItem.Name = "bakeAllTransferMapsToolStripMenuItem";
+            bakeAllTransferMapsToolStripMenuItem.Size = new Size(220, 22);
+            bakeAllTransferMapsToolStripMenuItem.Text = "Bake ALL Transfer Maps";
+            bakeAllTransferMapsToolStripMenuItem.Click += bakeAllTransferMapsToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapBiboToGen3ToolStripMenuItem
+            // 
+            bakeTransferMapBiboToGen3ToolStripMenuItem.Name = "bakeTransferMapBiboToGen3ToolStripMenuItem";
+            bakeTransferMapBiboToGen3ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapBiboToGen3ToolStripMenuItem.Text = "Bake Map: Bibo+ → Gen3";
+            bakeTransferMapBiboToGen3ToolStripMenuItem.Click += bakeTransferMapBiboToGen3ToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapGen3ToBiboToolStripMenuItem
+            // 
+            bakeTransferMapGen3ToBiboToolStripMenuItem.Name = "bakeTransferMapGen3ToBiboToolStripMenuItem";
+            bakeTransferMapGen3ToBiboToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen3ToBiboToolStripMenuItem.Text = "Bake Map: Gen3 → Bibo+";
+            bakeTransferMapGen3ToBiboToolStripMenuItem.Click += bakeTransferMapGen3ToBiboToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapBiboToGen2ToolStripMenuItem
+            // 
+            bakeTransferMapBiboToGen2ToolStripMenuItem.Name = "bakeTransferMapBiboToGen2ToolStripMenuItem";
+            bakeTransferMapBiboToGen2ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapBiboToGen2ToolStripMenuItem.Text = "Bake Map: Bibo+ → Gen2";
+            bakeTransferMapBiboToGen2ToolStripMenuItem.Click += bakeTransferMapBiboToGen2ToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapGen2ToBiboToolStripMenuItem
+            // 
+            bakeTransferMapGen2ToBiboToolStripMenuItem.Name = "bakeTransferMapGen2ToBiboToolStripMenuItem";
+            bakeTransferMapGen2ToBiboToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen2ToBiboToolStripMenuItem.Text = "Bake Map: Gen2 → Bibo+";
+            bakeTransferMapGen2ToBiboToolStripMenuItem.Click += bakeTransferMapGen2ToBiboToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapGen3ToGen2ToolStripMenuItem
+            // 
+            bakeTransferMapGen3ToGen2ToolStripMenuItem.Name = "bakeTransferMapGen3ToGen2ToolStripMenuItem";
+            bakeTransferMapGen3ToGen2ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen3ToGen2ToolStripMenuItem.Text = "Bake Map: Gen3 → Gen2";
+            bakeTransferMapGen3ToGen2ToolStripMenuItem.Click += bakeTransferMapGen3ToGen2ToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapGen2ToGen3ToolStripMenuItem
+            // 
+            bakeTransferMapGen2ToGen3ToolStripMenuItem.Name = "bakeTransferMapGen2ToGen3ToolStripMenuItem";
+            bakeTransferMapGen2ToGen3ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen2ToGen3ToolStripMenuItem.Text = "Bake Map: Gen2 → Gen3";
+            bakeTransferMapGen2ToGen3ToolStripMenuItem.Click += bakeTransferMapGen2ToGen3ToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapOtopopToVanillaToolStripMenuItem
+            // 
+            bakeTransferMapOtopopToVanillaToolStripMenuItem.Name = "bakeTransferMapOtopopToVanillaToolStripMenuItem";
+            bakeTransferMapOtopopToVanillaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapOtopopToVanillaToolStripMenuItem.Text = "Bake Map: Otopop → Vanilla";
+            bakeTransferMapOtopopToVanillaToolStripMenuItem.Click += bakeTransferMapOtopopToVanillaToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapVanillaToOtopopToolStripMenuItem
+            // 
+            bakeTransferMapVanillaToOtopopToolStripMenuItem.Name = "bakeTransferMapVanillaToOtopopToolStripMenuItem";
+            bakeTransferMapVanillaToOtopopToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapVanillaToOtopopToolStripMenuItem.Text = "Bake Map: Vanilla → Otopop";
+            bakeTransferMapVanillaToOtopopToolStripMenuItem.Click += bakeTransferMapVanillaToOtopopToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapVanillaToAsymLalaToolStripMenuItem
+            // 
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Name = "bakeTransferMapVanillaToAsymLalaToolStripMenuItem";
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Text = "Bake Map: Vanilla → Asym Lala";
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Click += bakeTransferMapVanillaToAsymLalaToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapAsymLalaToVanillaToolStripMenuItem
+            // 
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Name = "bakeTransferMapAsymLalaToVanillaToolStripMenuItem";
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Text = "Bake Map: Asym Lala → Vanilla";
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Click += bakeTransferMapAsymLalaToVanillaToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapOtopopToAsymLalaToolStripMenuItem
+            // 
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Name = "bakeTransferMapOtopopToAsymLalaToolStripMenuItem";
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Text = "Bake Map: Otopop → Asym Lala";
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Click += bakeTransferMapOtopopToAsymLalaToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapAsymLalaToOtopopToolStripMenuItem
+            // 
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Name = "bakeTransferMapAsymLalaToOtopopToolStripMenuItem";
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Text = "Bake Map: Asym Lala → Otopop";
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Click += bakeTransferMapAsymLalaToOtopopToolStripMenuItem_Click;
+            // 
             // devToolsToolStripMenuItem
             // 
             devToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textureToLTCTToolStripMenuItem, pNGToLTCTToolStripMenuItem, convertLTCTToPNGToolStripMenuItem, bulkDDSToPNGToolStripMenuItem, textureToTexToolStripMenuItem, autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem });
@@ -991,9 +1120,10 @@
             autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem.Text = "Auto Prepare Normal Maps From TexTools Dump";
             autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem.Click += autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem_Click;
             // 
+            // 
             // configToolStripMenuItem
             // 
-            configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem });
+            configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem, useFastUVTransferToolStripMenuItem });
             configToolStripMenuItem.Name = "configToolStripMenuItem";
             configToolStripMenuItem.Size = new Size(55, 20);
             configToolStripMenuItem.Text = "Config";
@@ -1004,6 +1134,15 @@
             changePenumbraPathToolStripMenuItem.Size = new Size(200, 22);
             changePenumbraPathToolStripMenuItem.Text = "Change Penumbra Path";
             changePenumbraPathToolStripMenuItem.Click += changePenumbraPathToolStripMenuItem_Click;
+            // 
+            // useFastUVTransferToolStripMenuItem
+            // 
+            useFastUVTransferToolStripMenuItem.CheckOnClick = true;
+            useFastUVTransferToolStripMenuItem.Checked = true;
+            useFastUVTransferToolStripMenuItem.Name = "useFastUVTransferToolStripMenuItem";
+            useFastUVTransferToolStripMenuItem.Size = new Size(200, 22);
+            useFastUVTransferToolStripMenuItem.Text = "Use Fast UV Transfer";
+            useFastUVTransferToolStripMenuItem.Click += useFastUVTransferToolStripMenuItem_Click;
             // 
             // modShareToolStripMenuItem
             // 
@@ -1835,6 +1974,7 @@
         private ContextMenuStrip textureSetListContextMenu;
         private ToolStripMenuItem editPathsToolStripMenuItem;
         private ToolStripMenuItem moveUpToolStripMenuItem;
+        private ToolStripMenuItem useFastUVTransferToolStripMenuItem;
         private ToolStripMenuItem moveDownToolStripMenuItem;
         private Button moveUpButton;
         private Button moveDownButton;
@@ -1969,6 +2109,22 @@
         private ToolStripMenuItem swapRaceToolStripMenuItem;
         private ToolStripMenuItem languageToolStripMenuItem;
         private ToolStripMenuItem resetLanguageSettingsToolStripMenuItem;
+        private ToolStripMenuItem uvTransferMapToolsToolStripMenuItem;
+        private ToolStripMenuItem generateCoordinateMapToolStripMenuItem;
+        private ToolStripMenuItem applyTransferMapToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapBiboToGen3ToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapGen3ToBiboToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapBiboToGen2ToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapGen2ToBiboToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapGen3ToGen2ToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapGen2ToGen3ToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapOtopopToVanillaToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapVanillaToOtopopToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapVanillaToAsymLalaToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapAsymLalaToVanillaToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapOtopopToAsymLalaToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapAsymLalaToOtopopToolStripMenuItem;
+        private ToolStripMenuItem bakeAllTransferMapsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }
         public ComboBox SubRaceList { get => subRaceList; set => subRaceList = value; }

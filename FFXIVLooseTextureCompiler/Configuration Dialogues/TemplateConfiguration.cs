@@ -1,4 +1,5 @@
-﻿namespace FFXIVLooseTextureCompiler {
+using Ookii.Dialogs.WinForms;
+namespace FFXIVLooseTextureCompiler {
     public partial class TemplateConfiguration : Form {
         private string groupName = "";
 
@@ -24,3 +25,4 @@
         }
     }
 }
+

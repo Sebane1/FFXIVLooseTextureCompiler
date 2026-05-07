@@ -1,3 +1,4 @@
+using Ookii.Dialogs.WinForms;
 #region Libraries
 using Anamnesis.Penumbra;
 using FFXIVLooseTextureCompiler.Configuration_Dialogues;
@@ -122,7 +123,7 @@ namespace FFXIVLooseTextureCompiler {
                 switch (dialogResult) {
                     case DialogResult.Yes:
                         if (savePath == null) {
-                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                             saveFileDialog.Filter = WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                                 savePath = saveFileDialog.FileName;
@@ -299,6 +300,7 @@ namespace FFXIVLooseTextureCompiler {
             mainFormSimplified = new MainFormSimplified();
             mainFormSimplified.MainWindow = this;
             GetDefaultMode();
+            GetFastUVTransferConfig();
             CheckForCommandArguments();
             VersionText = (await WFTranslator.String(Application.ProductName)) + " " + Program.Version;
             WFTranslator.ParentForm = this;
@@ -580,6 +582,33 @@ namespace FFXIVLooseTextureCompiler {
                 Hide();
                 mainFormSimplified.Show();
                 Hide();
+            }
+        }
+
+        public async void GetFastUVTransferConfig() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"FastUVTransfer.config");
+            bool useFast = true; // default true
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    if (bool.TryParse(reader.ReadLine(), out bool result)) {
+                        useFast = result;
+                    }
+                }
+            }
+            useFastUVTransferToolStripMenuItem.Checked = useFast;
+            if (textureProcessor != null) {
+                textureProcessor.UseFastUVTransfer = useFast;
+            }
+        }
+
+        public async void WriteFastUVTransferConfig() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"FastUVTransfer.config"))) {
+                writer.WriteLine(useFastUVTransferToolStripMenuItem.Checked);
+            }
+            if (textureProcessor != null) {
+                textureProcessor.UseFastUVTransfer = useFastUVTransferToolStripMenuItem.Checked;
             }
         }
         public async void WriteDefaultMode() {
@@ -1175,7 +1204,7 @@ namespace FFXIVLooseTextureCompiler {
                 switch (dialogResult) {
                     case DialogResult.Yes:
                         if (savePath == null) {
-                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                             saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
                             saveFileDialog.AddExtension = true;
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1235,7 +1264,7 @@ namespace FFXIVLooseTextureCompiler {
             Save();
         }
         public async void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 savePath = saveFileDialog.FileName;
@@ -1245,7 +1274,7 @@ namespace FFXIVLooseTextureCompiler {
         public async void openToolStripMenuItem_Click(object sender, EventArgs e) {
             lockDuplicateGeneration = true;
             if (await CleanSlate()) {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
+                VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
                 openFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     savePath = openFileDialog.FileName;
@@ -1262,7 +1291,7 @@ namespace FFXIVLooseTextureCompiler {
         public async void Save() {
             lockDuplicateGeneration = true;
             if (savePath == null) {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                 saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     savePath = saveFileDialog.FileName;
@@ -1527,83 +1556,45 @@ namespace FFXIVLooseTextureCompiler {
         private async void xNormalToolStripMenuItem_Click(object sender, EventArgs e) {
             XNormal.OpenXNormal();
         }
-        private async void biboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+        private async Task ConvertStandaloneTextureHelper(Action<string, string> xnormalMethod, Action<string, string> fastMethod) {
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 await WFTranslator.Show("Please select where you want to save the conversion");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.BiboToGen3(openFileDialog.FileName, saveFileDialog.FileName);
+                    if (useFastUVTransferToolStripMenuItem.Checked && fastMethod != null) {
+                        fastMethod(openFileDialog.FileName, saveFileDialog.FileName);
+                    } else {
+                        xnormalMethod(openFileDialog.FileName, saveFileDialog.FileName);
+                    }
                     await WFTranslator.Show("Conversion successful!");
                     NavigateToFolder(saveFileDialog.FileName);
                 }
             }
         }
+
+        private async void biboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
+            await ConvertStandaloneTextureHelper(XNormal.BiboToGen3, FastUVTransfer.BiboToGen3);
+        }
+
         private async void gen3ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.Gen3ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.Gen3ToBibo, FastUVTransfer.Gen3ToBibo);
         }
 
         private async void gen3ToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.Gen3ToGen2(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.Gen3ToGen2, FastUVTransfer.Gen3ToGen2);
         }
 
         private async void gen2ToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.Gen2ToGen3(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.Gen2ToGen3, FastUVTransfer.Gen2ToGen3);
         }
 
         private async void gen2ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.Gen2ToBibo(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.Gen2ToBibo, FastUVTransfer.Gen2ToBibo);
         }
 
         private async void toolsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1611,106 +1602,38 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void biboToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.BiboToGen2(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.BiboToGen2, FastUVTransfer.BiboToGen2);
         }
 
 
         private async void otopopToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.OtopopToVanillaLala(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.OtopopToVanillaLala, FastUVTransfer.OtopopToVanillaLala);
         }
 
 
         private async void vanillaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.VanillaLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.VanillaLalaToOtopop, FastUVTransfer.VanillaLalaToOtopop);
         }
 
         private async void vanillaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.VanillaLalaToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.VanillaLalaToAsymLala, FastUVTransfer.VanillaLalaToAsymLala);
         }
 
         private async void otopopToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.OtopopToAsymLala(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.OtopopToAsymLala, FastUVTransfer.OtopopToAsymLala);
         }
 
         private async void asymLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
-            saveFileDialog.Filter = "Texture File|*.png;";
-            await WFTranslator.Show("Please select input texture");
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                await WFTranslator.Show("Please select where you want to save the conversion");
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    XNormal.AsymLalaToOtopop(openFileDialog.FileName, saveFileDialog.FileName);
-                    await WFTranslator.Show("Conversion successful!");
-                    NavigateToFolder(saveFileDialog.FileName);
-                }
-            }
+            await ConvertStandaloneTextureHelper(XNormal.AsymLalaToOtopop, FastUVTransfer.AsymLalaToOtopop);
+        }
+
+        private async void asymLalaToVanillaLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await ConvertStandaloneTextureHelper(XNormal.AsymLalaToVanillaLala, FastUVTransfer.AsymLalaToVanillaLala);
         }
 
         private async void extractAtramentumLuminisGlowMapToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
             await WFTranslator.Show("Please select input texture");
@@ -1722,6 +1645,189 @@ namespace FFXIVLooseTextureCompiler {
                 }
             }
         }
+
+        #region UV Transfer Map Tools
+        private async void generateCoordinateMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
+            saveFileDialog.Filter = "PNG Image|*.png;";
+            saveFileDialog.DefaultExt = "png";
+            await WFTranslator.Show("Select where to save the 16-bit coordinate map.\r\n\r\n" +
+                "This generates a UV identity map that you feed into XNormal's base texture slot " +
+                "to bake a transfer map between two body meshes.\r\n\r\n" +
+                "Once baked, you can use 'Apply Transfer Map' to convert textures without XNormal.", VersionText);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                UVTransferMap.GenerateCoordinateMap(4096, 4096, 
+                    ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
+                await WFTranslator.Show("Coordinate map generated successfully!", VersionText);
+                NavigateToFolder(saveFileDialog.FileName);
+            }
+        }
+
+        private async void applyTransferMapToolStripMenuItem_Click(object sender, EventArgs e) {
+            VistaOpenFileDialog sourceFileDialog = new VistaOpenFileDialog();
+            VistaOpenFileDialog transferMapDialog = new VistaOpenFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
+            sourceFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
+            transferMapDialog.Filter = "Transfer Map (16-bit)|*.tif;*.png;";
+            saveFileDialog.Filter = "PNG Image|*.png;";
+            saveFileDialog.DefaultExt = "png";
+            await WFTranslator.Show("Please select the source texture you want to convert.", VersionText);
+            if (sourceFileDialog.ShowDialog() == DialogResult.OK) {
+                await WFTranslator.Show("Please select the pre-baked transfer map PNG.\r\n\r\n" +
+                    "This should be a 16-bit PNG that was generated by baking a coordinate map " +
+                    "through XNormal with the desired source/target body meshes.", VersionText);
+                if (transferMapDialog.ShowDialog() == DialogResult.OK) {
+                    await WFTranslator.Show("Please select where to save the converted texture.", VersionText);
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                        try {
+                            Bitmap sourceTexture = TexIO.ResolveBitmap(sourceFileDialog.FileName);
+                            Bitmap result = UVTransferMap.ApplyTransferMap(sourceTexture, transferMapDialog.FileName);
+                            TexIO.SaveBitmap(result, ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
+                            result.Dispose();
+                            sourceTexture.Dispose();
+                            await WFTranslator.Show("Transfer map applied successfully!", VersionText);
+                            NavigateToFolder(saveFileDialog.FileName);
+                        } catch (Exception ex) {
+                            await WFTranslator.Show("Error applying transfer map: " + ex.Message, VersionText);
+                        }
+                    }
+                }
+            }
+        }
+
+        private async void bakeTransferMapBiboToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
+            saveFileDialog.Filter = "TIFF Image (16-bit)|*.tif;";
+            saveFileDialog.DefaultExt = "tif";
+            saveFileDialog.FileName = "bibo_to_gen3_transfer.tif";
+            await WFTranslator.Show("This will generate a 16-bit transfer map for Bibo+ → Gen3.\r\n\r\n" +
+                "XNormal must be installed. The process will run automatically.\r\n" +
+                "Choose where to save the resulting .tif transfer map.", VersionText);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                try {
+                    await WFTranslator.Show("Baking transfer map via XNormal. Please wait...", VersionText);
+                    await Task.Run(() => XNormal.BakeTransferMapBiboToGen3(saveFileDialog.FileName));
+                    await WFTranslator.Show("Transfer map baked successfully!\r\n\r\n" + saveFileDialog.FileName, VersionText);
+                    NavigateToFolder(saveFileDialog.FileName);
+                } catch (Exception ex) {
+                    await WFTranslator.Show("Error baking transfer map: " + ex.Message, VersionText);
+                }
+            }
+        }
+
+        private async void bakeTransferMapGen3ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
+            saveFileDialog.Filter = "TIFF Image (16-bit)|*.tif;";
+            saveFileDialog.DefaultExt = "tif";
+            saveFileDialog.FileName = "gen3_to_bibo_transfer.tif";
+            await WFTranslator.Show("This will generate a 16-bit transfer map for Gen3 → Bibo+.\r\n\r\n" +
+                "XNormal must be installed. The process will run automatically.\r\n" +
+                "Choose where to save the resulting .tif transfer map.", VersionText);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                try {
+                    await WFTranslator.Show("Baking transfer map via XNormal. Please wait...", VersionText);
+                    await Task.Run(() => XNormal.BakeTransferMapGen3ToBibo(saveFileDialog.FileName));
+                    await WFTranslator.Show("Transfer map baked successfully!\r\n\r\n" + saveFileDialog.FileName, VersionText);
+                    NavigateToFolder(saveFileDialog.FileName);
+                } catch (Exception ex) {
+                    await WFTranslator.Show("Error baking transfer map: " + ex.Message, VersionText);
+                }
+            }
+        }
+
+        private async void bakeAllTransferMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            folderDialog.Description = "Select folder to save all transfer maps";
+            if (folderDialog.ShowDialog() == DialogResult.OK) {
+                string folder = folderDialog.SelectedPath;
+                var bakeJobs = new (string filename, string label, Action<string> method)[] {
+                    ("bibo_to_gen3_transfer.tif", "Bibo+ → Gen3", XNormal.BakeTransferMapBiboToGen3),
+                    ("gen3_to_bibo_transfer.tif", "Gen3 → Bibo+", XNormal.BakeTransferMapGen3ToBibo),
+                    ("bibo_to_gen2_transfer.tif", "Bibo+ → Gen2", XNormal.BakeTransferMapBiboToGen2),
+                    ("gen2_to_bibo_transfer.tif", "Gen2 → Bibo+", XNormal.BakeTransferMapGen2ToBibo),
+                    ("gen3_to_gen2_transfer.tif", "Gen3 → Gen2", XNormal.BakeTransferMapGen3ToGen2),
+                    ("gen2_to_gen3_transfer.tif", "Gen2 → Gen3", XNormal.BakeTransferMapGen2ToGen3),
+                    ("otopop_to_vanilla_transfer.tif", "Otopop → Vanilla", XNormal.BakeTransferMapOtopopToVanilla),
+                    ("vanilla_to_otopop_transfer.tif", "Vanilla → Otopop", XNormal.BakeTransferMapVanillaToOtopop),
+                    ("vanilla_to_asymlala_transfer.tif", "Vanilla → Asym Lala", XNormal.BakeTransferMapVanillaToAsymLala),
+                    ("asymlala_to_vanilla_transfer.tif", "Asym Lala → Vanilla", XNormal.BakeTransferMapAsymLalaToVanilla),
+                    ("otopop_to_asymlala_transfer.tif", "Otopop → Asym Lala", XNormal.BakeTransferMapOtopopToAsymLala),
+                    ("asymlala_to_otopop_transfer.tif", "Asym Lala → Otopop", XNormal.BakeTransferMapAsymLalaToOtopop),
+                };
+                string originalTitle = this.Text;
+                try {
+                    for (int i = 0; i < bakeJobs.Length; i++) {
+                        var job = bakeJobs[i];
+                        string outputPath = Path.Combine(folder, job.filename);
+                        this.Text = $"Baking {i + 1}/{bakeJobs.Length}: {job.label}...";
+                        await Task.Run(() => job.method(outputPath));
+                    }
+                    this.Text = originalTitle;
+                    await WFTranslator.Show($"All {bakeJobs.Length} transfer maps baked successfully!\r\n\r\n{folder}", VersionText);
+                    NavigateToFolder(folder);
+                } catch (Exception ex) {
+                    this.Text = originalTitle;
+                    await WFTranslator.Show("Error during batch bake: " + ex.Message, VersionText);
+                }
+            }
+        }
+
+        private async Task BakeTransferMapHelper(string label, string defaultFilename, Action<string> bakeMethod) {
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
+            saveFileDialog.Filter = "TIFF Image (16-bit)|*.tif;";
+            saveFileDialog.DefaultExt = "tif";
+            saveFileDialog.FileName = defaultFilename;
+            await WFTranslator.Show($"This will generate a 16-bit transfer map for {label}.\r\n\r\n" +
+                "XNormal must be installed. The process will run automatically.\r\n" +
+                "Choose where to save the resulting .tif transfer map.", VersionText);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                try {
+                    await WFTranslator.Show("Baking transfer map via XNormal. Please wait...", VersionText);
+                    await Task.Run(() => bakeMethod(saveFileDialog.FileName));
+                    await WFTranslator.Show("Transfer map baked successfully!\r\n\r\n" + saveFileDialog.FileName, VersionText);
+                    NavigateToFolder(saveFileDialog.FileName);
+                } catch (Exception ex) {
+                    await WFTranslator.Show("Error baking transfer map: " + ex.Message, VersionText);
+                }
+            }
+        }
+
+        private async void bakeTransferMapBiboToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Bibo+ → Gen2", "bibo_to_gen2_transfer.tif", XNormal.BakeTransferMapBiboToGen2);
+        }
+
+        private void useFastUVTransferToolStripMenuItem_Click(object sender, EventArgs e) {
+            WriteFastUVTransferConfig();
+        }
+        private async void bakeTransferMapGen2ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Gen2 → Bibo+", "gen2_to_bibo_transfer.tif", XNormal.BakeTransferMapGen2ToBibo);
+        }
+        private async void bakeTransferMapGen3ToGen2ToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Gen3 → Gen2", "gen3_to_gen2_transfer.tif", XNormal.BakeTransferMapGen3ToGen2);
+        }
+        private async void bakeTransferMapGen2ToGen3ToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Gen2 → Gen3", "gen2_to_gen3_transfer.tif", XNormal.BakeTransferMapGen2ToGen3);
+        }
+        private async void bakeTransferMapOtopopToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Otopop → Vanilla", "otopop_to_vanilla_transfer.tif", XNormal.BakeTransferMapOtopopToVanilla);
+        }
+        private async void bakeTransferMapVanillaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Vanilla → Otopop", "vanilla_to_otopop_transfer.tif", XNormal.BakeTransferMapVanillaToOtopop);
+        }
+        private async void bakeTransferMapVanillaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Vanilla → Asym Lala", "vanilla_to_asymlala_transfer.tif", XNormal.BakeTransferMapVanillaToAsymLala);
+        }
+        private async void bakeTransferMapAsymLalaToVanillaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Asym Lala → Vanilla", "asymlala_to_vanilla_transfer.tif", XNormal.BakeTransferMapAsymLalaToVanilla);
+        }
+        private async void bakeTransferMapOtopopToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Otopop → Asym Lala", "otopop_to_asymlala_transfer.tif", XNormal.BakeTransferMapOtopopToAsymLala);
+        }
+        private async void bakeTransferMapAsymLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Asym Lala → Otopop", "asymlala_to_otopop_transfer.tif", XNormal.BakeTransferMapAsymLalaToOtopop);
+        }
+        #endregion
+
         #endregion
         #region Image Conversion Utilities
 
@@ -1748,7 +1854,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void multiMapToGrayscaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1775,7 +1881,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void convertImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1794,7 +1900,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void convertOldImageToEyeMultiDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1805,11 +1911,11 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void convertImagesToAsymEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
-            OpenFileDialog openFileDialog2 = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog2 = new VistaOpenFileDialog();
             openFileDialog2.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             saveFileDialog.Filter = "Texture File|*.png;";
 
             await WFTranslator.Show("Please select left input texture (left side of image, not left side of face)");
@@ -1834,7 +1940,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void convertImageToDawntrailEyeMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1964,8 +2070,8 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void imageToRGBChannelsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1985,7 +2091,7 @@ namespace FFXIVLooseTextureCompiler {
             });
         }
         private async void splitImageToRGBAndAlphaToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -1995,9 +2101,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void mergeRGBAndAlphaImagesToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialogRGB = new OpenFileDialog();
-            OpenFileDialog openFileDialogAlpha = new OpenFileDialog();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaOpenFileDialog openFileDialogRGB = new VistaOpenFileDialog();
+            VistaOpenFileDialog openFileDialogAlpha = new VistaOpenFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialogRGB.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             openFileDialogAlpha.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             saveFileDialog.Filter = "Texture File|*.png;";
@@ -2046,7 +2152,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void generateXNormalTranslationMapToolStripMenuItem_Click(object sender, EventArgs e) {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             saveFileDialog.Filter = "Texture File|*.png;";
             await WFTranslator.Show("Please select where you want to save the result", VersionText);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2173,7 +2279,7 @@ namespace FFXIVLooseTextureCompiler {
             new HelpWindow().Show();
         }
         private async void importCustomTemplateToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 OpenTemplate(openFileDialog.FileName);
@@ -2287,7 +2393,7 @@ namespace FFXIVLooseTextureCompiler {
         #endregion
 
         private async void textureToBodyMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2298,7 +2404,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void baseTextureToDawntrailSkinMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2309,7 +2415,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void textureToFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2321,7 +2427,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void textureToAsymFaceMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2385,7 +2491,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void hairBaseToFFXIVHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2395,7 +2501,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void legacyHairMapsToDawntrailHairMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select legacy hair multi.");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2418,7 +2524,7 @@ namespace FFXIVLooseTextureCompiler {
 
 
         private async void convertBaseToNormalAndMultiToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2441,7 +2547,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void textureToTexToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture to convert to .tex");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2562,7 +2668,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void baseTextureToNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2572,7 +2678,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void baseTextureToInvertedNormalMapToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2586,7 +2692,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void generateMapsForDawntrailEyeDiffuseToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2597,7 +2703,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void fullTattooToOverlayToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2616,7 +2722,7 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void fullTattooToOverlayBodyToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2638,9 +2744,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void seperateTextureByDifferenceToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
-            OpenFileDialog openFileDialog2 = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog2 = new VistaOpenFileDialog();
             openFileDialog2.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select an input texture with the element you want to separate.");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2875,7 +2981,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void createAnimatedContactLensesToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2970,7 +3076,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail1FemaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -2989,7 +3095,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail2FemaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3008,7 +3114,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail3FemaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3027,7 +3133,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail4FemaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3046,7 +3152,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail1MaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3065,7 +3171,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail2MaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3084,7 +3190,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail3MaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3103,7 +3209,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void tail4MaleToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -3122,7 +3228,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void legacyAuRaMapsToDawntrailToolStripMenuItem_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            VistaOpenFileDialog openFileDialog = new VistaOpenFileDialog();
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select Au Ra diffuse (skin) texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {

@@ -1,4 +1,5 @@
-﻿using FFXIVLooseTextureCompiler.PathOrganization;
+using Ookii.Dialogs.WinForms;
+using FFXIVLooseTextureCompiler.PathOrganization;
 
 namespace FFXIVLooseTextureCompiler {
     public partial class CustomPathDialog : Form {
@@ -134,3 +135,4 @@ namespace FFXIVLooseTextureCompiler {
         }
     }
 }
+

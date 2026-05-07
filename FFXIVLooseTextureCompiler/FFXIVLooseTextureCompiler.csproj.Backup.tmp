@@ -4,18 +4,16 @@
     <OutputType>WinExe</OutputType>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.0.5.4</Version>
+    <Version>2.0.5.3</Version>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <Title>FFXIV Loose Texture Compiler</Title>
     <Copyright>Lawener Industries</Copyright>
     <PackageProjectUrl>https://github.com/Sebane1/FFXIVLooseTextureCompiler</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Sebane1/FFXIVLooseTextureCompiler</RepositoryUrl>
     <ApplicationIcon>FFXIVTP.ico</ApplicationIcon>
-    
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <TargetFramework>net8.0-windows</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
@@ -23,12 +21,23 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <DebugType>embedded</DebugType>
     <Platforms>AnyCPU;x64</Platforms>
-    <NoWarn>$(NoWarn);WFO1000</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Using Include="System.IO" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows|AnyCPU'">
+    <DefineConstants>$(DefineConstants);dotnet build --self-contained;dotnet publish --self-contained;dotnet publish -r win-x64</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows|AnyCPU'">
+    <DefineConstants>$(DefineConstants);dotnet build --self-contained;dotnet publish --self-contained;dotnet build -r win-x64</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Penumbra\**" />
@@ -42,7 +51,6 @@
 
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.6" />
-    <PackageReference Include="Ookii.Dialogs.WinForms" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
