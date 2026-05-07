@@ -2534,7 +2534,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public async void legacyMakeupSalvagerToolStripMenuItem_Click(object sender, EventArgs e) {
-            new LegacyMakeupSalvager().Show();
+            new LegacyMakeupSalvager(textureProcessor.UseFastUVTransfer).Show();
         }
 
         private async void bulkDDSToPNGToolStripMenuItem_Click(object sender, EventArgs e) {
