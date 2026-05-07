@@ -79,7 +79,7 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities
                         string mapNameOverride = $"face_{racialGender.SelectedItem.ToString().ToLower()}_{RaceInfo.ModelRaces[RaceInfo.SubRaceToModelRace(subRaceListBox.SelectedIndex)].ToLower()}_{1 + faceNumberListBox.SelectedIndex}_transfer.tif";
                         FastUVTransfer.PerformModularTransfer(inputModel, outputModel, makeupPath, path, mapNameOverride);
                     }
-                    else if (!textureIsNormalMap.Checked)
+                    else if (textureIsNormalMap.Checked)
                     {
                         XNormal.CallXNormal(inputModel, outputModel, makeupPath, path, false,
                        (subRaceListBox.SelectedIndex == 11 || subRaceListBox.SelectedIndex == 10) ? 1024 : 512, 1024);
