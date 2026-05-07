@@ -1,4 +1,4 @@
-﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using FFXIVLooseTextureCompiler.ImageProcessing;
 using Penumbra.LTCImport.Textures;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -24,6 +24,8 @@ namespace FFXIVLooseTextureCompiler {
             if (texturePreview.BackgroundImage != null) {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = ".png files|*.png";
+                saveFileDialog.DefaultExt = "png";
+                saveFileDialog.AddExtension = true;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     TexIO.SaveBitmap(texturePreview.BackgroundImage as Bitmap, saveFileDialog.FileName);
                     MessageBox.Show("Texture saved to .png", Text);

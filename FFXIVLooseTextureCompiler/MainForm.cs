@@ -125,6 +125,8 @@ namespace FFXIVLooseTextureCompiler {
                         if (savePath == null) {
                             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                             saveFileDialog.Filter = WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
+                            saveFileDialog.DefaultExt = "ffxivtp";
+                            saveFileDialog.AddExtension = true;
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                                 savePath = saveFileDialog.FileName;
                             }
@@ -1206,6 +1208,7 @@ namespace FFXIVLooseTextureCompiler {
                         if (savePath == null) {
                             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                             saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
+                            saveFileDialog.DefaultExt = "ffxivtp";
                             saveFileDialog.AddExtension = true;
                             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                                 savePath = saveFileDialog.FileName;
@@ -1266,6 +1269,8 @@ namespace FFXIVLooseTextureCompiler {
         public async void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
+            saveFileDialog.DefaultExt = "ffxivtp";
+            saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 savePath = saveFileDialog.FileName;
                 SaveProject(savePath);
@@ -1293,6 +1298,8 @@ namespace FFXIVLooseTextureCompiler {
             if (savePath == null) {
                 VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
                 saveFileDialog.Filter = await WFTranslator.String("FFXIV Texture Project") + "|*.ffxivtp;";
+                saveFileDialog.DefaultExt = "ffxivtp";
+                saveFileDialog.AddExtension = true;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     savePath = saveFileDialog.FileName;
                 }
@@ -1562,6 +1569,8 @@ namespace FFXIVLooseTextureCompiler {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
+            saveFileDialog.DefaultExt = "png";
+            saveFileDialog.AddExtension = true;
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 await WFTranslator.Show("Please select where you want to save the conversion");
@@ -1636,6 +1645,8 @@ namespace FFXIVLooseTextureCompiler {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             openFileDialog.Filter = "Texture File|*.png;*.dds;*.bmp;";
             saveFileDialog.Filter = "Texture File|*.png;";
+            saveFileDialog.DefaultExt = "png";
+            saveFileDialog.AddExtension = true;
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 await WFTranslator.Show("Please select where you want to save the conversion", VersionText);
@@ -1651,6 +1662,7 @@ namespace FFXIVLooseTextureCompiler {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
             saveFileDialog.Filter = "PNG Image|*.png;";
             saveFileDialog.DefaultExt = "png";
+            saveFileDialog.AddExtension = true;
             await WFTranslator.Show("Select where to save the 16-bit coordinate map.\r\n\r\n" +
                 "This generates a UV identity map that you feed into XNormal's base texture slot " +
                 "to bake a transfer map between two body meshes.\r\n\r\n" +
@@ -1671,6 +1683,7 @@ namespace FFXIVLooseTextureCompiler {
             transferMapDialog.Filter = "Transfer Map (16-bit)|*.tif;*.png;";
             saveFileDialog.Filter = "PNG Image|*.png;";
             saveFileDialog.DefaultExt = "png";
+            saveFileDialog.AddExtension = true;
             await WFTranslator.Show("Please select the source texture you want to convert.", VersionText);
             if (sourceFileDialog.ShowDialog() == DialogResult.OK) {
                 await WFTranslator.Show("Please select the pre-baked transfer map PNG.\r\n\r\n" +
@@ -2985,7 +2998,7 @@ namespace FFXIVLooseTextureCompiler {
             openFileDialog.Filter = (await WFTranslator.String("Texture File")) + "|*.png;*.tga;*.dds;*.bmp;*.tex;";
             await WFTranslator.Show("Please select input texture");
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, openFileDialog.FileName);
+                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, openFileDialog.FileName, textureProcessor.UseFastUVTransfer);
                 await WFTranslator.Show("Image successfully converted to contact maps.", VersionText);
                 AutoModPackingPromptContacts(openFileDialog.FileName);
             }
@@ -2998,6 +3011,7 @@ namespace FFXIVLooseTextureCompiler {
             int itemsCounted = 0;
             int calculatingItems = 0;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                bool useFast = textureProcessor.UseFastUVTransfer;
                 foreach (string file in Directory.EnumerateFiles(folderBrowserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".dds") || s.EndsWith(".tex"))) {
                     if (!file.Contains("_contactBase") && !file.Contains("_base") && !file.Contains("_norm") && !file.Contains("_mask")) {
@@ -3008,7 +3022,7 @@ namespace FFXIVLooseTextureCompiler {
                         calculatingItems++;
                         Task.Run(() => {
                             try {
-                                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, file);
+                                ImageManipulation.CreateContact(GlobalPathStorage.OriginalBaseDirectory, file, useFast);
                             } catch {
 
                             }

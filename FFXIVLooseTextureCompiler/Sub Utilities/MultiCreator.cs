@@ -1,4 +1,4 @@
-﻿using FFXIVLooseTextureCompiler.ImageProcessing;
+using FFXIVLooseTextureCompiler.ImageProcessing;
 using System.Drawing.Imaging;
 
 namespace FFXIVLooseTextureCompiler {
@@ -133,6 +133,8 @@ namespace FFXIVLooseTextureCompiler {
         private void exportButton_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Texture Files|*.png;";
+            saveFileDialog.DefaultExt = "png";
+            saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 TexIO.SaveBitmap(result.BackgroundImage as Bitmap, saveFileDialog.FileName);
                 WFTranslator.Show("Texture saved!", Text);
