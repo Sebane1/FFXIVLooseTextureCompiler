@@ -3070,7 +3070,12 @@ namespace FFXIVLooseTextureCompiler {
         private async void layerBaseButton_Click(object sender, EventArgs e) {
             TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
             OverlaySelector overlaySelector = new OverlaySelector();
+            
+            string targetUV = ImageManipulation.IdentifyTargetUV(textureSet.InternalBasePath);
+            
+            overlaySelector.TargetUV = targetUV;
             overlaySelector.LayeredImages = textureSet.BaseOverlays;
+            overlaySelector.LayeredUVs = textureSet.BaseOverlayUVs;
             overlaySelector.OnSelectedEventHandler = multi_OnFileSelected;
             overlaySelector.ShowDialog();
         }
@@ -3078,14 +3083,24 @@ namespace FFXIVLooseTextureCompiler {
         private async void layerNormalButton_Click(object sender, EventArgs e) {
             TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
             OverlaySelector overlaySelector = new OverlaySelector();
+            
+            string targetUV = ImageManipulation.IdentifyTargetUV(textureSet.InternalBasePath);
+            
+            overlaySelector.TargetUV = targetUV;
             overlaySelector.LayeredImages = textureSet.NormalOverlays;
+            overlaySelector.LayeredUVs = textureSet.NormalOverlayUVs;
             overlaySelector.ShowDialog();
         }
 
         private async void layersMaskButton_Click(object sender, EventArgs e) {
             TextureSet textureSet = textureList.Items[textureList.SelectedIndex] as TextureSet;
             OverlaySelector overlaySelector = new OverlaySelector();
+            
+            string targetUV = ImageManipulation.IdentifyTargetUV(textureSet.InternalBasePath);
+            
+            overlaySelector.TargetUV = targetUV;
             overlaySelector.LayeredImages = textureSet.MaskOverlays;
+            overlaySelector.LayeredUVs = textureSet.MaskOverlayUVs;
             overlaySelector.ShowDialog();
         }
 

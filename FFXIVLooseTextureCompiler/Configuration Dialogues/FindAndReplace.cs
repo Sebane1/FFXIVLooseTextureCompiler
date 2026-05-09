@@ -1,4 +1,4 @@
-﻿using FFXIVLooseTextureCompiler.Configuration_Dialogues;
+using FFXIVLooseTextureCompiler.Configuration_Dialogues;
 using FFXIVLooseTextureCompiler.PathOrganization;
 
 namespace FFXIVLooseTextureCompiler {
@@ -9,12 +9,15 @@ namespace FFXIVLooseTextureCompiler {
 
             _overlaySelectorBase = new OverlaySelector();
             _overlaySelectorBase.LayeredImages = new List<string>();
+            _overlaySelectorBase.LayeredUVs = new List<string>();
 
             _overlaySelectorNormal = new OverlaySelector();
             _overlaySelectorNormal.LayeredImages = new List<string>();
+            _overlaySelectorNormal.LayeredUVs = new List<string>();
 
             _overlaySelectorMask = new OverlaySelector();
             _overlaySelectorMask.LayeredImages = new List<string>();
+            _overlaySelectorMask.LayeredUVs = new List<string>();
 
         }
         List<TextureSet> textureSet = new List<TextureSet>();
@@ -40,6 +43,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         if (_overlaySelectorBase.LayeredImages.Count > 0) {
                             textureSet.BaseOverlays = _overlaySelectorBase.LayeredImages;
+                            textureSet.BaseOverlayUVs = _overlaySelectorBase.LayeredUVs;
                         }
 
                         if (!string.IsNullOrEmpty(normal.FilePath.Text)) {
@@ -47,6 +51,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         if (_overlaySelectorNormal.LayeredImages.Count > 0) {
                             textureSet.NormalOverlays = _overlaySelectorNormal.LayeredImages;
+                            textureSet.NormalOverlayUVs = _overlaySelectorNormal.LayeredUVs;
                         }
 
                         if (!string.IsNullOrEmpty(mask.FilePath.Text)) {
@@ -54,6 +59,7 @@ namespace FFXIVLooseTextureCompiler {
                         }
                         if (_overlaySelectorMask.LayeredImages.Count > 0) {
                             textureSet.MaskOverlays = _overlaySelectorMask.LayeredImages;
+                            textureSet.MaskOverlayUVs = _overlaySelectorMask.LayeredUVs;
                         }
 
                         if (!string.IsNullOrEmpty(bounds.FilePath.Text)) {
