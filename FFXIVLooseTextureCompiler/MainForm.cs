@@ -184,7 +184,7 @@ namespace FFXIVLooseTextureCompiler {
                 Action safeWrite = delegate { LaunchingXnormal(); };
                 generateButton.Invoke(safeWrite);
             } else {
-                exportLabel.Text = await WFTranslator.String("Wait For xNormal");
+                exportLabel.Text = await WFTranslator.String("Wait For UV Transfer");
                 Console.WriteLine(exportLabel.Text);
             }
         }
@@ -201,11 +201,11 @@ namespace FFXIVLooseTextureCompiler {
         private async void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             ExportJson();
             ExportMeta();
-            Thread.Sleep(100);
+            await Task.Delay(1000);
             await PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
-            Thread.Sleep(100);
+            await Task.Delay(1000);
             await PenumbraHttpApi.Redraw(0);
-            Thread.Sleep(100);
+            await Task.Delay(1000);
             await PenumbraHttpApi.Redraw(0);
             hasDoneReload = true;
             textureSetList_SelectedIndexChanged(this, EventArgs.Empty);
