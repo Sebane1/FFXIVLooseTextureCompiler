@@ -92,6 +92,14 @@ namespace FFXIVLooseTextureCompiler {
             textureProcessor.OnStartedProcessing += TextureProcessor_OnStartedProcessing;
             textureProcessor.OnError += TextureProcessor_OnError;
             Racial.RacePaths.otopopNoticeTriggered += RacePaths_otopopNoticeTriggered;
+            
+            ToolStripMenuItem bakeTransferMapOtopopToRelalaToolStripMenuItem = new ToolStripMenuItem("Bake Map: Otopop → Relala");
+            bakeTransferMapOtopopToRelalaToolStripMenuItem.Click += async (s, e) => { await BakeTransferMapHelper("Otopop → Relala", "otopop_to_relala_transfer.tif", XNormal.BakeTransferMapOtopopToRelala); };
+            ToolStripMenuItem bakeTransferMapRelalaToOtopopToolStripMenuItem = new ToolStripMenuItem("Bake Map: Relala → Otopop");
+            bakeTransferMapRelalaToOtopopToolStripMenuItem.Click += async (s, e) => { await BakeTransferMapHelper("Relala → Otopop", "relala_to_otopop_transfer.tif", XNormal.BakeTransferMapRelalaToOtopop); };
+
+            uvTransferMapToolsToolStripMenuItem.DropDownItems.Add(bakeTransferMapOtopopToRelalaToolStripMenuItem);
+            uvTransferMapToolsToolStripMenuItem.DropDownItems.Add(bakeTransferMapRelalaToOtopopToolStripMenuItem);
         }
 
         private async void TextureProcessor_OnProgressReport(object? sender, string e) {
@@ -799,6 +807,8 @@ namespace FFXIVLooseTextureCompiler {
                     uniqueAuRa.Enabled = false;
                     break;
                 case 5:
+                case 6:
+                case 7:
                     //genderList.Enabled = false;
                     raceList.SelectedIndex = 3;
                     tailList.Enabled = false;
@@ -811,7 +821,7 @@ namespace FFXIVLooseTextureCompiler {
                 if (raceList.SelectedIndex != 4 && raceList.SelectedIndex != 6 && raceList.SelectedIndex != 7) {
                     baseBodyList.SelectedIndex = 0;
                 }
-            } else if (baseBodyList.SelectedIndex == 5) {
+            } else if (baseBodyList.SelectedIndex >= 5) {
                 if (raceList.SelectedIndex != 3) {
                     if (genderList.SelectedIndex == 0) {
                         baseBodyList.SelectedIndex = 3;
@@ -1624,6 +1634,8 @@ namespace FFXIVLooseTextureCompiler {
             await ConvertStandaloneTextureHelper(XNormal.VanillaLalaToOtopop, FastUVTransfer.VanillaLalaToOtopop);
         }
 
+
+
         private async void vanillaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
             await ConvertStandaloneTextureHelper(XNormal.VanillaLalaToAsymLala, FastUVTransfer.VanillaLalaToAsymLala);
         }
@@ -1660,8 +1672,8 @@ namespace FFXIVLooseTextureCompiler {
         #region UV Transfer Map Tools
         private async void generateCoordinateMapToolStripMenuItem_Click(object sender, EventArgs e) {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog();
-            saveFileDialog.Filter = "PNG Image|*.png;";
-            saveFileDialog.DefaultExt = "png";
+            saveFileDialog.Filter = "TIFF Image|*.tif;";
+            saveFileDialog.DefaultExt = "tif";
             saveFileDialog.AddExtension = true;
             await WFTranslator.Show("Select where to save the 16-bit coordinate map.\r\n\r\n" +
                 "This generates a UV identity map that you feed into XNormal's base texture slot " +
@@ -1669,7 +1681,7 @@ namespace FFXIVLooseTextureCompiler {
                 "Once baked, you can use 'Apply Transfer Map' to convert textures without XNormal.", VersionText);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 UVTransferMap.GenerateCoordinateMap(4096, 4096, 
-                    ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".png"));
+                    ImageManipulation.ReplaceExtension(saveFileDialog.FileName, ".tif"));
                 await WFTranslator.Show("Coordinate map generated successfully!", VersionText);
                 NavigateToFolder(saveFileDialog.FileName);
             }
@@ -1766,6 +1778,8 @@ namespace FFXIVLooseTextureCompiler {
                     ("asymlala_to_vanilla_transfer.tif", "Asym Lala → Vanilla", XNormal.BakeTransferMapAsymLalaToVanilla),
                     ("otopop_to_asymlala_transfer.tif", "Otopop → Asym Lala", XNormal.BakeTransferMapOtopopToAsymLala),
                     ("asymlala_to_otopop_transfer.tif", "Asym Lala → Otopop", XNormal.BakeTransferMapAsymLalaToOtopop),
+                    ("otopop_to_relala_transfer.tif", "Otopop → Relala", XNormal.BakeTransferMapOtopopToRelala),
+                    ("relala_to_otopop_transfer.tif", "Relala → Otopop", XNormal.BakeTransferMapRelalaToOtopop),
                 };
                 string originalTitle = this.Text;
                 try {
@@ -1838,6 +1852,12 @@ namespace FFXIVLooseTextureCompiler {
         }
         private async void bakeTransferMapAsymLalaToOtopopToolStripMenuItem_Click(object sender, EventArgs e) {
             await BakeTransferMapHelper("Asym Lala → Otopop", "asymlala_to_otopop_transfer.tif", XNormal.BakeTransferMapAsymLalaToOtopop);
+        }
+        private async void bakeTransferMapRelalaToAsymLalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Relala → Asym Lala", "relala_to_asymlala_transfer.tif", XNormal.BakeTransferMapRelalaToAsymLala);
+        }
+        private async void bakeTransferMapAsymLalaToRelalaToolStripMenuItem_Click(object sender, EventArgs e) {
+            await BakeTransferMapHelper("Asym Lala → Relala", "asymlala_to_relala_transfer.tif", XNormal.BakeTransferMapAsymLalaToRelala);
         }
         #endregion
 

@@ -122,6 +122,8 @@ namespace FFXIVLooseTextureCompiler {
             bakeTransferMapAsymLalaToVanillaToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapOtopopToAsymLalaToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem = new ToolStripMenuItem();
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem = new ToolStripMenuItem();
             bakeAllTransferMapsToolStripMenuItem = new ToolStripMenuItem();
             biboToGen3ToolStripMenuItem = new ToolStripMenuItem();
             biboToGen2ToolStripMenuItem = new ToolStripMenuItem();
@@ -269,7 +271,7 @@ namespace FFXIVLooseTextureCompiler {
             // baseBodyList
             // 
             baseBodyList.FormattingEnabled = true;
-            baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "Gen3", "TBSE and HRBODY", "TAIL", "Otopop" });
+            baseBodyList.Items.AddRange(new object[] { "Vanilla and Gen2", "BIBO+", "Gen3", "TBSE and HRBODY", "TAIL", "Otopop", "Asym Lalafell", "Relala" });
             baseBodyList.Location = new Point(81, 4);
             baseBodyList.Name = "baseBodyList";
             baseBodyList.Size = new Size(112, 23);
@@ -961,7 +963,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // uvTransferMapToolsToolStripMenuItem
             // 
-            uvTransferMapToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateCoordinateMapToolStripMenuItem, applyTransferMapToolStripMenuItem, bakeAllTransferMapsToolStripMenuItem, bakeTransferMapBiboToGen3ToolStripMenuItem, bakeTransferMapGen3ToBiboToolStripMenuItem, bakeTransferMapBiboToGen2ToolStripMenuItem, bakeTransferMapGen2ToBiboToolStripMenuItem, bakeTransferMapGen3ToGen2ToolStripMenuItem, bakeTransferMapGen2ToGen3ToolStripMenuItem, bakeTransferMapOtopopToVanillaToolStripMenuItem, bakeTransferMapVanillaToOtopopToolStripMenuItem, bakeTransferMapVanillaToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToVanillaToolStripMenuItem, bakeTransferMapOtopopToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToOtopopToolStripMenuItem });
+            uvTransferMapToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateCoordinateMapToolStripMenuItem, applyTransferMapToolStripMenuItem, bakeAllTransferMapsToolStripMenuItem, bakeTransferMapBiboToGen3ToolStripMenuItem, bakeTransferMapGen3ToBiboToolStripMenuItem, bakeTransferMapBiboToGen2ToolStripMenuItem, bakeTransferMapGen2ToBiboToolStripMenuItem, bakeTransferMapGen3ToGen2ToolStripMenuItem, bakeTransferMapGen2ToGen3ToolStripMenuItem, bakeTransferMapOtopopToVanillaToolStripMenuItem, bakeTransferMapVanillaToOtopopToolStripMenuItem, bakeTransferMapVanillaToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToVanillaToolStripMenuItem, bakeTransferMapOtopopToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToOtopopToolStripMenuItem, bakeTransferMapRelalaToAsymLalaToolStripMenuItem, bakeTransferMapAsymLalaToRelalaToolStripMenuItem });
             uvTransferMapToolsToolStripMenuItem.Name = "uvTransferMapToolsToolStripMenuItem";
             uvTransferMapToolsToolStripMenuItem.Size = new Size(286, 22);
             uvTransferMapToolsToolStripMenuItem.Text = "UV Transfer Map Tools";
@@ -1070,6 +1072,20 @@ namespace FFXIVLooseTextureCompiler {
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Size = new Size(220, 22);
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Text = "Bake Map: Asym Lala → Otopop";
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Click += bakeTransferMapAsymLalaToOtopopToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapRelalaToAsymLalaToolStripMenuItem
+            // 
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Name = "bakeTransferMapRelalaToAsymLalaToolStripMenuItem";
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Text = "Bake Map: Relala → Asym Lala";
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Click += bakeTransferMapRelalaToAsymLalaToolStripMenuItem_Click;
+            // 
+            // bakeTransferMapAsymLalaToRelalaToolStripMenuItem
+            // 
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Name = "bakeTransferMapAsymLalaToRelalaToolStripMenuItem";
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Text = "Bake Map: Asym Lala → Relala";
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Click += bakeTransferMapAsymLalaToRelalaToolStripMenuItem_Click;
             // 
             // devToolsToolStripMenuItem
             // 
@@ -2124,6 +2140,8 @@ namespace FFXIVLooseTextureCompiler {
         private ToolStripMenuItem bakeTransferMapAsymLalaToVanillaToolStripMenuItem;
         private ToolStripMenuItem bakeTransferMapOtopopToAsymLalaToolStripMenuItem;
         private ToolStripMenuItem bakeTransferMapAsymLalaToOtopopToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapRelalaToAsymLalaToolStripMenuItem;
+        private ToolStripMenuItem bakeTransferMapAsymLalaToRelalaToolStripMenuItem;
         private ToolStripMenuItem bakeAllTransferMapsToolStripMenuItem;
 
         public ListBox TextureList { get => textureList; set => textureList = value; }

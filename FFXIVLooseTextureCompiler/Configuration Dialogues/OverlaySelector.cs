@@ -40,14 +40,20 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
                 _layeredUVs = value;
                 for (int i = 0; i < value.Count && i < _uvSelectors.Count; i++) {
                     string uv = value[i];
-                    if (string.IsNullOrEmpty(uv)) _uvSelectors[i].SelectedIndex = 0;
-                    else if (uv.ToLower() == "bibo") _uvSelectors[i].SelectedIndex = 1;
-                    else if (uv.ToLower() == "gen3") _uvSelectors[i].SelectedIndex = 2;
-                    else if (uv.ToLower() == "gen2") _uvSelectors[i].SelectedIndex = 3;
-                    else if (uv.ToLower() == "tbse") _uvSelectors[i].SelectedIndex = 4;
-                    else if (uv.ToLower() == "otopop") _uvSelectors[i].SelectedIndex = 5;
-                    else if (uv.ToLower() == "vanillalala") _uvSelectors[i].SelectedIndex = 6;
-                    else if (uv.ToLower() == "asymlala") _uvSelectors[i].SelectedIndex = 7;
+                    int index = 0;
+                    if (string.IsNullOrEmpty(uv) || uv.ToLower() == "none") index = 0;
+                    else if (uv.ToLower() == "auto") index = 1;
+                    else if (uv.ToLower() == "bibo") index = _uvSelectors[i].FindStringExact("Bibo");
+                    else if (uv.ToLower() == "gen3") index = _uvSelectors[i].FindStringExact("Gen3");
+                    else if (uv.ToLower() == "gen2") index = _uvSelectors[i].FindStringExact("Gen2");
+                    else if (uv.ToLower() == "tbse") index = _uvSelectors[i].FindStringExact("TBSE");
+                    else if (uv.ToLower() == "otopop") index = _uvSelectors[i].FindStringExact("Otopop");
+                    else if (uv.ToLower() == "vanillalala") index = _uvSelectors[i].FindStringExact("Vanilla Lala");
+                    else if (uv.ToLower() == "asymlala") index = _uvSelectors[i].FindStringExact("Asym Lala");
+                    else if (uv.ToLower() == "relala") index = _uvSelectors[i].FindStringExact("Relala");
+                    
+                    if (index == -1) index = 0;
+                    _uvSelectors[i].SelectedIndex = index;
                 }
             }
         }
@@ -83,16 +89,17 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
             ComboBox uvComboBox = new ComboBox();
             uvComboBox.Parent = this;
             uvComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            List<string> options = new List<string>() { "Auto" };
+            List<string> options = new List<string>() { "None", "Auto" };
             if (_targetUV == "bibo") options.AddRange(new string[] { "Bibo", "Gen3", "Gen2" });
             else if (_targetUV == "gen3") options.AddRange(new string[] { "Gen3", "Bibo", "Gen2" });
             else if (_targetUV == "gen2") options.AddRange(new string[] { "Gen2", "Bibo", "Gen3" });
-            else if (_targetUV == "otopop") options.AddRange(new string[] { "Otopop", "Asym Lala", "Vanilla Lala" });
-            else if (_targetUV == "asymlala") options.AddRange(new string[] { "Asym Lala", "Otopop", "Vanilla Lala" });
-            else if (_targetUV == "vanillalala") options.AddRange(new string[] { "Vanilla Lala", "Otopop", "Asym Lala" });
+            else if (_targetUV == "otopop") options.AddRange(new string[] { "Otopop", "Asym Lala", "Relala", "Vanilla Lala" });
+            else if (_targetUV == "asymlala") options.AddRange(new string[] { "Asym Lala", "Relala", "Otopop", "Vanilla Lala" });
+            else if (_targetUV == "relala") options.AddRange(new string[] { "Relala", "Asym Lala", "Otopop", "Vanilla Lala" });
+            else if (_targetUV == "vanillalala") options.AddRange(new string[] { "Vanilla Lala", "Otopop", "Asym Lala", "Relala" });
             else if (_targetUV == "tbse") options.AddRange(new string[] { "TBSE", "Vanilla Male" });
             else if (_targetUV == "vanillamale") options.AddRange(new string[] { "Vanilla Male", "TBSE" });
-            else options.AddRange(new string[] { "Bibo", "Gen3", "Gen2", "TBSE", "Otopop", "Vanilla Lala", "Asym Lala", "Vanilla Male" });
+            else options.AddRange(new string[] { "Bibo", "Gen3", "Gen2", "TBSE", "Otopop", "Relala", "Vanilla Lala", "Asym Lala", "Vanilla Male" });
 
             uvComboBox.Items.AddRange(options.ToArray());
             uvComboBox.Width = 100;
@@ -114,12 +121,18 @@ namespace FFXIVLooseTextureCompiler.Configuration_Dialogues {
                 var i = index;
                 var selector = filePicker;
                 _layeredImages[i] = selector.FilePath.Text;
+                if (ImageProcessing.ImageManipulation.HasTextIdentifiers(selector.FilePath.Text)) {
+                    uvComboBox.SelectedIndex = 1;
+                } else {
+                    uvComboBox.SelectedIndex = 0;
+                }
             };
             uvComboBox.SelectedIndexChanged += delegate {
                 var i = index;
                 if (uvComboBox.SelectedItem != null) {
                     string selected = uvComboBox.SelectedItem.ToString();
-                    if (selected == "Auto") _layeredUVs[i] = "";
+                    if (selected == "None") _layeredUVs[i] = "none";
+                    else if (selected == "Auto") _layeredUVs[i] = "auto";
                     else if (selected == "Vanilla Lala") _layeredUVs[i] = "vanillalala";
                     else if (selected == "Vanilla Male") _layeredUVs[i] = "vanillamale";
                     else if (selected == "Asym Lala") _layeredUVs[i] = "asymlala";
