@@ -143,6 +143,7 @@ namespace FFXIVLooseTextureCompiler {
             configToolStripMenuItem = new ToolStripMenuItem();
             changePenumbraPathToolStripMenuItem = new ToolStripMenuItem();
             useFastUVTransferToolStripMenuItem = new ToolStripMenuItem();
+            exportBC7ToolStripMenuItem = new ToolStripMenuItem();
             modShareToolStripMenuItem = new ToolStripMenuItem();
             enableModshareToolStripMenuItem = new ToolStripMenuItem();
             sendCurrentModToolStripMenuItem = new ToolStripMenuItem();
@@ -1139,7 +1140,7 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // configToolStripMenuItem
             // 
-            configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem, useFastUVTransferToolStripMenuItem });
+            configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem, useFastUVTransferToolStripMenuItem, exportBC7ToolStripMenuItem });
             configToolStripMenuItem.Name = "configToolStripMenuItem";
             configToolStripMenuItem.Size = new Size(55, 20);
             configToolStripMenuItem.Text = "Config";
@@ -1160,6 +1161,15 @@ namespace FFXIVLooseTextureCompiler {
             useFastUVTransferToolStripMenuItem.Text = "Use Fast UV Transfer";
             useFastUVTransferToolStripMenuItem.Click += useFastUVTransferToolStripMenuItem_Click;
             // 
+            // 
+            // exportBC7ToolStripMenuItem
+            // 
+            exportBC7ToolStripMenuItem.CheckOnClick = true;
+            exportBC7ToolStripMenuItem.Checked = false;
+            exportBC7ToolStripMenuItem.Name = "exportBC7ToolStripMenuItem";
+            exportBC7ToolStripMenuItem.Size = new Size(200, 22);
+            exportBC7ToolStripMenuItem.Text = "Export BC7";
+            exportBC7ToolStripMenuItem.Click += exportBC7ToolStripMenuItem_Click;
             // modShareToolStripMenuItem
             // 
             modShareToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableModshareToolStripMenuItem, sendCurrentModToolStripMenuItem });
@@ -1991,6 +2001,7 @@ namespace FFXIVLooseTextureCompiler {
         private ToolStripMenuItem editPathsToolStripMenuItem;
         private ToolStripMenuItem moveUpToolStripMenuItem;
         private ToolStripMenuItem useFastUVTransferToolStripMenuItem;
+        private ToolStripMenuItem exportBC7ToolStripMenuItem;
         private ToolStripMenuItem moveDownToolStripMenuItem;
         private Button moveUpButton;
         private Button moveDownButton;

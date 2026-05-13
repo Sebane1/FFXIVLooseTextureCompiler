@@ -311,6 +311,7 @@ namespace FFXIVLooseTextureCompiler {
             mainFormSimplified.MainWindow = this;
             GetDefaultMode();
             GetFastUVTransferConfig();
+            GetExportBC7Config();
             CheckForCommandArguments();
             VersionText = (await WFTranslator.String(Application.ProductName)) + " " + Program.Version;
             WFTranslator.ParentForm = this;
@@ -609,6 +610,33 @@ namespace FFXIVLooseTextureCompiler {
             useFastUVTransferToolStripMenuItem.Checked = useFast;
             if (textureProcessor != null) {
                 textureProcessor.UseFastUVTransfer = useFast;
+            }
+        }
+
+        public async void GetExportBC7Config() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            string path = Path.Combine(dataPath, @"ExportBC7.config");
+            bool exportBC7 = false; 
+            if (File.Exists(path)) {
+                using (StreamReader reader = new StreamReader(path)) {
+                    if (bool.TryParse(reader.ReadLine(), out bool result)) {
+                        exportBC7 = result;
+                    }
+                }
+            }
+            exportBC7ToolStripMenuItem.Checked = exportBC7;
+            if (textureProcessor != null) {
+                textureProcessor.ExportBc7 = exportBC7;
+            }
+        }
+
+        public async void WriteExportBC7Config() {
+            string dataPath = Application.UserAppDataPath.Replace(Application.ProductVersion, null);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(dataPath, @"ExportBC7.config"))) {
+                writer.WriteLine(exportBC7ToolStripMenuItem.Checked);
+            }
+            if (textureProcessor != null) {
+                textureProcessor.ExportBc7 = exportBC7ToolStripMenuItem.Checked;
             }
         }
 
@@ -1825,6 +1853,10 @@ namespace FFXIVLooseTextureCompiler {
 
         private void useFastUVTransferToolStripMenuItem_Click(object sender, EventArgs e) {
             WriteFastUVTransferConfig();
+        }
+
+        private void exportBC7ToolStripMenuItem_Click(object sender, EventArgs e) {
+            WriteExportBC7Config();
         }
         private async void bakeTransferMapGen2ToBiboToolStripMenuItem_Click(object sender, EventArgs e) {
             await BakeTransferMapHelper("Gen2 → Bibo+", "gen2_to_bibo_transfer.tif", XNormal.BakeTransferMapGen2ToBibo);
