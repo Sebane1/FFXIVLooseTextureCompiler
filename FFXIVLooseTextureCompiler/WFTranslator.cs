@@ -75,9 +75,13 @@ namespace FFXIVLooseTextureCompiler {
             foreach (ToolStripMenuItem control in parentControl.Items) {
                 string text = await Translator.LocalizeText(control.Text, Translator.UiLanguage,
                     LanguageConversionProxy.LanguageEnum.English);
-                parentControl.Invoke(delegate {
-                    control.Text = text;
-                });
+                if (parentForm != null)
+                {
+                    parentControl.Invoke(delegate
+                    {
+                        control.Text = text;
+                    });
+                }
                 TranslateToolStripItem(control);
             }
         }
@@ -85,9 +89,13 @@ namespace FFXIVLooseTextureCompiler {
             foreach (ToolStripMenuItem control in parentControl.DropDownItems) {
                 string text = await Translator.LocalizeText(control.Text, Translator.UiLanguage,
                     LanguageConversionProxy.LanguageEnum.English);
-                parentForm.Invoke(delegate {
-                    control.Text = text;
-                });
+                if (parentForm != null)
+                {
+                    parentForm.Invoke(delegate
+                    {
+                        control.Text = text;
+                    });
+                }
                 TranslateToolStripItem(control);
             }
         }
@@ -95,9 +103,13 @@ namespace FFXIVLooseTextureCompiler {
             foreach (ToolStripMenuItem control in parentControl.Items) {
                 string text = await Translator.LocalizeText(control.Text, Translator.UiLanguage,
                     LanguageConversionProxy.LanguageEnum.English);
-                parentForm.Invoke(delegate {
-                    control.Text = text;
-                });
+                if (parentForm != null)
+                {
+                    parentForm.Invoke(delegate
+                    {
+                        control.Text = text;
+                    });
+                }
                 TranslateToolStripItem(control);
             }
         }
