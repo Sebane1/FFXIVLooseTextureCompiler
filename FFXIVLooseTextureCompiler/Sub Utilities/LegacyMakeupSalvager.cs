@@ -69,7 +69,10 @@ namespace FFXIVLooseTextureCompiler.Sub_Utilities
                     }
                 }
                 string tempPath = ImageManipulation.ReplaceExtension(ImageManipulation.AddSuffix(makeupPath, "_backup"), ".png");
-                TexIO.SaveBitmap(TexIO.ResolveBitmap(makeupPath), tempPath);
+                using (Bitmap resolved = TexIO.ResolveBitmap(makeupPath))
+                {
+                    TexIO.SaveBitmap(resolved, tempPath);
+                }
                 makeupPath = tempPath;
                 if (!string.IsNullOrEmpty(makeupPath))
                 {
