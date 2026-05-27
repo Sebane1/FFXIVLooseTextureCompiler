@@ -13,7 +13,7 @@ Tutorials and resources can be found here:
 
 https://loosetexturecompiler.zip/
 
-You may need to install XNormal if you run into any errors that say stuff is missing (using universal texture set feature).
+You may need to install XNormal if you run into any errors that say stuff is missing, but we are phasing out XNormal usage where possible.
 
 https://xnormal.net/
 
