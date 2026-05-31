@@ -103,9 +103,9 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void TextureProcessor_OnProgressReport(object? sender, string e) {
-            if (generateButton.InvokeRequired) {
+            if (finalizeButton.InvokeRequired) {
                 Action safeWrite = delegate { ProgressReport(e); };
-                generateButton.Invoke(safeWrite);
+                finalizeButton.Invoke(safeWrite);
             } else {
                 exportLabel.AutoSize = true;
                 exportLabel.Text = e;
@@ -169,7 +169,7 @@ namespace FFXIVLooseTextureCompiler {
         }
         private async void generationCooldown_Tick(object sender, EventArgs e) {
             generationCooldown.Stop();
-            finalizeButton.Enabled = generateButton.Enabled = true;
+            finalizeButton.Enabled = finalizeButton.Enabled = true;
         }
         private async void TextureProcessor_OnStartedProcessing(object? sender, EventArgs e) {
             StartedProcessing();
@@ -188,18 +188,18 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         public async void LaunchingXnormal() {
-            if (generateButton.InvokeRequired) {
+            if (finalizeButton.InvokeRequired) {
                 Action safeWrite = delegate { LaunchingXnormal(); };
-                generateButton.Invoke(safeWrite);
+                finalizeButton.Invoke(safeWrite);
             } else {
                 exportLabel.Text = await WFTranslator.String("Wait For UV Transfer");
                 Console.WriteLine(exportLabel.Text);
             }
         }
         public async void StartedProcessing() {
-            if (generateButton.InvokeRequired) {
+            if (finalizeButton.InvokeRequired) {
                 Action safeWrite = delegate { StartedProcessing(); };
-                generateButton.Invoke(safeWrite);
+                finalizeButton.Invoke(safeWrite);
             } else {
                 exportLabel.Text = await WFTranslator.String("Exporting");
                 Console.WriteLine(exportLabel.Text);
@@ -217,7 +217,7 @@ namespace FFXIVLooseTextureCompiler {
             await PenumbraHttpApi.Redraw(0);
             hasDoneReload = true;
             textureSetList_SelectedIndexChanged(this, EventArgs.Empty);
-            finalizeButton.Enabled = generateButton.Enabled = false;
+            finalizeButton.Enabled = finalizeButton.Enabled = false;
             generationCooldown.Start();
             exportProgress.Visible = false;
             exportProgress.Value = 0;
@@ -450,9 +450,9 @@ namespace FFXIVLooseTextureCompiler {
         }
         public async void StartGeneration() {
             if (!lockDuplicateGeneration) {
-                if (generateButton.InvokeRequired) {
+                if (finalizeButton.InvokeRequired) {
                     Action safeWrite = delegate { StartGeneration(); };
-                    generateButton.Invoke(safeWrite);
+                    finalizeButton.Invoke(safeWrite);
                 } else {
                     if (autoGenerateTImer == null) {
                         autoGenerateTImer = new System.Windows.Forms.Timer();
@@ -2924,7 +2924,7 @@ namespace FFXIVLooseTextureCompiler {
                     string modName2 = item.Key + (await WFTranslator.String(" Right Eye Mod"));
                     string modPath1 = "";
                     string modPath2 = "";
-                    generateButton.Invoke(async () => {
+                    finalizeButton.Invoke(async () => {
                         try {
                             NewProject();
                             OpenLoadTemplate(templatePath + "\\" + "- Eye Pack Template.ffxivtp", await WFTranslator.String("Symmetrical Eyes And Left Eye"), item.Value);
@@ -2961,7 +2961,7 @@ namespace FFXIVLooseTextureCompiler {
                         ZipFile.CreateFromDirectory(modPath1, path1);
                     });
                 }
-                generateButton.Invoke(async () => {
+                finalizeButton.Invoke(async () => {
                     await WFTranslator.Show("Your .pmp archives have been exported, but are also already in Penumbra.", VersionText);
                     try {
                         Process.Start(new System.Diagnostics.ProcessStartInfo() {
@@ -3002,7 +3002,7 @@ namespace FFXIVLooseTextureCompiler {
                     bool executed = false;
                     string modName1 = item.Key + (await WFTranslator.String(" Contact Mod"));
                     string modPath1 = "";
-                    generateButton.Invoke(() => {
+                    finalizeButton.Invoke(() => {
                         try {
                             NewProject();
                             OpenLoadTemplate(templatePath + "\\" + "- Animated Contact Lense.ffxivtp", "Default", item.Value);
@@ -3029,7 +3029,7 @@ namespace FFXIVLooseTextureCompiler {
                         ZipFile.CreateFromDirectory(modPath1, path1);
                     });
                 }
-                generateButton.Invoke(async () => {
+                finalizeButton.Invoke(async () => {
                     await WFTranslator.Show("Your .pmp archives have been exported, but are also already in Penumbra.", VersionText);
                     try {
                         Process.Start(new System.Diagnostics.ProcessStartInfo() {

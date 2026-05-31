@@ -22,7 +22,8 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormSimplified));
             body = new FFXIVVoicePackCreator.FilePicker();
@@ -35,7 +36,6 @@
             label1 = new Label();
             generateButton = new Button();
             advancedModeButton = new Button();
-            previewButton = new Button();
             normalGeneration = new ComboBox();
             label2 = new Label();
             exportProgress = new ProgressBar();
@@ -166,11 +166,11 @@
             // 
             // generateButton
             // 
-            generateButton.Location = new Point(269, 276);
+            generateButton.Location = new Point(0, 276);
             generateButton.Name = "generateButton";
-            generateButton.Size = new Size(296, 23);
+            generateButton.Size = new Size(565, 23);
             generateButton.TabIndex = 8;
-            generateButton.Text = "Finished (To finish mod)";
+            generateButton.Text = "Export";
             generateButton.UseVisualStyleBackColor = true;
             generateButton.Click += generateButton_Click;
             // 
@@ -185,16 +185,6 @@
             advancedModeButton.Text = "Detailed Mode";
             advancedModeButton.UseVisualStyleBackColor = false;
             advancedModeButton.Click += advancedModeButton_Click;
-            // 
-            // previewButton
-            // 
-            previewButton.Location = new Point(0, 276);
-            previewButton.Name = "previewButton";
-            previewButton.Size = new Size(263, 23);
-            previewButton.TabIndex = 10;
-            previewButton.Text = "Preview (For quick edits)";
-            previewButton.UseVisualStyleBackColor = true;
-            previewButton.Click += previewButton_Click;
             // 
             // normalGeneration
             // 
@@ -218,9 +208,9 @@
             // 
             // exportProgress
             // 
-            exportProgress.Location = new Point(-2, 269);
+            exportProgress.Location = new Point(-2, 287);
             exportProgress.Name = "exportProgress";
-            exportProgress.Size = new Size(567, 32);
+            exportProgress.Size = new Size(567, 14);
             exportProgress.TabIndex = 13;
             exportProgress.Visible = false;
             exportProgress.Click += exportProgress_Click;
@@ -441,7 +431,6 @@
             Controls.Add(donateButton);
             Controls.Add(label2);
             Controls.Add(normalGeneration);
-            Controls.Add(previewButton);
             Controls.Add(advancedModeButton);
             Controls.Add(generateButton);
             Controls.Add(label1);
@@ -485,7 +474,6 @@
         private Label label1;
         private Button generateButton;
         private Button advancedModeButton;
-        private Button previewButton;
         private ComboBox normalGeneration;
         private Label label2;
         private ProgressBar exportProgress;

@@ -22,7 +22,8 @@ namespace FFXIVLooseTextureCompiler {
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             components = new System.ComponentModel.Container();
             System.Windows.Forms.Timer autoGenerateTImer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
@@ -30,7 +31,6 @@ namespace FFXIVLooseTextureCompiler {
             raceList = new ComboBox();
             tailList = new ComboBox();
             baseBodyList = new ComboBox();
-            generateButton = new Button();
             uniqueAuRa = new CheckBox();
             mask = new FFXIVVoicePackCreator.FilePicker();
             normal = new FFXIVVoicePackCreator.FilePicker();
@@ -107,9 +107,18 @@ namespace FFXIVLooseTextureCompiler {
             bulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
             recursiveBulkImageToTexToolStripMenuItem = new ToolStripMenuItem();
             convertStandaloneTextureToolStripMenuItem = new ToolStripMenuItem();
+            biboToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            biboToGen2ToolStripMenuItem = new ToolStripMenuItem();
+            gen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            gen3ToGen2ToolStripMenuItem1 = new ToolStripMenuItem();
+            gen2ToGen3ToolStripMenuItem = new ToolStripMenuItem();
+            gen2ToBiboToolStripMenuItem = new ToolStripMenuItem();
+            otopopToVanillaToolStripMenuItem = new ToolStripMenuItem();
+            vanillaToOtopopToolStripMenuItem = new ToolStripMenuItem();
             uvTransferMapToolsToolStripMenuItem = new ToolStripMenuItem();
             generateCoordinateMapToolStripMenuItem = new ToolStripMenuItem();
             applyTransferMapToolStripMenuItem = new ToolStripMenuItem();
+            bakeAllTransferMapsToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapBiboToGen3ToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapGen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapBiboToGen2ToolStripMenuItem = new ToolStripMenuItem();
@@ -124,15 +133,6 @@ namespace FFXIVLooseTextureCompiler {
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapRelalaToAsymLalaToolStripMenuItem = new ToolStripMenuItem();
             bakeTransferMapAsymLalaToRelalaToolStripMenuItem = new ToolStripMenuItem();
-            bakeAllTransferMapsToolStripMenuItem = new ToolStripMenuItem();
-            biboToGen3ToolStripMenuItem = new ToolStripMenuItem();
-            biboToGen2ToolStripMenuItem = new ToolStripMenuItem();
-            gen3ToBiboToolStripMenuItem = new ToolStripMenuItem();
-            gen3ToGen2ToolStripMenuItem1 = new ToolStripMenuItem();
-            gen2ToGen3ToolStripMenuItem = new ToolStripMenuItem();
-            gen2ToBiboToolStripMenuItem = new ToolStripMenuItem();
-            otopopToVanillaToolStripMenuItem = new ToolStripMenuItem();
-            vanillaToOtopopToolStripMenuItem = new ToolStripMenuItem();
             devToolsToolStripMenuItem = new ToolStripMenuItem();
             textureToLTCTToolStripMenuItem = new ToolStripMenuItem();
             pNGToLTCTToolStripMenuItem = new ToolStripMenuItem();
@@ -279,17 +279,6 @@ namespace FFXIVLooseTextureCompiler {
             baseBodyList.TabIndex = 4;
             baseBodyList.Text = "Gen3 and T&F3";
             baseBodyList.SelectedIndexChanged += baseBodyList_SelectedIndexChanged;
-            // 
-            // generateButton
-            // 
-            generateButton.Anchor = AnchorStyles.Bottom;
-            generateButton.Location = new Point(552, 587);
-            generateButton.Name = "generateButton";
-            generateButton.Size = new Size(107, 24);
-            generateButton.TabIndex = 7;
-            generateButton.Text = "Preview";
-            generateButton.UseVisualStyleBackColor = true;
-            generateButton.Click += generateButton_Click;
             // 
             // uniqueAuRa
             // 
@@ -972,119 +961,119 @@ namespace FFXIVLooseTextureCompiler {
             // generateCoordinateMapToolStripMenuItem
             // 
             generateCoordinateMapToolStripMenuItem.Name = "generateCoordinateMapToolStripMenuItem";
-            generateCoordinateMapToolStripMenuItem.Size = new Size(220, 22);
+            generateCoordinateMapToolStripMenuItem.Size = new Size(243, 22);
             generateCoordinateMapToolStripMenuItem.Text = "Generate Coordinate Map";
             generateCoordinateMapToolStripMenuItem.Click += generateCoordinateMapToolStripMenuItem_Click;
             // 
             // applyTransferMapToolStripMenuItem
             // 
             applyTransferMapToolStripMenuItem.Name = "applyTransferMapToolStripMenuItem";
-            applyTransferMapToolStripMenuItem.Size = new Size(220, 22);
+            applyTransferMapToolStripMenuItem.Size = new Size(243, 22);
             applyTransferMapToolStripMenuItem.Text = "Apply Transfer Map";
             applyTransferMapToolStripMenuItem.Click += applyTransferMapToolStripMenuItem_Click;
             // 
             // bakeAllTransferMapsToolStripMenuItem
             // 
             bakeAllTransferMapsToolStripMenuItem.Name = "bakeAllTransferMapsToolStripMenuItem";
-            bakeAllTransferMapsToolStripMenuItem.Size = new Size(220, 22);
+            bakeAllTransferMapsToolStripMenuItem.Size = new Size(243, 22);
             bakeAllTransferMapsToolStripMenuItem.Text = "Bake ALL Transfer Maps";
             bakeAllTransferMapsToolStripMenuItem.Click += bakeAllTransferMapsToolStripMenuItem_Click;
             // 
             // bakeTransferMapBiboToGen3ToolStripMenuItem
             // 
             bakeTransferMapBiboToGen3ToolStripMenuItem.Name = "bakeTransferMapBiboToGen3ToolStripMenuItem";
-            bakeTransferMapBiboToGen3ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapBiboToGen3ToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapBiboToGen3ToolStripMenuItem.Text = "Bake Map: Bibo+ → Gen3";
             bakeTransferMapBiboToGen3ToolStripMenuItem.Click += bakeTransferMapBiboToGen3ToolStripMenuItem_Click;
             // 
             // bakeTransferMapGen3ToBiboToolStripMenuItem
             // 
             bakeTransferMapGen3ToBiboToolStripMenuItem.Name = "bakeTransferMapGen3ToBiboToolStripMenuItem";
-            bakeTransferMapGen3ToBiboToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen3ToBiboToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapGen3ToBiboToolStripMenuItem.Text = "Bake Map: Gen3 → Bibo+";
             bakeTransferMapGen3ToBiboToolStripMenuItem.Click += bakeTransferMapGen3ToBiboToolStripMenuItem_Click;
             // 
             // bakeTransferMapBiboToGen2ToolStripMenuItem
             // 
             bakeTransferMapBiboToGen2ToolStripMenuItem.Name = "bakeTransferMapBiboToGen2ToolStripMenuItem";
-            bakeTransferMapBiboToGen2ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapBiboToGen2ToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapBiboToGen2ToolStripMenuItem.Text = "Bake Map: Bibo+ → Gen2";
             bakeTransferMapBiboToGen2ToolStripMenuItem.Click += bakeTransferMapBiboToGen2ToolStripMenuItem_Click;
             // 
             // bakeTransferMapGen2ToBiboToolStripMenuItem
             // 
             bakeTransferMapGen2ToBiboToolStripMenuItem.Name = "bakeTransferMapGen2ToBiboToolStripMenuItem";
-            bakeTransferMapGen2ToBiboToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen2ToBiboToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapGen2ToBiboToolStripMenuItem.Text = "Bake Map: Gen2 → Bibo+";
             bakeTransferMapGen2ToBiboToolStripMenuItem.Click += bakeTransferMapGen2ToBiboToolStripMenuItem_Click;
             // 
             // bakeTransferMapGen3ToGen2ToolStripMenuItem
             // 
             bakeTransferMapGen3ToGen2ToolStripMenuItem.Name = "bakeTransferMapGen3ToGen2ToolStripMenuItem";
-            bakeTransferMapGen3ToGen2ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen3ToGen2ToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapGen3ToGen2ToolStripMenuItem.Text = "Bake Map: Gen3 → Gen2";
             bakeTransferMapGen3ToGen2ToolStripMenuItem.Click += bakeTransferMapGen3ToGen2ToolStripMenuItem_Click;
             // 
             // bakeTransferMapGen2ToGen3ToolStripMenuItem
             // 
             bakeTransferMapGen2ToGen3ToolStripMenuItem.Name = "bakeTransferMapGen2ToGen3ToolStripMenuItem";
-            bakeTransferMapGen2ToGen3ToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapGen2ToGen3ToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapGen2ToGen3ToolStripMenuItem.Text = "Bake Map: Gen2 → Gen3";
             bakeTransferMapGen2ToGen3ToolStripMenuItem.Click += bakeTransferMapGen2ToGen3ToolStripMenuItem_Click;
             // 
             // bakeTransferMapOtopopToVanillaToolStripMenuItem
             // 
             bakeTransferMapOtopopToVanillaToolStripMenuItem.Name = "bakeTransferMapOtopopToVanillaToolStripMenuItem";
-            bakeTransferMapOtopopToVanillaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapOtopopToVanillaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapOtopopToVanillaToolStripMenuItem.Text = "Bake Map: Otopop → Vanilla";
             bakeTransferMapOtopopToVanillaToolStripMenuItem.Click += bakeTransferMapOtopopToVanillaToolStripMenuItem_Click;
             // 
             // bakeTransferMapVanillaToOtopopToolStripMenuItem
             // 
             bakeTransferMapVanillaToOtopopToolStripMenuItem.Name = "bakeTransferMapVanillaToOtopopToolStripMenuItem";
-            bakeTransferMapVanillaToOtopopToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapVanillaToOtopopToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapVanillaToOtopopToolStripMenuItem.Text = "Bake Map: Vanilla → Otopop";
             bakeTransferMapVanillaToOtopopToolStripMenuItem.Click += bakeTransferMapVanillaToOtopopToolStripMenuItem_Click;
             // 
             // bakeTransferMapVanillaToAsymLalaToolStripMenuItem
             // 
             bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Name = "bakeTransferMapVanillaToAsymLalaToolStripMenuItem";
-            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Text = "Bake Map: Vanilla → Asym Lala";
             bakeTransferMapVanillaToAsymLalaToolStripMenuItem.Click += bakeTransferMapVanillaToAsymLalaToolStripMenuItem_Click;
             // 
             // bakeTransferMapAsymLalaToVanillaToolStripMenuItem
             // 
             bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Name = "bakeTransferMapAsymLalaToVanillaToolStripMenuItem";
-            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Text = "Bake Map: Asym Lala → Vanilla";
             bakeTransferMapAsymLalaToVanillaToolStripMenuItem.Click += bakeTransferMapAsymLalaToVanillaToolStripMenuItem_Click;
             // 
             // bakeTransferMapOtopopToAsymLalaToolStripMenuItem
             // 
             bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Name = "bakeTransferMapOtopopToAsymLalaToolStripMenuItem";
-            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Text = "Bake Map: Otopop → Asym Lala";
             bakeTransferMapOtopopToAsymLalaToolStripMenuItem.Click += bakeTransferMapOtopopToAsymLalaToolStripMenuItem_Click;
             // 
             // bakeTransferMapAsymLalaToOtopopToolStripMenuItem
             // 
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Name = "bakeTransferMapAsymLalaToOtopopToolStripMenuItem";
-            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Text = "Bake Map: Asym Lala → Otopop";
             bakeTransferMapAsymLalaToOtopopToolStripMenuItem.Click += bakeTransferMapAsymLalaToOtopopToolStripMenuItem_Click;
             // 
             // bakeTransferMapRelalaToAsymLalaToolStripMenuItem
             // 
             bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Name = "bakeTransferMapRelalaToAsymLalaToolStripMenuItem";
-            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Text = "Bake Map: Relala → Asym Lala";
             bakeTransferMapRelalaToAsymLalaToolStripMenuItem.Click += bakeTransferMapRelalaToAsymLalaToolStripMenuItem_Click;
             // 
             // bakeTransferMapAsymLalaToRelalaToolStripMenuItem
             // 
             bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Name = "bakeTransferMapAsymLalaToRelalaToolStripMenuItem";
-            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Size = new Size(220, 22);
+            bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Size = new Size(243, 22);
             bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Text = "Bake Map: Asym Lala → Relala";
             bakeTransferMapAsymLalaToRelalaToolStripMenuItem.Click += bakeTransferMapAsymLalaToRelalaToolStripMenuItem_Click;
             // 
@@ -1137,7 +1126,6 @@ namespace FFXIVLooseTextureCompiler {
             autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem.Text = "Auto Prepare Normal Maps From TexTools Dump";
             autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem.Click += autoPrepareNormalMapsFromTexToolsDumpToolStripMenuItem_Click;
             // 
-            // 
             // configToolStripMenuItem
             // 
             configToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changePenumbraPathToolStripMenuItem, useFastUVTransferToolStripMenuItem, exportBC7ToolStripMenuItem });
@@ -1154,22 +1142,22 @@ namespace FFXIVLooseTextureCompiler {
             // 
             // useFastUVTransferToolStripMenuItem
             // 
-            useFastUVTransferToolStripMenuItem.CheckOnClick = true;
             useFastUVTransferToolStripMenuItem.Checked = true;
+            useFastUVTransferToolStripMenuItem.CheckOnClick = true;
+            useFastUVTransferToolStripMenuItem.CheckState = CheckState.Checked;
             useFastUVTransferToolStripMenuItem.Name = "useFastUVTransferToolStripMenuItem";
             useFastUVTransferToolStripMenuItem.Size = new Size(200, 22);
             useFastUVTransferToolStripMenuItem.Text = "Use Fast UV Transfer";
             useFastUVTransferToolStripMenuItem.Click += useFastUVTransferToolStripMenuItem_Click;
             // 
-            // 
             // exportBC7ToolStripMenuItem
             // 
             exportBC7ToolStripMenuItem.CheckOnClick = true;
-            exportBC7ToolStripMenuItem.Checked = false;
             exportBC7ToolStripMenuItem.Name = "exportBC7ToolStripMenuItem";
             exportBC7ToolStripMenuItem.Size = new Size(200, 22);
             exportBC7ToolStripMenuItem.Text = "Export BC7";
             exportBC7ToolStripMenuItem.Click += exportBC7ToolStripMenuItem_Click;
+            // 
             // modShareToolStripMenuItem
             // 
             modShareToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableModshareToolStripMenuItem, sendCurrentModToolStripMenuItem });
@@ -1621,11 +1609,11 @@ namespace FFXIVLooseTextureCompiler {
             // finalizeButton
             // 
             finalizeButton.Anchor = AnchorStyles.Bottom;
-            finalizeButton.Location = new Point(659, 587);
+            finalizeButton.Location = new Point(646, 587);
             finalizeButton.Name = "finalizeButton";
-            finalizeButton.Size = new Size(98, 24);
+            finalizeButton.Size = new Size(111, 24);
             finalizeButton.TabIndex = 46;
-            finalizeButton.Text = "Finished";
+            finalizeButton.Text = "Export";
             finalizeButton.UseVisualStyleBackColor = true;
             finalizeButton.Click += finalizeButton_Click;
             // 
@@ -1897,7 +1885,6 @@ namespace FFXIVLooseTextureCompiler {
             Controls.Add(layerBaseButton);
             Controls.Add(panel3);
             Controls.Add(textureSetName);
-            Controls.Add(generateButton);
             Controls.Add(label8);
             Controls.Add(ipBox);
             Controls.Add(finalizeButton);
@@ -1962,7 +1949,6 @@ namespace FFXIVLooseTextureCompiler {
         private ComboBox raceList;
         private ComboBox tailList;
         private ComboBox baseBodyList;
-        private Button generateButton;
         private Label label1;
         private TextBox modAuthorTextBox;
         private Label nameLabel;
