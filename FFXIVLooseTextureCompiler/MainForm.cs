@@ -12,6 +12,7 @@ using FFXIVVoicePackCreator;
 using LanguageConversionProxy;
 using LooseTextureCompilerCore;
 using LooseTextureCompilerCore.Json;
+using LooseTextureCompilerCore.ProjectCreation;
 using LooseTextureCompilerCore.Racial;
 using Lumina.Data;
 using Newtonsoft.Json;
@@ -53,6 +54,7 @@ namespace FFXIVLooseTextureCompiler {
         private bool hasDoneReload;
         private bool willCloseWhenComplete;
         private Dictionary<string, int> groupOptionTypes = new Dictionary<string, int>();
+        private List<FFXIVVoicePackCreator.Json.Group> _exportedGroups = new List<FFXIVVoicePackCreator.Json.Group>();
         Stopwatch stopwatch = new Stopwatch();
 
         public bool HasSaved {
@@ -207,7 +209,6 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void processGeneration_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
-            ExportJson();
             ExportMeta();
             await Task.Delay(1000);
             await PenumbraHttpApi.Reload(modPath, modNameTextBox.Text);
@@ -271,7 +272,7 @@ namespace FFXIVLooseTextureCompiler {
         }
 
         private async void processGeneration_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            textureProcessor.Export(textureSets, groupOptionTypes, modPath, choiceTypeIndex,
+            _exportedGroups = textureProcessor.Export(textureSets, groupOptionTypes, modPath, choiceTypeIndex,
                 bakeNormalsChecked, generatingMulti, finalizeResults);
             processGeneration.CancelAsync();
         }
@@ -1579,21 +1580,16 @@ namespace FFXIVLooseTextureCompiler {
             }
         }
         private async void ExportMeta() {
-            string metaText = @"{
-  ""FileVersion"": 3,
-  ""Name"": """ + (!string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "") + @""",
-  ""Author"": """ + (!string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text :
-    "FFXIV Loose Texture Compiler") + @""",
-  ""Description"": """ + (!string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text :
-    "Exported by FFXIV Loose Texture Compiler") + @""",
-  ""Version"": """ + modVersionTextBox.Text + @""",
-  ""Website"": """ + modWebsiteTextBox.Text + @""",
-  ""ModTags"": []
-}";
             if (metaFilePath != null) {
-                using (StreamWriter writer = new StreamWriter(metaFilePath)) {
-                    writer.WriteLine(metaText);
-                }
+                ProjectHelper.ExportMeta(
+                    metaFilePath,
+                    !string.IsNullOrEmpty(modNameTextBox.Text) ? modNameTextBox.Text : "",
+                    _exportedGroups,
+                    !string.IsNullOrEmpty(modAuthorTextBox.Text) ? modAuthorTextBox.Text : "FFXIV Loose Texture Compiler",
+                    !string.IsNullOrEmpty(modDescriptionTextBox.Text) ? modDescriptionTextBox.Text : "Exported by FFXIV Loose Texture Compiler",
+                    modVersionTextBox.Text,
+                    modWebsiteTextBox.Text
+                );
             }
         }
         #endregion
